@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.sp
 import com.example.smartcubeapp.cube.CubeState
 import com.example.smartcubeapp.cube.Solve
+import com.example.smartcubeapp.roundDouble
 
 class StateSolveFinishedLayout(
     private val state: MutableState<TimerState>,
@@ -46,6 +47,7 @@ class StateSolveFinishedLayout(
     fun SolveResults() {
         val time = solve.value.time / 1000.0
         Text(text = time.toString(), fontSize = 50.sp)
-        Text(text = "${solve.value.getTurnsPerSecond().toString()}tps", fontSize = 25.sp)
+        val tpsRounded = roundDouble(solve.value.getTurnsPerSecond(), 100)
+        Text(text = "${tpsRounded}tps", fontSize = 25.sp)
     }
 }

@@ -15,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.sp
 import com.example.smartcubeapp.SOLVED_CUBE_STATE
 import com.example.smartcubeapp.cube.CubeState
+import com.example.smartcubeapp.cube.Move
 import com.example.smartcubeapp.cube.Solve
 import kotlinx.coroutines.delay
 import java.util.Calendar
@@ -53,6 +54,9 @@ class StateSolvingLayout(
                             Calendar.getInstance().timeInMillis - solve.value.solveStartTime
                     }
                 }
+            }
+            if(cubeState.value != solve.value.scrambledState){
+                solve.value.solveMoveSequence.add(cubeState.value)
             }
             if (cubeState.value.solved) {
                 state.value = TimerState.SolveFinished
