@@ -55,7 +55,7 @@ class StateSolvingLayout(
                     }
                 }
             }
-            if(cubeState.value != solve.value.scrambledState){
+            if(cubeState.value != solve.value.scrambledState && cubeState.value != solve.value.solveMoveSequence.lastOrNull()){
                 solve.value.solveMoveSequence.add(cubeState.value)
             }
             if (cubeState.value.solved) {
