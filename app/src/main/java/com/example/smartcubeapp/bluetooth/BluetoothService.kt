@@ -181,6 +181,7 @@ class BluetoothService(
                 bluetoothUtilities.requestBluetoothConnectPermission()
                 return
             }
+            state.value = TimerState.Scrambling
             gatt.discoverServices()
         } else if (newState == BluetoothProfile.STATE_DISCONNECTED) {
             println("Disconnected")
