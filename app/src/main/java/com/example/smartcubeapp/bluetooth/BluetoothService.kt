@@ -18,6 +18,7 @@ import android.os.Parcelable
 import androidx.activity.ComponentActivity
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.MutableState
+import com.example.smartcubeapp.CHARACTERISTIC_UUID
 import com.example.smartcubeapp.MY_CUBE_ADDRESS
 import com.example.smartcubeapp.cube.CubeState
 import com.example.smartcubeapp.cube.Move
@@ -48,18 +49,10 @@ class BluetoothService(
 
     private val receiver: BroadcastReceiver = object : BroadcastReceiver() {
         @RequiresApi(Build.VERSION_CODES.S)
+
         override fun onReceive(context: Context?, intent: Intent) {
             val action = intent.action
-            if (BluetoothDevice.ACTION_FOUND == action) {
-                val device =
-                    intent.parcelable<BluetoothDevice>(BluetoothDevice.EXTRA_DEVICE)
-                if (!bluetoothUtilities.checkForBluetoothConnectPermission()) {
-                    bluetoothUtilities.requestBluetoothConnectPermission()
-                    return
-                }
-            } else {
-                println(action)
-            }
+            handleDiscoveryReceiverAction(action, intent)
         }
     }
 
@@ -77,15 +70,8 @@ class BluetoothService(
 
         bluetoothUtilities.checkIfBluetoothIsOn(bluetoothAdapter)
 
-        val filter = IntentFilter(BluetoothDevice.ACTION_FOUND)
-        filter.addAction(BluetoothAdapter.ACTION_STATE_CHANGED)
-        filter.addAction(BluetoothAdapter.ACTION_DISCOVERY_STARTED)
-        filter.addAction(BluetoothAdapter.ACTION_DISCOVERY_FINISHED)
-        filter.addAction(BluetoothAdapter.ACTION_CONNECTION_STATE_CHANGED)
-        filter.addAction(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE)
-        filter.addAction(BluetoothAdapter.ACTION_REQUEST_ENABLE)
-        filter.addAction(BluetoothAdapter.ACTION_SCAN_MODE_CHANGED)
-        filter.addAction(BluetoothAdapter.ACTION_LOCAL_NAME_CHANGED)
+        val filter = getDeviceScanIntentFilter()
+
         activity.registerReceiver(receiver, filter)
         bluetoothUtilities.checkForBluetoothScanPermission()
         bluetoothAdapter.startDiscovery()
@@ -133,6 +119,7 @@ class BluetoothService(
         activity.unregisterReceiver(receiver)
     }
 
+    @RequiresApi(Build.VERSION_CODES.S)
     fun connectToDevice(
         address: String = MY_CUBE_ADDRESS,
         serviceUUID: String,
@@ -143,48 +130,15 @@ class BluetoothService(
         val gattCallback = object : BluetoothGattCallback() {
             @RequiresApi(Build.VERSION_CODES.S)
             override fun onConnectionStateChange(gatt: BluetoothGatt, status: Int, newState: Int) {
-                if (newState == BluetoothProfile.STATE_CONNECTED) {
-                    if (!bluetoothUtilities.checkForBluetoothScanPermission()) {
-                        bluetoothUtilities.requestBluetoothScanPermission()
-                        return
-                    }
-                    if (!bluetoothUtilities.checkForBluetoothConnectPermission()) {
-                        bluetoothUtilities.requestBluetoothConnectPermission()
-                        return
-                    }
-                    state.value = TimerState.Scrambling
-                    gatt.discoverServices()
-                } else if (newState == BluetoothProfile.STATE_DISCONNECTED) {
-                    // Handle the disconnect event here
-                    println("Disconnected")
-                }
+                handleConnectionStateChanged(newState, gatt)
             }
 
             @RequiresApi(Build.VERSION_CODES.S)
             override fun onServicesDiscovered(gatt: BluetoothGatt, status: Int) {
-                val service = gatt.getService(UUID.fromString(serviceUUID))
-                if (service == null) {
-                    println("Service not found")
-                    return
-                }
-                val characteristic = service.getCharacteristic(UUID.fromString(characteristicUUID))
-                if (characteristic == null) {
-                    println("Characteristic not found")
-                    return
-                }
-                if (!bluetoothUtilities.checkForBluetoothConnectPermission()) {
-                    bluetoothUtilities.requestBluetoothConnectPermission()
-                    return
-                }
-                println("Service and characteristic found")
-                for (ch in characteristic.service.characteristics) {
-                    println(ch.uuid)
-                }
-                enableCharacteristicsNotifications(gatt, characteristic)
-                gatt.setCharacteristicNotification(characteristic, true)
-                // Send commands and receive responses here
+                handleServiceDiscovery(gatt)
             }
 
+            @Deprecated("Deprecated for API 33+")
             override fun onCharacteristicChanged(
                 gatt: BluetoothGatt,
                 characteristic: BluetoothGattCharacteristic
@@ -195,31 +149,137 @@ class BluetoothService(
                 cubeState.value = state.first
                 lastMove.value = state.second[0] as Move
             }
+
+            @RequiresApi(Build.VERSION_CODES.TIRAMISU)
+            override fun onCharacteristicChanged(
+                gatt: BluetoothGatt,
+                characteristic: BluetoothGattCharacteristic,
+                value: ByteArray
+            ) {
+                val dataParser = MoveDataParser(ByteBuffer.wrap(value))
+                val state = dataParser.parseCubeValue()
+                cubeState.value = state.first
+                lastMove.value = state.second[0] as Move
+            }
         }
 
+        if(!bluetoothUtilities.checkForBluetoothConnectPermission()){
+            bluetoothUtilities.requestBluetoothConnectPermission()
+            return
+        }
         device.connectGatt(activityContext, false, gattCallback)
     }
 
     @RequiresApi(Build.VERSION_CODES.S)
-    fun enableCharacteristicsNotifications(
+    private fun handleConnectionStateChanged(newState: Int, gatt: BluetoothGatt) {
+        if (newState == BluetoothProfile.STATE_CONNECTED) {
+            if (!bluetoothUtilities.checkForBluetoothScanPermission()) {
+                bluetoothUtilities.requestBluetoothScanPermission()
+                return
+            }
+            if (!bluetoothUtilities.checkForBluetoothConnectPermission()) {
+                bluetoothUtilities.requestBluetoothConnectPermission()
+                return
+            }
+            gatt.discoverServices()
+        } else if (newState == BluetoothProfile.STATE_DISCONNECTED) {
+            println("Disconnected")
+        }
+    }
+
+
+    @RequiresApi(Build.VERSION_CODES.S)
+    fun handleServiceDiscovery(gatt: BluetoothGatt) {
+
+        val service = gatt.getService(UUID.fromString(SERVICE_UUID))
+        if (service == null) {
+            println("Service not found")
+            return
+        }
+
+        val characteristic = service.getCharacteristic(UUID.fromString(CHARACTERISTIC_UUID))
+        if (characteristic == null) {
+            println("Characteristic not found")
+            return
+        }
+
+        if (!bluetoothUtilities.checkForBluetoothConnectPermission()) {
+            bluetoothUtilities.requestBluetoothConnectPermission()
+            return
+        }
+
+        if(SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            enableCharacteristicsNotificationsAPI33Plus(gatt, characteristic)
+        } else {
+            enableCharacteristicsNotificationsAPI33Minus(gatt, characteristic)
+        }
+        gatt.setCharacteristicNotification(characteristic, true)
+    }
+
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
+    fun enableCharacteristicsNotificationsAPI33Plus(
         bluetoothGatt: BluetoothGatt,
         characteristic: BluetoothGattCharacteristic
     ) {
-// Enable notifications for the characteristic
+        // Enable notifications for the characteristic
         if (!bluetoothUtilities.checkForBluetoothConnectPermission()) {
             bluetoothUtilities.requestBluetoothConnectPermission()
             return
         }
         bluetoothGatt.setCharacteristicNotification(characteristic, true)
 
-// Set the CCCD descriptor value to enable notifications
+        // Set the CCCD descriptor value to enable notifications
+        val descriptor = characteristic.getDescriptor(UUID.fromString(GIIKER_DESCRIPTOR_UUID))
+        bluetoothGatt.writeDescriptor(
+            descriptor,
+            BluetoothGattDescriptor.ENABLE_INDICATION_VALUE
+        )
+    }
+
+    @RequiresApi(Build.VERSION_CODES.S)
+    fun enableCharacteristicsNotificationsAPI33Minus(
+        bluetoothGatt: BluetoothGatt,
+        characteristic: BluetoothGattCharacteristic
+    ) {
+        // Enable notifications for the characteristic
+        if (!bluetoothUtilities.checkForBluetoothConnectPermission()) {
+            bluetoothUtilities.requestBluetoothConnectPermission()
+            return
+        }
+        bluetoothGatt.setCharacteristicNotification(characteristic, true)
+
+        // Set the CCCD descriptor value to enable notifications
         val descriptor = characteristic.getDescriptor(UUID.fromString(GIIKER_DESCRIPTOR_UUID))
         descriptor.value = BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE
         bluetoothGatt.writeDescriptor(descriptor)
     }
 
-    companion object CubeConstants {
-        private const val GIIKER_DESCRIPTOR_UUID = "00002902-0000-1000-8000-00805f9b34fb"
+    @RequiresApi(Build.VERSION_CODES.S)
+    private fun handleDiscoveryReceiverAction(action: String?, intent: Intent) {
+
+        if (BluetoothDevice.ACTION_FOUND == action) {
+            val device = intent.parcelable<BluetoothDevice>(BluetoothDevice.EXTRA_DEVICE)
+            if (!bluetoothUtilities.checkForBluetoothConnectPermission()) {
+                bluetoothUtilities.requestBluetoothConnectPermission()
+                return
+            } else {
+                println(action)
+            }
+        }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.S)
+    private fun getDeviceScanIntentFilter(): IntentFilter {
+        val filter = IntentFilter(BluetoothDevice.ACTION_FOUND)
+        filter.addAction(BluetoothAdapter.ACTION_STATE_CHANGED)
+        filter.addAction(BluetoothAdapter.ACTION_DISCOVERY_STARTED)
+        filter.addAction(BluetoothAdapter.ACTION_DISCOVERY_FINISHED)
+        filter.addAction(BluetoothAdapter.ACTION_CONNECTION_STATE_CHANGED)
+        filter.addAction(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE)
+        filter.addAction(BluetoothAdapter.ACTION_REQUEST_ENABLE)
+        filter.addAction(BluetoothAdapter.ACTION_SCAN_MODE_CHANGED)
+        filter.addAction(BluetoothAdapter.ACTION_LOCAL_NAME_CHANGED)
+        return filter
     }
 
 }
