@@ -18,8 +18,6 @@ import android.os.Parcelable
 import androidx.activity.ComponentActivity
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.MutableState
-import com.example.smartcubeapp.CHARACTERISTIC_UUID
-import com.example.smartcubeapp.MY_CUBE_ADDRESS
 import com.example.smartcubeapp.cube.CubeState
 import com.example.smartcubeapp.cube.Move
 import com.example.smartcubeapp.cube.MoveDataParser
@@ -89,7 +87,7 @@ class BluetoothService(
 
 
     @RequiresApi(Build.VERSION_CODES.S)
-    fun getPairedDevices(): List<SimpleBluetoothDevice> {
+    fun getPairedDevices(): List<CubeDevice> {
 
         if (!bluetoothUtilities.checkIfBluetoothIsAvailable(bluetoothAdapter)) {
             return emptyList()
@@ -106,10 +104,10 @@ class BluetoothService(
             bluetoothAdapter.bondedDevices
         }
 
-        val devices = mutableListOf<SimpleBluetoothDevice>()
+        val devices = mutableListOf<CubeDevice>()
         pairedDevices.forEach { device ->
             //do something
-            devices.add(SimpleBluetoothDevice(device.name, device.address))
+            devices.add(CubeDevice(device.name, device.address))
         }
         return devices
     }
