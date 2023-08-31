@@ -29,9 +29,6 @@ import java.util.UUID
 class BluetoothService(
     private val activityContext: Context,
     private val activity: ComponentActivity,
-    val state: MutableState<TimerState>,
-    val cubeState: MutableState<CubeState>,
-    val lastMove: MutableState<Move>
 ) {
 
     private val bluetoothManager =
@@ -125,6 +122,7 @@ class BluetoothService(
     ) {
 
         val device = bluetoothAdapter.getRemoteDevice(address)
+        bluetoothState.value = BluetoothState.Connecting
         val gattCallback = object : BluetoothGattCallback() {
             @RequiresApi(Build.VERSION_CODES.S)
             override fun onConnectionStateChange(gatt: BluetoothGatt, status: Int, newState: Int) {
@@ -179,9 +177,10 @@ class BluetoothService(
                 bluetoothUtilities.requestBluetoothConnectPermission()
                 return
             }
-            state.value = TimerState.Scrambling
+            bluetoothState.value = BluetoothState.Connected
             gatt.discoverServices()
         } else if (newState == BluetoothProfile.STATE_DISCONNECTED) {
+            bluetoothState.value = BluetoothState.Disconnected
             println("Disconnected")
         }
     }

@@ -109,4 +109,15 @@ class BluetoothUtilities(private val activity: ComponentActivity, private val ac
             Manifest.permission.BLUETOOTH_SCAN
         ) == PackageManager.PERMISSION_GRANTED
     }
+
+    @RequiresApi(Build.VERSION_CODES.S)
+    fun requestAllPermissions() {
+        val permissions = arrayOf(
+            Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.ACCESS_COARSE_LOCATION,
+            Manifest.permission.BLUETOOTH_CONNECT,
+            Manifest.permission.BLUETOOTH_SCAN
+        )
+        activity.requestPermissions(permissions, 5)
+    }
 }
