@@ -18,8 +18,7 @@ class MoveDataParser(private val data: ByteBuffer) {
             cornerPositions = mutableListOf(),
             cornerOrientations = mutableListOf(),
             edgePositions = mutableListOf(),
-            edgeOrientations = mutableListOf(),
-            false
+            edgeOrientations = mutableListOf()
         )
         val moves = mutableListOf<Any>()
 
@@ -65,7 +64,10 @@ class MoveDataParser(private val data: ByteBuffer) {
             }
         }
 
-        state.solved = stateSolved(state)
+        val cornerPositionStartingFromZero = state.cornerPositions.map { it - 1 }.toMutableList()
+        state.setCornerPositions(cornerPositionStartingFromZero)
+        val edgePositionsStartingFromZero = state.edgePositions.map { it - 1 }.toMutableList()
+        state.setEdgePositions(edgePositionsStartingFromZero)
         return Pair(state, moves)
     }
 
@@ -83,30 +85,5 @@ class MoveDataParser(private val data: ByteBuffer) {
         } catch (e: Exception) {
             null
         }
-    }
-
-    //solved state: CubeState(cornerPositions=[1, 2, 3, 4, 5, 6, 7, 8], cornerOrientations=[3, 3, 3, 3, 3, 3, 3, 3], edgePositions=[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12], edgeOrientations=[false, false, false, false, false, false, false, false, false, false, false, false])
-    private fun stateSolved(state: CubeState): Boolean {
-        val solvedState = CubeState(
-            cornerPositions = mutableListOf(1, 2, 3, 4, 5, 6, 7, 8),
-            cornerOrientations = mutableListOf(3, 3, 3, 3, 3, 3, 3, 3),
-            edgePositions = mutableListOf(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12),
-            edgeOrientations = mutableListOf(
-                false,
-                false,
-                false,
-                false,
-                false,
-                false,
-                false,
-                false,
-                false,
-                false,
-                false,
-                false
-            ),
-            false
-        )
-        return state == solvedState
     }
 }

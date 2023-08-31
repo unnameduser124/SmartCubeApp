@@ -26,7 +26,7 @@ class StateScramblingLayout(
             modifier = Modifier
                 .fillMaxSize()
                 .clickable {
-                    if(!cubeState.value.solved){
+                    if(!cubeState.value.isSolved()){
                         state.value = TimerState.Solving
                         solve.value.scrambledState = cubeState.value
                     }

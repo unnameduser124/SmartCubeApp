@@ -33,7 +33,7 @@ class StateSolveFinishedLayout(
                 text = "Ready?",
                 fontSize = 40.sp,
                 modifier = Modifier.clickable {
-                    if(!cubeState.value.solved){
+                    if(!cubeState.value.isSolved()){
                         solve.value = Solve()
                         solve.value.scrambledState = cubeState.value
                         state.value = TimerState.Solving

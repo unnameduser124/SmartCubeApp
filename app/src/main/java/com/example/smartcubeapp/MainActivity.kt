@@ -29,7 +29,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             val state = remember { mutableStateOf(TimerState.Connecting) }
-            val cubeState = remember { mutableStateOf(SOLVED_CUBE_STATE) }
+            val cubeState = remember { mutableStateOf(CubeState.SOLVED_CUBE_STATE) }
             val lastMove = remember { mutableStateOf(Move("?", 0, "?")) }
 
             val solve = remember { mutableStateOf(Solve()) }
