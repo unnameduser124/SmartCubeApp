@@ -4,11 +4,11 @@ import com.example.smartcubeapp.cube.CubeSideIndexes
 import com.example.smartcubeapp.cube.CubeState
 import com.example.smartcubeapp.cube.WhiteSide
 import com.example.smartcubeapp.cube.YellowSide
-import com.example.smartcubeapp.phasedetection.SolutionPhaseDetection
+import com.example.smartcubeapp.phasedetection.CubeStatePhaseDetection
 import junit.framework.TestCase.assertTrue
 import org.junit.Test
 
-class SolutionPhaseDetectionSideSolvedTests {
+class CubeStatePhaseDetectionSideSolvedTests {
 
     @Test
     fun whiteSideSolvedTest(){
@@ -19,8 +19,8 @@ class SolutionPhaseDetectionSideSolvedTests {
             mutableListOf(true, false, false, true, false, false, false, true, false, false, false, true)
         )
 
-        val solutionPhaseDetection = SolutionPhaseDetection(cubeState)
-        val whiteSideSolved =  solutionPhaseDetection.checkIfSideIsSolved(
+        val cubeStatePhaseDetection = CubeStatePhaseDetection(cubeState)
+        val whiteSideSolved =  cubeStatePhaseDetection.checkIfSideIsSolved(
             WhiteSide.cornerIndexes,
             WhiteSide.edgeIndexes
         )
@@ -36,8 +36,8 @@ class SolutionPhaseDetectionSideSolvedTests {
             mutableListOf(true, false, false, true, false, false, false, true, false, false, false, true)
         )
 
-        val solutionPhaseDetection = SolutionPhaseDetection(cubeState)
-        val yellowSideSolved =  solutionPhaseDetection.checkIfSideIsSolved(
+        val cubeStatePhaseDetection = CubeStatePhaseDetection(cubeState)
+        val yellowSideSolved =  cubeStatePhaseDetection.checkIfSideIsSolved(
             YellowSide.cornerIndexes,
             YellowSide.edgeIndexes
         )
@@ -53,8 +53,8 @@ class SolutionPhaseDetectionSideSolvedTests {
             mutableListOf(true, false, true, true, true, false, true, true, false, false, false, false)
         )
 
-        val solutionPhaseDetection = SolutionPhaseDetection(cubeState)
-        val blueSideSolved =  solutionPhaseDetection.checkIfSideIsSolved(
+        val cubeStatePhaseDetection = CubeStatePhaseDetection(cubeState)
+        val blueSideSolved =  cubeStatePhaseDetection.checkIfSideIsSolved(
             CubeSideIndexes.BLUE_SIDE_CORNER_INDEXES,
             CubeSideIndexes.BLUE_SIDE_EDGE_INDEXES
         )
@@ -70,8 +70,8 @@ class SolutionPhaseDetectionSideSolvedTests {
             mutableListOf(true, false, true, true, true, false, true, true, false, false, false, false)
         )
 
-        val solutionPhaseDetection = SolutionPhaseDetection(cubeState)
-        val greenSideSolved =  solutionPhaseDetection.checkIfSideIsSolved(
+        val cubeStatePhaseDetection = CubeStatePhaseDetection(cubeState)
+        val greenSideSolved =  cubeStatePhaseDetection.checkIfSideIsSolved(
             CubeSideIndexes.GREEN_SIDE_CORNER_INDEXES,
             CubeSideIndexes.GREEN_SIDE_EDGE_INDEXES
         )
@@ -87,8 +87,8 @@ class SolutionPhaseDetectionSideSolvedTests {
             mutableListOf(false, false, true, false, false, false, false, true, false, false, false, false)
         )
 
-        val solutionPhaseDetection = SolutionPhaseDetection(cubeState)
-        val redSideSolved =  solutionPhaseDetection.checkIfSideIsSolved(
+        val cubeStatePhaseDetection = CubeStatePhaseDetection(cubeState)
+        val redSideSolved =  cubeStatePhaseDetection.checkIfSideIsSolved(
             CubeSideIndexes.RED_SIDE_CORNER_INDEXES,
             CubeSideIndexes.RED_SIDE_EDGE_INDEXES
         )
@@ -104,8 +104,8 @@ class SolutionPhaseDetectionSideSolvedTests {
             mutableListOf(false, false, true, false, false, false, false, true, false, false, false, false)
         )
 
-        val solutionPhaseDetection = SolutionPhaseDetection(cubeState)
-        val orangeSideSolved =  solutionPhaseDetection.checkIfSideIsSolved(
+        val cubeStatePhaseDetection = CubeStatePhaseDetection(cubeState)
+        val orangeSideSolved =  cubeStatePhaseDetection.checkIfSideIsSolved(
             CubeSideIndexes.ORANGE_SIDE_CORNER_INDEXES,
             CubeSideIndexes.ORANGE_SIDE_EDGE_INDEXES
         )

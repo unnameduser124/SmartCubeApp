@@ -1,10 +1,10 @@
 package com.example.smartcubeapp.elementorientationtests
 
 import com.example.smartcubeapp.cube.CubeState
-import com.example.smartcubeapp.phasedetection.SolutionPhaseDetection
+import com.example.smartcubeapp.phasedetection.CubeStatePhaseDetection
 import org.junit.Test
 
-class SolutionPhaseDetectionF2LSolvedTests {
+class CubeStatePhaseDetectionF2LSolvedTests {
 
     @Test
     fun whiteCrossBaseF2LSolvedTest() {
@@ -16,8 +16,8 @@ class SolutionPhaseDetectionF2LSolvedTests {
                 false, false, false, false, false, false, false, false, false, false, false, false
             )
         )
-        val solutionPhaseDetection = SolutionPhaseDetection(cubeState)
-        val f2lSolved = solutionPhaseDetection.F2LSolved()
+        val cubeStatePhaseDetection = CubeStatePhaseDetection(cubeState)
+        val f2lSolved = cubeStatePhaseDetection.F2LSolved()
         assert(f2lSolved)
     }
 
@@ -31,8 +31,8 @@ class SolutionPhaseDetectionF2LSolvedTests {
                 false, false, false, false, false, false, true, false, false, false, true, false
             )
         )
-        val solutionPhaseDetection = SolutionPhaseDetection(cubeState)
-        val f2lSolved = solutionPhaseDetection.F2LSolved()
+        val cubeStatePhaseDetection = CubeStatePhaseDetection(cubeState)
+        val f2lSolved = cubeStatePhaseDetection.F2LSolved()
         assert(!f2lSolved)
     }
 
@@ -46,8 +46,8 @@ class SolutionPhaseDetectionF2LSolvedTests {
                 false, false, false, false, false, false, false, false, false, false, false, false
             )
         )
-        val solutionPhaseDetection = SolutionPhaseDetection(cubeState)
-        val f2lSolved = solutionPhaseDetection.F2LSolved()
+        val cubeStatePhaseDetection = CubeStatePhaseDetection(cubeState)
+        val f2lSolved = cubeStatePhaseDetection.F2LSolved()
         assert(f2lSolved)
     }
 
@@ -61,8 +61,8 @@ class SolutionPhaseDetectionF2LSolvedTests {
                 false, false, false, false, false, false, false, true, false, false, true, false
             )
         )
-        val solutionPhaseDetection = SolutionPhaseDetection(cubeState)
-        val f2lSolved = solutionPhaseDetection.F2LSolved()
+        val cubeStatePhaseDetection = CubeStatePhaseDetection(cubeState)
+        val f2lSolved = cubeStatePhaseDetection.F2LSolved()
         assert(!f2lSolved)
     }
 
@@ -76,8 +76,8 @@ class SolutionPhaseDetectionF2LSolvedTests {
                 false, false, false, false, false, false, false, false, false, false, false, false
             )
         )
-        val solutionPhaseDetection = SolutionPhaseDetection(cubeState)
-        val f2lSolved = solutionPhaseDetection.F2LSolved()
+        val cubeStatePhaseDetection = CubeStatePhaseDetection(cubeState)
+        val f2lSolved = cubeStatePhaseDetection.F2LSolved()
         assert(f2lSolved)
     }
 
@@ -91,8 +91,8 @@ class SolutionPhaseDetectionF2LSolvedTests {
                 false, false, false, false, false, false, false, false, true, true, false, false
             )
         )
-        val solutionPhaseDetection = SolutionPhaseDetection(cubeState)
-        val f2lSolved = solutionPhaseDetection.F2LSolved()
+        val cubeStatePhaseDetection = CubeStatePhaseDetection(cubeState)
+        val f2lSolved = cubeStatePhaseDetection.F2LSolved()
         assert(!f2lSolved)
     }
 }

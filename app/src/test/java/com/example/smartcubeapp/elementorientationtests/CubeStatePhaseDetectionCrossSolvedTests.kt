@@ -1,11 +1,11 @@
 package com.example.smartcubeapp.elementorientationtests
 
 import com.example.smartcubeapp.cube.CubeState
-import com.example.smartcubeapp.phasedetection.SolutionPhaseDetection
+import com.example.smartcubeapp.phasedetection.CubeStatePhaseDetection
 import junit.framework.TestCase.assertTrue
 import org.junit.Test
 
-class SolutionPhaseDetectionCrossSolvedTests {
+class CubeStatePhaseDetectionCrossSolvedTests {
 
     @Test
     fun whiteCrossSolvedTest() {
@@ -18,8 +18,8 @@ class SolutionPhaseDetectionCrossSolvedTests {
             )
         )
 
-        val solutionPhaseDetection = SolutionPhaseDetection(cubeState)
-        val whiteCrossSolved = solutionPhaseDetection.crossSolved()
+        val cubeStatePhaseDetection = CubeStatePhaseDetection(cubeState)
+        val whiteCrossSolved = cubeStatePhaseDetection.crossSolved()
         assertTrue(whiteCrossSolved)
     }
 
@@ -34,8 +34,8 @@ class SolutionPhaseDetectionCrossSolvedTests {
             )
         )
 
-        val solutionPhaseDetection = SolutionPhaseDetection(cubeState)
-        val yellowCrossSolved = solutionPhaseDetection.crossSolved()
+        val cubeStatePhaseDetection = CubeStatePhaseDetection(cubeState)
+        val yellowCrossSolved = cubeStatePhaseDetection.crossSolved()
         assertTrue(yellowCrossSolved)
     }
 
@@ -50,8 +50,8 @@ class SolutionPhaseDetectionCrossSolvedTests {
             )
         )
 
-        val solutionPhaseDetection = SolutionPhaseDetection(cubeState)
-        val blueCrossSolved = solutionPhaseDetection.crossSolved()
+        val cubeStatePhaseDetection = CubeStatePhaseDetection(cubeState)
+        val blueCrossSolved = cubeStatePhaseDetection.crossSolved()
         assertTrue(blueCrossSolved)
     }
 
@@ -66,8 +66,8 @@ class SolutionPhaseDetectionCrossSolvedTests {
             )
         )
 
-        val solutionPhaseDetection = SolutionPhaseDetection(cubeState)
-        val greenCrossSolved = solutionPhaseDetection.crossSolved()
+        val cubeStatePhaseDetection = CubeStatePhaseDetection(cubeState)
+        val greenCrossSolved = cubeStatePhaseDetection.crossSolved()
         assertTrue(greenCrossSolved)
     }
 
@@ -82,8 +82,8 @@ class SolutionPhaseDetectionCrossSolvedTests {
             )
         )
 
-        val solutionPhaseDetection = SolutionPhaseDetection(cubeState)
-        val redCrossSolved = solutionPhaseDetection.crossSolved()
+        val cubeStatePhaseDetection = CubeStatePhaseDetection(cubeState)
+        val redCrossSolved = cubeStatePhaseDetection.crossSolved()
         assertTrue(redCrossSolved)
     }
 
@@ -98,8 +98,8 @@ class SolutionPhaseDetectionCrossSolvedTests {
             )
         )
 
-        val solutionPhaseDetection = SolutionPhaseDetection(cubeState)
-        val orangeCrossSolved = solutionPhaseDetection.crossSolved()
+        val cubeStatePhaseDetection = CubeStatePhaseDetection(cubeState)
+        val orangeCrossSolved = cubeStatePhaseDetection.crossSolved()
         assertTrue(orangeCrossSolved)
     }
 
@@ -114,8 +114,8 @@ class SolutionPhaseDetectionCrossSolvedTests {
             )
         )
 
-        val solutionPhaseDetection = SolutionPhaseDetection(cubeState)
-        val crossSolved = solutionPhaseDetection.crossSolved()
+        val cubeStatePhaseDetection = CubeStatePhaseDetection(cubeState)
+        val crossSolved = cubeStatePhaseDetection.crossSolved()
         assertTrue(!crossSolved)
     }
 }

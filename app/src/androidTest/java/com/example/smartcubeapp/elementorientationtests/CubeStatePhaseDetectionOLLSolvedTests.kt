@@ -2,11 +2,11 @@ package com.example.smartcubeapp.elementorientationtests
 
 import android.content.Context
 import com.example.smartcubeapp.cube.CubeState
-import com.example.smartcubeapp.phasedetection.SolutionPhaseDetection
+import com.example.smartcubeapp.phasedetection.CubeStatePhaseDetection
 import org.junit.Before
 import org.junit.Test
 
-class SolutionPhaseDetectionOLLSolvedTests {
+class CubeStatePhaseDetectionOLLSolvedTests {
 
     private lateinit var context: Context
 
@@ -24,8 +24,8 @@ class SolutionPhaseDetectionOLLSolvedTests {
             edgeOrientations = mutableListOf(false, false, false, false, false, false, false, false, false, false, false, false)
         )
 
-        val solutionPhaseDetection = SolutionPhaseDetection(cubeState)
-        val OLLSolved = solutionPhaseDetection.OLLSolved(context)
+        val cubeStatePhaseDetection = CubeStatePhaseDetection(cubeState)
+        val OLLSolved = cubeStatePhaseDetection.OLLSolved(context)
         assert(OLLSolved)
     }
 
@@ -38,8 +38,8 @@ class SolutionPhaseDetectionOLLSolvedTests {
             edgeOrientations = mutableListOf(false, false, false, false, false, false, false, false, false, false, false, false)
         )
 
-        val solutionPhaseDetection = SolutionPhaseDetection(cubeState)
-        val OLLSolved = solutionPhaseDetection.OLLSolved(context)
+        val cubeStatePhaseDetection = CubeStatePhaseDetection(cubeState)
+        val OLLSolved = cubeStatePhaseDetection.OLLSolved(context)
         assert(!OLLSolved)
     }
 
@@ -52,8 +52,8 @@ class SolutionPhaseDetectionOLLSolvedTests {
             edgeOrientations = mutableListOf(false, false, false, false, false, false, false, false, false, false, false, false)
         )
 
-        val solutionPhaseDetection = SolutionPhaseDetection(cubeState)
-        val OLLSolved = solutionPhaseDetection.OLLSolved(context)
+        val cubeStatePhaseDetection = CubeStatePhaseDetection(cubeState)
+        val OLLSolved = cubeStatePhaseDetection.OLLSolved(context)
         assert(OLLSolved)
     }
 
@@ -66,8 +66,8 @@ class SolutionPhaseDetectionOLLSolvedTests {
             edgeOrientations = mutableListOf(true, true, true, true, false, false, false, false, false, false, false, false)
         )
 
-        val solutionPhaseDetection = SolutionPhaseDetection(cubeState)
-        val OLLSolved = solutionPhaseDetection.OLLSolved(context)
+        val cubeStatePhaseDetection = CubeStatePhaseDetection(cubeState)
+        val OLLSolved = cubeStatePhaseDetection.OLLSolved(context)
         assert(!OLLSolved)
     }
 
@@ -80,8 +80,8 @@ class SolutionPhaseDetectionOLLSolvedTests {
             edgeOrientations = mutableListOf(false, false, false, false, false, false, false, false, false, false, false, false)
         )
 
-        val solutionPhaseDetection = SolutionPhaseDetection(cubeState)
-        val OLLSolved = solutionPhaseDetection.OLLSolved(context)
+        val cubeStatePhaseDetection = CubeStatePhaseDetection(cubeState)
+        val OLLSolved = cubeStatePhaseDetection.OLLSolved(context)
         assert(OLLSolved)
     }
 
@@ -94,8 +94,8 @@ class SolutionPhaseDetectionOLLSolvedTests {
             edgeOrientations = mutableListOf(false, false, false, false, false, false, false, false, false, false, false, false)
         )
 
-        val solutionPhaseDetection = SolutionPhaseDetection(cubeState)
-        val OLLSolved = solutionPhaseDetection.OLLSolved(context)
+        val cubeStatePhaseDetection = CubeStatePhaseDetection(cubeState)
+        val OLLSolved = cubeStatePhaseDetection.OLLSolved(context)
         assert(!OLLSolved)
     }
 }
