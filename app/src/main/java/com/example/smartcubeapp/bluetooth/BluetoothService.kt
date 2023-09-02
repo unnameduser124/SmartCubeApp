@@ -23,6 +23,7 @@ import com.example.smartcubeapp.cube.Move
 import com.example.smartcubeapp.cube.MoveDataParser
 import com.example.smartcubeapp.timerUI.TimerState
 import java.nio.ByteBuffer
+import java.util.Calendar
 import java.util.UUID
 
 
@@ -117,8 +118,8 @@ class BluetoothService(
     @RequiresApi(Build.VERSION_CODES.S)
     fun connectToDevice(
         address: String = MY_CUBE_ADDRESS,
-        serviceUUID: String,
-        characteristicUUID: String
+        serviceUUID: String = SERVICE_UUID,
+        characteristicUUID: String = CHARACTERISTIC_UUID
     ) {
 
         val device = bluetoothAdapter.getRemoteDevice(address)
@@ -139,11 +140,12 @@ class BluetoothService(
                 gatt: BluetoothGatt,
                 characteristic: BluetoothGattCharacteristic
             ) {
+                val timestamp = Calendar.getInstance().timeInMillis
                 val data = characteristic.value // The received data from the GiikerCube
                 val dataParser = MoveDataParser(ByteBuffer.wrap(data))
                 val state = dataParser.parseCubeValue()
-                cubeState.value = state.first
-                lastMove.value = state.second[0] as Move
+                state.timestamp = timestamp
+                cubeState.value = state
             }
 
             @RequiresApi(Build.VERSION_CODES.TIRAMISU)
@@ -154,8 +156,7 @@ class BluetoothService(
             ) {
                 val dataParser = MoveDataParser(ByteBuffer.wrap(value))
                 val state = dataParser.parseCubeValue()
-                cubeState.value = state.first
-                lastMove.value = state.second[0] as Move
+                cubeState.value = state
             }
         }
 

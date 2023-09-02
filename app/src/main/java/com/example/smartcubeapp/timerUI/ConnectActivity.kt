@@ -64,10 +64,8 @@ class ConnectActivity: ComponentActivity(
             ) {
                 Button(
                     onClick = {
-                        bluetoothService.connectToDevice(
-                            serviceUUID = SERVICE_UUID,
-                            characteristicUUID = CHARACTERISTIC_UUID
-                        )
+                        //temporarily hard coded to connect to test cube
+                        bluetoothService.connectToDevice()
                     },
                     modifier = Modifier.padding(16.dp)
                 ) {

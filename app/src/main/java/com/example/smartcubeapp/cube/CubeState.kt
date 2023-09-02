@@ -1,12 +1,15 @@
 package com.example.smartcubeapp.cube
 
+import java.util.Calendar
+
 data class CubeState(
     val cornerPositions: MutableList<Int>,
     val cornerOrientations: MutableList<Int>,
     val edgePositions: MutableList<Int>,
-    val edgeOrientations: MutableList<Boolean>
-)
-{
+    val edgeOrientations: MutableList<Boolean>,
+    var lastMove: Move = Move(),
+    var timestamp: Long = Calendar.getInstance().timeInMillis
+) {
     fun setCornerPositions(newCornerPositions: MutableList<Int>) {
         cornerPositions.clear()
         cornerPositions.addAll(newCornerPositions)
@@ -22,8 +25,7 @@ data class CubeState(
         for (i in 0..7) {
             if (cornerPositions[i] != i) {
                 incorrectlySolvedCorners.add(i)
-            }
-            else if(cornerOrientations[i] != 3) {
+            } else if (cornerOrientations[i] != 3) {
                 incorrectlySolvedCorners.add(i)
             }
         }
@@ -32,8 +34,7 @@ data class CubeState(
         for (i in 0..11) {
             if (edgePositions[i] != i) {
                 incorrectlySolvedEdges.add(i)
-            }
-            else if(edgeOrientations[i]) {
+            } else if (edgeOrientations[i]) {
                 incorrectlySolvedEdges.add(i)
             }
         }
@@ -58,19 +59,30 @@ data class CubeState(
     }
 
     override fun equals(other: Any?): Boolean {
-        if(other is CubeState){
-            if(this.cornerPositions == other.cornerPositions &&
+        if (other is CubeState) {
+            if (this.cornerPositions == other.cornerPositions &&
                 this.cornerOrientations == other.cornerOrientations &&
                 this.edgePositions == other.edgePositions &&
-                this.edgeOrientations == other.edgeOrientations){
+                this.edgeOrientations == other.edgeOrientations
+            ) {
                 return true
             }
         }
         return false
     }
 
-    fun isSolved(): Boolean{
+    fun isSolved(): Boolean {
         return this == SOLVED_CUBE_STATE
+    }
+
+    override fun hashCode(): Int {
+        var result = cornerPositions.hashCode()
+        result = 31 * result + cornerOrientations.hashCode()
+        result = 31 * result + edgePositions.hashCode()
+        result = 31 * result + edgeOrientations.hashCode()
+        result = 31 * result + lastMove.hashCode()
+        result = 31 * result + timestamp.hashCode()
+        return result
     }
 
 
@@ -93,7 +105,8 @@ data class CubeState(
                 false,
                 false,
                 false
-            )
+            ),
+            lastMove = Move("F", 1, "F")
         )
 
     }

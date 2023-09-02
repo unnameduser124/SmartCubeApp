@@ -13,12 +13,13 @@ class MoveDataParser(private val data: ByteBuffer) {
 
     private val faces = listOf("F", "U", "L", "D", "R", "B")
 
-    fun parseCubeValue(): Pair<CubeState, List<Any>> {
+    fun parseCubeValue(): CubeState {
         val state = CubeState(
             cornerPositions = mutableListOf(),
             cornerOrientations = mutableListOf(),
             edgePositions = mutableListOf(),
-            edgeOrientations = mutableListOf()
+            edgeOrientations = mutableListOf(),
+            lastMove = Move()
         )
         val moves = mutableListOf<Any>()
 
@@ -68,7 +69,8 @@ class MoveDataParser(private val data: ByteBuffer) {
         state.setCornerPositions(cornerPositionStartingFromZero)
         val edgePositionsStartingFromZero = state.edgePositions.map { it - 1 }.toMutableList()
         state.setEdgePositions(edgePositionsStartingFromZero)
-        return Pair(state, moves)
+        state.lastMove = moves.last() as Move
+        return state
     }
 
     private fun parseMove(faceIndex: Int, turnIndex: Int): Move? {

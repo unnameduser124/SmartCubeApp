@@ -30,7 +30,7 @@ class CubeStatePhaseDetectionTests {
         )
 
         cubeStatePhaseDetection.changeState(cubeState)
-        val phase = cubeStatePhaseDetection.getFinishedPhaseForState()
+        val phase = cubeStatePhaseDetection.getFinishedPhaseForState(context)
         assert(phase == SolvePhase.Cross)
     }
 
@@ -45,7 +45,7 @@ class CubeStatePhaseDetectionTests {
             )
         )
         cubeStatePhaseDetection.changeState(cubeState)
-        val phase = cubeStatePhaseDetection.getFinishedPhaseForState()
+        val phase = cubeStatePhaseDetection.getFinishedPhaseForState(context)
         assert(phase == SolvePhase.Cross)
     }
 
@@ -60,7 +60,7 @@ class CubeStatePhaseDetectionTests {
             )
         )
         cubeStatePhaseDetection.changeState(cubeState)
-        val phase = cubeStatePhaseDetection.getFinishedPhaseForState()
+        val phase = cubeStatePhaseDetection.getFinishedPhaseForState(context)
         assert(phase == SolvePhase.F2L)
     }
 
@@ -75,7 +75,7 @@ class CubeStatePhaseDetectionTests {
             )
         )
         cubeStatePhaseDetection.changeState(cubeState)
-        val phase = cubeStatePhaseDetection.getFinishedPhaseForState()
+        val phase = cubeStatePhaseDetection.getFinishedPhaseForState(context)
         assert(phase == SolvePhase.F2L)
     }
 
@@ -91,7 +91,7 @@ class CubeStatePhaseDetectionTests {
             )
         )
         cubeStatePhaseDetection.changeState(cubeState)
-        val phase = cubeStatePhaseDetection.getFinishedPhaseForState()
+        val phase = cubeStatePhaseDetection.getFinishedPhaseForState(context)
         assert(phase == SolvePhase.OLL)
     }
 
@@ -106,14 +106,14 @@ class CubeStatePhaseDetectionTests {
             )
         )
         cubeStatePhaseDetection.changeState(cubeState)
-        val phase = cubeStatePhaseDetection.getFinishedPhaseForState()
+        val phase = cubeStatePhaseDetection.getFinishedPhaseForState(context)
         assert(phase == SolvePhase.OLL)
     }
 
     @Test
     fun stateCubeSolvedTest() {
         cubeStatePhaseDetection.changeState(CubeState.SOLVED_CUBE_STATE)
-        val phase = cubeStatePhaseDetection.getFinishedPhaseForState()
+        val phase = cubeStatePhaseDetection.getFinishedPhaseForState(context)
         assert(phase == SolvePhase.Solved)
     }
 

@@ -83,8 +83,20 @@ class CubeStatePhaseDetection(private var cubeState: CubeState) {
         return true
     }
 
-    fun getFinishedPhaseForState(): SolvePhase{
-        TODO("Not implemented yet")
+    fun getFinishedPhaseForState(context: Context): SolvePhase{
+        if(cubeState.isSolved()){
+            return SolvePhase.Solved
+        }
+        if(OLLSolved(context)){
+            return SolvePhase.OLL
+        }
+        if(F2LSolved()){
+            return SolvePhase.F2L
+        }
+        if(crossSolved()){
+            return SolvePhase.Cross
+        }
+        return SolvePhase.Scrambled
     }
 
     private fun getEdgePositionAndOrientation(edgeIndex: Int): Pair<Int, Int> {
