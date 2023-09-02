@@ -4,6 +4,6 @@ enum class SolvePhase {
     Cross,
     F2L,
     OLL,
-    Solved,
+    PLL,
     Scrambled
 }

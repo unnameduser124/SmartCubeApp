@@ -85,7 +85,7 @@ class CubeStatePhaseDetection(private var cubeState: CubeState) {
 
     fun getFinishedPhaseForState(context: Context): SolvePhase{
         if(cubeState.isSolved()){
-            return SolvePhase.Solved
+            return SolvePhase.PLL
         }
         if(OLLSolved(context)){
             return SolvePhase.OLL

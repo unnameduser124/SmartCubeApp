@@ -1,6 +1,5 @@
 package com.example.smartcubeapp.timerUI
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -14,7 +13,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.sp
 import com.example.smartcubeapp.cube.CubeState
-import com.example.smartcubeapp.cube.Move
 import com.example.smartcubeapp.cube.Solve
 import kotlinx.coroutines.delay
 import java.util.Calendar
@@ -55,13 +53,13 @@ class StateSolvingLayout(
                 }
             }
             if (cubeState.value != solve.value.scrambledState
-                && cubeState.value != solve.value.solveMoveSequence.lastOrNull()
+                && cubeState.value != solve.value.solveStateSequence.lastOrNull()
                 && solve.value.solveInProgress) {
-                solve.value.solveMoveSequence.add(cubeState.value)
+                solve.value.solveStateSequence.add(cubeState.value)
             }
             if (cubeState.value.isSolved()) {
                 state.value = TimerState.SolveFinished
-                solve.value.time = Calendar.getInstance().timeInMillis - solve.value.solveStartTime
+                solve.value.calculateTimeFromStateSequence()
                 solve.value.solveInProgress = false
             }
 

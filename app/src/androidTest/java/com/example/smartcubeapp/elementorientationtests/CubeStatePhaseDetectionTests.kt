@@ -114,7 +114,7 @@ class CubeStatePhaseDetectionTests {
     fun stateCubeSolvedTest() {
         cubeStatePhaseDetection.changeState(CubeState.SOLVED_CUBE_STATE)
         val phase = cubeStatePhaseDetection.getFinishedPhaseForState(context)
-        assert(phase == SolvePhase.Solved)
+        assert(phase == SolvePhase.PLL)
     }
 
 }
