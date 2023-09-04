@@ -74,7 +74,6 @@ class CubeStatePhaseDetection(private var cubeState: CubeState) {
             ElementOrientationDBService(context).getElementOrientationItemsBySideCorrectlySideRelativeOriented(
                 oppositeSide.sideName
             )
-        println(correctPositions.size)
 
         oppositeSide.edgeIndexes.forEach { edge ->
             val edgePosition = getEdgePositionAndOrientation(edge)

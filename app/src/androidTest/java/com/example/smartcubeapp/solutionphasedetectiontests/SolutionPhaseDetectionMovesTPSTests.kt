@@ -26,14 +26,14 @@ class SolutionPhaseDetectionMovesTPSTests {
     @Test
     fun crossMoveCountTest() {
         val expected = 1
-        val actual = solutionPhaseDetection.getPhaseMoveCount(SolvePhase.Cross)
+        val actual = solutionPhaseDetection.getPhaseMoveCount(SolvePhase.Cross, context)
         assert(expected == actual)
     }
 
     @Test
     fun crossTPSTest() {
         val expected = 10.0
-        val actual = solutionPhaseDetection.getPhaseTPS(SolvePhase.Cross)
+        val actual = solutionPhaseDetection.getPhaseTPS(SolvePhase.Cross, context)
         assert(expected == actual)
     }
 
@@ -41,7 +41,7 @@ class SolutionPhaseDetectionMovesTPSTests {
     @Test
     fun F2LMoveCountTest() {
         val expected = 3
-        val actual = solutionPhaseDetection.getPhaseMoveCount(SolvePhase.F2L)
+        val actual = solutionPhaseDetection.getPhaseMoveCount(SolvePhase.F2L, context)
         assert(expected == actual)
     }
 
@@ -49,7 +49,7 @@ class SolutionPhaseDetectionMovesTPSTests {
     @Test
     fun F2LTPSTest() {
         val expected = 10.0
-        val actual = solutionPhaseDetection.getPhaseTPS(SolvePhase.F2L)
+        val actual = solutionPhaseDetection.getPhaseTPS(SolvePhase.F2L, context)
         assert(expected == actual)
     }
 
@@ -57,7 +57,7 @@ class SolutionPhaseDetectionMovesTPSTests {
     @Test
     fun OLLMoveCountTest() {
         val expected = 6
-        val actual = solutionPhaseDetection.getPhaseMoveCount(SolvePhase.OLL)
+        val actual = solutionPhaseDetection.getPhaseMoveCount(SolvePhase.OLL, context)
         assert(expected == actual)
     }
 
@@ -65,7 +65,7 @@ class SolutionPhaseDetectionMovesTPSTests {
     @Test
     fun OLLTPSTest() {
         val expected = 10.0
-        val actual = solutionPhaseDetection.getPhaseTPS(SolvePhase.OLL)
+        val actual = solutionPhaseDetection.getPhaseTPS(SolvePhase.OLL, context)
         assert(expected == actual)
     }
 
@@ -73,7 +73,7 @@ class SolutionPhaseDetectionMovesTPSTests {
     @Test
     fun PLLMoveCountTest(){
         val expected = 0
-        val actual = solutionPhaseDetection.getPhaseMoveCount(SolvePhase.PLL)
+        val actual = solutionPhaseDetection.getPhaseMoveCount(SolvePhase.PLL, context)
         assert(expected == actual)
     }
 
@@ -81,7 +81,7 @@ class SolutionPhaseDetectionMovesTPSTests {
     @Test
     fun PLLTPSTest(){
         val expected = 0.0
-        val actual = solutionPhaseDetection.getPhaseTPS(SolvePhase.PLL)
+        val actual = solutionPhaseDetection.getPhaseTPS(SolvePhase.PLL, context)
         assert(expected == actual)
     }
 
