@@ -4,7 +4,24 @@ open class CubeSide(
     val sideName: String,
     val cornerIndexes: Array<Int>,
     val edgeIndexes: Array<Int>
-)
+) {
+    override fun equals(other: Any?): Boolean {
+        return if (other is CubeSide) {
+            sideName == other.sideName
+                    && cornerIndexes.contentEquals(other.cornerIndexes)
+                    && edgeIndexes.contentEquals(other.edgeIndexes)
+        } else {
+            false
+        }
+    }
+
+    override fun hashCode(): Int {
+        var result = sideName.hashCode()
+        result = 31 * result + cornerIndexes.contentHashCode()
+        result = 31 * result + edgeIndexes.contentHashCode()
+        return result
+    }
+}
 
 val YellowSide = CubeSide(
     "yellow",
@@ -51,9 +68,9 @@ val cubeSides = listOf(
     OrangeSide
 )
 
-fun getCubeSideFromName(name: String): CubeSide{
-    for(side in cubeSides){
-        if(side.sideName == name){
+fun getCubeSideFromName(name: String): CubeSide {
+    for (side in cubeSides) {
+        if (side.sideName == name) {
             return side
         }
     }
@@ -99,20 +116,20 @@ fun getSideIntersectionIndexes(
     return intersection
 }
 
-fun getSidesForCorner(cornerNumber: Int): List<CubeSide>{
+fun getSidesForCorner(cornerNumber: Int): List<CubeSide> {
     val sides = mutableListOf<CubeSide>()
-    for(side in cubeSides){
-        if(side.cornerIndexes.contains(cornerNumber)){
+    for (side in cubeSides) {
+        if (side.cornerIndexes.contains(cornerNumber)) {
             sides.add(side)
         }
     }
     return sides
 }
 
-fun getSidesForEdge(edgeNumber: Int): List<CubeSide>{
+fun getSidesForEdge(edgeNumber: Int): List<CubeSide> {
     val sides = mutableListOf<CubeSide>()
-    for(side in cubeSides){
-        if(side.edgeIndexes.contains(edgeNumber)){
+    for (side in cubeSides) {
+        if (side.edgeIndexes.contains(edgeNumber)) {
             sides.add(side)
         }
     }

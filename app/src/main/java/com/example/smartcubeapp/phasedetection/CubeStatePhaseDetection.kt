@@ -1,6 +1,7 @@
 package com.example.smartcubeapp.phasedetection
 
 import android.content.Context
+import com.example.smartcubeapp.cube.CubeSide
 import com.example.smartcubeapp.cube.CubeState
 import com.example.smartcubeapp.cube.cubeSides
 import com.example.smartcubeapp.cube.getSideIntersectionIndexes
@@ -11,6 +12,7 @@ class CubeStatePhaseDetection(private var cubeState: CubeState) {
     fun changeState(newCubeState: CubeState) {
         cubeState = newCubeState
     }
+
     fun crossSolved(): Boolean {
         val correctlySolvedEdges = cubeState.getCorrectlySolvedPieces().second
         for (side in cubeSides) {
@@ -22,14 +24,17 @@ class CubeStatePhaseDetection(private var cubeState: CubeState) {
     }
 
     @Suppress("FunctionName")
-    fun F2LSolved(): Boolean {
+    fun F2LSolved(
+        predeterminedSolvedSide: CubeSide? = null
+    ): Boolean {
         //check if theres a side that has all corners and edges solved correctly
         //if there isn't then return false
         //if there is then find the side that has no intersecting pieces with that side
         //if all of the pieces that are not on the solved side or the opposite side are solved then return true
-        val solvedSide = cubeSides.find {
+
+        val solvedSide = predeterminedSolvedSide ?: (cubeSides.find {
             checkIfSideIsSolved(it.cornerIndexes, it.edgeIndexes)
-        } ?: return false
+        } ?: return false)
 
         val oppositeSide = cubeSides.find {
             getSideIntersectionIndexes(
@@ -49,11 +54,14 @@ class CubeStatePhaseDetection(private var cubeState: CubeState) {
     }
 
     @Suppress("FunctionName")
-    fun OLLSolved(context: Context): Boolean {
+    fun OLLSolved(
+        context: Context,
+        predeterminedSolvedSide: CubeSide? = null,
+    ): Boolean {
 
-        val solvedSide = cubeSides.find {
+        val solvedSide = predeterminedSolvedSide ?: (cubeSides.find {
             checkIfSideIsSolved(it.cornerIndexes, it.edgeIndexes)
-        } ?: return false
+        } ?: return false)
 
         val oppositeSide = cubeSides.find {
             getSideIntersectionIndexes(
@@ -83,17 +91,17 @@ class CubeStatePhaseDetection(private var cubeState: CubeState) {
         return true
     }
 
-    fun getFinishedPhaseForState(context: Context): SolvePhase{
-        if(cubeState.isSolved()){
+    fun getFinishedPhaseForState(context: Context): SolvePhase {
+        if (cubeState.isSolved()) {
             return SolvePhase.PLL
         }
-        if(OLLSolved(context)){
+        if (OLLSolved(context)) {
             return SolvePhase.OLL
         }
-        if(F2LSolved()){
+        if (F2LSolved()) {
             return SolvePhase.F2L
         }
-        if(crossSolved()){
+        if (crossSolved()) {
             return SolvePhase.Cross
         }
         return SolvePhase.Scrambled
