@@ -1,5 +1,6 @@
 package com.example.smartcubeapp.cube
 
+import com.example.smartcubeapp.MILLIS_IN_SECOND
 import java.util.Calendar
 
 class Solve(
@@ -11,7 +12,8 @@ class Solve(
     var solveStartTime: Long = 0
 ) {
     fun getTurnsPerSecond(): Double{
-        return solveStateSequence.size.toDouble() / (time / 1000.0)
+        println(solveStateSequence.size)
+        return solveStateSequence.size.toDouble() / (time / MILLIS_IN_SECOND)
     }
 
     fun calculateTimeFromStateSequence(){

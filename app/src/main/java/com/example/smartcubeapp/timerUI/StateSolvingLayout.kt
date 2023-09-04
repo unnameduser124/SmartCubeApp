@@ -44,6 +44,8 @@ class StateSolvingLayout(
             if (cubeState.value != solve.value.scrambledState && !solve.value.solveInProgress) {
                 solve.value.solveStartTime = Calendar.getInstance().timeInMillis
                 solve.value.solveInProgress = true
+                solve.value.scrambledState.timestamp = solve.value.solveStartTime
+                solve.value.solveStateSequence.add(solve.value.scrambledState)
                 LaunchedEffect(solve.value.solveInProgress) {
                     while (solve.value.solveInProgress) {
                         delay(100)

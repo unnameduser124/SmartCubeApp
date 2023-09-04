@@ -14,6 +14,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
@@ -62,6 +64,18 @@ class ConnectActivity: ComponentActivity(
                 modifier = Modifier
                     .background(color = Color.LightGray, shape = RoundedCornerShape(16.dp))
             ) {
+                val buttonText = remember {mutableStateOf(BluetoothState.Disconnected.toString())}
+                when (bluetoothState.value) {
+                    BluetoothState.Disconnected -> {
+                        buttonText.value = "Connect"
+                    }
+                    BluetoothState.Connecting -> {
+                        buttonText.value = BluetoothState.Connecting.toString()
+                    }
+                    BluetoothState.Connected -> {
+                        buttonText.value = BluetoothState.Connected.toString()
+                    }
+                }
                 Button(
                     onClick = {
                         //temporarily hard coded to connect to test cube
@@ -69,7 +83,7 @@ class ConnectActivity: ComponentActivity(
                     },
                     modifier = Modifier.padding(16.dp)
                 ) {
-                    Text(text = "Connect", fontSize = 25.sp)
+                    Text(text = buttonText.value, fontSize = 25.sp)
                 }
             }
         }

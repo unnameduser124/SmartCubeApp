@@ -93,16 +93,25 @@ class SolutionPhaseDetection(
     }
 
     fun getStartTimeForPhase(phase: SolvePhase, context: Context): Long {
-        return solution.solveStateSequence[getStartIndexForPhase(phase, context)].timestamp
+        return try {
+            solution.solveStateSequence[getStartIndexForPhase(phase, context)].timestamp
+        } catch (e: Exception) {
+            0L
+        }
     }
 
     fun getEndTimeForPhase(phase: SolvePhase, context: Context): Long {
-        return solution.solveStateSequence[getEndIndexForPhase(phase, context)].timestamp
+        return try {
+            solution.solveStateSequence[getEndIndexForPhase(phase, context)].timestamp
+        } catch (e: Exception) {
+            0L
+        }
     }
 
     fun getPhaseDurationInSeconds(phase: SolvePhase, context: Context): Double {
         val durationInMillis =
             getEndTimeForPhase(phase, context) - getStartTimeForPhase(phase, context)
+        if(durationInMillis < 0) return 0.0
         return durationInMillis.toDouble() / MILLIS_IN_SECOND
     }
 

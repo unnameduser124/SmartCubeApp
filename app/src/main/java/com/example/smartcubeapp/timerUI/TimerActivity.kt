@@ -46,7 +46,7 @@ class TimerActivity: ComponentActivity() {
             }
 
             TimerState.SolveFinished -> {
-                StateSolveFinishedLayout(timerState, cubeState, solve).GenerateLayout()
+                StateSolveFinishedLayout(timerState, cubeState, solve, this).GenerateLayout()
             }
         }
     }
