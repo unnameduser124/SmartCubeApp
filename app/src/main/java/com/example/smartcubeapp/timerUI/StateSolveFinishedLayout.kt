@@ -69,7 +69,7 @@ class StateSolveFinishedLayout(
             Text(text = timeRounded.toString(), fontSize = 50.sp, modifier = Modifier.padding(top = 20.dp))
         }
         Row(horizontalArrangement = Arrangement.Center) {
-            val moveCount = solve.value.solveStateSequence.size
+            val moveCount = solve.value.solveStateSequence.size - 1
             Text(
                 text = "$moveCount moves",
                 fontSize = 25.sp,

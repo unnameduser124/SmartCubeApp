@@ -127,8 +127,8 @@ class SolutionPhaseDetection(
 
     fun setCrossSide() {
         solution.solveStateSequence.forEach {
-            phaseDetection.changeState(it)
-            if (phaseDetection.crossSolved()) {
+            val crossPhaseDetection = CubeStatePhaseDetection(it)
+            if (crossPhaseDetection.crossSolved()) {
                 val correctlySolvedEdges = it.getCorrectlySolvedPieces().second
                 for (side in cubeSides) {
                     if (correctlySolvedEdges.containsAll(side.edgeIndexes.toList())) {

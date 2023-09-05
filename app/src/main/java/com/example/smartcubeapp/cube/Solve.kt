@@ -12,7 +12,6 @@ class Solve(
     var solveStartTime: Long = 0
 ) {
     fun getTurnsPerSecond(): Double{
-        println(solveStateSequence.size)
         return solveStateSequence.size.toDouble() / (time / MILLIS_IN_SECOND)
     }
 
