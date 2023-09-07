@@ -3,8 +3,9 @@ package com.example.smartcubeapp.elementdatabase
 import android.content.ContentValues
 import android.content.Context
 import android.database.Cursor
-import com.example.smartcubeapp.elementdatabase.element.ElementOrientation
-import com.example.smartcubeapp.elementdatabase.element.PieceType
+import com.example.smartcubeapp.cube.piece.ElementOrientation
+import com.example.smartcubeapp.cube.piece.Orientation
+import com.example.smartcubeapp.cube.piece.PieceType
 
 class ElementOrientationDBService(
     context: Context,
@@ -42,7 +43,7 @@ class ElementOrientationDBService(
             )
             put(
                 ElementDatabaseConstants.ElementOrientationTable.SIDE_RELATIVE_ORIENTATION_COLUMN,
-                if (element.sideRelativeOrientation!!) 1 else 0
+                if ((element.sideRelativeOrientation!!)==Orientation.Correct) 1 else 0
             )
         }
 
@@ -79,7 +80,7 @@ class ElementOrientationDBService(
             )
             put(
                 ElementDatabaseConstants.ElementOrientationTable.SIDE_RELATIVE_ORIENTATION_COLUMN,
-                if (element.sideRelativeOrientation!!) 1 else 0
+                if ((element.sideRelativeOrientation!!)==Orientation.Correct) 1 else 0
             )
         }
 
@@ -173,7 +174,7 @@ class ElementOrientationDBService(
                     pieceNumber,
                     piecePosition,
                     pieceOrientation,
-                    sideRelativeOrientation == 1
+                    if(sideRelativeOrientation == 1) Orientation.Correct else Orientation.Incorrect,
                 )
             }
         }
@@ -279,7 +280,7 @@ class ElementOrientationDBService(
                     pieceNumber,
                     piecePosition,
                     pieceOrientation,
-                    sideRelativeOrientation == 1,
+                    if(sideRelativeOrientation == 1) Orientation.Correct else Orientation.Incorrect,
                     true
                 )
                 elementOrientationList.add(element)

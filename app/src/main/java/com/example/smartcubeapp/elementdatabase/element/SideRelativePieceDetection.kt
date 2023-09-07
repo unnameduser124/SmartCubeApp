@@ -4,6 +4,8 @@ import com.example.smartcubeapp.cube.CubeSide
 import com.example.smartcubeapp.cube.CubeState
 import com.example.smartcubeapp.cube.cubeSides
 import com.example.smartcubeapp.cube.getSidesForCorner
+import com.example.smartcubeapp.cube.piece.ElementOrientation
+import com.example.smartcubeapp.cube.piece.PieceType
 
 class SideRelativePieceDetection(private val cubeState: CubeState, private val relativeSide: CubeSide) {
 

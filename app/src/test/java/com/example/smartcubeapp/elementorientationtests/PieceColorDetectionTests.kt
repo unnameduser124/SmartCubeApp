@@ -1,6 +1,6 @@
 package com.example.smartcubeapp.elementorientationtests
 
-import com.example.smartcubeapp.elementdatabase.element.PieceType
+import com.example.smartcubeapp.cube.piece.PieceType
 import com.example.smartcubeapp.elementdatabase.element.SideRelativePieceDetection
 import org.junit.Test
 

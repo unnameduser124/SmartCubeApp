@@ -7,8 +7,8 @@ import com.example.smartcubeapp.cube.OrangeSide
 import com.example.smartcubeapp.cube.RedSide
 import com.example.smartcubeapp.cube.WhiteSide
 import com.example.smartcubeapp.cube.YellowSide
-import com.example.smartcubeapp.elementdatabase.element.ElementOrientation
-import com.example.smartcubeapp.elementdatabase.element.PieceType
+import com.example.smartcubeapp.cube.piece.ElementOrientation
+import com.example.smartcubeapp.cube.piece.PieceType
 import com.example.smartcubeapp.elementdatabase.element.SideRelativePieceDetection
 import org.junit.Test
 

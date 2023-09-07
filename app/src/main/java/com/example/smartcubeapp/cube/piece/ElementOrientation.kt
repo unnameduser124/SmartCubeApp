@@ -1,4 +1,4 @@
-package com.example.smartcubeapp.elementdatabase.element
+package com.example.smartcubeapp.cube.piece
 
 data class ElementOrientation(
     val sideName: String,
@@ -6,7 +6,7 @@ data class ElementOrientation(
     val pieceNumber: Int,
     val piecePosition: Int,
     val pieceOrientation: Int,
-    var sideRelativeOrientation: Boolean? = null,
+    var sideRelativeOrientation: Orientation? = null,
     var savedToDatabase: Boolean = false
 ){
     override fun equals(other: Any?): Boolean {
@@ -22,5 +22,15 @@ data class ElementOrientation(
             }
         }
         return false
+    }
+
+    override fun hashCode(): Int {
+        var result = sideName.hashCode()
+        result = 31 * result + pieceType.hashCode()
+        result = 31 * result + pieceNumber
+        result = 31 * result + piecePosition
+        result = 31 * result + pieceOrientation
+        result = 31 * result + (sideRelativeOrientation?.hashCode() ?: 0)
+        return result
     }
 }

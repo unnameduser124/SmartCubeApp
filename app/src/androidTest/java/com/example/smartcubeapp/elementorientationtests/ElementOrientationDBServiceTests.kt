@@ -5,14 +5,15 @@ import android.database.Cursor
 import androidx.test.platform.app.InstrumentationRegistry
 import com.example.smartcubeapp.elementdatabase.ElementDatabaseConstants
 import com.example.smartcubeapp.elementdatabase.ElementOrientationDBService
-import com.example.smartcubeapp.elementdatabase.element.PieceType
-import com.example.smartcubeapp.elementdatabase.element.ElementOrientation
+import com.example.smartcubeapp.cube.piece.PieceType
+import com.example.smartcubeapp.cube.piece.ElementOrientation
 import junit.framework.TestCase.assertEquals
 import junit.framework.TestCase.assertTrue
 import junit.framework.TestCase.fail
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
+import com.example.smartcubeapp.cube.piece.Orientation
 
 class ElementOrientationDBServiceTests {
 
@@ -34,7 +35,7 @@ class ElementOrientationDBServiceTests {
 
     @Test
     fun addElementOrientationTest() {
-        val element = ElementOrientation("yellow", PieceType.CORNER, 1, 1, 1, false)
+        val element = ElementOrientation("yellow", PieceType.CORNER, 1, 1, 1, Orientation.Incorrect)
         dbService.addElementOrientation(element)
 
         val cursor = dbService.readableDatabase.query(
@@ -69,10 +70,10 @@ class ElementOrientationDBServiceTests {
 
     @Test
     fun updateElementOrientationTest() {
-        val element = ElementOrientation("yellow", PieceType.CORNER, 1, 1, 1, false)
+        val element = ElementOrientation("yellow", PieceType.CORNER, 1, 1, 1, Orientation.Incorrect)
         dbService.addElementOrientation(element)
 
-        val updatedElement = ElementOrientation("yellow", PieceType.CORNER, 1, 1, 1, true)
+        val updatedElement = ElementOrientation("yellow", PieceType.CORNER, 1, 1, 1, Orientation.Correct)
         dbService.updateElementOrientation(updatedElement)
 
         val cursor = dbService.readableDatabase.query(
@@ -90,7 +91,7 @@ class ElementOrientationDBServiceTests {
 
     @Test
     fun updateElementOrientationFailNullSideRelativeOrientation() {
-        val element = ElementOrientation("yellow", PieceType.CORNER, 1, 1, 1, false)
+        val element = ElementOrientation("yellow", PieceType.CORNER, 1, 1, 1, Orientation.Incorrect)
         dbService.addElementOrientation(element)
 
         val updatedElement = ElementOrientation("yellow", PieceType.CORNER, 1, 1, 1, null)
@@ -111,7 +112,7 @@ class ElementOrientationDBServiceTests {
 
     @Test
     fun deleteElementOrientationTest() {
-        val element = ElementOrientation("yellow", PieceType.CORNER, 1, 1, 1, false)
+        val element = ElementOrientation("yellow", PieceType.CORNER, 1, 1, 1, Orientation.Incorrect)
         dbService.addElementOrientation(element)
 
         dbService.deleteElementOrientation(element)
@@ -131,7 +132,7 @@ class ElementOrientationDBServiceTests {
 
     @Test
     fun getElementOrientationTest() {
-        val element = ElementOrientation("yellow", PieceType.CORNER, 1, 1, 1, false)
+        val element = ElementOrientation("yellow", PieceType.CORNER, 1, 1, 1, Orientation.Incorrect)
         dbService.addElementOrientation(element)
 
         val retrievedElement = dbService.getElementOrientation(element)
@@ -141,7 +142,7 @@ class ElementOrientationDBServiceTests {
 
     @Test
     fun getElementOrientationFail() {
-        val element = ElementOrientation("yellow", PieceType.CORNER, 1, 1, 1, false)
+        val element = ElementOrientation("yellow", PieceType.CORNER, 1, 1, 1, Orientation.Incorrect)
         dbService.addElementOrientation(element)
 
         val retrievedElement = dbService.getElementOrientation(
@@ -151,7 +152,7 @@ class ElementOrientationDBServiceTests {
                 1,
                 1,
                 2,
-                false
+                Orientation.Incorrect
             )
         )
 
@@ -160,9 +161,9 @@ class ElementOrientationDBServiceTests {
 
     @Test
     fun getAllElementOrientationItems() {
-        val element1 = ElementOrientation("yellow", PieceType.CORNER, 1, 1, 1, false)
-        val element2 = ElementOrientation("yellow", PieceType.CORNER, 1, 1, 2, false)
-        val element3 = ElementOrientation("yellow", PieceType.CORNER, 1, 1, 3, false)
+        val element1 = ElementOrientation("yellow", PieceType.CORNER, 1, 1, 1, Orientation.Incorrect)
+        val element2 = ElementOrientation("yellow", PieceType.CORNER, 1, 1, 2, Orientation.Incorrect)
+        val element3 = ElementOrientation("yellow", PieceType.CORNER, 1, 1, 3, Orientation.Incorrect)
         dbService.addElementOrientation(element1)
         dbService.addElementOrientation(element2)
         dbService.addElementOrientation(element3)
@@ -183,12 +184,12 @@ class ElementOrientationDBServiceTests {
 
     @Test
     fun getElementsOrientationItemBySide() {
-        val element1 = ElementOrientation("yellow", PieceType.CORNER, 1, 1, 1, false)
-        val element2 = ElementOrientation("yellow", PieceType.CORNER, 1, 1, 2, false)
-        val element3 = ElementOrientation("yellow", PieceType.CORNER, 1, 1, 3, false)
-        val element4 = ElementOrientation("white", PieceType.CORNER, 1, 1, 1, false)
-        val element5 = ElementOrientation("white", PieceType.CORNER, 1, 1, 2, false)
-        val element6 = ElementOrientation("white", PieceType.CORNER, 1, 1, 3, false)
+        val element1 = ElementOrientation("yellow", PieceType.CORNER, 1, 1, 1, Orientation.Incorrect)
+        val element2 = ElementOrientation("yellow", PieceType.CORNER, 1, 1, 2, Orientation.Incorrect)
+        val element3 = ElementOrientation("yellow", PieceType.CORNER, 1, 1, 3, Orientation.Incorrect)
+        val element4 = ElementOrientation("white", PieceType.CORNER, 1, 1, 1, Orientation.Incorrect)
+        val element5 = ElementOrientation("white", PieceType.CORNER, 1, 1, 2, Orientation.Incorrect)
+        val element6 = ElementOrientation("white", PieceType.CORNER, 1, 1, 3, Orientation.Incorrect)
         dbService.addElementOrientation(element1)
         dbService.addElementOrientation(element2)
         dbService.addElementOrientation(element3)
@@ -206,12 +207,12 @@ class ElementOrientationDBServiceTests {
 
     @Test
     fun getElementOrientationItemsBySideNoElementsWithSideName(){
-        val element1 = ElementOrientation("yellow", PieceType.CORNER, 1, 1, 1, false)
-        val element2 = ElementOrientation("yellow", PieceType.CORNER, 1, 1, 2, false)
-        val element3 = ElementOrientation("yellow", PieceType.CORNER, 1, 1, 3, false)
-        val element4 = ElementOrientation("white", PieceType.CORNER, 1, 1, 1, false)
-        val element5 = ElementOrientation("white", PieceType.CORNER, 1, 1, 2, false)
-        val element6 = ElementOrientation("white", PieceType.CORNER, 1, 1, 3, false)
+        val element1 = ElementOrientation("yellow", PieceType.CORNER, 1, 1, 1, Orientation.Incorrect)
+        val element2 = ElementOrientation("yellow", PieceType.CORNER, 1, 1, 2, Orientation.Incorrect)
+        val element3 = ElementOrientation("yellow", PieceType.CORNER, 1, 1, 3, Orientation.Incorrect)
+        val element4 = ElementOrientation("white", PieceType.CORNER, 1, 1, 1, Orientation.Incorrect)
+        val element5 = ElementOrientation("white", PieceType.CORNER, 1, 1, 2, Orientation.Incorrect)
+        val element6 = ElementOrientation("white", PieceType.CORNER, 1, 1, 3, Orientation.Incorrect)
         dbService.addElementOrientation(element1)
         dbService.addElementOrientation(element2)
         dbService.addElementOrientation(element3)
@@ -226,12 +227,12 @@ class ElementOrientationDBServiceTests {
 
     @Test
     fun getElementOrientationItemsForPiece(){
-        val element1 = ElementOrientation("yellow", PieceType.CORNER, 1, 1, 1, false)
-        val element2 = ElementOrientation("yellow", PieceType.EDGE, 2, 1, 2, false)
-        val element3 = ElementOrientation("yellow", PieceType.CORNER, 1, 4, 3, true)
-        val element4 = ElementOrientation("white", PieceType.EDGE, 1, 1, 1, false)
-        val element5 = ElementOrientation("white", PieceType.CORNER, 4, 1, 2, false)
-        val element6 = ElementOrientation("white", PieceType.CORNER, 1, 8, 3, false)
+        val element1 = ElementOrientation("yellow", PieceType.CORNER, 1, 1, 1, Orientation.Incorrect)
+        val element2 = ElementOrientation("yellow", PieceType.EDGE, 2, 1, 2, Orientation.Incorrect)
+        val element3 = ElementOrientation("yellow", PieceType.CORNER, 1, 4, 3, Orientation.Correct)
+        val element4 = ElementOrientation("white", PieceType.EDGE, 1, 1, 1, Orientation.Incorrect)
+        val element5 = ElementOrientation("white", PieceType.CORNER, 4, 1, 2, Orientation.Incorrect)
+        val element6 = ElementOrientation("white", PieceType.CORNER, 1, 8, 3, Orientation.Incorrect)
         dbService.addElementOrientation(element1)
         dbService.addElementOrientation(element2)
         dbService.addElementOrientation(element3)
@@ -249,12 +250,12 @@ class ElementOrientationDBServiceTests {
 
     @Test
     fun getElementOrientationsForPieceNoElementsForPiece(){
-        val element1 = ElementOrientation("yellow", PieceType.CORNER, 1, 1, 1, false)
-        val element2 = ElementOrientation("yellow", PieceType.EDGE, 2, 1, 2, false)
-        val element3 = ElementOrientation("yellow", PieceType.CORNER, 1, 4, 3, true)
-        val element4 = ElementOrientation("white", PieceType.EDGE, 1, 1, 1, false)
-        val element5 = ElementOrientation("white", PieceType.CORNER, 4, 1, 2, false)
-        val element6 = ElementOrientation("white", PieceType.CORNER, 1, 8, 3, false)
+        val element1 = ElementOrientation("yellow", PieceType.CORNER, 1, 1, 1, Orientation.Incorrect)
+        val element2 = ElementOrientation("yellow", PieceType.EDGE, 2, 1, 2, Orientation.Incorrect)
+        val element3 = ElementOrientation("yellow", PieceType.CORNER, 1, 4, 3, Orientation.Correct)
+        val element4 = ElementOrientation("white", PieceType.EDGE, 1, 1, 1, Orientation.Incorrect)
+        val element5 = ElementOrientation("white", PieceType.CORNER, 4, 1, 2, Orientation.Incorrect)
+        val element6 = ElementOrientation("white", PieceType.CORNER, 1, 8, 3, Orientation.Incorrect)
         dbService.addElementOrientation(element1)
         dbService.addElementOrientation(element2)
         dbService.addElementOrientation(element3)
@@ -298,7 +299,7 @@ class ElementOrientationDBServiceTests {
                 )
                 if (element.sideRelativeOrientation != null) {
                     assertEquals(
-                        if (element.sideRelativeOrientation!!) 1 else 0,
+                        if ((element.sideRelativeOrientation!!)==Orientation.Correct) 1 else 0,
                         getInt(getColumnIndexOrThrow(ElementDatabaseConstants.ElementOrientationTable.SIDE_RELATIVE_ORIENTATION_COLUMN))
                     )
                 } else {
