@@ -1,63 +1,10 @@
 package com.example.smartcubeapp.olldetection
 
-import com.example.smartcubeapp.cube.piece.ElementOrientation
-enum class OLLCase(val incorrectlyOrientedPieces: MutableList<ElementOrientation> = mutableListOf()){
-    //OLLs 1 to 57 to be populated with incorrectlyOrientedPieces later
-    OLL_01(),
-    OLL_02(),
-    OLL_03(),
-    OLL_04(),
-    OLL_05(),
-    OLL_06(),
-    OLL_07(),
-    OLL_08(),
-    OLL_09(),
-    OLL_10(),
-    OLL_11(),
-    OLL_12(),
-    OLL_13(),
-    OLL_14(),
-    OLL_15(),
-    OLL_16(),
-    OLL_17(),
-    OLL_18(),
-    OLL_19(),
-    OLL_20(),
-    OLL_21(),
-    OLL_22(),
-    OLL_23(),
-    OLL_24(),
-    OLL_25(),
-    OLL_26(),
-    OLL_27(),
-    OLL_28(),
-    OLL_29(),
-    OLL_30(),
-    OLL_31(),
-    OLL_32(),
-    OLL_33(),
-    OLL_34(),
-    OLL_35(),
-    OLL_36(),
-    OLL_37(),
-    OLL_38(),
-    OLL_39(),
-    OLL_40(),
-    OLL_41(),
-    OLL_42(),
-    OLL_43(),
-    OLL_44(),
-    OLL_45(),
-    OLL_46(),
-    OLL_47(),
-    OLL_48(),
-    OLL_49(),
-    OLL_50(),
-    OLL_51(),
-    OLL_52(),
-    OLL_53(),
-    OLL_54(),
-    OLL_55(),
-    OLL_56(),
-    OLL_57()
+import com.example.smartcubeapp.cube.piece.PositionRepresentationElement
+
+interface OLLCase {
+    val incorrectlyOrientedPieces: MutableList<PositionRepresentationElement>
+
+
+    override fun equals(other: Any?): Boolean
 }
