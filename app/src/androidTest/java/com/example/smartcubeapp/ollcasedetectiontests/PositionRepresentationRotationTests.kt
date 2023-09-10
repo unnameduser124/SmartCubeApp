@@ -33,9 +33,7 @@ class PositionRepresentationRotationTests {
         ollCaseDetection.changeCubeState(CubeState.SOLVED_CUBE_STATE)
         val positionBeforeRotation = ollCaseDetection.transformStateToPositionRepresentation()
 
-        ollCaseDetection.rotatePositionClockwise(positionBeforeRotation)
-
-        val positionAfterRotation = ollCaseDetection.transformStateToPositionRepresentation()
+        val positionAfterRotation = ollCaseDetection.rotatePositionClockwise(positionBeforeRotation)
 
         val expectedPosition = arrayOf(
             arrayOf(
@@ -63,9 +61,7 @@ class PositionRepresentationRotationTests {
         ollCaseDetection.changeCubeState(CubeState.SOLVED_CUBE_STATE)
         val positionBeforeRotation = ollCaseDetection.transformStateToPositionRepresentation()
 
-        ollCaseDetection.rotatePositionClockwise(positionBeforeRotation)
-
-        val positionAfterRotation = ollCaseDetection.transformStateToPositionRepresentation()
+        val positionAfterRotation = ollCaseDetection.rotatePositionClockwise(positionBeforeRotation)
 
         val expectedPosition = arrayOf(
             arrayOf(
@@ -93,9 +89,7 @@ class PositionRepresentationRotationTests {
         ollCaseDetection.changeCubeState(CubeState.SOLVED_CUBE_STATE)
         val positionBeforeRotation = ollCaseDetection.transformStateToPositionRepresentation()
 
-        ollCaseDetection.rotatePositionClockwise(positionBeforeRotation)
-
-        val positionAfterRotation = ollCaseDetection.transformStateToPositionRepresentation()
+        val positionAfterRotation = ollCaseDetection.rotatePositionClockwise(positionBeforeRotation)
 
         val expectedPosition = arrayOf(
             arrayOf(
@@ -123,9 +117,7 @@ class PositionRepresentationRotationTests {
         ollCaseDetection.changeCubeState(CubeState.SOLVED_CUBE_STATE)
         val positionBeforeRotation = ollCaseDetection.transformStateToPositionRepresentation()
 
-        ollCaseDetection.rotatePositionClockwise(positionBeforeRotation)
-
-        val positionAfterRotation = ollCaseDetection.transformStateToPositionRepresentation()
+        val positionAfterRotation = ollCaseDetection.rotatePositionClockwise(positionBeforeRotation)
 
         val expectedPosition = arrayOf(
             arrayOf(
@@ -154,9 +146,7 @@ class PositionRepresentationRotationTests {
         ollCaseDetection.changeCubeState(CubeState.SOLVED_CUBE_STATE)
         val positionBeforeRotation = ollCaseDetection.transformStateToPositionRepresentation()
 
-        ollCaseDetection.rotatePositionClockwise(positionBeforeRotation)
-
-        val positionAfterRotation = ollCaseDetection.transformStateToPositionRepresentation()
+        val positionAfterRotation = ollCaseDetection.rotatePositionClockwise(positionBeforeRotation)
 
         val expectedPosition = arrayOf(
             arrayOf(
@@ -175,6 +165,7 @@ class PositionRepresentationRotationTests {
             )
         )
 
+
         assert(positionAfterRotation.contentDeepEquals(expectedPosition))
     }
 
@@ -184,9 +175,7 @@ class PositionRepresentationRotationTests {
         ollCaseDetection.changeCubeState(CubeState.SOLVED_CUBE_STATE)
         val positionBeforeRotation = ollCaseDetection.transformStateToPositionRepresentation()
 
-        ollCaseDetection.rotatePositionClockwise(positionBeforeRotation)
-
-        val positionAfterRotation = ollCaseDetection.transformStateToPositionRepresentation()
+        val positionAfterRotation = ollCaseDetection.rotatePositionClockwise(positionBeforeRotation)
 
         val expectedPosition = arrayOf(
             arrayOf(
