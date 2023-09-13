@@ -1,4 +1,4 @@
-package com.example.smartcubeapp.elementdatabase
+package com.example.smartcubeapp.elementdatabase.casedetectiondatabase
 
 import android.content.ContentValues
 import android.content.Context
@@ -6,10 +6,12 @@ import android.database.Cursor
 import com.example.smartcubeapp.cube.piece.ElementOrientation
 import com.example.smartcubeapp.cube.piece.Orientation
 import com.example.smartcubeapp.cube.piece.PieceType
+import com.example.smartcubeapp.elementdatabase.ElementDatabase
+import com.example.smartcubeapp.elementdatabase.ElementDatabaseConstants
 
-class ElementOrientationDBService(
+class CaseElementOrientationDBService(
     context: Context,
-    databaseName: String = ElementDatabaseConstants.DATABASE_NAME
+    databaseName: String = ElementDatabaseConstants.CASE_DATABASE_NAME
 ) :
     ElementDatabase(context, databaseName) {
 
@@ -43,7 +45,12 @@ class ElementOrientationDBService(
             )
             put(
                 ElementDatabaseConstants.ElementOrientationTable.SIDE_RELATIVE_ORIENTATION_COLUMN,
-                if ((element.sideRelativeOrientation!!)==Orientation.Correct) 1 else 0
+                when (element.sideRelativeOrientation) {
+                    Orientation.Correct -> 0
+                    Orientation.OneRotation -> 1
+                    Orientation.TwoRotations -> 2
+                    else -> 3
+                }
             )
         }
 
@@ -80,7 +87,12 @@ class ElementOrientationDBService(
             )
             put(
                 ElementDatabaseConstants.ElementOrientationTable.SIDE_RELATIVE_ORIENTATION_COLUMN,
-                if ((element.sideRelativeOrientation!!)==Orientation.Correct) 1 else 0
+                when (element.sideRelativeOrientation) {
+                    Orientation.Correct -> 0
+                    Orientation.OneRotation -> 1
+                    Orientation.TwoRotations -> 2
+                    else -> 3
+                }
             )
         }
 
@@ -174,7 +186,8 @@ class ElementOrientationDBService(
                     pieceNumber,
                     piecePosition,
                     pieceOrientation,
-                    if(sideRelativeOrientation == 1) Orientation.Correct else Orientation.Incorrect,
+                    Orientation.values()[sideRelativeOrientation],
+                    true
                 )
             }
         }
@@ -214,48 +227,6 @@ class ElementOrientationDBService(
         return getElements(cursor)
     }
 
-    fun getElementOrientationItemsBySideCorrectlySideRelativeOriented(sideName: String): List<ElementOrientation> {
-
-        val selection = "${ElementDatabaseConstants.ElementOrientationTable.SIDE_NAME_COLUMN} = ? AND " +
-                "${ElementDatabaseConstants.ElementOrientationTable.SIDE_RELATIVE_ORIENTATION_COLUMN} = ?"
-        val selectionArgs = arrayOf(sideName, "1")
-
-        val cursor = readableDatabase.query(
-            ElementDatabaseConstants.ElementOrientationTable.TABLE_NAME,
-            fullElementProjection,
-            selection,
-            selectionArgs,
-            null,
-            null,
-            null
-        )
-
-        return getElements(cursor)
-    }
-
-    fun getElementOrientationItemsForPiece(
-        pieceNumber: Int,
-        pieceType: PieceType
-    ): List<ElementOrientation> {
-
-        val selection =
-            "${ElementDatabaseConstants.ElementOrientationTable.PIECE_NUMBER_COLUMN} = ? AND " +
-                    "${ElementDatabaseConstants.ElementOrientationTable.PIECE_TYPE_COLUMN} = ?"
-        val selectionArgs = arrayOf(pieceNumber.toString(), pieceType.ordinal.toString())
-
-        val cursor = readableDatabase.query(
-            ElementDatabaseConstants.ElementOrientationTable.TABLE_NAME,
-            fullElementProjection,
-            selection,
-            selectionArgs,
-            null,
-            null,
-            null
-        )
-
-        return getElements(cursor)
-    }
-
     private fun getElements(cursor: Cursor): List<ElementOrientation> {
 
         val elementOrientationList = mutableListOf<ElementOrientation>()
@@ -280,7 +251,7 @@ class ElementOrientationDBService(
                     pieceNumber,
                     piecePosition,
                     pieceOrientation,
-                    if(sideRelativeOrientation == 1) Orientation.Correct else Orientation.Incorrect,
+                    Orientation.values()[sideRelativeOrientation],
                     true
                 )
                 elementOrientationList.add(element)

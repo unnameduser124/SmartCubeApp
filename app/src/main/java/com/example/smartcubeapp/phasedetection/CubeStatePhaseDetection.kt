@@ -5,7 +5,7 @@ import com.example.smartcubeapp.cube.CubeSide
 import com.example.smartcubeapp.cube.CubeState
 import com.example.smartcubeapp.cube.cubeSides
 import com.example.smartcubeapp.cube.getSideIntersectionIndexes
-import com.example.smartcubeapp.elementdatabase.ElementOrientationDBService
+import com.example.smartcubeapp.elementdatabase.phasedetectiondatabase.PhaseElementOrientationDBService
 
 class CubeStatePhaseDetection(private var cubeState: CubeState) {
 
@@ -71,7 +71,7 @@ class CubeStatePhaseDetection(private var cubeState: CubeState) {
         } ?: return false
 
         val correctPositions =
-            ElementOrientationDBService(context).getElementOrientationItemsBySideCorrectlySideRelativeOriented(
+            PhaseElementOrientationDBService(context).getElementOrientationItemsBySideCorrectlySideRelativeOriented(
                 oppositeSide.sideName
             )
 

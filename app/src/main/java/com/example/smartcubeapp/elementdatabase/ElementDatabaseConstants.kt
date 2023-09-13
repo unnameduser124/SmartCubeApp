@@ -2,7 +2,8 @@ package com.example.smartcubeapp.elementdatabase
 
 object ElementDatabaseConstants {
 
-    const val DATABASE_NAME = "ElementOrientationDB"
+    const val PHASE_DATABASE_NAME = "PhaseElementOrientationDB.db"
+    const val CASE_DATABASE_NAME = "CaseElementOrientationDB.db"
     const val TEST_DATABASE_NAME = "ElementOrientationDBTest"
     const val DATABASE_VERSION = 1
 

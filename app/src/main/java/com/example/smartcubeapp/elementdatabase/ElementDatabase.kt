@@ -5,16 +5,19 @@ import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import java.io.FileOutputStream
 
-open class ElementDatabase(val context: Context, databaseName: String = ElementDatabaseConstants.DATABASE_NAME) :
+open class ElementDatabase(val context: Context, databaseName: String = ElementDatabaseConstants.PHASE_DATABASE_NAME) :
     SQLiteOpenHelper(context, databaseName, null, ElementDatabaseConstants.DATABASE_VERSION) {
 
     init{
-        copyDatabaseFromAssets()
+        if(databaseName!=ElementDatabaseConstants.TEST_DATABASE_NAME){
+            copyDatabaseFromAssets()
+        }
     }
+
     override fun onCreate(db: SQLiteDatabase?) {
-        //if (db != null) {
-        //    createElementOrientationTable(db)
-        //}
+        if(databaseName == ElementDatabaseConstants.TEST_DATABASE_NAME){
+            createElementOrientationTable(db!!)
+        }
     }
 
     override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
@@ -26,9 +29,9 @@ open class ElementDatabase(val context: Context, databaseName: String = ElementD
     }
 
     private fun copyDatabaseFromAssets(){
-        val dbPath = context.getDatabasePath(ElementDatabaseConstants.DATABASE_NAME)
+        val dbPath = context.getDatabasePath(databaseName)
         if (!dbPath.exists()) {
-            val inputStream = context.assets.open(ElementDatabaseConstants.DATABASE_NAME)
+            val inputStream = context.assets.open(databaseName)
             val outputStream = FileOutputStream(dbPath)
             val buffer = ByteArray(1024)
             var length: Int
