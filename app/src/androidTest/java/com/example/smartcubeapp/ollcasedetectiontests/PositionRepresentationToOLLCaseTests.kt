@@ -9,6 +9,7 @@ import com.example.smartcubeapp.cube.OrangeSide
 import com.example.smartcubeapp.cube.RedSide
 import com.example.smartcubeapp.cube.WhiteSide
 import com.example.smartcubeapp.cube.YellowSide
+import com.example.smartcubeapp.olldetection.CustomOLLCase
 import com.example.smartcubeapp.olldetection.PredefinedOLLCase
 import com.example.smartcubeapp.olldetection.OLLCaseDetection
 import junit.framework.TestCase.assertTrue
@@ -37,33 +38,48 @@ class PositionRepresentationToOLLCaseTests {
         )
         ollCaseDetection.changeCubeState(cubeState)
         ollCaseDetection.changeCubeSide(WhiteSide)
-        val positionRepresentation = ollCaseDetection.transformStateToPositionRepresentation()
-        val ollCaseRepresentation =
-            ollCaseDetection.positionRepresentationToOLLCase(positionRepresentation)
+        var positionRepresentation = ollCaseDetection.transformStateToPositionRepresentation(context)
+        var caseMatch = false
+        for(i in 0..3){
+            val ollCaseRepresentation =
+                ollCaseDetection.positionRepresentationToOLLCase(positionRepresentation)
+            if(ollCaseRepresentation.equals(PredefinedOLLCase.OLL_44)){
+                caseMatch = true
+                break
+            }
+            else{
+                positionRepresentation = ollCaseDetection.rotatePositionClockwise(positionRepresentation)
+            }
+        }
 
-        val expectedPredefinedOLLCaseRepresentation = PredefinedOLLCase.OLL_44
-
-        assertTrue(ollCaseRepresentation == expectedPredefinedOLLCaseRepresentation)
+        assertTrue(caseMatch)
     }
 
     @Test
     fun positionRepresentationToOLLCaseTestYellow(){
         val cubeState = CubeState(
-            mutableListOf(3, 1, 2, 0, 7, 5, 6, 4),
-            mutableListOf(3, 3, 3, 2, 3, 3, 3, 2),
-            mutableListOf(4, 1, 2, 3, 8, 5, 6, 7, 0, 9, 10, 11),
-            mutableListOf(false, false, false, false, false, false, false, false, false, false, false, false),
+            mutableListOf(7, 1, 2, 3, 4, 5, 6, 0),
+            mutableListOf(3, 3, 3, 1, 3, 3, 3, 1),
+            mutableListOf(4, 1, 2, 3, 0, 5, 6, 7, 8, 9, 10, 11),
+            mutableListOf(false, false, false, false, true, false, false, true, false ,false, false, false),
         )
         ollCaseDetection.changeCubeState(cubeState)
         ollCaseDetection.changeCubeSide(YellowSide)
-        val positionRepresentation = ollCaseDetection.transformStateToPositionRepresentation()
-        val ollCaseRepresentation =
-            ollCaseDetection.positionRepresentationToOLLCase(positionRepresentation)
+        var positionRepresentation = ollCaseDetection.transformStateToPositionRepresentation(context)
+        var caseMatch = false
+        for(i in 0..3){
+            val ollCaseRepresentation =
+                ollCaseDetection.positionRepresentationToOLLCase(positionRepresentation)
+            if(ollCaseRepresentation.equals(PredefinedOLLCase.OLL_44)){
+                caseMatch = true
+                break
+            }
+            else{
+                positionRepresentation = ollCaseDetection.rotatePositionClockwise(positionRepresentation)
+            }
+        }
 
-        val expectedPredefinedOLLCaseRepresentation = PredefinedOLLCase.OLL_44
-
-        //may need to exclude piece positions from the comparison
-        assertTrue(ollCaseRepresentation == expectedPredefinedOLLCaseRepresentation)
+        assertTrue(caseMatch)
     }
 
     @Test
@@ -76,14 +92,21 @@ class PositionRepresentationToOLLCaseTests {
         )
         ollCaseDetection.changeCubeState(cubeState)
         ollCaseDetection.changeCubeSide(BlueSide)
-        val positionRepresentation = ollCaseDetection.transformStateToPositionRepresentation()
-        val ollCaseRepresentation =
-            ollCaseDetection.positionRepresentationToOLLCase(positionRepresentation)
+        var positionRepresentation = ollCaseDetection.transformStateToPositionRepresentation(context)
+        var caseMatch = false
+        for(i in 0..3){
+            val ollCaseRepresentation =
+                ollCaseDetection.positionRepresentationToOLLCase(positionRepresentation)
+            if(ollCaseRepresentation.equals(PredefinedOLLCase.OLL_44)){
+                caseMatch = true
+                break
+            }
+            else{
+                positionRepresentation = ollCaseDetection.rotatePositionClockwise(positionRepresentation)
+            }
+        }
 
-        val expectedPredefinedOLLCaseRepresentation = PredefinedOLLCase.OLL_44
-
-        //may need to exclude piece positions from the comparison
-        assertTrue(ollCaseRepresentation == expectedPredefinedOLLCaseRepresentation)
+        assertTrue(caseMatch)
     }
 
     @Test
@@ -96,14 +119,21 @@ class PositionRepresentationToOLLCaseTests {
         )
         ollCaseDetection.changeCubeState(cubeState)
         ollCaseDetection.changeCubeSide(GreenSide)
-        val positionRepresentation = ollCaseDetection.transformStateToPositionRepresentation()
-        val ollCaseRepresentation =
-            ollCaseDetection.positionRepresentationToOLLCase(positionRepresentation)
+        var positionRepresentation = ollCaseDetection.transformStateToPositionRepresentation(context)
+        var caseMatch = false
+        for(i in 0..3){
+            val ollCaseRepresentation =
+                ollCaseDetection.positionRepresentationToOLLCase(positionRepresentation)
+            if(ollCaseRepresentation.equals(PredefinedOLLCase.OLL_44)){
+                caseMatch = true
+                break
+            }
+            else{
+                positionRepresentation = ollCaseDetection.rotatePositionClockwise(positionRepresentation)
+            }
+        }
 
-        val expectedPredefinedOLLCaseRepresentation = PredefinedOLLCase.OLL_44
-
-        //may need to exclude piece positions from the comparison
-        assertTrue(ollCaseRepresentation == expectedPredefinedOLLCaseRepresentation)
+        assertTrue(caseMatch)
     }
 
     @Test
@@ -116,14 +146,22 @@ class PositionRepresentationToOLLCaseTests {
         )
         ollCaseDetection.changeCubeState(cubeState)
         ollCaseDetection.changeCubeSide(RedSide)
-        val positionRepresentation = ollCaseDetection.transformStateToPositionRepresentation()
-        val ollCaseRepresentation =
-            ollCaseDetection.positionRepresentationToOLLCase(positionRepresentation)
+        var positionRepresentation = ollCaseDetection.transformStateToPositionRepresentation(context)
+        var caseMatch = false
+        for(i in 0..3){
+            val ollCaseRepresentation =
+                ollCaseDetection.positionRepresentationToOLLCase(positionRepresentation)
+            if(ollCaseRepresentation.equals(PredefinedOLLCase.OLL_44)){
+                caseMatch = true
+                break
+            }
+            else{
+                positionRepresentation = ollCaseDetection.rotatePositionClockwise(positionRepresentation)
+            }
+        }
 
-        val expectedPredefinedOLLCaseRepresentation = PredefinedOLLCase.OLL_44
 
-        //may need to exclude piece positions from the comparison
-        assertTrue(ollCaseRepresentation == expectedPredefinedOLLCaseRepresentation)
+        assertTrue(caseMatch)
     }
 
     @Test
@@ -136,13 +174,20 @@ class PositionRepresentationToOLLCaseTests {
         )
         ollCaseDetection.changeCubeState(cubeState)
         ollCaseDetection.changeCubeSide(OrangeSide)
-        val positionRepresentation = ollCaseDetection.transformStateToPositionRepresentation()
-        val ollCaseRepresentation =
-            ollCaseDetection.positionRepresentationToOLLCase(positionRepresentation)
+        var positionRepresentation = ollCaseDetection.transformStateToPositionRepresentation(context)
+        var caseMatch = false
+        for(i in 0..3){
+            val ollCaseRepresentation =
+                ollCaseDetection.positionRepresentationToOLLCase(positionRepresentation)
+            if(ollCaseRepresentation.equals(PredefinedOLLCase.OLL_44)){
+                caseMatch = true
+                break
+            }
+            else{
+                positionRepresentation = ollCaseDetection.rotatePositionClockwise(positionRepresentation)
+            }
+        }
 
-        val expectedPredefinedOLLCaseRepresentation = PredefinedOLLCase.OLL_44
-
-        //may need to exclude piece positions from the comparison
-        assertTrue(ollCaseRepresentation == expectedPredefinedOLLCaseRepresentation)
+        assertTrue(caseMatch)
     }
 }

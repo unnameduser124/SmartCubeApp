@@ -48,12 +48,17 @@ enum class PredefinedOLLCase(override val incorrectlyOrientedPieces: MutableList
     OLL_40(),
     OLL_41(),
     OLL_42(),
-    OLL_43(),
+    OLL_43(mutableListOf(
+        PositionRepresentationElement(PieceType.CORNER, 1, Orientation.OneRotation, Pair(0, 0)),
+        PositionRepresentationElement(PieceType.CORNER, 5, Orientation.TwoRotations, Pair(0, 2)),
+        PositionRepresentationElement(PieceType.EDGE, 10, Orientation.Incorrect, Pair(0, 1)),
+        PositionRepresentationElement(PieceType.EDGE, 2, Orientation.Incorrect, Pair(1, 0))
+    )),
     OLL_44(mutableListOf(
         PositionRepresentationElement(PieceType.CORNER, 1, Orientation.OneRotation, Pair(0, 0)),
         PositionRepresentationElement(PieceType.CORNER, 5, Orientation.TwoRotations, Pair(0, 2)),
         PositionRepresentationElement(PieceType.EDGE, 10, Orientation.Incorrect, Pair(0, 1)),
-        PositionRepresentationElement(PieceType.EDGE, 2, Orientation.Incorrect, Pair(2, 1))
+        PositionRepresentationElement(PieceType.EDGE, 2, Orientation.Incorrect, Pair(1, 2))
     )),
     OLL_45(),
     OLL_46(),

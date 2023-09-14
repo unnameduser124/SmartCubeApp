@@ -31,7 +31,7 @@ class PositionRepresentationRotationTests {
     fun positionRepresentationRotationTestWhite(){
         ollCaseDetection.changeCubeSide(WhiteSide)
         ollCaseDetection.changeCubeState(CubeState.SOLVED_CUBE_STATE)
-        val positionBeforeRotation = ollCaseDetection.transformStateToPositionRepresentation()
+        val positionBeforeRotation = ollCaseDetection.transformStateToPositionRepresentation(context)
 
         val positionAfterRotation = ollCaseDetection.rotatePositionClockwise(positionBeforeRotation)
 
@@ -59,7 +59,7 @@ class PositionRepresentationRotationTests {
     fun positionRepresentationRotationTestYellow(){
         ollCaseDetection.changeCubeSide(YellowSide)
         ollCaseDetection.changeCubeState(CubeState.SOLVED_CUBE_STATE)
-        val positionBeforeRotation = ollCaseDetection.transformStateToPositionRepresentation()
+        val positionBeforeRotation = ollCaseDetection.transformStateToPositionRepresentation(context)
 
         val positionAfterRotation = ollCaseDetection.rotatePositionClockwise(positionBeforeRotation)
 
@@ -87,7 +87,7 @@ class PositionRepresentationRotationTests {
     fun positionRepresentationRotationTestBlue(){
         ollCaseDetection.changeCubeSide(BlueSide)
         ollCaseDetection.changeCubeState(CubeState.SOLVED_CUBE_STATE)
-        val positionBeforeRotation = ollCaseDetection.transformStateToPositionRepresentation()
+        val positionBeforeRotation = ollCaseDetection.transformStateToPositionRepresentation(context)
 
         val positionAfterRotation = ollCaseDetection.rotatePositionClockwise(positionBeforeRotation)
 
@@ -115,7 +115,7 @@ class PositionRepresentationRotationTests {
     fun positionRepresentationRotationTestGreen(){
         ollCaseDetection.changeCubeSide(GreenSide)
         ollCaseDetection.changeCubeState(CubeState.SOLVED_CUBE_STATE)
-        val positionBeforeRotation = ollCaseDetection.transformStateToPositionRepresentation()
+        val positionBeforeRotation = ollCaseDetection.transformStateToPositionRepresentation(context)
 
         val positionAfterRotation = ollCaseDetection.rotatePositionClockwise(positionBeforeRotation)
 
@@ -144,7 +144,7 @@ class PositionRepresentationRotationTests {
     fun positionRepresentationRotationTestRed(){
         ollCaseDetection.changeCubeSide(RedSide)
         ollCaseDetection.changeCubeState(CubeState.SOLVED_CUBE_STATE)
-        val positionBeforeRotation = ollCaseDetection.transformStateToPositionRepresentation()
+        val positionBeforeRotation = ollCaseDetection.transformStateToPositionRepresentation(context)
 
         val positionAfterRotation = ollCaseDetection.rotatePositionClockwise(positionBeforeRotation)
 
@@ -173,7 +173,7 @@ class PositionRepresentationRotationTests {
     fun positionRepresentationRotationTestOrange(){
         ollCaseDetection.changeCubeSide(OrangeSide)
         ollCaseDetection.changeCubeState(CubeState.SOLVED_CUBE_STATE)
-        val positionBeforeRotation = ollCaseDetection.transformStateToPositionRepresentation()
+        val positionBeforeRotation = ollCaseDetection.transformStateToPositionRepresentation(context)
 
         val positionAfterRotation = ollCaseDetection.rotatePositionClockwise(positionBeforeRotation)
 

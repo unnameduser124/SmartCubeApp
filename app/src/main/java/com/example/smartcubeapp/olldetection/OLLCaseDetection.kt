@@ -1,5 +1,6 @@
 package com.example.smartcubeapp.olldetection
 
+import android.content.Context
 import com.example.smartcubeapp.cube.BlueSide
 import com.example.smartcubeapp.cube.CubeSide
 import com.example.smartcubeapp.cube.CubeState
@@ -7,9 +8,12 @@ import com.example.smartcubeapp.cube.GreenSide
 import com.example.smartcubeapp.cube.RedSide
 import com.example.smartcubeapp.cube.WhiteSide
 import com.example.smartcubeapp.cube.YellowSide
+import com.example.smartcubeapp.cube.piece.ElementOrientation
 import com.example.smartcubeapp.cube.piece.Orientation
 import com.example.smartcubeapp.cube.piece.PieceType
 import com.example.smartcubeapp.cube.piece.PositionRepresentationElement
+import com.example.smartcubeapp.elementdatabase.ElementDatabaseConstants
+import com.example.smartcubeapp.elementdatabase.casedetectiondatabase.CaseElementOrientationDBService
 
 class OLLCaseDetection(var cubeState: CubeState, private var cubeSide: CubeSide) {
 
@@ -17,29 +21,29 @@ class OLLCaseDetection(var cubeState: CubeState, private var cubeSide: CubeSide)
         TODO("Not implemented yet")
     }
 
-    fun transformStateToPositionRepresentation(): Array<Array<PositionRepresentationElement>> {
+    fun transformStateToPositionRepresentation(context: Context): Array<Array<PositionRepresentationElement>> {
         when (cubeSide) {
             YellowSide -> {
-                return stateToPositionRepresentationYellow()
+                return stateToPositionRepresentationYellow(context)
             }
 
             WhiteSide -> {
-                return stateToPositionRepresentationWhite()
+                return stateToPositionRepresentationWhite(context)
             }
 
             GreenSide -> {
-                return stateToPositionRepresentationGreen()
+                return stateToPositionRepresentationGreen(context)
             }
 
             BlueSide -> {
-                return stateToPositionRepresentationBlue()
+                return stateToPositionRepresentationBlue(context)
             }
 
             RedSide -> {
-                return stateToPositionRepresentationRed()
+                return stateToPositionRepresentationRed(context)
             }
 
-            else -> return stateToPositionRepresentationOrange()
+            else -> return stateToPositionRepresentationOrange(context)
         }
     }
 
@@ -88,7 +92,7 @@ class OLLCaseDetection(var cubeState: CubeState, private var cubeSide: CubeSide)
         TODO("Not implemented yet")
     }
 
-    fun positionRepresentationToOLLCase(position: Array<Array<PositionRepresentationElement>>): OLLCase {
+    fun positionRepresentationToOLLCase(position: Array<Array<PositionRepresentationElement>>): CustomOLLCase {
         val elements = mutableListOf<PositionRepresentationElement>()
         for (row in position) {
             for (element in row) {
@@ -108,355 +112,416 @@ class OLLCaseDetection(var cubeState: CubeState, private var cubeSide: CubeSide)
         this.cubeState = cubeState
     }
 
-    //TODO("Hardcoded orientation has to be changed to orientation from database (once orientations are mapped)")
-    private fun stateToPositionRepresentationYellow(): Array<Array<PositionRepresentationElement>> {
+    fun getSideRelativePositionRepresentation(
+        pieceType: PieceType,
+        pieceNumber: Int,
+        piecePosition: Int,
+        pieceOrientation: Int,
+        context: Context
+    ): Orientation {
+        val db =
+            CaseElementOrientationDBService(context, ElementDatabaseConstants.CASE_DATABASE_NAME)
+
+        val element = ElementOrientation(
+            sideName = cubeSide.sideName,
+            pieceNumber = pieceNumber,
+            pieceType = pieceType,
+            piecePosition = piecePosition,
+            pieceOrientation = pieceOrientation
+        )
+        val fromDatabase = db.getElementOrientation(element)
+        return if (fromDatabase != null) {
+            fromDatabase.sideRelativeOrientation!!
+        } else {
+            Orientation.Incorrect
+        }
+    }
+
+    fun createPositionRepresentationElement(
+        pieceType: PieceType,
+        piecePosition: Int,
+        context: Context,
+        sideRelativePosition: Pair<Int, Int>
+    ): PositionRepresentationElement {
+        return if (pieceType == PieceType.CORNER)
+            PositionRepresentationElement(
+                pieceType = pieceType,
+                pieceNumber = cubeState.cornerPositions[piecePosition],
+                sideRelativePosition = sideRelativePosition,
+                sideRelativeOrientation = getSideRelativePositionRepresentation(
+                    pieceType,
+                    cubeState.cornerPositions[piecePosition],
+                    piecePosition,
+                    cubeState.cornerOrientations[piecePosition],
+                    context
+                )
+            )
+        else
+            PositionRepresentationElement(
+                pieceType = pieceType,
+                pieceNumber = cubeState.edgePositions[piecePosition],
+                sideRelativePosition = sideRelativePosition,
+                sideRelativeOrientation = getSideRelativePositionRepresentation(
+                    pieceType,
+                    cubeState.edgePositions[piecePosition],
+                    piecePosition,
+                    if (cubeState.edgeOrientations[piecePosition]) 1 else 0,
+                    context
+                )
+            )
+
+    }
+
+    private fun stateToPositionRepresentationYellow(context: Context): Array<Array<PositionRepresentationElement>> {
+
         return arrayOf(
             arrayOf(
-                PositionRepresentationElement(
+                createPositionRepresentationElement(
                     PieceType.CORNER,
-                    cubeState.cornerPositions[4],
-                    Orientation.Correct,
+                    4,
+                    context,
                     Pair(0, 0)
                 ),
-                PositionRepresentationElement(
+                createPositionRepresentationElement(
                     PieceType.EDGE,
-                    cubeState.edgePositions[8],
-                    Orientation.Correct,
+                    8,
+                    context,
                     Pair(0, 1)
                 ),
-                PositionRepresentationElement(
+                createPositionRepresentationElement(
                     PieceType.CORNER,
-                    cubeState.cornerPositions[7],
-                    Orientation.Correct,
+                    7,
+                    context,
                     Pair(0, 2)
                 )
             ),
             arrayOf(
-                PositionRepresentationElement(
+                createPositionRepresentationElement(
                     PieceType.EDGE,
-                    cubeState.edgePositions[4],
-                    Orientation.Correct,
+                    4,
+                    context,
                     Pair(1, 0)
                 ),
-                PositionRepresentationElement(
+                createPositionRepresentationElement(
                     PieceType.EDGE,
-                    cubeState.edgePositions[7],
-                    Orientation.Correct,
+                    7,
+                    context,
                     Pair(1, 2)
                 )
             ),
             arrayOf(
-                PositionRepresentationElement(
+                createPositionRepresentationElement(
                     PieceType.CORNER,
-                    cubeState.cornerPositions[0],
-                    Orientation.Correct,
+                    0,
+                    context,
                     Pair(2, 0)
                 ),
-                PositionRepresentationElement(
+                createPositionRepresentationElement(
                     PieceType.EDGE,
-                    cubeState.edgePositions[0],
-                    Orientation.Correct,
+                    0,
+                    context,
                     Pair(2, 1)
                 ),
-                PositionRepresentationElement(
+                createPositionRepresentationElement(
                     PieceType.CORNER,
-                    cubeState.cornerPositions[3],
-                    Orientation.Correct,
+                    3,
+                    context,
+                    Pair(2, 2)
+                )
+            )
+        )
+
+    }
+
+    private fun stateToPositionRepresentationWhite(context: Context): Array<Array<PositionRepresentationElement>> {
+        return arrayOf(
+            arrayOf(
+                createPositionRepresentationElement(
+                    PieceType.CORNER,
+                    2,
+                    context,
+                    Pair(0, 0)
+                ),
+                createPositionRepresentationElement(
+                    PieceType.EDGE,
+                    6,
+                    context,
+                    Pair(0, 1)
+                ),
+                createPositionRepresentationElement(
+                    PieceType.CORNER,
+                    6,
+                    context,
+                    Pair(0, 2)
+                )
+            ),
+            arrayOf(
+                createPositionRepresentationElement(
+                    PieceType.EDGE,
+                    2,
+                    context,
+                    Pair(1, 0)
+                ),
+                createPositionRepresentationElement(
+                    PieceType.EDGE,
+                    10,
+                    context,
+                    Pair(1, 2)
+                )
+            ),
+            arrayOf(
+                createPositionRepresentationElement(
+                    PieceType.CORNER,
+                    1,
+                    context,
+                    Pair(2, 0)
+                ),
+                createPositionRepresentationElement(
+                    PieceType.EDGE,
+                    5,
+                    context,
+                    Pair(2, 1)
+                ),
+                createPositionRepresentationElement(
+                    PieceType.CORNER,
+                    5,
+                    context,
                     Pair(2, 2)
                 )
             )
         )
     }
 
-    private fun stateToPositionRepresentationWhite(): Array<Array<PositionRepresentationElement>> {
+    private fun stateToPositionRepresentationGreen(context: Context): Array<Array<PositionRepresentationElement>> {
         return arrayOf(
             arrayOf(
-                PositionRepresentationElement(
+                createPositionRepresentationElement(
                     PieceType.CORNER,
-                    cubeState.cornerPositions[2],
-                    Orientation.Correct,
+                    3,
+                    context,
                     Pair(0, 0)
                 ),
-                PositionRepresentationElement(
+                createPositionRepresentationElement(
                     PieceType.EDGE,
-                    cubeState.edgePositions[6],
-                    Orientation.Correct,
+                    3,
+                    context,
                     Pair(0, 1)
                 ),
-                PositionRepresentationElement(
+                createPositionRepresentationElement(
                     PieceType.CORNER,
-                    cubeState.cornerPositions[6],
-                    Orientation.Correct,
+                    2,
+                    context,
                     Pair(0, 2)
                 )
             ),
             arrayOf(
-                PositionRepresentationElement(
+                createPositionRepresentationElement(
                     PieceType.EDGE,
-                    cubeState.edgePositions[2],
-                    Orientation.Correct,
+                    0,
+                    context,
                     Pair(1, 0)
                 ),
-                PositionRepresentationElement(
+                createPositionRepresentationElement(
                     PieceType.EDGE,
-                    cubeState.edgePositions[10],
-                    Orientation.Correct,
+                    2,
+                    context,
                     Pair(1, 2)
                 )
             ),
             arrayOf(
-                PositionRepresentationElement(
+                createPositionRepresentationElement(
                     PieceType.CORNER,
-                    cubeState.cornerPositions[1],
-                    Orientation.Correct,
+                    0,
+                    context,
                     Pair(2, 0)
                 ),
-                PositionRepresentationElement(
+                createPositionRepresentationElement(
                     PieceType.EDGE,
-                    cubeState.edgePositions[5],
-                    Orientation.Correct,
+                    1,
+                    context,
                     Pair(2, 1)
                 ),
-                PositionRepresentationElement(
+                createPositionRepresentationElement(
                     PieceType.CORNER,
-                    cubeState.cornerPositions[5],
-                    Orientation.Correct,
+                    1,
+                    context,
                     Pair(2, 2)
                 )
             )
         )
     }
 
-    private fun stateToPositionRepresentationGreen(): Array<Array<PositionRepresentationElement>> {
+    private fun stateToPositionRepresentationBlue(context: Context): Array<Array<PositionRepresentationElement>> {
         return arrayOf(
             arrayOf(
-                PositionRepresentationElement(
+                createPositionRepresentationElement(
                     PieceType.CORNER,
-                    cubeState.cornerPositions[3],
-                    Orientation.Correct,
+                    5,
+                    context,
                     Pair(0, 0)
                 ),
-                PositionRepresentationElement(
+                createPositionRepresentationElement(
                     PieceType.EDGE,
-                    cubeState.edgePositions[3],
-                    Orientation.Correct,
+                    10,
+                    context,
                     Pair(0, 1)
                 ),
-                PositionRepresentationElement(
+                createPositionRepresentationElement(
                     PieceType.CORNER,
-                    cubeState.cornerPositions[2],
-                    Orientation.Correct,
+                    6,
+                    context,
                     Pair(0, 2)
                 )
             ),
             arrayOf(
-                PositionRepresentationElement(
+                createPositionRepresentationElement(
                     PieceType.EDGE,
-                    cubeState.edgePositions[0],
-                    Orientation.Correct,
+                    9,
+                    context,
                     Pair(1, 0)
                 ),
-                PositionRepresentationElement(
+                createPositionRepresentationElement(
                     PieceType.EDGE,
-                    cubeState.edgePositions[2],
-                    Orientation.Correct,
+                    11,
+                    context,
                     Pair(1, 2)
                 )
             ),
             arrayOf(
-                PositionRepresentationElement(
+                createPositionRepresentationElement(
                     PieceType.CORNER,
-                    cubeState.cornerPositions[0],
-                    Orientation.Correct,
+                    4,
+                    context,
                     Pair(2, 0)
                 ),
-                PositionRepresentationElement(
+                createPositionRepresentationElement(
                     PieceType.EDGE,
-                    cubeState.edgePositions[1],
-                    Orientation.Correct,
+                    8,
+                    context,
                     Pair(2, 1)
                 ),
-                PositionRepresentationElement(
+                createPositionRepresentationElement(
                     PieceType.CORNER,
-                    cubeState.cornerPositions[1],
-                    Orientation.Correct,
+                    7,
+                    context,
                     Pair(2, 2)
                 )
             )
         )
     }
 
-    private fun stateToPositionRepresentationBlue(): Array<Array<PositionRepresentationElement>> {
+    private fun stateToPositionRepresentationRed(context: Context): Array<Array<PositionRepresentationElement>> {
         return arrayOf(
             arrayOf(
-                PositionRepresentationElement(
+                createPositionRepresentationElement(
                     PieceType.CORNER,
-                    cubeState.cornerPositions[5],
-                    Orientation.Correct,
+                    1,
+                    context,
                     Pair(0, 0)
                 ),
-                PositionRepresentationElement(
+                createPositionRepresentationElement(
                     PieceType.EDGE,
-                    cubeState.edgePositions[10],
-                    Orientation.Correct,
+                    5,
+                    context,
                     Pair(0, 1)
                 ),
-                PositionRepresentationElement(
+                createPositionRepresentationElement(
                     PieceType.CORNER,
-                    cubeState.cornerPositions[6],
-                    Orientation.Correct,
+                    5,
+                    context,
                     Pair(0, 2)
                 )
             ),
             arrayOf(
-                PositionRepresentationElement(
+                createPositionRepresentationElement(
                     PieceType.EDGE,
-                    cubeState.edgePositions[9],
-                    Orientation.Correct,
+                    1,
+                    context,
                     Pair(1, 0)
                 ),
-                PositionRepresentationElement(
+                createPositionRepresentationElement(
                     PieceType.EDGE,
-                    cubeState.edgePositions[11],
-                    Orientation.Correct,
+                    9,
+                    context,
                     Pair(1, 2)
                 )
             ),
             arrayOf(
-                PositionRepresentationElement(
+                createPositionRepresentationElement(
                     PieceType.CORNER,
-                    cubeState.cornerPositions[4],
-                    Orientation.Correct,
+                    0,
+                    context,
                     Pair(2, 0)
                 ),
-                PositionRepresentationElement(
+                createPositionRepresentationElement(
                     PieceType.EDGE,
-                    cubeState.edgePositions[8],
-                    Orientation.Correct,
+                    4,
+                    context,
                     Pair(2, 1)
                 ),
-                PositionRepresentationElement(
+                createPositionRepresentationElement(
                     PieceType.CORNER,
-                    cubeState.cornerPositions[7],
-                    Orientation.Correct,
+                    4,
+                    context,
                     Pair(2, 2)
                 )
             )
         )
     }
 
-    private fun stateToPositionRepresentationRed(): Array<Array<PositionRepresentationElement>> {
+    private fun stateToPositionRepresentationOrange(context: Context): Array<Array<PositionRepresentationElement>> {
         return arrayOf(
             arrayOf(
-                PositionRepresentationElement(
+                createPositionRepresentationElement(
                     PieceType.CORNER,
-                    cubeState.cornerPositions[1],
-                    Orientation.Correct,
+                    3,
+                    context,
                     Pair(0, 0)
                 ),
-                PositionRepresentationElement(
+                createPositionRepresentationElement(
                     PieceType.EDGE,
-                    cubeState.edgePositions[5],
-                    Orientation.Correct,
+                    7,
+                    context,
                     Pair(0, 1)
                 ),
-                PositionRepresentationElement(
+                createPositionRepresentationElement(
                     PieceType.CORNER,
-                    cubeState.cornerPositions[5],
-                    Orientation.Correct,
+                    7,
+                    context,
                     Pair(0, 2)
                 )
             ),
             arrayOf(
-                PositionRepresentationElement(
+                createPositionRepresentationElement(
                     PieceType.EDGE,
-                    cubeState.edgePositions[1],
-                    Orientation.Correct,
+                    3,
+                    context,
                     Pair(1, 0)
                 ),
-                PositionRepresentationElement(
+                createPositionRepresentationElement(
                     PieceType.EDGE,
-                    cubeState.edgePositions[9],
-                    Orientation.Correct,
+                    11,
+                    context,
                     Pair(1, 2)
                 )
             ),
             arrayOf(
-                PositionRepresentationElement(
+                createPositionRepresentationElement(
                     PieceType.CORNER,
-                    cubeState.cornerPositions[0],
-                    Orientation.Correct,
+                    2,
+                    context,
                     Pair(2, 0)
                 ),
-                PositionRepresentationElement(
+                createPositionRepresentationElement(
                     PieceType.EDGE,
-                    cubeState.edgePositions[4],
-                    Orientation.Correct,
+                    6,
+                    context,
                     Pair(2, 1)
                 ),
-                PositionRepresentationElement(
+                createPositionRepresentationElement(
                     PieceType.CORNER,
-                    cubeState.cornerPositions[4],
-                    Orientation.Correct,
-                    Pair(2, 2)
-                )
-            )
-        )
-    }
-
-    private fun stateToPositionRepresentationOrange(): Array<Array<PositionRepresentationElement>> {
-        return arrayOf(
-            arrayOf(
-                PositionRepresentationElement(
-                    PieceType.CORNER,
-                    cubeState.cornerPositions[3],
-                    Orientation.Correct,
-                    Pair(0, 0)
-                ),
-                PositionRepresentationElement(
-                    PieceType.EDGE,
-                    cubeState.edgePositions[7],
-                    Orientation.Correct,
-                    Pair(0, 1)
-                ),
-                PositionRepresentationElement(
-                    PieceType.CORNER,
-                    cubeState.cornerPositions[7],
-                    Orientation.Correct,
-                    Pair(0, 2)
-                )
-            ),
-            arrayOf(
-                PositionRepresentationElement(
-                    PieceType.EDGE,
-                    cubeState.edgePositions[3],
-                    Orientation.Correct,
-                    Pair(1, 0)
-                ),
-                PositionRepresentationElement(
-                    PieceType.EDGE,
-                    cubeState.edgePositions[11],
-                    Orientation.Correct,
-                    Pair(1, 2)
-                )
-            ),
-            arrayOf(
-                PositionRepresentationElement(
-                    PieceType.CORNER,
-                    cubeState.cornerPositions[2],
-                    Orientation.Correct,
-                    Pair(2, 0)
-                ),
-                PositionRepresentationElement(
-                    PieceType.EDGE,
-                    cubeState.edgePositions[6],
-                    Orientation.Correct,
-                    Pair(2, 1)
-                ),
-                PositionRepresentationElement(
-                    PieceType.CORNER,
-                    cubeState.cornerPositions[6],
-                    Orientation.Correct,
+                    6,
+                    context,
                     Pair(2, 2)
                 )
             )
