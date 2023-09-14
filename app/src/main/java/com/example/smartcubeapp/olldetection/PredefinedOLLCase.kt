@@ -2,9 +2,9 @@ package com.example.smartcubeapp.olldetection
 
 import com.example.smartcubeapp.cube.piece.Orientation
 import com.example.smartcubeapp.cube.piece.PieceType
-import com.example.smartcubeapp.cube.piece.PositionRepresentationElement
+import com.example.smartcubeapp.cube.piece.OLLPositionRepresentationElement
 
-enum class PredefinedOLLCase(override val incorrectlyOrientedPieces: MutableList<PositionRepresentationElement> = mutableListOf()): OLLCase{
+enum class PredefinedOLLCase(override val incorrectlyOrientedPieces: MutableList<OLLPositionRepresentationElement> = mutableListOf()): OLLCase{
     //OLLs 1 to 57 to be populated with incorrectlyOrientedPieces later
     OLL_01(),
     OLL_02(),
@@ -49,16 +49,16 @@ enum class PredefinedOLLCase(override val incorrectlyOrientedPieces: MutableList
     OLL_41(),
     OLL_42(),
     OLL_43(mutableListOf(
-        PositionRepresentationElement(PieceType.CORNER, 1, Orientation.OneRotation, Pair(0, 0)),
-        PositionRepresentationElement(PieceType.CORNER, 5, Orientation.TwoRotations, Pair(0, 2)),
-        PositionRepresentationElement(PieceType.EDGE, 10, Orientation.Incorrect, Pair(0, 1)),
-        PositionRepresentationElement(PieceType.EDGE, 2, Orientation.Incorrect, Pair(1, 0))
+        OLLPositionRepresentationElement(PieceType.CORNER, Orientation.OneRotation, Pair(0, 0)),
+        OLLPositionRepresentationElement(PieceType.CORNER, Orientation.TwoRotations, Pair(0, 2)),
+        OLLPositionRepresentationElement(PieceType.EDGE, Orientation.Incorrect, Pair(0, 1)),
+        OLLPositionRepresentationElement(PieceType.EDGE, Orientation.Incorrect, Pair(1, 0))
     )),
     OLL_44(mutableListOf(
-        PositionRepresentationElement(PieceType.CORNER, 1, Orientation.OneRotation, Pair(0, 0)),
-        PositionRepresentationElement(PieceType.CORNER, 5, Orientation.TwoRotations, Pair(0, 2)),
-        PositionRepresentationElement(PieceType.EDGE, 10, Orientation.Incorrect, Pair(0, 1)),
-        PositionRepresentationElement(PieceType.EDGE, 2, Orientation.Incorrect, Pair(1, 2))
+        OLLPositionRepresentationElement(PieceType.CORNER, Orientation.OneRotation, Pair(0, 0)),
+        OLLPositionRepresentationElement(PieceType.CORNER, Orientation.TwoRotations, Pair(0, 2)),
+        OLLPositionRepresentationElement(PieceType.EDGE, Orientation.Incorrect, Pair(0, 1)),
+        OLLPositionRepresentationElement(PieceType.EDGE, Orientation.Incorrect, Pair(1, 2))
     )),
     OLL_45(),
     OLL_46(),

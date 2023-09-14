@@ -11,7 +11,7 @@ import com.example.smartcubeapp.cube.YellowSide
 import com.example.smartcubeapp.cube.piece.ElementOrientation
 import com.example.smartcubeapp.cube.piece.Orientation
 import com.example.smartcubeapp.cube.piece.PieceType
-import com.example.smartcubeapp.cube.piece.PositionRepresentationElement
+import com.example.smartcubeapp.cube.piece.OLLPositionRepresentationElement
 import com.example.smartcubeapp.elementdatabase.ElementDatabaseConstants
 import com.example.smartcubeapp.elementdatabase.casedetectiondatabase.CaseElementOrientationDBService
 
@@ -21,7 +21,7 @@ class OLLCaseDetection(var cubeState: CubeState, private var cubeSide: CubeSide)
         TODO("Not implemented yet")
     }
 
-    fun transformStateToPositionRepresentation(context: Context): Array<Array<PositionRepresentationElement>> {
+    fun transformStateToPositionRepresentation(context: Context): Array<Array<OLLPositionRepresentationElement>> {
         when (cubeSide) {
             YellowSide -> {
                 return stateToPositionRepresentationYellow(context)
@@ -47,21 +47,21 @@ class OLLCaseDetection(var cubeState: CubeState, private var cubeSide: CubeSide)
         }
     }
 
-    fun rotatePositionClockwise(position: Array<Array<PositionRepresentationElement>>): Array<Array<PositionRepresentationElement>> {
-        val rotatedPosition: Array<Array<PositionRepresentationElement>> = arrayOf(
+    fun rotatePositionClockwise(position: Array<Array<OLLPositionRepresentationElement>>): Array<Array<OLLPositionRepresentationElement>> {
+        val rotatedPosition: Array<Array<OLLPositionRepresentationElement>> = arrayOf(
             arrayOf(
-                PositionRepresentationElement(PieceType.CORNER, 0),
-                PositionRepresentationElement(PieceType.CORNER, 0),
-                PositionRepresentationElement(PieceType.CORNER, 0)
+                OLLPositionRepresentationElement(PieceType.CORNER),
+                OLLPositionRepresentationElement(PieceType.CORNER),
+                OLLPositionRepresentationElement(PieceType.CORNER)
             ),
             arrayOf(
-                PositionRepresentationElement(PieceType.CORNER, 0),
-                PositionRepresentationElement(PieceType.CORNER, 0)
+                OLLPositionRepresentationElement(PieceType.CORNER),
+                OLLPositionRepresentationElement(PieceType.CORNER)
             ),
             arrayOf(
-                PositionRepresentationElement(PieceType.CORNER, 0),
-                PositionRepresentationElement(PieceType.CORNER, 0),
-                PositionRepresentationElement(PieceType.CORNER, 0)
+                OLLPositionRepresentationElement(PieceType.CORNER),
+                OLLPositionRepresentationElement(PieceType.CORNER),
+                OLLPositionRepresentationElement(PieceType.CORNER)
             )
         )
 
@@ -92,8 +92,8 @@ class OLLCaseDetection(var cubeState: CubeState, private var cubeSide: CubeSide)
         TODO("Not implemented yet")
     }
 
-    fun positionRepresentationToOLLCase(position: Array<Array<PositionRepresentationElement>>): CustomOLLCase {
-        val elements = mutableListOf<PositionRepresentationElement>()
+    fun positionRepresentationToOLLCase(position: Array<Array<OLLPositionRepresentationElement>>): CustomOLLCase {
+        val elements = mutableListOf<OLLPositionRepresentationElement>()
         for (row in position) {
             for (element in row) {
                 if (element.sideRelativeOrientation != Orientation.Correct) {
@@ -137,16 +137,15 @@ class OLLCaseDetection(var cubeState: CubeState, private var cubeSide: CubeSide)
         }
     }
 
-    fun createPositionRepresentationElement(
+    private fun createPositionRepresentationElement(
         pieceType: PieceType,
         piecePosition: Int,
         context: Context,
         sideRelativePosition: Pair<Int, Int>
-    ): PositionRepresentationElement {
+    ): OLLPositionRepresentationElement {
         return if (pieceType == PieceType.CORNER)
-            PositionRepresentationElement(
+            OLLPositionRepresentationElement(
                 pieceType = pieceType,
-                pieceNumber = cubeState.cornerPositions[piecePosition],
                 sideRelativePosition = sideRelativePosition,
                 sideRelativeOrientation = getSideRelativePositionRepresentation(
                     pieceType,
@@ -157,9 +156,8 @@ class OLLCaseDetection(var cubeState: CubeState, private var cubeSide: CubeSide)
                 )
             )
         else
-            PositionRepresentationElement(
+            OLLPositionRepresentationElement(
                 pieceType = pieceType,
-                pieceNumber = cubeState.edgePositions[piecePosition],
                 sideRelativePosition = sideRelativePosition,
                 sideRelativeOrientation = getSideRelativePositionRepresentation(
                     pieceType,
@@ -172,7 +170,7 @@ class OLLCaseDetection(var cubeState: CubeState, private var cubeSide: CubeSide)
 
     }
 
-    private fun stateToPositionRepresentationYellow(context: Context): Array<Array<PositionRepresentationElement>> {
+    private fun stateToPositionRepresentationYellow(context: Context): Array<Array<OLLPositionRepresentationElement>> {
 
         return arrayOf(
             arrayOf(
@@ -233,7 +231,7 @@ class OLLCaseDetection(var cubeState: CubeState, private var cubeSide: CubeSide)
 
     }
 
-    private fun stateToPositionRepresentationWhite(context: Context): Array<Array<PositionRepresentationElement>> {
+    private fun stateToPositionRepresentationWhite(context: Context): Array<Array<OLLPositionRepresentationElement>> {
         return arrayOf(
             arrayOf(
                 createPositionRepresentationElement(
@@ -292,7 +290,7 @@ class OLLCaseDetection(var cubeState: CubeState, private var cubeSide: CubeSide)
         )
     }
 
-    private fun stateToPositionRepresentationGreen(context: Context): Array<Array<PositionRepresentationElement>> {
+    private fun stateToPositionRepresentationGreen(context: Context): Array<Array<OLLPositionRepresentationElement>> {
         return arrayOf(
             arrayOf(
                 createPositionRepresentationElement(
@@ -351,7 +349,7 @@ class OLLCaseDetection(var cubeState: CubeState, private var cubeSide: CubeSide)
         )
     }
 
-    private fun stateToPositionRepresentationBlue(context: Context): Array<Array<PositionRepresentationElement>> {
+    private fun stateToPositionRepresentationBlue(context: Context): Array<Array<OLLPositionRepresentationElement>> {
         return arrayOf(
             arrayOf(
                 createPositionRepresentationElement(
@@ -410,7 +408,7 @@ class OLLCaseDetection(var cubeState: CubeState, private var cubeSide: CubeSide)
         )
     }
 
-    private fun stateToPositionRepresentationRed(context: Context): Array<Array<PositionRepresentationElement>> {
+    private fun stateToPositionRepresentationRed(context: Context): Array<Array<OLLPositionRepresentationElement>> {
         return arrayOf(
             arrayOf(
                 createPositionRepresentationElement(
@@ -469,7 +467,7 @@ class OLLCaseDetection(var cubeState: CubeState, private var cubeSide: CubeSide)
         )
     }
 
-    private fun stateToPositionRepresentationOrange(context: Context): Array<Array<PositionRepresentationElement>> {
+    private fun stateToPositionRepresentationOrange(context: Context): Array<Array<OLLPositionRepresentationElement>> {
         return arrayOf(
             arrayOf(
                 createPositionRepresentationElement(
