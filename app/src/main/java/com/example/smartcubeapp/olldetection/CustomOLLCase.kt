@@ -12,6 +12,10 @@ class CustomOLLCase(override val incorrectlyOrientedPieces: MutableList<OLLPosit
         if (other is OLLCase) {
             val otherPiecesCopy = other.incorrectlyOrientedPieces.toMutableList()
 
+            if(incorrectlyOrientedPieces.size != otherPiecesCopy.size){
+                return false
+            }
+
             incorrectlyOrientedPieces.forEach { piece ->
                 if (otherPiecesCopy.contains(piece)) {
                     otherPiecesCopy.remove(piece)
