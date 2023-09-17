@@ -89,7 +89,12 @@ class OLLCaseDetection(var cubeState: CubeState, private var cubeSide: CubeSide)
     }
 
     fun matchCase(case: OLLCase): PredefinedOLLCase? {
-        TODO("Not implemented yet")
+        for(value in PredefinedOLLCase.values()) {
+            if (case.equals(value)) {
+                return value
+            }
+        }
+        return null
     }
 
     fun positionRepresentationToOLLCase(position: Array<Array<OLLPositionRepresentationElement>>): CustomOLLCase {

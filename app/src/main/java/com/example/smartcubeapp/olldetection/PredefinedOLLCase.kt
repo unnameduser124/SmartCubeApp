@@ -194,16 +194,16 @@ enum class PredefinedOLLCase(override val incorrectlyOrientedPieces: MutableList
                 PieceType.CORNER, Orientation.TwoRotations, Pair(0, 0)
             ),
             OLLPositionRepresentationElement(
-                PieceType.CORNER, Orientation.OneRotation, Pair(2, 0)
+                PieceType.CORNER, Orientation.TwoRotations, Pair(0, 2)
             ),
             OLLPositionRepresentationElement(
-                PieceType.CORNER, Orientation.OneRotation, Pair(2, 2)
+                PieceType.CORNER, Orientation.TwoRotations, Pair(2, 2)
             ),
             OLLPositionRepresentationElement(
-                PieceType.EDGE, Orientation.Incorrect, Pair(0, 1)
+                PieceType.EDGE, Orientation.Incorrect, Pair(1, 0)
             ),
             OLLPositionRepresentationElement(
-                PieceType.EDGE, Orientation.Incorrect, Pair(1, 2)
+                PieceType.EDGE, Orientation.Incorrect, Pair(2, 1)
             ),
         )
     ),
@@ -213,7 +213,7 @@ enum class PredefinedOLLCase(override val incorrectlyOrientedPieces: MutableList
                 PieceType.CORNER, Orientation.OneRotation, Pair(0, 0)
             ),
             OLLPositionRepresentationElement(
-                PieceType.CORNER, Orientation.OneRotation, Pair(0, 2)
+                PieceType.CORNER, Orientation.OneRotation, Pair(2, 0)
             ),
             OLLPositionRepresentationElement(
                 PieceType.CORNER, Orientation.OneRotation, Pair(2, 2)

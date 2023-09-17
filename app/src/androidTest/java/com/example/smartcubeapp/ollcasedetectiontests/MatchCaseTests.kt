@@ -29,7 +29,7 @@ class MatchCaseTests {
     @Test
     fun matchCaseOLL_01Test(){
         val cubeState = CubeState(
-            mutableListOf(7, 1, 2, 3, 0, 5, 6, 5),
+            mutableListOf(7, 1, 2, 3, 0, 5, 6, 4),
             mutableListOf(1, 3, 3, 1, 3, 3, 3, 3),
             mutableListOf(7, 1, 2, 3, 8, 5, 6, 0, 4, 9, 10, 11),
             mutableListOf(false, false, false, false, false, false, false, false, false, false, false, false),
@@ -107,13 +107,13 @@ class MatchCaseTests {
     @Test
     fun matchCaseOLL_04Test(){
         val cubeState = CubeState(
-            mutableListOf(0, 1, 2, 3, 4, 6, 5, 7),
-            mutableListOf(3, 3, 2, 1, 3, 3, 1, 3,),
-            mutableListOf(0, 1, 2, 11, 4, 5, 3, 7, 8, 9, 10, 6),
-            mutableListOf(false, false, false, true, false, false, true, true, false, false, false, true),
+            mutableListOf(3, 1, 2, 7, 0, 5, 6, 4),
+            mutableListOf(2, 3, 3, 3, 3, 3, 3, 1),
+            mutableListOf(7, 1, 2, 3, 4, 5, 6, 0, 8, 9, 10, 11),
+            mutableListOf(false, false, false, false, true, false, false, false, true, false, false, false),
         )
         OLLCaseDetection.changeCubeState(cubeState)
-        OLLCaseDetection.changeCubeSide(OrangeSide)
+        OLLCaseDetection.changeCubeSide(YellowSide)
         var positionRepresentation = OLLCaseDetection.transformStateToPositionRepresentation(context)
         for(i in 0..3){
             val ollCaseRepresentation =
@@ -133,19 +133,27 @@ class MatchCaseTests {
     @Test
     fun matchCaseOLL_05Test(){
         val cubeState = CubeState(
-            mutableListOf(0, 6, 5, 3, 4, 2, 1, 7),
-            mutableListOf(3, 3, 1, 3, 3, 1, 2, 3),
-            mutableListOf(0, 1, 2, 3, 4, 6, 10, 7, 8, 9, 5, 11),
-            mutableListOf(false, false, false, false, false, false, false, false, false, false, false, false),
+            mutableListOf(0, 1, 7, 6, 4, 5, 3, 2),
+            mutableListOf(3, 3, 1, 2, 3, 3, 2, 3),
+            mutableListOf(0, 1, 2, 7, 4, 5, 3, 6, 8, 9, 10, 11),
+            mutableListOf(false, false, false, true, false, false, true, false, false, false, false, false),
         )
         OLLCaseDetection.changeCubeState(cubeState)
-        OLLCaseDetection.changeCubeSide(WhiteSide)
+        OLLCaseDetection.changeCubeSide(OrangeSide)
         var positionRepresentation = OLLCaseDetection.transformStateToPositionRepresentation(context)
         for(i in 0..3){
             val ollCaseRepresentation =
                 OLLCaseDetection.positionRepresentationToOLLCase(positionRepresentation)
             val caseMatch = OLLCaseDetection.matchCase(ollCaseRepresentation)
             if(caseMatch!=null){
+                println("--------------------")
+                ollCaseRepresentation.incorrectlyOrientedPieces.forEach{ piece ->
+                    var printlnString = ""
+                    printlnString += piece.pieceType
+                    printlnString += piece.sideRelativePosition
+                    printlnString += piece.sideRelativeOrientation
+                    println(printlnString)
+                }
                 TestCase.assertEquals(PredefinedOLLCase.OLL_05, caseMatch)
                 return
             }
@@ -573,9 +581,9 @@ class MatchCaseTests {
     fun matchCaseOLL_22Test(){
         val cubeState = CubeState(
             mutableListOf(0, 1, 7, 6, 4, 5, 3, 2),
-            mutableListOf(3, 3, 2, 1, 3, 3, 2, 1),
-            mutableListOf(0, 1, 2, 6, 4, 5, 11, 7, 8, 9, 10, 3),
-            mutableListOf(true, true, true, true, true, true, true, true, true, true, true, true),
+            mutableListOf(3, 3, 1, 2, 3, 3, 1, 2),
+            mutableListOf(0, 1, 2, 11, 4, 5, 6, 3, 8, 9, 10, 7),
+            mutableListOf(false, false, false, false, false, false, false, false, false, false, false, false),
         )
         OLLCaseDetection.changeCubeState(cubeState)
         OLLCaseDetection.changeCubeSide(OrangeSide)
@@ -726,10 +734,10 @@ class MatchCaseTests {
     @Test
     fun matchCaseOLL_28Test(){
         val cubeState = CubeState(
-            mutableListOf(0, 1, 2, 3, 4, 6, 5, 7),
+            mutableListOf(0, 1, 2, 3, 4, 5, 6, 7),
             mutableListOf(3, 3, 3, 3, 3, 3, 3, 3),
-            mutableListOf(0, 1, 2, 3, 4, 5, 6, 7, 9, 8, 11, 19),
-            mutableListOf(false, false, false, false, false, false, false, false, false, true, true, false),
+            mutableListOf(0, 1, 2, 3, 4, 5, 6, 7, 10, 9, 11, 8),
+            mutableListOf(false, false, false, false, false, false, false, false, true, false, false, true),
         )
         OLLCaseDetection.changeCubeState(cubeState)
         OLLCaseDetection.changeCubeSide(BlueSide)
@@ -1125,10 +1133,10 @@ class MatchCaseTests {
     @Test
     fun matchCaseOLL_43Test(){
         val cubeState = CubeState(
-            mutableListOf(0, 1, 2, 3, 4, 7, 6, 5),
+            mutableListOf(0, 1, 2, 3, 7, 6, 5, 4),
             mutableListOf(3, 3, 3, 3, 3, 3, 2, 2),
-            mutableListOf(0, 1, 2, 3, 4, 5, 6, 7, 8, 10, 9, 11),
-            mutableListOf(false, false, false, false, false, false, false, false, false, false, true, false),
+            mutableListOf(0, 1, 2, 3, 4, 5, 6, 7, 11, 9, 8, 10),
+            mutableListOf(false, false, false, false, false, false, false, false, false, false, true, true),
         )
         OLLCaseDetection.changeCubeState(cubeState)
         OLLCaseDetection.changeCubeSide(BlueSide)
