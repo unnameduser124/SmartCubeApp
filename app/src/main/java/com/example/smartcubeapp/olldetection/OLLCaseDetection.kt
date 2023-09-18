@@ -17,8 +17,17 @@ import com.example.smartcubeapp.elementdatabase.casedetectiondatabase.CaseElemen
 
 class OLLCaseDetection(var cubeState: CubeState, private var cubeSide: CubeSide) {
 
-    fun detectOLLCase(): PredefinedOLLCase? {
-        TODO("Not implemented yet")
+    fun detectOLLCase(context: Context): PredefinedOLLCase? {
+        var positionRepresentation =
+            transformStateToPositionRepresentation(context)
+        for(i in 0..3){
+            val case = matchCase(positionRepresentationToOLLCase(positionRepresentation))
+            if(case != null){
+                return case
+            }
+            positionRepresentation = rotatePositionClockwise(positionRepresentation)
+        }
+        return null
     }
 
     fun transformStateToPositionRepresentation(context: Context): Array<Array<OLLPositionRepresentationElement>> {
@@ -89,7 +98,7 @@ class OLLCaseDetection(var cubeState: CubeState, private var cubeSide: CubeSide)
     }
 
     fun matchCase(case: OLLCase): PredefinedOLLCase? {
-        for(value in PredefinedOLLCase.values()) {
+        for (value in PredefinedOLLCase.values()) {
             if (case.equals(value)) {
                 return value
             }
