@@ -55,7 +55,8 @@ class StateSolveFinishedLayout(
                         solve.value.scrambledState = cubeState.value
                         state.value = TimerState.Solving
                     }
-                })
+                }
+            )
         }
 
     }
@@ -66,7 +67,11 @@ class StateSolveFinishedLayout(
             solve.value.calculateTimeFromStateSequence()
             val time = solve.value.time / MILLIS_IN_SECOND.toDouble()
             val timeRounded = roundDouble(time, 100)
-            Text(text = timeRounded.toString(), fontSize = 50.sp, modifier = Modifier.padding(top = 20.dp))
+            Text(
+                text = timeRounded.toString(),
+                fontSize = 50.sp,
+                modifier = Modifier.padding(top = 20.dp)
+            )
         }
         Row(horizontalArrangement = Arrangement.Center) {
             val moveCount = solve.value.solveStateSequence.size - 1
@@ -85,24 +90,31 @@ class StateSolveFinishedLayout(
         Row(horizontalArrangement = Arrangement.Center) {
             PhaseStatisticsLazyColumn()
         }
+        OLLCaseRow()
     }
 
     @Composable
-    fun PhaseStatisticsLazyColumn(){
+    fun PhaseStatisticsLazyColumn() {
         val phases = SolvePhase.values().toMutableList()
         phases.remove(SolvePhase.Scrambled)
 
         LazyColumn {
             items(phases.size) { index ->
 
-                val solutionPhaseDetection = SolutionPhaseDetection(solve.value, CubeStatePhaseDetection(CubeState.SOLVED_CUBE_STATE))
+                val solutionPhaseDetection = SolutionPhaseDetection(
+                    solve.value,
+                    CubeStatePhaseDetection(CubeState.SOLVED_CUBE_STATE)
+                )
                 val phase = phases[index]
 
                 val phaseTime = remember { mutableStateOf(0.0) }
                 val phaseTps = remember { mutableStateOf(0.0) }
                 val phaseMoves = remember { mutableStateOf(0) }
 
-                phaseTime.value = roundDouble(solutionPhaseDetection.getPhaseDurationInSeconds(phase, context), 100)
+                phaseTime.value = roundDouble(
+                    solutionPhaseDetection.getPhaseDurationInSeconds(phase, context),
+                    100
+                )
                 phaseTps.value = roundDouble(solutionPhaseDetection.getPhaseTPS(phase, context), 10)
                 phaseMoves.value = solutionPhaseDetection.getPhaseMoveCount(phase, context)
 
@@ -129,6 +141,27 @@ class StateSolveFinishedLayout(
                     )
                 }
             }
+        }
+    }
+
+    @Composable
+    fun OLLCaseRow() {
+        val ollCase = SolutionPhaseDetection(
+            solve.value,
+            CubeStatePhaseDetection(CubeState.SOLVED_CUBE_STATE)
+        ).getOLL(context)
+
+        Row(horizontalArrangement = Arrangement.Center) {
+            Text(
+                text = "OLL Case",
+                fontSize = 25.sp,
+                modifier = Modifier.padding(horizontal = 10.dp)
+            )
+            Text(
+                text = ollCase.toString(),
+                fontSize = 25.sp,
+                modifier = Modifier.padding(horizontal = 10.dp)
+            )
         }
     }
 

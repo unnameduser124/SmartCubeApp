@@ -11,6 +11,8 @@ import com.example.smartcubeapp.cube.Solve
 import com.example.smartcubeapp.cube.WhiteSide
 import com.example.smartcubeapp.cube.YellowSide
 import com.example.smartcubeapp.cube.cubeSides
+import com.example.smartcubeapp.olldetection.OLLCaseDetection
+import com.example.smartcubeapp.olldetection.PredefinedOLLCase
 
 class SolutionPhaseDetection(
     private val solution: Solve,
@@ -123,6 +125,15 @@ class SolutionPhaseDetection(
         val moveCount = getPhaseMoveCount(phase, context)
         val duration = getPhaseDurationInSeconds(phase, context)
         return if (duration != 0.0) moveCount / duration else 0.0
+    }
+
+    fun getOLL(context: Context): PredefinedOLLCase? {
+        val crossOppositeSide = getCrossOppositeSide() ?: return null
+        val ollStartState =
+            solution.solveStateSequence[getStartIndexForPhase(SolvePhase.OLL, context)]
+        val caseDetection = OLLCaseDetection(ollStartState, crossOppositeSide)
+
+        return caseDetection.detectOLLCase(context)
     }
 
     fun setCrossSide() {
