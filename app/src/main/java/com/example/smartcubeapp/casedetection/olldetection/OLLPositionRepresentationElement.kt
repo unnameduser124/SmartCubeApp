@@ -1,12 +1,16 @@
-package com.example.smartcubeapp.cube.piece
+package com.example.smartcubeapp.casedetection.olldetection
+
+import com.example.smartcubeapp.cube.piece.Orientation
+import com.example.smartcubeapp.cube.piece.PieceType
 
 class OLLPositionRepresentationElement(
-    val pieceType: PieceType,
+    var pieceType: PieceType,
     var sideRelativeOrientation: Orientation? = null,
     var sideRelativePosition: Pair<Int, Int>? = null
 ) {
-    //This override is temporary, excluding pieceNumber is necessary for OLLDetection tests to work
-    //but it may be necessary to include it for PLLDetection or write a separate class for PLLDetection
+
+    constructor(): this(PieceType.CORNER)
+
     override fun equals(other: Any?): Boolean {
         return if (other is OLLPositionRepresentationElement) {
             pieceType == other.pieceType

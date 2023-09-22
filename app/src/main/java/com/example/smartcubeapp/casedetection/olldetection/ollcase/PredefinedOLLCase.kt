@@ -1,8 +1,8 @@
-package com.example.smartcubeapp.olldetection
+package com.example.smartcubeapp.casedetection.olldetection.ollcase
 
 import com.example.smartcubeapp.cube.piece.Orientation
 import com.example.smartcubeapp.cube.piece.PieceType
-import com.example.smartcubeapp.cube.piece.OLLPositionRepresentationElement
+import com.example.smartcubeapp.casedetection.olldetection.OLLPositionRepresentationElement
 
 enum class PredefinedOLLCase(override val incorrectlyOrientedPieces: MutableList<OLLPositionRepresentationElement> = mutableListOf()) :
     OLLCase {

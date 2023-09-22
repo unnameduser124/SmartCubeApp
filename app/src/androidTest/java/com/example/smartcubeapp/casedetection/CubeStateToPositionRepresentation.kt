@@ -1,4 +1,4 @@
-package com.example.smartcubeapp.ollcasedetectiontests
+package com.example.smartcubeapp.casedetection
 
 import android.content.Context
 import androidx.test.platform.app.InstrumentationRegistry
@@ -11,27 +11,29 @@ import com.example.smartcubeapp.cube.WhiteSide
 import com.example.smartcubeapp.cube.YellowSide
 import com.example.smartcubeapp.cube.piece.Orientation
 import com.example.smartcubeapp.cube.piece.PieceType
-import com.example.smartcubeapp.cube.piece.OLLPositionRepresentationElement
-import com.example.smartcubeapp.olldetection.OLLCaseDetection
+import com.example.smartcubeapp.casedetection.olldetection.OLLPositionRepresentationElement
 import org.junit.Before
 import org.junit.Test
 
 class CubeStateToPositionRepresentationTests {
 
-    private lateinit var ollCaseDetection: OLLCaseDetection
+    private lateinit var positionTransformer: PositionRepresentationTransformer<OLLPositionRepresentationElement>
     private lateinit var context: Context
 
     @Before
     fun setUp() {
         context = InstrumentationRegistry.getInstrumentation().targetContext
-        ollCaseDetection = OLLCaseDetection(CubeState.SOLVED_CUBE_STATE, WhiteSide)
+        positionTransformer = PositionRepresentationTransformer(
+            CubeState.SOLVED_CUBE_STATE,
+            WhiteSide
+        )
     }
 
     @Test
     fun cubeStateToPositionRepresentationTestWhite() {
-        ollCaseDetection.changeCubeSide(WhiteSide)
-        val positionRepresentation =
-            ollCaseDetection.transformStateToPositionRepresentation(context)
+        positionTransformer.changeCubeSide(WhiteSide)
+        val positionRepresentation: Array<Array<OLLPositionRepresentationElement>> =
+            positionTransformer.transformStateToPositionRepresentation(context)
 
         val expectedRepresentation = arrayOf(
             arrayOf(
@@ -55,9 +57,9 @@ class CubeStateToPositionRepresentationTests {
 
     @Test
     fun cubeStateToPositionRepresentationTestYellow(){
-        ollCaseDetection.changeCubeSide(YellowSide)
-        val positionRepresentation =
-            ollCaseDetection.transformStateToPositionRepresentation(context)
+        positionTransformer.changeCubeSide(YellowSide)
+        val positionRepresentation: Array<Array<OLLPositionRepresentationElement>> =
+            positionTransformer.transformStateToPositionRepresentation(context)
 
         val expectedRepresentation = arrayOf(
             arrayOf(
@@ -81,9 +83,9 @@ class CubeStateToPositionRepresentationTests {
 
     @Test
     fun cubeStateToPositionRepresentationTestBlue(){
-        ollCaseDetection.changeCubeSide(BlueSide)
-        val positionRepresentation =
-            ollCaseDetection.transformStateToPositionRepresentation(context)
+        positionTransformer.changeCubeSide(BlueSide)
+        val positionRepresentation: Array<Array<OLLPositionRepresentationElement>> =
+            positionTransformer.transformStateToPositionRepresentation(context)
 
         val expectedRepresentation = arrayOf(
             arrayOf(
@@ -107,9 +109,9 @@ class CubeStateToPositionRepresentationTests {
 
     @Test
     fun cubeStateToPositionRepresentationTestGreen(){
-        ollCaseDetection.changeCubeSide(GreenSide)
-        val positionRepresentation =
-            ollCaseDetection.transformStateToPositionRepresentation(context)
+        positionTransformer.changeCubeSide(GreenSide)
+        val positionRepresentation: Array<Array<OLLPositionRepresentationElement>> =
+            positionTransformer.transformStateToPositionRepresentation(context)
 
         val expectedRepresentation = arrayOf(
             arrayOf(
@@ -133,9 +135,9 @@ class CubeStateToPositionRepresentationTests {
 
     @Test
     fun cubeStateToPositionRepresentationTestRed(){
-        ollCaseDetection.changeCubeSide(RedSide)
-        val positionRepresentation =
-            ollCaseDetection.transformStateToPositionRepresentation(context)
+        positionTransformer.changeCubeSide(RedSide)
+        val positionRepresentation: Array<Array<OLLPositionRepresentationElement>> =
+            positionTransformer.transformStateToPositionRepresentation(context)
 
         val expectedRepresentation = arrayOf(
             arrayOf(
@@ -159,9 +161,9 @@ class CubeStateToPositionRepresentationTests {
 
     @Test
     fun cubeStateToPositionRepresentationTestOrange(){
-        ollCaseDetection.changeCubeSide(OrangeSide)
-        val positionRepresentation =
-            ollCaseDetection.transformStateToPositionRepresentation(context)
+        positionTransformer.changeCubeSide(OrangeSide)
+        val positionRepresentation: Array<Array<OLLPositionRepresentationElement>> =
+            positionTransformer.transformStateToPositionRepresentation(context)
 
         val expectedRepresentation = arrayOf(
             arrayOf(

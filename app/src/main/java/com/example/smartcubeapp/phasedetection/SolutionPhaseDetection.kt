@@ -11,8 +11,8 @@ import com.example.smartcubeapp.cube.Solve
 import com.example.smartcubeapp.cube.WhiteSide
 import com.example.smartcubeapp.cube.YellowSide
 import com.example.smartcubeapp.cube.cubeSides
-import com.example.smartcubeapp.olldetection.OLLCaseDetection
-import com.example.smartcubeapp.olldetection.PredefinedOLLCase
+import com.example.smartcubeapp.casedetection.olldetection.OLLCaseDetection
+import com.example.smartcubeapp.casedetection.olldetection.ollcase.PredefinedOLLCase
 
 class SolutionPhaseDetection(
     private val solution: Solve,

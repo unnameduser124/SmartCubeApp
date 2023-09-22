@@ -91,6 +91,7 @@ class StateSolveFinishedLayout(
             PhaseStatisticsLazyColumn()
         }
         OLLCaseRow()
+        CrossSideRow()
     }
 
     @Composable
@@ -159,6 +160,27 @@ class StateSolveFinishedLayout(
             )
             Text(
                 text = ollCase.toString(),
+                fontSize = 25.sp,
+                modifier = Modifier.padding(horizontal = 10.dp)
+            )
+        }
+    }
+
+    @Composable
+    fun CrossSideRow(){
+        val crossSide = SolutionPhaseDetection(
+            solve.value,
+            CubeStatePhaseDetection(CubeState.SOLVED_CUBE_STATE)
+        ).getCrossSide() ?: return
+
+        Row(horizontalArrangement = Arrangement.Center) {
+            Text(
+                text = "Cross Side",
+                fontSize = 25.sp,
+                modifier = Modifier.padding(horizontal = 10.dp)
+            )
+            Text(
+                text = crossSide.sideName,
                 fontSize = 25.sp,
                 modifier = Modifier.padding(horizontal = 10.dp)
             )

@@ -1,9 +1,11 @@
-package com.example.smartcubeapp.olldetection
+package com.example.smartcubeapp.casedetection.olldetection.ollcase
 
-import com.example.smartcubeapp.cube.piece.OLLPositionRepresentationElement
+import com.example.smartcubeapp.casedetection.olldetection.OLLPositionRepresentationElement
 
-class CustomOLLCase(override val incorrectlyOrientedPieces: MutableList<OLLPositionRepresentationElement>) :
+class CustomOLLCase(override var incorrectlyOrientedPieces: MutableList<OLLPositionRepresentationElement>) :
     OLLCase {
+
+    constructor() : this(mutableListOf())
 
     private infix fun <T> List<T>.equalsIgnoreOrder(other: List<T>) =
         this.size == other.size && this.toSet() == other.toSet()

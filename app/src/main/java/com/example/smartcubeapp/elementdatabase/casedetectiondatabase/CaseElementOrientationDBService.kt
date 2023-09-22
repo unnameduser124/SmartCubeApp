@@ -34,7 +34,10 @@ class CaseElementOrientationDBService(
                 ElementDatabaseConstants.ElementOrientationTable.PIECE_TYPE_COLUMN,
                 element.pieceType.ordinal
             )
-            put(ElementDatabaseConstants.ElementOrientationTable.PIECE_NUMBER_COLUMN, element.pieceNumber)
+            put(
+                ElementDatabaseConstants.ElementOrientationTable.PIECE_NUMBER_COLUMN,
+                element.pieceNumber
+            )
             put(
                 ElementDatabaseConstants.ElementOrientationTable.PIECE_POSITION_COLUMN,
                 element.piecePosition
@@ -76,7 +79,10 @@ class CaseElementOrientationDBService(
                 ElementDatabaseConstants.ElementOrientationTable.PIECE_TYPE_COLUMN,
                 element.pieceType.ordinal
             )
-            put(ElementDatabaseConstants.ElementOrientationTable.PIECE_NUMBER_COLUMN, element.pieceNumber)
+            put(
+                ElementDatabaseConstants.ElementOrientationTable.PIECE_NUMBER_COLUMN,
+                element.pieceNumber
+            )
             put(
                 ElementDatabaseConstants.ElementOrientationTable.PIECE_POSITION_COLUMN,
                 element.piecePosition
@@ -96,11 +102,12 @@ class CaseElementOrientationDBService(
             )
         }
 
-        val selection = "${ElementDatabaseConstants.ElementOrientationTable.SIDE_NAME_COLUMN} = ? AND " +
-                "${ElementDatabaseConstants.ElementOrientationTable.PIECE_TYPE_COLUMN} = ? AND " +
-                "${ElementDatabaseConstants.ElementOrientationTable.PIECE_NUMBER_COLUMN} = ? AND " +
-                "${ElementDatabaseConstants.ElementOrientationTable.PIECE_POSITION_COLUMN} = ? AND " +
-                "${ElementDatabaseConstants.ElementOrientationTable.PIECE_ORIENTATION_COLUMN} = ?"
+        val selection =
+            "${ElementDatabaseConstants.ElementOrientationTable.SIDE_NAME_COLUMN} = ? AND " +
+                    "${ElementDatabaseConstants.ElementOrientationTable.PIECE_TYPE_COLUMN} = ? AND " +
+                    "${ElementDatabaseConstants.ElementOrientationTable.PIECE_NUMBER_COLUMN} = ? AND " +
+                    "${ElementDatabaseConstants.ElementOrientationTable.PIECE_POSITION_COLUMN} = ? AND " +
+                    "${ElementDatabaseConstants.ElementOrientationTable.PIECE_ORIENTATION_COLUMN} = ?"
 
         val selectionArgs = arrayOf(
             element.sideName,
@@ -120,11 +127,12 @@ class CaseElementOrientationDBService(
     }
 
     fun deleteElementOrientation(element: ElementOrientation) {
-        val selection = "${ElementDatabaseConstants.ElementOrientationTable.SIDE_NAME_COLUMN} = ? AND " +
-                "${ElementDatabaseConstants.ElementOrientationTable.PIECE_TYPE_COLUMN} = ? AND " +
-                "${ElementDatabaseConstants.ElementOrientationTable.PIECE_NUMBER_COLUMN} = ? AND " +
-                "${ElementDatabaseConstants.ElementOrientationTable.PIECE_POSITION_COLUMN} = ? AND " +
-                "${ElementDatabaseConstants.ElementOrientationTable.PIECE_ORIENTATION_COLUMN} = ?"
+        val selection =
+            "${ElementDatabaseConstants.ElementOrientationTable.SIDE_NAME_COLUMN} = ? AND " +
+                    "${ElementDatabaseConstants.ElementOrientationTable.PIECE_TYPE_COLUMN} = ? AND " +
+                    "${ElementDatabaseConstants.ElementOrientationTable.PIECE_NUMBER_COLUMN} = ? AND " +
+                    "${ElementDatabaseConstants.ElementOrientationTable.PIECE_POSITION_COLUMN} = ? AND " +
+                    "${ElementDatabaseConstants.ElementOrientationTable.PIECE_ORIENTATION_COLUMN} = ?"
         val selectionArgs = arrayOf(
             element.sideName,
             element.pieceType.ordinal.toString(),
@@ -142,11 +150,12 @@ class CaseElementOrientationDBService(
 
     fun getElementOrientation(element: ElementOrientation): ElementOrientation? {
         val db = this.readableDatabase
-        val selection = "${ElementDatabaseConstants.ElementOrientationTable.SIDE_NAME_COLUMN} = ? AND " +
-                "${ElementDatabaseConstants.ElementOrientationTable.PIECE_TYPE_COLUMN} = ? AND " +
-                "${ElementDatabaseConstants.ElementOrientationTable.PIECE_NUMBER_COLUMN} = ? AND " +
-                "${ElementDatabaseConstants.ElementOrientationTable.PIECE_POSITION_COLUMN} = ? AND " +
-                "${ElementDatabaseConstants.ElementOrientationTable.PIECE_ORIENTATION_COLUMN} = ?"
+        val selection =
+            "${ElementDatabaseConstants.ElementOrientationTable.SIDE_NAME_COLUMN} = ? AND " +
+                    "${ElementDatabaseConstants.ElementOrientationTable.PIECE_TYPE_COLUMN} = ? AND " +
+                    "${ElementDatabaseConstants.ElementOrientationTable.PIECE_NUMBER_COLUMN} = ? AND " +
+                    "${ElementDatabaseConstants.ElementOrientationTable.PIECE_POSITION_COLUMN} = ? AND " +
+                    "${ElementDatabaseConstants.ElementOrientationTable.PIECE_ORIENTATION_COLUMN} = ?"
         val selectionArgs = arrayOf(
             element.sideName,
             element.pieceType.ordinal.toString(),
@@ -189,6 +198,46 @@ class CaseElementOrientationDBService(
                     Orientation.values()[sideRelativeOrientation],
                     true
                 )
+            }
+        }
+        return null
+    }
+
+    fun getOrientationForElement(element: ElementOrientation): Orientation? {
+        val db = this.readableDatabase
+        val selection =
+            "${ElementDatabaseConstants.ElementOrientationTable.SIDE_NAME_COLUMN} = ? AND " +
+                    "${ElementDatabaseConstants.ElementOrientationTable.PIECE_TYPE_COLUMN} = ? AND " +
+                    "${ElementDatabaseConstants.ElementOrientationTable.PIECE_NUMBER_COLUMN} = ? AND " +
+                    "${ElementDatabaseConstants.ElementOrientationTable.PIECE_POSITION_COLUMN} = ? AND " +
+                    "${ElementDatabaseConstants.ElementOrientationTable.PIECE_ORIENTATION_COLUMN} = ?"
+        val selectionArgs = arrayOf(
+            element.sideName,
+            element.pieceType.ordinal.toString(),
+            element.pieceNumber.toString(),
+            element.piecePosition.toString(),
+            element.pieceOrientation.toString()
+        )
+
+        val projection = arrayOf(
+            ElementDatabaseConstants.ElementOrientationTable.SIDE_RELATIVE_ORIENTATION_COLUMN
+        )
+
+        val cursor = db.query(
+            ElementDatabaseConstants.ElementOrientationTable.TABLE_NAME,
+            projection,
+            selection,
+            selectionArgs,
+            null,
+            null,
+            null
+        )
+
+        with(cursor) {
+            if (moveToNext()) {
+                val sideRelativeOrientation =
+                    getInt(getColumnIndexOrThrow(ElementDatabaseConstants.ElementOrientationTable.SIDE_RELATIVE_ORIENTATION_COLUMN))
+                return Orientation.values()[sideRelativeOrientation]
             }
         }
         return null

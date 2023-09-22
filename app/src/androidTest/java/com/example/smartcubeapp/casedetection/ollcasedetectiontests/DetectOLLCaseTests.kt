@@ -1,4 +1,4 @@
-package com.example.smartcubeapp.ollcasedetectiontests
+package com.example.smartcubeapp.casedetection.ollcasedetectiontests
 
 import android.content.Context
 import androidx.test.platform.app.InstrumentationRegistry
@@ -9,8 +9,8 @@ import com.example.smartcubeapp.cube.OrangeSide
 import com.example.smartcubeapp.cube.RedSide
 import com.example.smartcubeapp.cube.WhiteSide
 import com.example.smartcubeapp.cube.YellowSide
-import com.example.smartcubeapp.olldetection.OLLCaseDetection
-import com.example.smartcubeapp.olldetection.PredefinedOLLCase
+import com.example.smartcubeapp.casedetection.olldetection.OLLCaseDetection
+import com.example.smartcubeapp.casedetection.olldetection.ollcase.PredefinedOLLCase
 import junit.framework.TestCase
 import org.junit.Before
 import org.junit.Test
