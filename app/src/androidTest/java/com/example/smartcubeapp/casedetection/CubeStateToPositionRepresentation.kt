@@ -11,13 +11,13 @@ import com.example.smartcubeapp.cube.WhiteSide
 import com.example.smartcubeapp.cube.YellowSide
 import com.example.smartcubeapp.cube.piece.Orientation
 import com.example.smartcubeapp.cube.piece.PieceType
-import com.example.smartcubeapp.casedetection.olldetection.OLLPositionRepresentationElement
+import com.example.smartcubeapp.casedetection.olldetection.OLLElementOrientation
 import org.junit.Before
 import org.junit.Test
 
 class CubeStateToPositionRepresentationTests {
 
-    private lateinit var positionTransformer: PositionRepresentationTransformer<OLLPositionRepresentationElement>
+    private lateinit var positionTransformer: PositionRepresentationTransformer
     private lateinit var context: Context
 
     @Before
@@ -32,23 +32,23 @@ class CubeStateToPositionRepresentationTests {
     @Test
     fun cubeStateToPositionRepresentationTestWhite() {
         positionTransformer.changeCubeSide(WhiteSide)
-        val positionRepresentation: Array<Array<OLLPositionRepresentationElement>> =
+        val positionRepresentation: Array<Array<OLLElementOrientation>> =
             positionTransformer.transformStateToPositionRepresentation(context)
 
         val expectedRepresentation = arrayOf(
             arrayOf(
-                OLLPositionRepresentationElement(PieceType.CORNER, Orientation.Correct, Pair(0, 0)),
-                OLLPositionRepresentationElement(PieceType.EDGE, Orientation.Correct, Pair(0, 1)),
-                OLLPositionRepresentationElement(PieceType.CORNER, Orientation.Correct, Pair(0, 2))
+                OLLElementOrientation(PieceType.CORNER, Orientation.Correct, Pair(0, 0)),
+                OLLElementOrientation(PieceType.EDGE, Orientation.Correct, Pair(0, 1)),
+                OLLElementOrientation(PieceType.CORNER, Orientation.Correct, Pair(0, 2))
             ),
             arrayOf(
-                OLLPositionRepresentationElement(PieceType.EDGE, Orientation.Correct, Pair(1, 0)),
-                OLLPositionRepresentationElement(PieceType.EDGE, Orientation.Correct, Pair(1, 2))
+                OLLElementOrientation(PieceType.EDGE, Orientation.Correct, Pair(1, 0)),
+                OLLElementOrientation(PieceType.EDGE, Orientation.Correct, Pair(1, 2))
             ),
             arrayOf(
-                OLLPositionRepresentationElement(PieceType.CORNER, Orientation.Correct, Pair(2, 0)),
-                OLLPositionRepresentationElement(PieceType.EDGE, Orientation.Correct, Pair(2, 1)),
-                OLLPositionRepresentationElement(PieceType.CORNER, Orientation.Correct, Pair(2, 2))
+                OLLElementOrientation(PieceType.CORNER, Orientation.Correct, Pair(2, 0)),
+                OLLElementOrientation(PieceType.EDGE, Orientation.Correct, Pair(2, 1)),
+                OLLElementOrientation(PieceType.CORNER, Orientation.Correct, Pair(2, 2))
             )
         )
 
@@ -58,23 +58,23 @@ class CubeStateToPositionRepresentationTests {
     @Test
     fun cubeStateToPositionRepresentationTestYellow(){
         positionTransformer.changeCubeSide(YellowSide)
-        val positionRepresentation: Array<Array<OLLPositionRepresentationElement>> =
+        val positionRepresentation: Array<Array<OLLElementOrientation>> =
             positionTransformer.transformStateToPositionRepresentation(context)
 
         val expectedRepresentation = arrayOf(
             arrayOf(
-                OLLPositionRepresentationElement(PieceType.CORNER, Orientation.Correct, Pair(0, 0)),
-                OLLPositionRepresentationElement(PieceType.EDGE, Orientation.Correct, Pair(0, 1)),
-                OLLPositionRepresentationElement(PieceType.CORNER, Orientation.Correct, Pair(0, 2))
+                OLLElementOrientation(PieceType.CORNER, Orientation.Correct, Pair(0, 0)),
+                OLLElementOrientation(PieceType.EDGE, Orientation.Correct, Pair(0, 1)),
+                OLLElementOrientation(PieceType.CORNER, Orientation.Correct, Pair(0, 2))
             ),
             arrayOf(
-                OLLPositionRepresentationElement(PieceType.EDGE, Orientation.Correct, Pair(1, 0)),
-                OLLPositionRepresentationElement(PieceType.EDGE, Orientation.Correct, Pair(1, 2))
+                OLLElementOrientation(PieceType.EDGE, Orientation.Correct, Pair(1, 0)),
+                OLLElementOrientation(PieceType.EDGE, Orientation.Correct, Pair(1, 2))
             ),
             arrayOf(
-                OLLPositionRepresentationElement(PieceType.CORNER, Orientation.Correct, Pair(2, 0)),
-                OLLPositionRepresentationElement(PieceType.EDGE, Orientation.Correct, Pair(2, 1)),
-                OLLPositionRepresentationElement(PieceType.CORNER, Orientation.Correct, Pair(2, 2))
+                OLLElementOrientation(PieceType.CORNER, Orientation.Correct, Pair(2, 0)),
+                OLLElementOrientation(PieceType.EDGE, Orientation.Correct, Pair(2, 1)),
+                OLLElementOrientation(PieceType.CORNER, Orientation.Correct, Pair(2, 2))
             )
         )
 
@@ -84,23 +84,23 @@ class CubeStateToPositionRepresentationTests {
     @Test
     fun cubeStateToPositionRepresentationTestBlue(){
         positionTransformer.changeCubeSide(BlueSide)
-        val positionRepresentation: Array<Array<OLLPositionRepresentationElement>> =
+        val positionRepresentation: Array<Array<OLLElementOrientation>> =
             positionTransformer.transformStateToPositionRepresentation(context)
 
         val expectedRepresentation = arrayOf(
             arrayOf(
-                OLLPositionRepresentationElement(PieceType.CORNER, Orientation.Correct, Pair(0, 0)),
-                OLLPositionRepresentationElement(PieceType.EDGE, Orientation.Correct, Pair(0, 1)),
-                OLLPositionRepresentationElement(PieceType.CORNER, Orientation.Correct, Pair(0, 2))
+                OLLElementOrientation(PieceType.CORNER, Orientation.Correct, Pair(0, 0)),
+                OLLElementOrientation(PieceType.EDGE, Orientation.Correct, Pair(0, 1)),
+                OLLElementOrientation(PieceType.CORNER, Orientation.Correct, Pair(0, 2))
             ),
             arrayOf(
-                OLLPositionRepresentationElement(PieceType.EDGE, Orientation.Correct, Pair(1, 0)),
-                OLLPositionRepresentationElement(PieceType.EDGE, Orientation.Correct, Pair(1, 2))
+                OLLElementOrientation(PieceType.EDGE, Orientation.Correct, Pair(1, 0)),
+                OLLElementOrientation(PieceType.EDGE, Orientation.Correct, Pair(1, 2))
             ),
             arrayOf(
-                OLLPositionRepresentationElement(PieceType.CORNER, Orientation.Correct, Pair(2, 0)),
-                OLLPositionRepresentationElement(PieceType.EDGE, Orientation.Correct, Pair(2, 1)),
-                OLLPositionRepresentationElement(PieceType.CORNER, Orientation.Correct, Pair(2, 2))
+                OLLElementOrientation(PieceType.CORNER, Orientation.Correct, Pair(2, 0)),
+                OLLElementOrientation(PieceType.EDGE, Orientation.Correct, Pair(2, 1)),
+                OLLElementOrientation(PieceType.CORNER, Orientation.Correct, Pair(2, 2))
             )
         )
 
@@ -110,23 +110,23 @@ class CubeStateToPositionRepresentationTests {
     @Test
     fun cubeStateToPositionRepresentationTestGreen(){
         positionTransformer.changeCubeSide(GreenSide)
-        val positionRepresentation: Array<Array<OLLPositionRepresentationElement>> =
+        val positionRepresentation: Array<Array<OLLElementOrientation>> =
             positionTransformer.transformStateToPositionRepresentation(context)
 
         val expectedRepresentation = arrayOf(
             arrayOf(
-                OLLPositionRepresentationElement(PieceType.CORNER, Orientation.Correct, Pair(0, 0)),
-                OLLPositionRepresentationElement(PieceType.EDGE, Orientation.Correct, Pair(0, 1)),
-                OLLPositionRepresentationElement(PieceType.CORNER, Orientation.Correct, Pair(0, 2))
+                OLLElementOrientation(PieceType.CORNER, Orientation.Correct, Pair(0, 0)),
+                OLLElementOrientation(PieceType.EDGE, Orientation.Correct, Pair(0, 1)),
+                OLLElementOrientation(PieceType.CORNER, Orientation.Correct, Pair(0, 2))
             ),
             arrayOf(
-                OLLPositionRepresentationElement(PieceType.EDGE, Orientation.Correct, Pair(1, 0)),
-                OLLPositionRepresentationElement(PieceType.EDGE, Orientation.Correct, Pair(1, 2))
+                OLLElementOrientation(PieceType.EDGE, Orientation.Correct, Pair(1, 0)),
+                OLLElementOrientation(PieceType.EDGE, Orientation.Correct, Pair(1, 2))
             ),
             arrayOf(
-                OLLPositionRepresentationElement(PieceType.CORNER, Orientation.Correct, Pair(2, 0)),
-                OLLPositionRepresentationElement(PieceType.EDGE, Orientation.Correct, Pair(2, 1)),
-                OLLPositionRepresentationElement(PieceType.CORNER, Orientation.Correct, Pair(2, 2))
+                OLLElementOrientation(PieceType.CORNER, Orientation.Correct, Pair(2, 0)),
+                OLLElementOrientation(PieceType.EDGE, Orientation.Correct, Pair(2, 1)),
+                OLLElementOrientation(PieceType.CORNER, Orientation.Correct, Pair(2, 2))
             )
         )
 
@@ -136,23 +136,23 @@ class CubeStateToPositionRepresentationTests {
     @Test
     fun cubeStateToPositionRepresentationTestRed(){
         positionTransformer.changeCubeSide(RedSide)
-        val positionRepresentation: Array<Array<OLLPositionRepresentationElement>> =
+        val positionRepresentation: Array<Array<OLLElementOrientation>> =
             positionTransformer.transformStateToPositionRepresentation(context)
 
         val expectedRepresentation = arrayOf(
             arrayOf(
-                OLLPositionRepresentationElement(PieceType.CORNER, Orientation.Correct, Pair(0, 0)),
-                OLLPositionRepresentationElement(PieceType.EDGE, Orientation.Correct, Pair(0, 1)),
-                OLLPositionRepresentationElement(PieceType.CORNER, Orientation.Correct, Pair(0, 2))
+                OLLElementOrientation(PieceType.CORNER, Orientation.Correct, Pair(0, 0)),
+                OLLElementOrientation(PieceType.EDGE, Orientation.Correct, Pair(0, 1)),
+                OLLElementOrientation(PieceType.CORNER, Orientation.Correct, Pair(0, 2))
             ),
             arrayOf(
-                OLLPositionRepresentationElement(PieceType.EDGE, Orientation.Correct, Pair(1, 0)),
-                OLLPositionRepresentationElement(PieceType.EDGE, Orientation.Correct, Pair(1, 2))
+                OLLElementOrientation(PieceType.EDGE, Orientation.Correct, Pair(1, 0)),
+                OLLElementOrientation(PieceType.EDGE, Orientation.Correct, Pair(1, 2))
             ),
             arrayOf(
-                OLLPositionRepresentationElement(PieceType.CORNER, Orientation.Correct, Pair(2, 0)),
-                OLLPositionRepresentationElement(PieceType.EDGE, Orientation.Correct, Pair(2, 1)),
-                OLLPositionRepresentationElement(PieceType.CORNER, Orientation.Correct, Pair(2, 2))
+                OLLElementOrientation(PieceType.CORNER, Orientation.Correct, Pair(2, 0)),
+                OLLElementOrientation(PieceType.EDGE, Orientation.Correct, Pair(2, 1)),
+                OLLElementOrientation(PieceType.CORNER, Orientation.Correct, Pair(2, 2))
             )
         )
 
@@ -162,23 +162,23 @@ class CubeStateToPositionRepresentationTests {
     @Test
     fun cubeStateToPositionRepresentationTestOrange(){
         positionTransformer.changeCubeSide(OrangeSide)
-        val positionRepresentation: Array<Array<OLLPositionRepresentationElement>> =
+        val positionRepresentation: Array<Array<OLLElementOrientation>> =
             positionTransformer.transformStateToPositionRepresentation(context)
 
         val expectedRepresentation = arrayOf(
             arrayOf(
-                OLLPositionRepresentationElement(PieceType.CORNER, Orientation.Correct, Pair(0, 0)),
-                OLLPositionRepresentationElement(PieceType.EDGE, Orientation.Correct, Pair(0, 1)),
-                OLLPositionRepresentationElement(PieceType.CORNER, Orientation.Correct, Pair(0, 2))
+                OLLElementOrientation(PieceType.CORNER, Orientation.Correct, Pair(0, 0)),
+                OLLElementOrientation(PieceType.EDGE, Orientation.Correct, Pair(0, 1)),
+                OLLElementOrientation(PieceType.CORNER, Orientation.Correct, Pair(0, 2))
             ),
             arrayOf(
-                OLLPositionRepresentationElement(PieceType.EDGE, Orientation.Correct, Pair(1, 0)),
-                OLLPositionRepresentationElement(PieceType.EDGE, Orientation.Correct, Pair(1, 2))
+                OLLElementOrientation(PieceType.EDGE, Orientation.Correct, Pair(1, 0)),
+                OLLElementOrientation(PieceType.EDGE, Orientation.Correct, Pair(1, 2))
             ),
             arrayOf(
-                OLLPositionRepresentationElement(PieceType.CORNER, Orientation.Correct, Pair(2, 0)),
-                OLLPositionRepresentationElement(PieceType.EDGE, Orientation.Correct, Pair(2, 1)),
-                OLLPositionRepresentationElement(PieceType.CORNER, Orientation.Correct, Pair(2, 2))
+                OLLElementOrientation(PieceType.CORNER, Orientation.Correct, Pair(2, 0)),
+                OLLElementOrientation(PieceType.EDGE, Orientation.Correct, Pair(2, 1)),
+                OLLElementOrientation(PieceType.CORNER, Orientation.Correct, Pair(2, 2))
             )
         )
 

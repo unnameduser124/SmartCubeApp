@@ -2,7 +2,6 @@ package com.example.smartcubeapp.casedetection
 
 import android.content.Context
 import androidx.test.platform.app.InstrumentationRegistry
-import com.example.smartcubeapp.casedetection.PositionRepresentationTransformer
 import com.example.smartcubeapp.cube.BlueSide
 import com.example.smartcubeapp.cube.CubeState
 import com.example.smartcubeapp.cube.GreenSide
@@ -11,8 +10,7 @@ import com.example.smartcubeapp.cube.RedSide
 import com.example.smartcubeapp.cube.WhiteSide
 import com.example.smartcubeapp.cube.YellowSide
 import com.example.smartcubeapp.casedetection.olldetection.ollcase.PredefinedOLLCase
-import com.example.smartcubeapp.casedetection.olldetection.OLLCaseDetection
-import com.example.smartcubeapp.casedetection.olldetection.OLLPositionRepresentationElement
+import com.example.smartcubeapp.casedetection.olldetection.OLLElementOrientation
 import com.example.smartcubeapp.casedetection.olldetection.ollcase.CustomOLLCase
 import junit.framework.TestCase.assertTrue
 import org.junit.Before
@@ -20,7 +18,7 @@ import org.junit.Test
 
 class PositionRepresentationToOLLCaseTests {
 
-    private lateinit var positionTransformer: PositionRepresentationTransformer<OLLPositionRepresentationElement>
+    private lateinit var positionTransformer: PositionRepresentationTransformer
     private lateinit var context: Context
 
 
@@ -56,12 +54,12 @@ class PositionRepresentationToOLLCaseTests {
         )
         positionTransformer.changeCubeState(cubeState)
         positionTransformer.changeCubeSide(WhiteSide)
-        var positionRepresentation: Array<Array<OLLPositionRepresentationElement>> =
+        var positionRepresentation: Array<Array<OLLElementOrientation>> =
             positionTransformer.transformStateToPositionRepresentation(context)
         var caseMatch = false
         for (i in 0..3) {
             val ollCaseRepresentation =
-                positionTransformer.positionRepresentationToCase<CustomOLLCase, OLLPositionRepresentationElement>(positionRepresentation)
+                positionTransformer.positionRepresentationToCase<CustomOLLCase, OLLElementOrientation>(positionRepresentation)
             if (ollCaseRepresentation.equals(PredefinedOLLCase.OLL_44)) {
                 caseMatch = true
                 break
@@ -97,12 +95,12 @@ class PositionRepresentationToOLLCaseTests {
         )
         positionTransformer.changeCubeState(cubeState)
         positionTransformer.changeCubeSide(YellowSide)
-        var positionRepresentation: Array<Array<OLLPositionRepresentationElement>> =
+        var positionRepresentation: Array<Array<OLLElementOrientation>> =
             positionTransformer.transformStateToPositionRepresentation(context)
         var caseMatch = false
         for (i in 0..3) {
             val ollCaseRepresentation =
-                positionTransformer.positionRepresentationToCase<CustomOLLCase, OLLPositionRepresentationElement>(positionRepresentation)
+                positionTransformer.positionRepresentationToCase<CustomOLLCase, OLLElementOrientation>(positionRepresentation)
             if (ollCaseRepresentation.equals(PredefinedOLLCase.OLL_44)) {
                 caseMatch = true
                 break
@@ -138,12 +136,12 @@ class PositionRepresentationToOLLCaseTests {
         )
         positionTransformer.changeCubeState(cubeState)
         positionTransformer.changeCubeSide(BlueSide)
-        var positionRepresentation: Array<Array<OLLPositionRepresentationElement>> =
+        var positionRepresentation: Array<Array<OLLElementOrientation>> =
             positionTransformer.transformStateToPositionRepresentation(context)
         var caseMatch = false
         for (i in 0..3) {
             val ollCaseRepresentation =
-                positionTransformer.positionRepresentationToCase<CustomOLLCase, OLLPositionRepresentationElement>(positionRepresentation)
+                positionTransformer.positionRepresentationToCase<CustomOLLCase, OLLElementOrientation>(positionRepresentation)
             if (ollCaseRepresentation.equals(PredefinedOLLCase.OLL_44)) {
                 caseMatch = true
                 break
@@ -179,12 +177,12 @@ class PositionRepresentationToOLLCaseTests {
         )
         positionTransformer.changeCubeState(cubeState)
         positionTransformer.changeCubeSide(GreenSide)
-        var positionRepresentation: Array<Array<OLLPositionRepresentationElement>> =
+        var positionRepresentation: Array<Array<OLLElementOrientation>> =
             positionTransformer.transformStateToPositionRepresentation(context)
         var caseMatch = false
         for (i in 0..3) {
             val ollCaseRepresentation =
-                positionTransformer.positionRepresentationToCase<CustomOLLCase, OLLPositionRepresentationElement>(positionRepresentation)
+                positionTransformer.positionRepresentationToCase<CustomOLLCase, OLLElementOrientation>(positionRepresentation)
             if (ollCaseRepresentation.equals(PredefinedOLLCase.OLL_44)) {
                 caseMatch = true
                 break
@@ -220,12 +218,12 @@ class PositionRepresentationToOLLCaseTests {
         )
         positionTransformer.changeCubeState(cubeState)
         positionTransformer.changeCubeSide(RedSide)
-        var positionRepresentation: Array<Array<OLLPositionRepresentationElement>> =
+        var positionRepresentation: Array<Array<OLLElementOrientation>> =
             positionTransformer.transformStateToPositionRepresentation(context)
         var caseMatch = false
         for (i in 0..3) {
             val ollCaseRepresentation =
-                positionTransformer.positionRepresentationToCase<CustomOLLCase, OLLPositionRepresentationElement>(positionRepresentation)
+                positionTransformer.positionRepresentationToCase<CustomOLLCase, OLLElementOrientation>(positionRepresentation)
             if (ollCaseRepresentation.equals(PredefinedOLLCase.OLL_44)) {
                 caseMatch = true
                 break
@@ -262,12 +260,12 @@ class PositionRepresentationToOLLCaseTests {
         )
         positionTransformer.changeCubeState(cubeState)
         positionTransformer.changeCubeSide(OrangeSide)
-        var positionRepresentation: Array<Array<OLLPositionRepresentationElement>> =
+        var positionRepresentation: Array<Array<OLLElementOrientation>> =
             positionTransformer.transformStateToPositionRepresentation(context)
         var caseMatch = false
         for (i in 0..3) {
             val ollCaseRepresentation =
-                positionTransformer.positionRepresentationToCase<CustomOLLCase, OLLPositionRepresentationElement>(positionRepresentation)
+                positionTransformer.positionRepresentationToCase<CustomOLLCase, OLLElementOrientation>(positionRepresentation)
 
             if (ollCaseRepresentation.equals(PredefinedOLLCase.OLL_44)) {
                 caseMatch = true

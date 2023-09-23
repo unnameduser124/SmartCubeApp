@@ -3,7 +3,7 @@ package com.example.smartcubeapp.casedetection.olldetection
 import com.example.smartcubeapp.cube.piece.Orientation
 import com.example.smartcubeapp.cube.piece.PieceType
 
-class OLLPositionRepresentationElement(
+class OLLElementOrientation(
     var pieceType: PieceType,
     var sideRelativeOrientation: Orientation? = null,
     var sideRelativePosition: Pair<Int, Int>? = null
@@ -12,7 +12,7 @@ class OLLPositionRepresentationElement(
     constructor(): this(PieceType.CORNER)
 
     override fun equals(other: Any?): Boolean {
-        return if (other is OLLPositionRepresentationElement) {
+        return if (other is OLLElementOrientation) {
             pieceType == other.pieceType
                     && sideRelativeOrientation == other.sideRelativeOrientation
                     && sideRelativePosition == other.sideRelativePosition

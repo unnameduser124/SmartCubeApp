@@ -5,22 +5,21 @@ import com.example.smartcubeapp.casedetection.PositionRepresentationTransformer
 import com.example.smartcubeapp.casedetection.olldetection.ollcase.CustomOLLCase
 import com.example.smartcubeapp.cube.CubeSide
 import com.example.smartcubeapp.cube.CubeState
-import com.example.smartcubeapp.casedetection.olldetection.ollcase.OLLCase
 import com.example.smartcubeapp.casedetection.olldetection.ollcase.PredefinedOLLCase
 
 class OLLCaseDetection(var cubeState: CubeState, private var cubeSide: CubeSide) {
 
     fun detectOLLCase(context: Context): PredefinedOLLCase? {
         val positionTransformer =
-            PositionRepresentationTransformer<OLLPositionRepresentationElement>(
+            PositionRepresentationTransformer(
                 cubeState,
                 cubeSide
             )
-        var positionRepresentation: Array<Array<OLLPositionRepresentationElement>> =
+        var positionRepresentation: Array<Array<OLLElementOrientation>> =
             positionTransformer.transformStateToPositionRepresentation(context)
         for (i in 0..3) {
             val customCase =
-                positionTransformer.positionRepresentationToCase<CustomOLLCase, OLLPositionRepresentationElement>(
+                positionTransformer.positionRepresentationToCase<CustomOLLCase, OLLElementOrientation>(
                     positionRepresentation
                 )
             val foundCase = matchCase(customCase)

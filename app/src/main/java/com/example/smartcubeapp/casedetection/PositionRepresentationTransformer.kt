@@ -1,9 +1,9 @@
 package com.example.smartcubeapp.casedetection
 
 import android.content.Context
-import com.example.smartcubeapp.casedetection.olldetection.OLLPositionRepresentationElement
+import com.example.smartcubeapp.casedetection.olldetection.OLLElementOrientation
 import com.example.smartcubeapp.casedetection.olldetection.ollcase.CustomOLLCase
-import com.example.smartcubeapp.casedetection.plldetection.PLLPositionRepresentationElement
+import com.example.smartcubeapp.casedetection.plldetection.PLLElementPosition
 import com.example.smartcubeapp.casedetection.plldetection.pllcase.CustomPLLCase
 import com.example.smartcubeapp.cube.BlueSide
 import com.example.smartcubeapp.cube.CubeSide
@@ -18,7 +18,7 @@ import com.example.smartcubeapp.cube.piece.PieceType
 import com.example.smartcubeapp.elementdatabase.ElementDatabaseConstants
 import com.example.smartcubeapp.elementdatabase.casedetectiondatabase.CaseElementOrientationDBService
 
-class PositionRepresentationTransformer<T>(var cubeState: CubeState, var cubeSide: CubeSide) {
+class PositionRepresentationTransformer(var cubeState: CubeState, var cubeSide: CubeSide) {
 
     inline fun <reified T> transformStateToPositionRepresentation(context: Context): Array<Array<T>> {
         when (cubeSide) {
@@ -67,9 +67,9 @@ class PositionRepresentationTransformer<T>(var cubeState: CubeState, var cubeSid
     }
 
     inline fun <reified T> sideRelativePosition(element: T, position: Pair<Int, Int>) {
-        if (element is OLLPositionRepresentationElement) {
+        if (element is OLLElementOrientation) {
             element.sideRelativePosition = position
-        } else if (element is PLLPositionRepresentationElement) {
+        } else if (element is PLLElementPosition) {
             element.sideRelativePosition = position
         }
     }
@@ -108,18 +108,26 @@ class PositionRepresentationTransformer<T>(var cubeState: CubeState, var cubeSid
     inline fun <reified CaseType, reified T> positionRepresentationToCase(position: Array<Array<T>>): CaseType {
 
         if (CaseType::class.java == CustomOLLCase::class.java
-            && T::class.java == PLLPositionRepresentationElement::class.java) {
+            && T::class.java == PLLElementPosition::class.java) {
             throw Exception("Cannot use PLLPositionRepresentationElement in OLLCase")
         }
         else if(CaseType::class.java == CustomPLLCase::class.java
-            && T::class.java == OLLPositionRepresentationElement::class.java) {
+            && T::class.java == OLLElementOrientation::class.java) {
             throw Exception("Cannot use OLLPositionRepresentationElement in PLLCase")
+        }
+        else if(CaseType::class.java != CustomPLLCase::class.java
+            && CaseType::class.java != CustomOLLCase::class.java) {
+            throw Exception("Unknown case type")
+        }
+        else if(T::class.java != OLLElementOrientation::class.java
+            && T::class.java != PLLElementPosition::class.java) {
+            throw Exception("Unknown element type")
         }
 
         val elements = mutableListOf<T>()
         for (row in position) {
             for (element in row) {
-                if (element is OLLPositionRepresentationElement) {
+                if (element is OLLElementOrientation) {
                     if (element.sideRelativeOrientation != Orientation.Correct) {
                         elements.add(element as T)
                     }
@@ -133,11 +141,11 @@ class PositionRepresentationTransformer<T>(var cubeState: CubeState, var cubeSid
         when (case) {
             is CustomOLLCase -> {
                 case.incorrectlyOrientedPieces =
-                    elements as MutableList<OLLPositionRepresentationElement>
+                    elements as MutableList<OLLElementOrientation>
             }
 
             is CustomPLLCase -> {
-                case.lastLayerPieces = elements as MutableList<PLLPositionRepresentationElement>
+                case.lastLayerPieces = elements as MutableList<PLLElementPosition>
             }
 
             else -> {
@@ -183,21 +191,21 @@ class PositionRepresentationTransformer<T>(var cubeState: CubeState, var cubeSid
         sideRelativePosition: Pair<Int, Int>,
     ): T {
         val elementClass = T::class.java
-        if (elementClass::class.java == PLLPositionRepresentationElement::class.java) {
+        if (elementClass::class.java == PLLElementPosition::class.java) {
             val element = elementClass.newInstance()
-            (element as PLLPositionRepresentationElement).pieceType = pieceType
-            (element as PLLPositionRepresentationElement).pieceNumber =
+            (element as PLLElementPosition).pieceType = pieceType
+            (element as PLLElementPosition).pieceNumber =
                 if (pieceType == PieceType.CORNER) cubeState.cornerPositions[piecePosition]
                 else cubeState.edgePositions[piecePosition]
-            (element as PLLPositionRepresentationElement).sideRelativePosition = sideRelativePosition
+            (element as PLLElementPosition).sideRelativePosition = sideRelativePosition
             return element
         } else {
             val element = elementClass.newInstance()
-            (element as OLLPositionRepresentationElement).pieceType = pieceType
-            (element as OLLPositionRepresentationElement).sideRelativePosition =
+            (element as OLLElementOrientation).pieceType = pieceType
+            (element as OLLElementOrientation).sideRelativePosition =
                 sideRelativePosition
 
-            (element as OLLPositionRepresentationElement).sideRelativeOrientation =
+            (element as OLLElementOrientation).sideRelativeOrientation =
                 getSideRelativePositionRepresentation(
                     pieceType,
                     if (pieceType == PieceType.CORNER) cubeState.cornerPositions[piecePosition]

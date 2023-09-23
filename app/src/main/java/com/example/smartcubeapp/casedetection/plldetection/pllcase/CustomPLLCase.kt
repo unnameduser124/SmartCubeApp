@@ -1,8 +1,8 @@
 package com.example.smartcubeapp.casedetection.plldetection.pllcase
 
-import com.example.smartcubeapp.casedetection.plldetection.PLLPositionRepresentationElement
+import com.example.smartcubeapp.casedetection.plldetection.PLLElementPosition
 
-class CustomPLLCase(override var lastLayerPieces: MutableList<PLLPositionRepresentationElement>) :
+class CustomPLLCase(override var lastLayerPieces: MutableList<PLLElementPosition>) :
     PLLCase {
 
     constructor() : this(mutableListOf())

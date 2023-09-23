@@ -3,7 +3,8 @@ package com.example.smartcubeapp.cube
 open class CubeSide(
     val sideName: String,
     val cornerIndexes: Array<Int>,
-    val edgeIndexes: Array<Int>
+    val edgeIndexes: Array<Int>,
+    val solvedState: Array<Array<Int>>
 ) {
     override fun equals(other: Any?): Boolean {
         return if (other is CubeSide) {
@@ -26,37 +27,67 @@ open class CubeSide(
 val YellowSide = CubeSide(
     "yellow",
     CubeSideIndexes.YELLOW_SIDE_CORNER_INDEXES,
-    CubeSideIndexes.YELLOW_SIDE_EDGE_INDEXES
+    CubeSideIndexes.YELLOW_SIDE_EDGE_INDEXES,
+    arrayOf(
+        arrayOf(4, 8, 7),
+        arrayOf(4, 7),
+        arrayOf(0, 3, 3)
+    )
 )
 
 val WhiteSide = CubeSide(
     "white",
     CubeSideIndexes.WHITE_SIDE_CORNER_INDEXES,
-    CubeSideIndexes.WHITE_SIDE_EDGE_INDEXES
+    CubeSideIndexes.WHITE_SIDE_EDGE_INDEXES,
+    arrayOf(
+        arrayOf(2, 6, 6),
+        arrayOf(2, 10),
+        arrayOf(1, 5, 5)
+    )
 )
 
 val GreenSide = CubeSide(
     "green",
     CubeSideIndexes.GREEN_SIDE_CORNER_INDEXES,
-    CubeSideIndexes.GREEN_SIDE_EDGE_INDEXES
+    CubeSideIndexes.GREEN_SIDE_EDGE_INDEXES,
+    arrayOf(
+        arrayOf(3, 3, 2),
+        arrayOf(0, 2),
+        arrayOf(0, 1, 1)
+    )
 )
 
 val BlueSide = CubeSide(
     "blue",
     CubeSideIndexes.BLUE_SIDE_CORNER_INDEXES,
-    CubeSideIndexes.BLUE_SIDE_EDGE_INDEXES
+    CubeSideIndexes.BLUE_SIDE_EDGE_INDEXES,
+    arrayOf(
+        arrayOf(5, 10, 6),
+        arrayOf(9, 11),
+        arrayOf(4, 8, 7)
+    )
 )
 
 val RedSide = CubeSide(
     "red",
     CubeSideIndexes.RED_SIDE_CORNER_INDEXES,
-    CubeSideIndexes.RED_SIDE_EDGE_INDEXES
+    CubeSideIndexes.RED_SIDE_EDGE_INDEXES,
+    arrayOf(
+        arrayOf(1, 5, 5),
+        arrayOf(1, 9),
+        arrayOf(0, 4, 4)
+    )
 )
 
 val OrangeSide = CubeSide(
     "orange",
     CubeSideIndexes.ORANGE_SIDE_CORNER_INDEXES,
-    CubeSideIndexes.ORANGE_SIDE_EDGE_INDEXES
+    CubeSideIndexes.ORANGE_SIDE_EDGE_INDEXES,
+    arrayOf(
+        arrayOf(3, 7, 7),
+        arrayOf(3, 11),
+        arrayOf(2, 6, 6)
+    )
 )
 
 val cubeSides = listOf(

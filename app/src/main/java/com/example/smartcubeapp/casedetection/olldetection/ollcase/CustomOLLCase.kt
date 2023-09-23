@@ -1,8 +1,8 @@
 package com.example.smartcubeapp.casedetection.olldetection.ollcase
 
-import com.example.smartcubeapp.casedetection.olldetection.OLLPositionRepresentationElement
+import com.example.smartcubeapp.casedetection.olldetection.OLLElementOrientation
 
-class CustomOLLCase(override var incorrectlyOrientedPieces: MutableList<OLLPositionRepresentationElement>) :
+class CustomOLLCase(override var incorrectlyOrientedPieces: MutableList<OLLElementOrientation>) :
     OLLCase {
 
     constructor() : this(mutableListOf())
