@@ -191,21 +191,21 @@ class PositionRepresentationTransformer(var cubeState: CubeState, var cubeSide: 
         sideRelativePosition: Pair<Int, Int>,
     ): T {
         val elementClass = T::class.java
-        if (elementClass::class.java == PLLElementPosition::class.java) {
-            val element = elementClass.newInstance()
-            (element as PLLElementPosition).pieceType = pieceType
-            (element as PLLElementPosition).pieceNumber =
+        if (elementClass == PLLElementPosition::class.java) {
+            val element = elementClass.newInstance() as PLLElementPosition
+            element.pieceType = pieceType
+            element.pieceNumber =
                 if (pieceType == PieceType.CORNER) cubeState.cornerPositions[piecePosition]
                 else cubeState.edgePositions[piecePosition]
-            (element as PLLElementPosition).sideRelativePosition = sideRelativePosition
-            return element
+            element.sideRelativePosition = sideRelativePosition
+            return element as T
         } else {
-            val element = elementClass.newInstance()
-            (element as OLLElementOrientation).pieceType = pieceType
-            (element as OLLElementOrientation).sideRelativePosition =
+            val element = elementClass.newInstance() as OLLElementOrientation
+            element.pieceType = pieceType
+            element.sideRelativePosition =
                 sideRelativePosition
 
-            (element as OLLElementOrientation).sideRelativeOrientation =
+            element.sideRelativeOrientation =
                 getSideRelativePositionRepresentation(
                     pieceType,
                     if (pieceType == PieceType.CORNER) cubeState.cornerPositions[piecePosition]
@@ -215,7 +215,7 @@ class PositionRepresentationTransformer(var cubeState: CubeState, var cubeSide: 
                     else if (cubeState.edgeOrientations[piecePosition]) 1 else 0,
                     context
                 )
-            return element
+            return element as T
         }
     }
 

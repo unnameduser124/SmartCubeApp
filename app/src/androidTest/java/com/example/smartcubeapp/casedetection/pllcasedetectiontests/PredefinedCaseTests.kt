@@ -60,20 +60,21 @@ class PredefinedCaseTests {
 
         val expectedPositionRepresentation = arrayOf(
             arrayOf(
-                PLLElementPosition(PieceType.CORNER, 5),
-                PLLElementPosition(PieceType.EDGE, 6),
-                PLLElementPosition(PieceType.CORNER, 6),
+                PLLElementPosition(PieceType.CORNER, 5, Pair(0, 0)),
+                PLLElementPosition(PieceType.EDGE, 6, Pair(0, 1)),
+                PLLElementPosition(PieceType.CORNER, 6, Pair(0, 2)),
             ),
             arrayOf(
-                PLLElementPosition(PieceType.EDGE, 2),
-                PLLElementPosition(PieceType.EDGE, 10),
+                PLLElementPosition(PieceType.EDGE, 2, Pair(1, 0)),
+                PLLElementPosition(PieceType.EDGE, 10, Pair(1, 2)),
             ),
             arrayOf(
-                PLLElementPosition(PieceType.CORNER, 2),
-                PLLElementPosition(PieceType.EDGE, 5),
-                PLLElementPosition(PieceType.CORNER, 1),
+                PLLElementPosition(PieceType.CORNER, 2, Pair(2, 0)),
+                PLLElementPosition(PieceType.EDGE, 5, Pair(2, 1)),
+                PLLElementPosition(PieceType.CORNER, 1, Pair(2, 2)),
             ),
         )
+
 
         assert(applyCase.contentDeepEquals(expectedPositionRepresentation))
     }
@@ -87,18 +88,18 @@ class PredefinedCaseTests {
 
         val expectedPositionRepresentation = arrayOf(
             arrayOf(
-                PLLElementPosition(PieceType.CORNER, 2),
-                PLLElementPosition(PieceType.EDGE, 5),
-                PLLElementPosition(PieceType.CORNER, 5),
+                PLLElementPosition(PieceType.CORNER, 2, Pair(0, 0)),
+                PLLElementPosition(PieceType.EDGE, 5, Pair(0, 1)),
+                PLLElementPosition(PieceType.CORNER, 5, Pair(0, 2)),
             ),
             arrayOf(
-                PLLElementPosition(PieceType.EDGE, 2),
-                PLLElementPosition(PieceType.EDGE, 10),
+                PLLElementPosition(PieceType.EDGE, 2, Pair(1, 0)),
+                PLLElementPosition(PieceType.EDGE, 10, Pair(1, 2)),
             ),
             arrayOf(
-                PLLElementPosition(PieceType.CORNER, 1),
-                PLLElementPosition(PieceType.EDGE, 6),
-                PLLElementPosition(PieceType.CORNER, 6),
+                PLLElementPosition(PieceType.CORNER, 1, Pair(2, 0)),
+                PLLElementPosition(PieceType.EDGE, 6, Pair(2, 1)),
+                PLLElementPosition(PieceType.CORNER, 6, Pair(2, 2)),
             ),
         )
 
@@ -114,18 +115,18 @@ class PredefinedCaseTests {
 
         val expectedPositionRepresentation = arrayOf(
             arrayOf(
-                PLLElementPosition(PieceType.CORNER, 1),
-                PLLElementPosition(PieceType.EDGE, 10),
-                PLLElementPosition(PieceType.CORNER, 2),
+                PLLElementPosition(PieceType.CORNER, 1, Pair(0, 0)),
+                PLLElementPosition(PieceType.EDGE, 10, Pair(0, 1)),
+                PLLElementPosition(PieceType.CORNER, 2, Pair(0, 2)),
             ),
             arrayOf(
-                PLLElementPosition(PieceType.EDGE, 6),
-                PLLElementPosition(PieceType.EDGE, 2),
+                PLLElementPosition(PieceType.EDGE, 6, Pair(1, 0)),
+                PLLElementPosition(PieceType.EDGE, 2, Pair(1, 2)),
             ),
             arrayOf(
-                PLLElementPosition(PieceType.CORNER, 6),
-                PLLElementPosition(PieceType.EDGE, 5),
-                PLLElementPosition(PieceType.CORNER, 5),
+                PLLElementPosition(PieceType.CORNER, 6, Pair(2, 0)),
+                PLLElementPosition(PieceType.EDGE, 5, Pair(2, 1)),
+                PLLElementPosition(PieceType.CORNER, 5, Pair(2, 2)),
             ),
         )
 
@@ -141,18 +142,18 @@ class PredefinedCaseTests {
 
         val expectedPositionRepresentation = arrayOf(
             arrayOf(
-                PLLElementPosition(PieceType.CORNER, 6),
-                PLLElementPosition(PieceType.EDGE, 2),
-                PLLElementPosition(PieceType.CORNER, 1),
+                PLLElementPosition(PieceType.CORNER, 6, Pair(0, 0)),
+                PLLElementPosition(PieceType.EDGE, 2, Pair(0, 1)),
+                PLLElementPosition(PieceType.CORNER, 1, Pair(0, 2)),
             ),
             arrayOf(
-                PLLElementPosition(PieceType.EDGE, 10),
-                PLLElementPosition(PieceType.EDGE, 6),
+                PLLElementPosition(PieceType.EDGE, 10, Pair(1, 0)),
+                PLLElementPosition(PieceType.EDGE, 6, Pair(1, 2)),
             ),
             arrayOf(
-                PLLElementPosition(PieceType.CORNER, 2),
-                PLLElementPosition(PieceType.EDGE, 5),
-                PLLElementPosition(PieceType.CORNER, 5),
+                PLLElementPosition(PieceType.CORNER, 2, Pair(2, 0)),
+                PLLElementPosition(PieceType.EDGE, 5, Pair(2, 1)),
+                PLLElementPosition(PieceType.CORNER, 5, Pair(2, 2)),
             ),
         )
 
@@ -168,18 +169,18 @@ class PredefinedCaseTests {
 
         val expectedPositionRepresentation = arrayOf(
             arrayOf(
-                PLLElementPosition(PieceType.CORNER, 5),
-                PLLElementPosition(PieceType.EDGE, 6),
-                PLLElementPosition(PieceType.CORNER, 6),
+                PLLElementPosition(PieceType.CORNER, 5, Pair(0, 0)),
+                PLLElementPosition(PieceType.EDGE, 6, Pair(0, 1)),
+                PLLElementPosition(PieceType.CORNER, 6, Pair(0, 2)),
             ),
             arrayOf(
-                PLLElementPosition(PieceType.EDGE, 5),
-                PLLElementPosition(PieceType.EDGE, 2),
+                PLLElementPosition(PieceType.EDGE, 5, Pair(1, 0)),
+                PLLElementPosition(PieceType.EDGE, 2, Pair(1, 2)),
             ),
             arrayOf(
-                PLLElementPosition(PieceType.CORNER, 2),
-                PLLElementPosition(PieceType.EDGE, 10),
-                PLLElementPosition(PieceType.CORNER, 1),
+                PLLElementPosition(PieceType.CORNER, 2, Pair(2, 0)),
+                PLLElementPosition(PieceType.EDGE, 10, Pair(2, 1)),
+                PLLElementPosition(PieceType.CORNER, 1, Pair(2, 2)),
             ),
         )
 
@@ -195,18 +196,18 @@ class PredefinedCaseTests {
 
         val expectedPositionRepresentation = arrayOf(
             arrayOf(
-                PLLElementPosition(PieceType.CORNER, 1),
-                PLLElementPosition(PieceType.EDGE, 5),
-                PLLElementPosition(PieceType.CORNER, 2),
+                PLLElementPosition(PieceType.CORNER, 1, Pair(0, 0)),
+                PLLElementPosition(PieceType.EDGE, 5, Pair(0, 1)),
+                PLLElementPosition(PieceType.CORNER, 2, Pair(0, 2)),
             ),
             arrayOf(
-                PLLElementPosition(PieceType.EDGE, 6),
-                PLLElementPosition(PieceType.EDGE, 10),
+                PLLElementPosition(PieceType.EDGE, 6, Pair(1, 0)),
+                PLLElementPosition(PieceType.EDGE, 10, Pair(1, 2)),
             ),
             arrayOf(
-                PLLElementPosition(PieceType.CORNER, 6),
-                PLLElementPosition(PieceType.EDGE, 2),
-                PLLElementPosition(PieceType.CORNER, 5),
+                PLLElementPosition(PieceType.CORNER, 6, Pair(2, 0)),
+                PLLElementPosition(PieceType.EDGE, 2, Pair(2, 1)),
+                PLLElementPosition(PieceType.CORNER, 5, Pair(2, 2)),
             ),
         )
 
@@ -222,18 +223,18 @@ class PredefinedCaseTests {
 
         val expectedPositionRepresentation = arrayOf(
             arrayOf(
-                PLLElementPosition(PieceType.CORNER, 2),
-                PLLElementPosition(PieceType.EDGE, 10),
-                PLLElementPosition(PieceType.CORNER, 5),
+                PLLElementPosition(PieceType.CORNER, 2, Pair(0, 0)),
+                PLLElementPosition(PieceType.EDGE, 10, Pair(0, 1)),
+                PLLElementPosition(PieceType.CORNER, 5, Pair(0, 2)),
             ),
             arrayOf(
-                PLLElementPosition(PieceType.EDGE, 2),
-                PLLElementPosition(PieceType.EDGE, 6),
+                PLLElementPosition(PieceType.EDGE, 2, Pair(1, 0)),
+                PLLElementPosition(PieceType.EDGE, 6, Pair(1, 2)),
             ),
             arrayOf(
-                PLLElementPosition(PieceType.CORNER, 1),
-                PLLElementPosition(PieceType.EDGE, 5),
-                PLLElementPosition(PieceType.CORNER, 6),
+                PLLElementPosition(PieceType.CORNER, 1, Pair(2, 0)),
+                PLLElementPosition(PieceType.EDGE, 5, Pair(2, 1)),
+                PLLElementPosition(PieceType.CORNER, 6, Pair(2, 2)),
             ),
         )
 
@@ -251,7 +252,7 @@ class PredefinedCaseTests {
             arrayOf(
                 PLLElementPosition(PieceType.CORNER, 2, Pair(0, 0)),
                 PLLElementPosition(PieceType.EDGE, 6, Pair(0, 1)),
-                PLLElementPosition(PieceType.CORNER, 6, Pair(0, 2)),
+                PLLElementPosition(PieceType.CORNER, 5, Pair(0, 2)),
             ),
             arrayOf(
                 PLLElementPosition(PieceType.EDGE, 2, Pair(1, 0)),
@@ -263,6 +264,14 @@ class PredefinedCaseTests {
                 PLLElementPosition(PieceType.CORNER, 6, Pair(2, 2)),
             ),
         )
+        println(applyCase[0][0].pieceNumber)
+        println(applyCase[0][1].pieceNumber)
+        println(applyCase[0][2].pieceNumber)
+        println(applyCase[1][0].pieceNumber)
+        println(applyCase[1][1].pieceNumber)
+        println(applyCase[2][0].pieceNumber)
+        println(applyCase[2][1].pieceNumber)
+        println(applyCase[2][2].pieceNumber)
 
         assert(applyCase.contentDeepEquals(expectedPositionRepresentation))
     }
@@ -278,7 +287,7 @@ class PredefinedCaseTests {
             arrayOf(
                 PLLElementPosition(PieceType.CORNER, 2, Pair(0, 0)),
                 PLLElementPosition(PieceType.EDGE, 2, Pair(0, 1)),
-                PLLElementPosition(PieceType.CORNER, 6, Pair(0, 2)),
+                PLLElementPosition(PieceType.CORNER, 5, Pair(0, 2)),
             ),
             arrayOf(
                 PLLElementPosition(PieceType.EDGE, 6, Pair(1, 0)),
@@ -420,7 +429,7 @@ class PredefinedCaseTests {
                 PLLElementPosition(PieceType.EDGE, 2, Pair(1, 2)),
             ),
             arrayOf(
-                PLLElementPosition(PieceType.CORNER, 2, Pair(2, 0)),
+                PLLElementPosition(PieceType.CORNER, 1, Pair(2, 0)),
                 PLLElementPosition(PieceType.EDGE, 5, Pair(2, 1)),
                 PLLElementPosition(PieceType.CORNER, 2, Pair(2, 2)),
             ),
