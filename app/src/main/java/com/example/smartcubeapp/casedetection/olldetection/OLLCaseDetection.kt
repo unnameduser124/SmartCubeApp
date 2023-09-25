@@ -9,7 +9,7 @@ import com.example.smartcubeapp.casedetection.olldetection.ollcase.PredefinedOLL
 
 class OLLCaseDetection(var cubeState: CubeState, private var cubeSide: CubeSide) {
 
-    fun detectOLLCase(context: Context): PredefinedOLLCase? {
+    fun detectCase(context: Context): PredefinedOLLCase? {
         val positionTransformer =
             PositionRepresentationTransformer(
                 cubeState,

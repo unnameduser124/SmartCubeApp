@@ -8,11 +8,17 @@ import com.example.smartcubeapp.cube.CubeState
 
 class PLLCaseDetection(private var cubeState: CubeState, private var cubeSide: CubeSide) {
 
-    fun detectPLLCase(context: Context): PredefinedPLLCase? {
-        TODO("Not implemented yet")
+    fun detectCase(context: Context): PredefinedPLLCase? {
+        val positionTransformer = PositionRepresentationTransformer(cubeState, cubeSide)
+        val position =
+            positionTransformer.transformStateToPositionRepresentation<PLLElementPosition>(context)
+        return matchCase(context, position)
     }
 
-    fun matchCase(context: Context, position: Array<Array<PLLElementPosition>>): PredefinedPLLCase? {
+    fun matchCase(
+        context: Context,
+        position: Array<Array<PLLElementPosition>>
+    ): PredefinedPLLCase? {
         val positionTransformer = PositionRepresentationTransformer(cubeState, cubeSide)
         for (case in PredefinedPLLCase.values()) {
             var positionCopy = position.copyOf()
@@ -34,28 +40,28 @@ class PLLCaseDetection(private var cubeState: CubeState, private var cubeSide: C
         permutationPosition: Array<Array<PLLElementPosition>>,
         solvedSidePosition: Array<Array<Int>>
     ): Boolean {
-        if(permutationPosition[0][0].pieceNumber != solvedSidePosition[0][0]) {
+        if (permutationPosition[0][0].pieceNumber != solvedSidePosition[0][0]) {
             return false
         }
-        if(permutationPosition[0][1].pieceNumber != solvedSidePosition[0][1]) {
+        if (permutationPosition[0][1].pieceNumber != solvedSidePosition[0][1]) {
             return false
         }
-        if(permutationPosition[0][2].pieceNumber != solvedSidePosition[0][2]) {
+        if (permutationPosition[0][2].pieceNumber != solvedSidePosition[0][2]) {
             return false
         }
-        if(permutationPosition[1][0].pieceNumber != solvedSidePosition[1][0]) {
+        if (permutationPosition[1][0].pieceNumber != solvedSidePosition[1][0]) {
             return false
         }
-        if(permutationPosition[1][1].pieceNumber != solvedSidePosition[1][1]) {
+        if (permutationPosition[1][1].pieceNumber != solvedSidePosition[1][1]) {
             return false
         }
-        if(permutationPosition[2][0].pieceNumber != solvedSidePosition[2][0]) {
+        if (permutationPosition[2][0].pieceNumber != solvedSidePosition[2][0]) {
             return false
         }
-        if(permutationPosition[2][1].pieceNumber != solvedSidePosition[2][1]) {
+        if (permutationPosition[2][1].pieceNumber != solvedSidePosition[2][1]) {
             return false
         }
-        if(permutationPosition[2][2].pieceNumber != solvedSidePosition[2][2]) {
+        if (permutationPosition[2][2].pieceNumber != solvedSidePosition[2][2]) {
             return false
         }
         return true

@@ -133,7 +133,7 @@ class SolutionPhaseDetection(
             solution.solveStateSequence[getStartIndexForPhase(SolvePhase.OLL, context)]
         val caseDetection = OLLCaseDetection(ollStartState, crossOppositeSide)
 
-        return caseDetection.detectOLLCase(context)
+        return caseDetection.detectCase(context)
     }
 
     fun setCrossSide() {

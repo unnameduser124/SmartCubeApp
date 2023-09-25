@@ -38,7 +38,7 @@ class DetectOLLCaseTests {
         caseDetection.changeCubeState(cubeState)
         caseDetection.changeCubeSide(WhiteSide)
 
-        val case = caseDetection.detectOLLCase(context)
+        val case = caseDetection.detectCase(context)
 
         TestCase.assertEquals(PredefinedOLLCase.OLL_29, case)
     }
@@ -54,7 +54,7 @@ class DetectOLLCaseTests {
         caseDetection.changeCubeState(cubeState)
         caseDetection.changeCubeSide(YellowSide)
 
-        val case = caseDetection.detectOLLCase(context)
+        val case = caseDetection.detectCase(context)
 
         TestCase.assertEquals(PredefinedOLLCase.OLL_38, case)
     }
@@ -70,7 +70,7 @@ class DetectOLLCaseTests {
         caseDetection.changeCubeState(cubeState)
         caseDetection.changeCubeSide(BlueSide)
 
-        val case = caseDetection.detectOLLCase(context)
+        val case = caseDetection.detectCase(context)
 
         TestCase.assertEquals(PredefinedOLLCase.OLL_03, case)
     }
@@ -86,7 +86,7 @@ class DetectOLLCaseTests {
         caseDetection.changeCubeState(cubeState)
         caseDetection.changeCubeSide(GreenSide)
 
-        val case = caseDetection.detectOLLCase(context)
+        val case = caseDetection.detectCase(context)
 
         TestCase.assertEquals(PredefinedOLLCase.OLL_49, case)
     }
@@ -102,7 +102,7 @@ class DetectOLLCaseTests {
         caseDetection.changeCubeState(cubeState)
         caseDetection.changeCubeSide(RedSide)
 
-        val case = caseDetection.detectOLLCase(context)
+        val case = caseDetection.detectCase(context)
 
         TestCase.assertEquals(PredefinedOLLCase.OLL_24, case)
     }
@@ -118,7 +118,7 @@ class DetectOLLCaseTests {
         caseDetection.changeCubeState(cubeState)
         caseDetection.changeCubeSide(OrangeSide)
 
-        val case = caseDetection.detectOLLCase(context)
+        val case = caseDetection.detectCase(context)
 
         TestCase.assertEquals(PredefinedOLLCase.OLL_35, case)
     }
@@ -134,7 +134,7 @@ class DetectOLLCaseTests {
         caseDetection.changeCubeState(cubeState)
         caseDetection.changeCubeSide(OrangeSide)
 
-        val case = caseDetection.detectOLLCase(context)
+        val case = caseDetection.detectCase(context)
 
         TestCase.assertNull(case)
     }
