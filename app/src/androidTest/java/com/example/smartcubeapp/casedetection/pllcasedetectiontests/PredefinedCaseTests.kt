@@ -30,7 +30,7 @@ class PredefinedCaseTests {
         val positionRepresentation =
             positionTransformer.transformStateToPositionRepresentation<PLLElementPosition>(context)
 
-        val applyCase = PredefinedPLLCase(positionRepresentation).Aa()
+        val applyCase = PredefinedPLLCase.Aa.performPermutation(positionRepresentation)
 
         val expectedPositionRepresentation = arrayOf(
             arrayOf(
@@ -52,11 +52,11 @@ class PredefinedCaseTests {
     }
 
     @Test
-    fun PLLAbTest(){
+    fun PLLAbTest() {
         val positionRepresentation =
             positionTransformer.transformStateToPositionRepresentation<PLLElementPosition>(context)
 
-        val applyCase = PredefinedPLLCase(positionRepresentation).Ab()
+        val applyCase = PredefinedPLLCase.Ab.performPermutation(positionRepresentation)
 
         val expectedPositionRepresentation = arrayOf(
             arrayOf(
@@ -80,11 +80,11 @@ class PredefinedCaseTests {
     }
 
     @Test
-    fun PLLFTest(){
+    fun PLLFTest() {
         val positionRepresentation =
             positionTransformer.transformStateToPositionRepresentation<PLLElementPosition>(context)
 
-        val applyCase = PredefinedPLLCase(positionRepresentation).F()
+        val applyCase = PredefinedPLLCase.F.performPermutation(positionRepresentation)
 
         val expectedPositionRepresentation = arrayOf(
             arrayOf(
@@ -107,11 +107,11 @@ class PredefinedCaseTests {
     }
 
     @Test
-    fun PLLGaTest(){
+    fun PLLGaTest() {
         val positionRepresentation =
             positionTransformer.transformStateToPositionRepresentation<PLLElementPosition>(context)
 
-        val applyCase = PredefinedPLLCase(positionRepresentation).Ga()
+        val applyCase = PredefinedPLLCase.Ga.performPermutation(positionRepresentation)
 
         val expectedPositionRepresentation = arrayOf(
             arrayOf(
@@ -134,11 +134,11 @@ class PredefinedCaseTests {
     }
 
     @Test
-    fun PLLGbTest(){
+    fun PLLGbTest() {
         val positionRepresentation =
             positionTransformer.transformStateToPositionRepresentation<PLLElementPosition>(context)
 
-        val applyCase = PredefinedPLLCase(positionRepresentation).Gb()
+        val applyCase = PredefinedPLLCase.Gb.performPermutation(positionRepresentation)
 
         val expectedPositionRepresentation = arrayOf(
             arrayOf(
@@ -161,11 +161,11 @@ class PredefinedCaseTests {
     }
 
     @Test
-    fun PLLGcTest(){
+    fun PLLGcTest() {
         val positionRepresentation =
             positionTransformer.transformStateToPositionRepresentation<PLLElementPosition>(context)
 
-        val applyCase = PredefinedPLLCase(positionRepresentation).Gc()
+        val applyCase = PredefinedPLLCase.Gc.performPermutation(positionRepresentation)
 
         val expectedPositionRepresentation = arrayOf(
             arrayOf(
@@ -188,11 +188,11 @@ class PredefinedCaseTests {
     }
 
     @Test
-    fun PLLGdTest(){
+    fun PLLGdTest() {
         val positionRepresentation =
             positionTransformer.transformStateToPositionRepresentation<PLLElementPosition>(context)
 
-        val applyCase = PredefinedPLLCase(positionRepresentation).Gd()
+        val applyCase = PredefinedPLLCase.Gd.performPermutation(positionRepresentation)
 
         val expectedPositionRepresentation = arrayOf(
             arrayOf(
@@ -215,11 +215,11 @@ class PredefinedCaseTests {
     }
 
     @Test
-    fun PLLJaTest(){
+    fun PLLJaTest() {
         val positionRepresentation =
             positionTransformer.transformStateToPositionRepresentation<PLLElementPosition>(context)
 
-        val applyCase = PredefinedPLLCase(positionRepresentation).Ja()
+        val applyCase = PredefinedPLLCase.Ja.performPermutation(positionRepresentation)
 
         val expectedPositionRepresentation = arrayOf(
             arrayOf(
@@ -242,11 +242,11 @@ class PredefinedCaseTests {
     }
 
     @Test
-    fun PLLJbTest(){
+    fun PLLJbTest() {
         val positionRepresentation =
             positionTransformer.transformStateToPositionRepresentation<PLLElementPosition>(context)
 
-        val applyCase = PredefinedPLLCase(positionRepresentation).Jb()
+        val applyCase = PredefinedPLLCase.Jb.performPermutation(positionRepresentation)
 
         val expectedPositionRepresentation = arrayOf(
             arrayOf(
@@ -264,24 +264,16 @@ class PredefinedCaseTests {
                 PLLElementPosition(PieceType.CORNER, 6, Pair(2, 2)),
             ),
         )
-        println(applyCase[0][0].pieceNumber)
-        println(applyCase[0][1].pieceNumber)
-        println(applyCase[0][2].pieceNumber)
-        println(applyCase[1][0].pieceNumber)
-        println(applyCase[1][1].pieceNumber)
-        println(applyCase[2][0].pieceNumber)
-        println(applyCase[2][1].pieceNumber)
-        println(applyCase[2][2].pieceNumber)
 
         assert(applyCase.contentDeepEquals(expectedPositionRepresentation))
     }
 
     @Test
-    fun PLLRaTest(){
+    fun PLLRaTest() {
         val positionRepresentation =
             positionTransformer.transformStateToPositionRepresentation<PLLElementPosition>(context)
 
-        val applyCase = PredefinedPLLCase(positionRepresentation).Ra()
+        val applyCase = PredefinedPLLCase.Ra.performPermutation(positionRepresentation)
 
         val expectedPositionRepresentation = arrayOf(
             arrayOf(
@@ -304,11 +296,11 @@ class PredefinedCaseTests {
     }
 
     @Test
-    fun PLLRbTest(){
+    fun PLLRbTest() {
         val positionRepresentation =
             positionTransformer.transformStateToPositionRepresentation<PLLElementPosition>(context)
 
-        val applyCase = PredefinedPLLCase(positionRepresentation).Rb()
+        val applyCase = PredefinedPLLCase.Rb.performPermutation(positionRepresentation)
 
         val expectedPositionRepresentation = arrayOf(
             arrayOf(
@@ -331,11 +323,11 @@ class PredefinedCaseTests {
     }
 
     @Test
-    fun PLLTTest(){
+    fun PLLTTest() {
         val positionRepresentation =
             positionTransformer.transformStateToPositionRepresentation<PLLElementPosition>(context)
 
-        val applyCase = PredefinedPLLCase(positionRepresentation).T()
+        val applyCase = PredefinedPLLCase.T.performPermutation(positionRepresentation)
 
         val expectedPositionRepresentation = arrayOf(
             arrayOf(
@@ -358,11 +350,11 @@ class PredefinedCaseTests {
     }
 
     @Test
-    fun PLLETest(){
+    fun PLLETest() {
         val positionRepresentation =
             positionTransformer.transformStateToPositionRepresentation<PLLElementPosition>(context)
 
-        val applyCase = PredefinedPLLCase(positionRepresentation).E()
+        val applyCase = PredefinedPLLCase.E.performPermutation(positionRepresentation)
 
         val expectedPositionRepresentation = arrayOf(
             arrayOf(
@@ -385,11 +377,11 @@ class PredefinedCaseTests {
     }
 
     @Test
-    fun PLLNaTest(){
+    fun PLLNaTest() {
         val positionRepresentation =
             positionTransformer.transformStateToPositionRepresentation<PLLElementPosition>(context)
 
-        val applyCase = PredefinedPLLCase(positionRepresentation).Na()
+        val applyCase = PredefinedPLLCase.Na.performPermutation(positionRepresentation)
 
         val expectedPositionRepresentation = arrayOf(
             arrayOf(
@@ -412,11 +404,11 @@ class PredefinedCaseTests {
     }
 
     @Test
-    fun PLLNbTest(){
+    fun PLLNbTest() {
         val positionRepresentation =
             positionTransformer.transformStateToPositionRepresentation<PLLElementPosition>(context)
 
-        val applyCase = PredefinedPLLCase(positionRepresentation).Nb()
+        val applyCase = PredefinedPLLCase.Nb.performPermutation(positionRepresentation)
 
         val expectedPositionRepresentation = arrayOf(
             arrayOf(
@@ -439,11 +431,11 @@ class PredefinedCaseTests {
     }
 
     @Test
-    fun PLLVTest(){
+    fun PLLVTest() {
         val positionRepresentation =
             positionTransformer.transformStateToPositionRepresentation<PLLElementPosition>(context)
 
-        val applyCase = PredefinedPLLCase(positionRepresentation).V()
+        val applyCase = PredefinedPLLCase.V.performPermutation(positionRepresentation)
 
         val expectedPositionRepresentation = arrayOf(
             arrayOf(
@@ -466,11 +458,11 @@ class PredefinedCaseTests {
     }
 
     @Test
-    fun PLLYTest(){
+    fun PLLYTest() {
         val positionRepresentation =
             positionTransformer.transformStateToPositionRepresentation<PLLElementPosition>(context)
 
-        val applyCase = PredefinedPLLCase(positionRepresentation).Y()
+        val applyCase = PredefinedPLLCase.Y.performPermutation(positionRepresentation)
 
         val expectedPositionRepresentation = arrayOf(
             arrayOf(
@@ -493,11 +485,11 @@ class PredefinedCaseTests {
     }
 
     @Test
-    fun PLLHTest(){
+    fun PLLHTest() {
         val positionRepresentation =
             positionTransformer.transformStateToPositionRepresentation<PLLElementPosition>(context)
 
-        val applyCase = PredefinedPLLCase(positionRepresentation).H()
+        val applyCase = PredefinedPLLCase.H.performPermutation(positionRepresentation)
 
         val expectedPositionRepresentation = arrayOf(
             arrayOf(
@@ -520,11 +512,11 @@ class PredefinedCaseTests {
     }
 
     @Test
-    fun PLLUaTest(){
+    fun PLLUaTest() {
         val positionRepresentation =
             positionTransformer.transformStateToPositionRepresentation<PLLElementPosition>(context)
 
-        val applyCase = PredefinedPLLCase(positionRepresentation).Ua()
+        val applyCase = PredefinedPLLCase.Ua.performPermutation(positionRepresentation)
 
         val expectedPositionRepresentation = arrayOf(
             arrayOf(
@@ -547,11 +539,11 @@ class PredefinedCaseTests {
     }
 
     @Test
-    fun PLLUbTest(){
+    fun PLLUbTest() {
         val positionRepresentation =
             positionTransformer.transformStateToPositionRepresentation<PLLElementPosition>(context)
 
-        val applyCase = PredefinedPLLCase(positionRepresentation).Ub()
+        val applyCase = PredefinedPLLCase.Ub.performPermutation(positionRepresentation)
 
         val expectedPositionRepresentation = arrayOf(
             arrayOf(
@@ -574,11 +566,11 @@ class PredefinedCaseTests {
     }
 
     @Test
-    fun PLLZTest(){
+    fun PLLZTest() {
         val positionRepresentation =
             positionTransformer.transformStateToPositionRepresentation<PLLElementPosition>(context)
 
-        val applyCase = PredefinedPLLCase(positionRepresentation).Z()
+        val applyCase = PredefinedPLLCase.Z.performPermutation(positionRepresentation)
 
         val expectedPositionRepresentation = arrayOf(
             arrayOf(

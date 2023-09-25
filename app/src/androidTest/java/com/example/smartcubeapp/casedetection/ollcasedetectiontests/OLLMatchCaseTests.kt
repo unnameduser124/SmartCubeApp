@@ -18,7 +18,7 @@ import junit.framework.TestCase
 import org.junit.Before
 import org.junit.Test
 
-class MatchCaseTests {
+class OLLMatchCaseTests {
 
     private lateinit var context: Context
     private lateinit var positionTransformer: PositionRepresentationTransformer
