@@ -31,7 +31,7 @@ val YellowSide = CubeSide(
     arrayOf(
         arrayOf(4, 8, 7),
         arrayOf(4, 7),
-        arrayOf(0, 3, 3)
+        arrayOf(0, 0, 3)
     )
 )
 
