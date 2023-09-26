@@ -20,27 +20,6 @@ data class CubeState(
         edgePositions.addAll(newEdgePositions)
     }
 
-    fun getIncorrectlySolvedPieces(): Pair<MutableList<Int>, MutableList<Int>> {
-        val incorrectlySolvedCorners = mutableListOf<Int>()
-        for (i in 0..7) {
-            if (cornerPositions[i] != i) {
-                incorrectlySolvedCorners.add(i)
-            } else if (cornerOrientations[i] != 3) {
-                incorrectlySolvedCorners.add(i)
-            }
-        }
-
-        val incorrectlySolvedEdges = mutableListOf<Int>()
-        for (i in 0..11) {
-            if (edgePositions[i] != i) {
-                incorrectlySolvedEdges.add(i)
-            } else if (edgeOrientations[i]) {
-                incorrectlySolvedEdges.add(i)
-            }
-        }
-        return Pair(incorrectlySolvedCorners, incorrectlySolvedEdges)
-    }
-
     fun getCorrectlySolvedPieces(): Pair<MutableList<Int>, MutableList<Int>> {
         val correctlySolvedCorners = mutableListOf<Int>()
         for (i in 0..7) {

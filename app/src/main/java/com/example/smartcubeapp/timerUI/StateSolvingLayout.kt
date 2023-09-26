@@ -14,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.sp
 import com.example.smartcubeapp.cube.CubeState
 import com.example.smartcubeapp.cube.Solve
+import com.example.smartcubeapp.roundDouble
 import kotlinx.coroutines.delay
 import java.util.Calendar
 
@@ -66,7 +67,7 @@ class StateSolvingLayout(
             }
 
             Text(
-                text = "${solveTime.value / 1000.0}s",
+                text = "${roundDouble(solveTime.value / 1000.0, 100)}s",
                 fontSize = 50.sp
             )
         }
