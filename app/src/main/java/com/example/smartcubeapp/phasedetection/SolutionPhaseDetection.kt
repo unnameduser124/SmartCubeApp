@@ -13,6 +13,8 @@ import com.example.smartcubeapp.cube.YellowSide
 import com.example.smartcubeapp.cube.cubeSides
 import com.example.smartcubeapp.casedetection.olldetection.OLLCaseDetection
 import com.example.smartcubeapp.casedetection.olldetection.ollcase.PredefinedOLLCase
+import com.example.smartcubeapp.casedetection.plldetection.PLLCaseDetection
+import com.example.smartcubeapp.casedetection.plldetection.pllcase.PredefinedPLLCase
 
 class SolutionPhaseDetection(
     private val solution: Solve,
@@ -133,6 +135,14 @@ class SolutionPhaseDetection(
             solution.solveStateSequence[getStartIndexForPhase(SolvePhase.OLL, context)]
         val caseDetection = OLLCaseDetection(ollStartState, crossOppositeSide)
 
+        return caseDetection.detectCase(context)
+    }
+
+    fun getPLL(context: Context): PredefinedPLLCase?{
+        val crossOppositeSide = getCrossOppositeSide() ?: return null
+        val pllStartState =
+            solution.solveStateSequence[getStartIndexForPhase(SolvePhase.PLL, context)]
+        val caseDetection = PLLCaseDetection(pllStartState, crossOppositeSide)
         return caseDetection.detectCase(context)
     }
 

@@ -91,6 +91,7 @@ class StateSolveFinishedLayout(
             PhaseStatisticsLazyColumn()
         }
         OLLCaseRow()
+        PLLCaseRow()
         CrossSideRow()
     }
 
@@ -160,6 +161,27 @@ class StateSolveFinishedLayout(
             )
             Text(
                 text = ollCase.toString(),
+                fontSize = 25.sp,
+                modifier = Modifier.padding(horizontal = 10.dp)
+            )
+        }
+    }
+
+    @Composable
+    fun PLLCaseRow(){
+        val pllCase = SolutionPhaseDetection(
+            solve.value,
+            CubeStatePhaseDetection(CubeState.SOLVED_CUBE_STATE)
+        ).getPLL(context)
+
+        Row(horizontalArrangement = Arrangement.Center) {
+            Text(
+                text = "PLL Case",
+                fontSize = 25.sp,
+                modifier = Modifier.padding(horizontal = 10.dp)
+            )
+            Text(
+                text = pllCase.toString(),
                 fontSize = 25.sp,
                 modifier = Modifier.padding(horizontal = 10.dp)
             )
