@@ -1,4 +1,5 @@
 package com.example.smartcubeapp.solvedatabase.dataclasses
+
 data class PLLData(
     val id: Long,
     val solveID: Long,

@@ -125,6 +125,6 @@ fun simpleTestSolve(): Solve {
                 Move(),
                 1000
             ),
-        )
+        ),
     )
 }

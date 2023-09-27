@@ -8,7 +8,8 @@ data class CubeState(
     val edgePositions: MutableList<Int>,
     val edgeOrientations: MutableList<Boolean>,
     var lastMove: Move = Move(),
-    var timestamp: Long = Calendar.getInstance().timeInMillis
+    var timestamp: Long = Calendar.getInstance().timeInMillis,
+    var id: Long = -1
 ) {
     fun setCornerPositions(newCornerPositions: MutableList<Int>) {
         cornerPositions.clear()

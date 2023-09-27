@@ -11,7 +11,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.currentCompositionLocalContext
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -27,8 +26,6 @@ import com.example.smartcubeapp.phasedetection.SolutionPhaseDetection
 import com.example.smartcubeapp.phasedetection.SolvePhase
 import com.example.smartcubeapp.roundDouble
 import com.example.smartcubeapp.simpleTestSolve
-import kotlin.concurrent.thread
-import kotlin.coroutines.coroutineContext
 
 class StateSolveFinishedLayout(
     private val state: MutableState<TimerState>,

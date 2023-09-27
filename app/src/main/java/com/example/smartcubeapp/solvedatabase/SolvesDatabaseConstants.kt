@@ -11,6 +11,7 @@ object SolvesDatabaseConstants {
     const val CREATE_SOLVE_TABLE =
         "CREATE TABLE IF NOT EXISTS ${SolveTable.TABLE_NAME} (" +
                 "${BaseColumns._ID} INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                "${SolveTable.DURATION_COLUMN} INTEGER NOT NULL, " +
                 "${SolveTable.TIMESTAMP_COLUMN} INTEGER NOT NULL, " +
                 "${SolveTable.SCRAMBLED_STATE_ID_COLUMN} INTEGER NOT NULL, " +
                 "${SolveTable.SCRAMBLE_SEQUENCE_COLUMN} TEXT NOT NULL, " +
@@ -69,6 +70,7 @@ object SolvesDatabaseConstants {
 
     object SolveTable {
         const val TABLE_NAME = "Solve"
+        const val DURATION_COLUMN = "Duration"
         const val TIMESTAMP_COLUMN = "Timestamp"
         const val SCRAMBLED_STATE_ID_COLUMN = "ScrambledStateId"
         const val SCRAMBLE_SEQUENCE_COLUMN = "ScrambleSequence"
