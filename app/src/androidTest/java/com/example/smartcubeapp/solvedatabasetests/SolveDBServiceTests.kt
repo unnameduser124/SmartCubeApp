@@ -47,7 +47,8 @@ class SolveDBServiceTests {
             SolvesDatabaseConstants.SolveTable.DURATION_COLUMN,
             SolvesDatabaseConstants.SolveTable.TIMESTAMP_COLUMN,
             SolvesDatabaseConstants.SolveTable.SCRAMBLED_STATE_ID_COLUMN,
-            SolvesDatabaseConstants.SolveTable.SCRAMBLE_SEQUENCE_COLUMN
+            SolvesDatabaseConstants.SolveTable.SCRAMBLE_SEQUENCE_COLUMN,
+            BaseColumns._ID
         )
 
         val cursor = solveDBService.readableDatabase.query(

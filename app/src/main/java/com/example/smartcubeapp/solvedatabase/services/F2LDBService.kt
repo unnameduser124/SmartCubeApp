@@ -61,9 +61,9 @@ class F2LDBService(context: Context, databaseName: String) : SolveDB(context, da
                 val moveCount = getLong(getColumnIndexOrThrow(SolvesDatabaseConstants.F2LTable.MOVE_COUNT_COLUMN))
                 val startStateID = getLong(getColumnIndexOrThrow(SolvesDatabaseConstants.F2LTable.START_CUBE_STATE_ID_COLUMN))
                 val endStateID = getLong(getColumnIndexOrThrow(SolvesDatabaseConstants.F2LTable.END_CUBE_STATE_ID_COLUMN))
-                val id = getLong(getColumnIndexOrThrow(BaseColumns._ID))
+                val retrievedID = getLong(getColumnIndexOrThrow(BaseColumns._ID))
 
-                return F2LData(solveID, duration, moveCount, startStateID, endStateID, id)
+                return F2LData(solveID, duration, moveCount, startStateID, endStateID, retrievedID)
             }
             return null
         }
