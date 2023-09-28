@@ -1,12 +1,14 @@
 package com.example.smartcubeapp.solvedatabasetests
 
 import android.content.Context
+import android.provider.BaseColumns
 import androidx.test.platform.app.InstrumentationRegistry
 import com.example.smartcubeapp.cube.CubeState
 import com.example.smartcubeapp.cube.Solve
 import com.example.smartcubeapp.solvedatabase.services.SolveDBService
 import com.example.smartcubeapp.solvedatabase.SolvesDatabaseConstants
 import com.example.smartcubeapp.solvedatabase.dataclasses.SolveData
+import junit.framework.TestCase
 import org.junit.After
 import org.junit.Assert.assertThrows
 import org.junit.Before
@@ -39,7 +41,7 @@ class SolveDBServiceTests {
             scrambledState = CubeState.SOLVED_CUBE_STATE
         )
 
-        solveDBService.addSolve(SolveData(solve))
+        val id = solveDBService.addSolve(SolveData(solve))
 
         val projection = arrayOf(
             SolvesDatabaseConstants.SolveTable.DURATION_COLUMN,
@@ -59,11 +61,16 @@ class SolveDBServiceTests {
         )
 
         with(cursor) {
-            moveToFirst()
-            assert(getLong(getColumnIndexOrThrow(SolvesDatabaseConstants.SolveTable.DURATION_COLUMN)) == 1000L)
-            assert(getLong(getColumnIndexOrThrow(SolvesDatabaseConstants.SolveTable.TIMESTAMP_COLUMN)) == solve.date.timeInMillis)
-            assert(getLong(getColumnIndexOrThrow(SolvesDatabaseConstants.SolveTable.SCRAMBLED_STATE_ID_COLUMN)) == -1L)
-            assert(getString(getColumnIndexOrThrow(SolvesDatabaseConstants.SolveTable.SCRAMBLE_SEQUENCE_COLUMN)) == "R U R' U'")
+            if(moveToFirst()){
+                assert(getLong(getColumnIndexOrThrow(SolvesDatabaseConstants.SolveTable.DURATION_COLUMN)) == 1000L)
+                assert(getLong(getColumnIndexOrThrow(SolvesDatabaseConstants.SolveTable.TIMESTAMP_COLUMN)) == solve.date.timeInMillis)
+                assert(getLong(getColumnIndexOrThrow(SolvesDatabaseConstants.SolveTable.SCRAMBLED_STATE_ID_COLUMN)) == -1L)
+                assert(getString(getColumnIndexOrThrow(SolvesDatabaseConstants.SolveTable.SCRAMBLE_SEQUENCE_COLUMN)) == "R U R' U'")
+                assert(getLong(getColumnIndexOrThrow(BaseColumns._ID)) == id)
+            }
+            else{
+                TestCase.fail()
+            }
         }
     }
 
