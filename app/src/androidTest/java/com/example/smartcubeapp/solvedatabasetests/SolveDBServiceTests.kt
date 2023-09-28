@@ -4,7 +4,7 @@ import android.content.Context
 import androidx.test.platform.app.InstrumentationRegistry
 import com.example.smartcubeapp.cube.CubeState
 import com.example.smartcubeapp.cube.Solve
-import com.example.smartcubeapp.solvedatabase.SolveDBService
+import com.example.smartcubeapp.solvedatabase.services.SolveDBService
 import com.example.smartcubeapp.solvedatabase.SolvesDatabaseConstants
 import com.example.smartcubeapp.solvedatabase.dataclasses.SolveData
 import org.junit.After

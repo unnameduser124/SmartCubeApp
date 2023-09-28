@@ -1,8 +1,10 @@
-package com.example.smartcubeapp.solvedatabase
+package com.example.smartcubeapp.solvedatabase.services
 
 import android.content.ContentValues
 import android.content.Context
 import android.provider.BaseColumns
+import com.example.smartcubeapp.solvedatabase.SolveDB
+import com.example.smartcubeapp.solvedatabase.SolvesDatabaseConstants
 import com.example.smartcubeapp.solvedatabase.dataclasses.SolveData
 
 class SolveDBService(context: Context, databaseName: String) : SolveDB(context, databaseName) {
