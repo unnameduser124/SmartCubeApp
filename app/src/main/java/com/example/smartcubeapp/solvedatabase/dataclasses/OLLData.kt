@@ -6,6 +6,6 @@ data class OLLData(
     val moveCount: Long,
     val startStateID: Long,
     val endStateID: Long,
-    val case: Long,
+    val case: Int,
     val id: Long = -1
 )

@@ -4,34 +4,34 @@ import android.content.Context
 import android.provider.BaseColumns
 import androidx.test.platform.app.InstrumentationRegistry
 import com.example.smartcubeapp.solvedatabase.SolvesDatabaseConstants
-import com.example.smartcubeapp.solvedatabase.dataclasses.OLLData
-import com.example.smartcubeapp.solvedatabase.services.OLLDBService
+import com.example.smartcubeapp.solvedatabase.dataclasses.PLLData
+import com.example.smartcubeapp.solvedatabase.services.PLLDBService
 import junit.framework.TestCase
 import org.junit.After
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 
-class OLLDBServiceTests {
+class PLLDBServiceTests {
 
     private lateinit var context: Context
-    private lateinit var ollDBService: OLLDBService
+    private lateinit var pllDBService: PLLDBService
 
     @Before
     fun setUp() {
         context = InstrumentationRegistry.getInstrumentation().targetContext
-        ollDBService = OLLDBService(context, SolvesDatabaseConstants.TEST_DATABASE_NAME)
+        pllDBService = PLLDBService(context, SolvesDatabaseConstants.TEST_DATABASE_NAME)
     }
 
     @After
     fun tearDown() {
-        ollDBService.close()
+        pllDBService.close()
         context.deleteDatabase(SolvesDatabaseConstants.TEST_DATABASE_NAME)
     }
 
     @Test
-    fun addOLLDataTest() {
-        val ollData = OLLData(
+    fun addPLLDataTest() {
+        val pllData = PLLData(
             solveID = 1,
             duration = 1000,
             moveCount = 10,
@@ -40,20 +40,20 @@ class OLLDBServiceTests {
             case = 1
         )
 
-        val id = ollDBService.addOLLData(ollData)
+        val id = pllDBService.addPLLData(pllData)
 
         val projection = arrayOf(
-            SolvesDatabaseConstants.OLLTable.SOLVE_ID_COLUMN,
-            SolvesDatabaseConstants.OLLTable.DURATION_COLUMN,
-            SolvesDatabaseConstants.OLLTable.MOVE_COUNT_COLUMN,
-            SolvesDatabaseConstants.OLLTable.END_CUBE_STATE_ID_COLUMN,
-            SolvesDatabaseConstants.OLLTable.START_CUBE_STATE_ID_COLUMN,
-            SolvesDatabaseConstants.OLLTable.CASE_COLUMN,
+            SolvesDatabaseConstants.PLLTable.SOLVE_ID_COLUMN,
+            SolvesDatabaseConstants.PLLTable.DURATION_COLUMN,
+            SolvesDatabaseConstants.PLLTable.MOVE_COUNT_COLUMN,
+            SolvesDatabaseConstants.PLLTable.END_CUBE_STATE_ID_COLUMN,
+            SolvesDatabaseConstants.PLLTable.START_CUBE_STATE_ID_COLUMN,
+            SolvesDatabaseConstants.PLLTable.CASE_COLUMN,
             BaseColumns._ID
         )
 
-        val cursor = ollDBService.readableDatabase.query(
-            SolvesDatabaseConstants.OLLTable.TABLE_NAME,
+        val cursor = pllDBService.readableDatabase.query(
+            SolvesDatabaseConstants.PLLTable.TABLE_NAME,
             projection,
             null,
             null,
@@ -64,12 +64,12 @@ class OLLDBServiceTests {
 
         with(cursor) {
             if (moveToFirst()) {
-                assert(getLong(getColumnIndex(SolvesDatabaseConstants.OLLTable.SOLVE_ID_COLUMN)) == ollData.solveID)
-                assert(getLong(getColumnIndex(SolvesDatabaseConstants.OLLTable.DURATION_COLUMN)) == ollData.duration)
-                assert(getLong(getColumnIndex(SolvesDatabaseConstants.OLLTable.MOVE_COUNT_COLUMN)) == ollData.moveCount)
-                assert(getLong(getColumnIndex(SolvesDatabaseConstants.OLLTable.END_CUBE_STATE_ID_COLUMN)) == ollData.endStateID)
-                assert(getLong(getColumnIndex(SolvesDatabaseConstants.OLLTable.START_CUBE_STATE_ID_COLUMN)) == ollData.startStateID)
-                assert(getInt(getColumnIndex(SolvesDatabaseConstants.OLLTable.CASE_COLUMN)) == ollData.case)
+                assert(getLong(getColumnIndex(SolvesDatabaseConstants.PLLTable.SOLVE_ID_COLUMN)) == pllData.solveID)
+                assert(getLong(getColumnIndex(SolvesDatabaseConstants.PLLTable.DURATION_COLUMN)) == pllData.duration)
+                assert(getLong(getColumnIndex(SolvesDatabaseConstants.PLLTable.MOVE_COUNT_COLUMN)) == pllData.moveCount)
+                assert(getLong(getColumnIndex(SolvesDatabaseConstants.PLLTable.END_CUBE_STATE_ID_COLUMN)) == pllData.endStateID)
+                assert(getLong(getColumnIndex(SolvesDatabaseConstants.PLLTable.START_CUBE_STATE_ID_COLUMN)) == pllData.startStateID)
+                assert(getInt(getColumnIndex(SolvesDatabaseConstants.PLLTable.CASE_COLUMN)) == pllData.case)
                 assert(getLong(getColumnIndex(BaseColumns._ID)) == id)
             } else {
                 TestCase.fail()
@@ -78,8 +78,8 @@ class OLLDBServiceTests {
     }
 
     @Test
-    fun addOLLDataFailInvalidDuration() {
-        val ollData = OLLData(
+    fun addPLLDataFailInvalidDuration() {
+        val pllData = PLLData(
             solveID = 1,
             duration = -1000,
             moveCount = 10,
@@ -89,20 +89,20 @@ class OLLDBServiceTests {
         )
 
         Assert.assertThrows(IllegalArgumentException::class.java) {
-            ollDBService.addOLLData(ollData)
+            pllDBService.addPLLData(pllData)
         }
 
         val projection = arrayOf(
-            SolvesDatabaseConstants.OLLTable.SOLVE_ID_COLUMN,
-            SolvesDatabaseConstants.OLLTable.DURATION_COLUMN,
-            SolvesDatabaseConstants.OLLTable.MOVE_COUNT_COLUMN,
-            SolvesDatabaseConstants.OLLTable.END_CUBE_STATE_ID_COLUMN,
-            SolvesDatabaseConstants.OLLTable.START_CUBE_STATE_ID_COLUMN,
+            SolvesDatabaseConstants.PLLTable.SOLVE_ID_COLUMN,
+            SolvesDatabaseConstants.PLLTable.DURATION_COLUMN,
+            SolvesDatabaseConstants.PLLTable.MOVE_COUNT_COLUMN,
+            SolvesDatabaseConstants.PLLTable.END_CUBE_STATE_ID_COLUMN,
+            SolvesDatabaseConstants.PLLTable.START_CUBE_STATE_ID_COLUMN,
             BaseColumns._ID
         )
 
-        val cursor = ollDBService.readableDatabase.query(
-            SolvesDatabaseConstants.OLLTable.TABLE_NAME,
+        val cursor = pllDBService.readableDatabase.query(
+            SolvesDatabaseConstants.PLLTable.TABLE_NAME,
             projection,
             null,
             null,
@@ -115,8 +115,8 @@ class OLLDBServiceTests {
     }
 
     @Test
-    fun addOLLDataFailInvalidMoveCount() {
-        val ollData = OLLData(
+    fun addPLLDataFailInvalidMoveCount() {
+        val pllData = PLLData(
             solveID = 1,
             duration = 1000,
             moveCount = -10,
@@ -126,20 +126,20 @@ class OLLDBServiceTests {
         )
 
         Assert.assertThrows(IllegalArgumentException::class.java) {
-            ollDBService.addOLLData(ollData)
+            pllDBService.addPLLData(pllData)
         }
 
         val projection = arrayOf(
-            SolvesDatabaseConstants.OLLTable.SOLVE_ID_COLUMN,
-            SolvesDatabaseConstants.OLLTable.DURATION_COLUMN,
-            SolvesDatabaseConstants.OLLTable.MOVE_COUNT_COLUMN,
-            SolvesDatabaseConstants.OLLTable.END_CUBE_STATE_ID_COLUMN,
-            SolvesDatabaseConstants.OLLTable.START_CUBE_STATE_ID_COLUMN,
+            SolvesDatabaseConstants.PLLTable.SOLVE_ID_COLUMN,
+            SolvesDatabaseConstants.PLLTable.DURATION_COLUMN,
+            SolvesDatabaseConstants.PLLTable.MOVE_COUNT_COLUMN,
+            SolvesDatabaseConstants.PLLTable.END_CUBE_STATE_ID_COLUMN,
+            SolvesDatabaseConstants.PLLTable.START_CUBE_STATE_ID_COLUMN,
             BaseColumns._ID
         )
 
-        val cursor = ollDBService.readableDatabase.query(
-            SolvesDatabaseConstants.OLLTable.TABLE_NAME,
+        val cursor = pllDBService.readableDatabase.query(
+            SolvesDatabaseConstants.PLLTable.TABLE_NAME,
             projection,
             null,
             null,
@@ -152,8 +152,8 @@ class OLLDBServiceTests {
     }
 
     @Test
-    fun addOLLDataFailInvalidCase(){
-        val ollData = OLLData(
+    fun addPLLDataFailInvalidCase(){
+        val pllData = PLLData(
             solveID = 1,
             duration = 1000,
             moveCount = 10,
@@ -163,20 +163,20 @@ class OLLDBServiceTests {
         )
 
         Assert.assertThrows(IllegalArgumentException::class.java) {
-            ollDBService.addOLLData(ollData)
+            pllDBService.addPLLData(pllData)
         }
 
         val projection = arrayOf(
-            SolvesDatabaseConstants.OLLTable.SOLVE_ID_COLUMN,
-            SolvesDatabaseConstants.OLLTable.DURATION_COLUMN,
-            SolvesDatabaseConstants.OLLTable.MOVE_COUNT_COLUMN,
-            SolvesDatabaseConstants.OLLTable.END_CUBE_STATE_ID_COLUMN,
-            SolvesDatabaseConstants.OLLTable.START_CUBE_STATE_ID_COLUMN,
+            SolvesDatabaseConstants.PLLTable.SOLVE_ID_COLUMN,
+            SolvesDatabaseConstants.PLLTable.DURATION_COLUMN,
+            SolvesDatabaseConstants.PLLTable.MOVE_COUNT_COLUMN,
+            SolvesDatabaseConstants.PLLTable.END_CUBE_STATE_ID_COLUMN,
+            SolvesDatabaseConstants.PLLTable.START_CUBE_STATE_ID_COLUMN,
             BaseColumns._ID
         )
 
-        val cursor = ollDBService.readableDatabase.query(
-            SolvesDatabaseConstants.OLLTable.TABLE_NAME,
+        val cursor = pllDBService.readableDatabase.query(
+            SolvesDatabaseConstants.PLLTable.TABLE_NAME,
             projection,
             null,
             null,
@@ -189,8 +189,8 @@ class OLLDBServiceTests {
     }
 
     @Test
-    fun getOLLDataTest() {
-        val ollData = OLLData(
+    fun getPLLDataTest() {
+        val pllData = PLLData(
             solveID = 1,
             duration = 1000,
             moveCount = 10,
@@ -199,16 +199,16 @@ class OLLDBServiceTests {
             case = 1
         )
 
-        val id = ollDBService.addOLLData(ollData)
+        val id = pllDBService.addPLLData(pllData)
 
-        val ollDataFromDB = ollDBService.getOLLData(id)
+        val pllDataFromDB = pllDBService.getPLLData(id)
 
-        assertOLLDataEquals(ollDataFromDB, ollData, id)
+        assertPLLDataEquals(pllDataFromDB, pllData, id)
     }
 
     @Test
-    fun getOLLDataFailInvalidID() {
-        val ollData = OLLData(
+    fun getPLLDataFailInvalidID() {
+        val pllData = PLLData(
             solveID = 1,
             duration = 1000,
             moveCount = 10,
@@ -217,16 +217,16 @@ class OLLDBServiceTests {
             case = 1
         )
 
-        val id = ollDBService.addOLLData(ollData)
+        val id = pllDBService.addPLLData(pllData)
 
-        val ollDataFromDB = ollDBService.getOLLData(id + 1)
+        val pllDataFromDB = pllDBService.getPLLData(id + 1)
 
-        assert(ollDataFromDB == null)
+        assert(pllDataFromDB == null)
     }
 
     @Test
-    fun deleteOLLData() {
-        val ollData = OLLData(
+    fun deletePLLData() {
+        val pllData = PLLData(
             solveID = 1,
             duration = 1000,
             moveCount = 10,
@@ -235,18 +235,18 @@ class OLLDBServiceTests {
             case = 1
         )
 
-        val id = ollDBService.addOLLData(ollData)
+        val id = pllDBService.addPLLData(pllData)
 
-        ollDBService.deleteOLLData(id)
+        pllDBService.deletePLLData(id)
 
-        val ollDataFromDB = ollDBService.getOLLData(id)
+        val pllDataFromDB = pllDBService.getPLLData(id)
 
-        assert(ollDataFromDB == null)
+        assert(pllDataFromDB == null)
     }
 
     @Test
-    fun deleteOLLDataFailInvalidID() {
-        val ollData = OLLData(
+    fun deletePLLDataFailInvalidID() {
+        val pllData = PLLData(
             solveID = 1,
             duration = 1000,
             moveCount = 10,
@@ -255,18 +255,18 @@ class OLLDBServiceTests {
             case = 1
         )
 
-        val id = ollDBService.addOLLData(ollData)
+        val id = pllDBService.addPLLData(pllData)
 
-        ollDBService.deleteOLLData(id + 1)
+        pllDBService.deletePLLData(id + 1)
 
-        val ollDataFromDB = ollDBService.getOLLData(id)
+        val pllDataFromDB = pllDBService.getPLLData(id)
 
-        assert(ollDataFromDB != null)
+        assert(pllDataFromDB != null)
     }
 
     @Test
-    fun updateOLLDataTest() {
-        val ollData = OLLData(
+    fun updatePLLDataTest() {
+        val pllData = PLLData(
             solveID = 1,
             duration = 1000,
             moveCount = 10,
@@ -275,9 +275,9 @@ class OLLDBServiceTests {
             case = 1
         )
 
-        val id = ollDBService.addOLLData(ollData)
+        val id = pllDBService.addPLLData(pllData)
 
-        val newOLLData = OLLData(
+        val newPLLData = PLLData(
             solveID = 2,
             duration = 2000,
             moveCount = 20,
@@ -287,16 +287,16 @@ class OLLDBServiceTests {
             id = id
         )
 
-        ollDBService.updateOLLData(newOLLData, id)
+        pllDBService.updatePLLData(newPLLData, id)
 
-        val ollDataFromDB = ollDBService.getOLLData(id)
+        val pllDataFromDB = pllDBService.getPLLData(id)
 
-        assertOLLDataEquals(ollDataFromDB, newOLLData, id)
+        assertPLLDataEquals(pllDataFromDB, newPLLData, id)
     }
 
     @Test
-    fun updateOLLDataFailInvalidDuration() {
-        val ollData = OLLData(
+    fun updatePLLDataFailInvalidDuration() {
+        val pllData = PLLData(
             solveID = 1,
             duration = 1000,
             moveCount = 10,
@@ -305,9 +305,9 @@ class OLLDBServiceTests {
             case = 1
         )
 
-        val id = ollDBService.addOLLData(ollData)
+        val id = pllDBService.addPLLData(pllData)
 
-        val newOLLData = OLLData(
+        val newPLLData = PLLData(
             solveID = 2,
             duration = -2000,
             moveCount = 20,
@@ -318,17 +318,17 @@ class OLLDBServiceTests {
         )
 
         Assert.assertThrows(IllegalArgumentException::class.java) {
-            ollDBService.updateOLLData(newOLLData, id)
+            pllDBService.updatePLLData(newPLLData, id)
         }
 
-        val ollDataFromDB = ollDBService.getOLLData(id)
+        val pllDataFromDB = pllDBService.getPLLData(id)
 
-        assertOLLDataEquals(ollDataFromDB, ollData, id)
+        assertPLLDataEquals(pllDataFromDB, pllData, id)
     }
 
     @Test
-    fun updateOLLDataFailInvalidMoveCount() {
-        val ollData = OLLData(
+    fun updatePLLDataFailInvalidMoveCount() {
+        val pllData = PLLData(
             solveID = 1,
             duration = 1000,
             moveCount = 10,
@@ -337,9 +337,9 @@ class OLLDBServiceTests {
             case = 1
         )
 
-        val id = ollDBService.addOLLData(ollData)
+        val id = pllDBService.addPLLData(pllData)
 
-        val newOLLData = OLLData(
+        val newPLLData = PLLData(
             solveID = 2,
             duration = 2000,
             moveCount = -20,
@@ -350,17 +350,17 @@ class OLLDBServiceTests {
         )
 
         Assert.assertThrows(IllegalArgumentException::class.java) {
-            ollDBService.updateOLLData(newOLLData, id)
+            pllDBService.updatePLLData(newPLLData, id)
         }
 
-        val ollDataFromDB = ollDBService.getOLLData(id)
+        val pllDataFromDB = pllDBService.getPLLData(id)
 
-        assertOLLDataEquals(ollDataFromDB, ollData, id)
+        assertPLLDataEquals(pllDataFromDB, pllData, id)
     }
 
     @Test
     fun updateF2lDataFailInvalidID() {
-        val ollData = OLLData(
+        val pllData = PLLData(
             solveID = 1,
             duration = 2000,
             moveCount = 20,
@@ -369,9 +369,9 @@ class OLLDBServiceTests {
             case = 1
         )
 
-        val id = ollDBService.addOLLData(ollData)
+        val id = pllDBService.addPLLData(pllData)
 
-        val newOLLData = OLLData(
+        val newPLLData = PLLData(
             solveID = 2,
             duration = 2000,
             moveCount = 20,
@@ -381,16 +381,16 @@ class OLLDBServiceTests {
             id = id
         )
 
-        ollDBService.updateOLLData(newOLLData, id + 1)
+        pllDBService.updatePLLData(newPLLData, id + 1)
 
-        val ollDataFromDB = ollDBService.getOLLData(id)
+        val pllDataFromDB = pllDBService.getPLLData(id)
 
-        assertOLLDataEquals(ollDataFromDB, ollData, id)
+        assertPLLDataEquals(pllDataFromDB, pllData, id)
     }
 
     @Test
-    fun updateOLLDataFailInvalidCase(){
-        val ollData = OLLData(
+    fun updatePLLDataFailInvalidCase(){
+        val pllData = PLLData(
             solveID = 1,
             duration = 2000,
             moveCount = 20,
@@ -399,9 +399,9 @@ class OLLDBServiceTests {
             case = 1
         )
 
-        val id = ollDBService.addOLLData(ollData)
+        val id = pllDBService.addPLLData(pllData)
 
-        val newOLLData = OLLData(
+        val newPLLData = PLLData(
             solveID = 2,
             duration = 2000,
             moveCount = 20,
@@ -412,15 +412,15 @@ class OLLDBServiceTests {
         )
 
         Assert.assertThrows(IllegalArgumentException::class.java) {
-            ollDBService.updateOLLData(newOLLData, id)
+            pllDBService.updatePLLData(newPLLData, id)
         }
 
-        val ollDataFromDB = ollDBService.getOLLData(id)
+        val pllDataFromDB = pllDBService.getPLLData(id)
 
-        assertOLLDataEquals(ollDataFromDB, ollData, id)
+        assertPLLDataEquals(pllDataFromDB, pllData, id)
     }
 
-    private fun assertOLLDataEquals(retrievedData: OLLData?, expectedData: OLLData, id: Long) {
+    private fun assertPLLDataEquals(retrievedData: PLLData?, expectedData: PLLData, id: Long) {
         if (retrievedData == null) {
             TestCase.fail()
             return
@@ -433,5 +433,4 @@ class OLLDBServiceTests {
         assert(retrievedData.endStateID == expectedData.endStateID)
         assert(retrievedData.case == expectedData.case)
     }
-
 }

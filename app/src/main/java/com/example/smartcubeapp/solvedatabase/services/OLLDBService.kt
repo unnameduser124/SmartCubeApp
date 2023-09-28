@@ -67,7 +67,7 @@ class OLLDBService(context: Context, databaseName: String) : SolveDB(context, da
                 val moveCount = getLong(getColumnIndexOrThrow(SolvesDatabaseConstants.OLLTable.MOVE_COUNT_COLUMN))
                 val startStateID = getLong(getColumnIndexOrThrow(SolvesDatabaseConstants.OLLTable.START_CUBE_STATE_ID_COLUMN))
                 val endStateID = getLong(getColumnIndexOrThrow(SolvesDatabaseConstants.OLLTable.END_CUBE_STATE_ID_COLUMN))
-                val case = getLong(getColumnIndexOrThrow(SolvesDatabaseConstants.OLLTable.CASE_COLUMN))
+                val case = getInt(getColumnIndexOrThrow(SolvesDatabaseConstants.OLLTable.CASE_COLUMN))
                 val retrievedID = getLong(getColumnIndexOrThrow(BaseColumns._ID))
 
                 return OLLData(solveID, duration, moveCount, startStateID, endStateID, case, retrievedID)
