@@ -152,13 +152,99 @@ class CubeStateDBService(context: Context, databaseName: String) : SolveDB(conte
         val selection = "${BaseColumns._ID} = ?"
         val selectionArgs = arrayOf(id.toString())
 
-        db.update(SolvesDatabaseConstants.CubeStateTable.TABLE_NAME, contentValues, selection, selectionArgs)
+        db.update(
+            SolvesDatabaseConstants.CubeStateTable.TABLE_NAME,
+            contentValues,
+            selection,
+            selectionArgs
+        )
+    }
+
+    fun getCubeStatesForSolve(solveID: Long): List<CubeStateData> {
+        val db = this.readableDatabase
+
+        val projection = arrayOf(
+            SolvesDatabaseConstants.CubeStateTable.TIMESTAMP_COLUMN,
+            SolvesDatabaseConstants.CubeStateTable.MOVE_INDEX_COLUMN,
+            SolvesDatabaseConstants.CubeStateTable.LAST_MOVE_COLUMN,
+            SolvesDatabaseConstants.CubeStateTable.CORNER_POSITIONS_COLUMN,
+            SolvesDatabaseConstants.CubeStateTable.EDGE_POSITIONS_COLUMN,
+            SolvesDatabaseConstants.CubeStateTable.CORNER_ORIENTATIONS_COLUMN,
+            SolvesDatabaseConstants.CubeStateTable.EDGE_ORIENTATIONS_COLUMN,
+            BaseColumns._ID
+        )
+
+        val selection = "${SolvesDatabaseConstants.CubeStateTable.SOLVE_ID_COLUMN} = ?"
+        val selectionArgs = arrayOf(solveID.toString())
+
+        val cursor = db.query(
+            SolvesDatabaseConstants.CubeStateTable.TABLE_NAME,
+            projection,
+            selection,
+            selectionArgs,
+            null,
+            null,
+            null
+        )
+
+        val cubeStates = mutableListOf<CubeStateData>()
+
+        with(cursor) {
+            while (moveToNext()) {
+                val retrievedID = getLong(getColumnIndexOrThrow(BaseColumns._ID))
+                val timestamp =
+                    getLong(getColumnIndexOrThrow(SolvesDatabaseConstants.CubeStateTable.TIMESTAMP_COLUMN))
+                val moveIndex =
+                    getInt(getColumnIndexOrThrow(SolvesDatabaseConstants.CubeStateTable.MOVE_INDEX_COLUMN))
+                val lastMove =
+                    getString(getColumnIndexOrThrow(SolvesDatabaseConstants.CubeStateTable.LAST_MOVE_COLUMN))
+                val cornerPositions =
+                    getString(getColumnIndexOrThrow(SolvesDatabaseConstants.CubeStateTable.CORNER_POSITIONS_COLUMN))
+                val edgePositions =
+                    getString(getColumnIndexOrThrow(SolvesDatabaseConstants.CubeStateTable.EDGE_POSITIONS_COLUMN))
+                val cornerOrientations =
+                    getString(getColumnIndexOrThrow(SolvesDatabaseConstants.CubeStateTable.CORNER_ORIENTATIONS_COLUMN))
+                val edgeOrientations =
+                    getString(getColumnIndexOrThrow(SolvesDatabaseConstants.CubeStateTable.EDGE_ORIENTATIONS_COLUMN))
+
+                cubeStates.add(
+                    CubeStateData(
+                        id = retrievedID,
+                        timestamp = timestamp,
+                        solveID = solveID,
+                        moveIndex = moveIndex,
+                        lastMove = lastMove,
+                        cornerPositions = cornerPositions,
+                        edgePositions = edgePositions,
+                        cornerOrientations = cornerOrientations,
+                        edgeOrientations = edgeOrientations)
+                )
+            }
+        }
+        return cubeStates
     }
 
     private fun validateMove(move: String): Boolean {
         val validNotations =
             listOf(
-                "R", "R'", "R2", "L", "L'", "L2", "U", "U'", "U2", "D", "D'", "D2", "F", "F'", "F2", "B", "B'", "B2"
+                "R",
+                "R'",
+                "R2",
+                "L",
+                "L'",
+                "L2",
+                "U",
+                "U'",
+                "U2",
+                "D",
+                "D'",
+                "D2",
+                "F",
+                "F'",
+                "F2",
+                "B",
+                "B'",
+                "B2"
             )
 
         if (move !in validNotations) {

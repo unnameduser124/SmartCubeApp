@@ -112,4 +112,44 @@ class PLLDBService(context: Context, databaseName: String) : SolveDB(context, da
 
         db.update(SolvesDatabaseConstants.PLLTable.TABLE_NAME, contentValues, selection, selectionArgs)
     }
+
+    fun getPLLForSolve(solveID: Long): PLLData? {
+        val db = this.readableDatabase
+
+        val projection = arrayOf(
+            SolvesDatabaseConstants.PLLTable.DURATION_COLUMN,
+            SolvesDatabaseConstants.PLLTable.MOVE_COUNT_COLUMN,
+            SolvesDatabaseConstants.PLLTable.START_CUBE_STATE_ID_COLUMN,
+            SolvesDatabaseConstants.PLLTable.END_CUBE_STATE_ID_COLUMN,
+            SolvesDatabaseConstants.PLLTable.CASE_COLUMN,
+            BaseColumns._ID
+        )
+
+        val selection = "${SolvesDatabaseConstants.PLLTable.SOLVE_ID_COLUMN} = ?"
+        val selectionArgs = arrayOf(solveID.toString())
+
+        val cursor = db.query(
+            SolvesDatabaseConstants.PLLTable.TABLE_NAME,
+            projection,
+            selection,
+            selectionArgs,
+            null,
+            null,
+            null
+        )
+
+        with(cursor){
+            if(cursor.moveToFirst()){
+                val duration = getLong(getColumnIndexOrThrow(SolvesDatabaseConstants.PLLTable.DURATION_COLUMN))
+                val moveCount = getLong(getColumnIndexOrThrow(SolvesDatabaseConstants.PLLTable.MOVE_COUNT_COLUMN))
+                val startStateID = getLong(getColumnIndexOrThrow(SolvesDatabaseConstants.PLLTable.START_CUBE_STATE_ID_COLUMN))
+                val endStateID = getLong(getColumnIndexOrThrow(SolvesDatabaseConstants.PLLTable.END_CUBE_STATE_ID_COLUMN))
+                val case = getInt(getColumnIndexOrThrow(SolvesDatabaseConstants.PLLTable.CASE_COLUMN))
+                val retrievedID = getLong(getColumnIndexOrThrow(BaseColumns._ID))
+
+                return PLLData(solveID, duration, moveCount, startStateID, endStateID, case, retrievedID)
+            }
+            return null
+        }
+    }
 }

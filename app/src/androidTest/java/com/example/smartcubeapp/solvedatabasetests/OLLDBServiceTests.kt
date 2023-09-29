@@ -420,6 +420,66 @@ class OLLDBServiceTests {
         assertOLLDataEquals(ollDataFromDB, ollData, id)
     }
 
+    @Test
+    fun getOLLForSolveTest(){
+        val ollData1 = OLLData(
+            solveID = 1,
+            duration = 1000,
+            moveCount = 10,
+            startStateID = 1,
+            endStateID = 11,
+            case = 1
+        )
+
+        val ollData2 = OLLData(
+            solveID = 2,
+            duration = 2000,
+            moveCount = 20,
+            startStateID = 2,
+            endStateID = 22,
+            case = 1
+        )
+
+        val id1 = ollDBService.addOLLData(ollData1)
+        ollDBService.addOLLData(ollData2)
+
+        val ollForSolveID = ollDBService.getOLLForSolve(1)
+
+        if(ollForSolveID == null){
+            TestCase.fail()
+            return
+        }
+        assertOLLDataEquals(ollForSolveID, ollData1, id1)
+    }
+
+    @Test
+    fun getOLLDataForSolveFailInvalidID(){
+        val ollData1 = OLLData(
+            solveID = 1,
+            duration = 1000,
+            moveCount = 10,
+            startStateID = 1,
+            endStateID = 11,
+            case = 1
+        )
+
+        val ollData2 = OLLData(
+            solveID = 2,
+            duration = 2000,
+            moveCount = 20,
+            startStateID = 2,
+            endStateID = 22,
+            case = 1
+        )
+
+        val id1 = ollDBService.addOLLData(ollData1)
+        ollDBService.addOLLData(ollData2)
+
+        val ollForSolveID = ollDBService.getOLLForSolve(3)
+
+        assert(ollForSolveID == null)
+    }
+
     private fun assertOLLDataEquals(retrievedData: OLLData?, expectedData: OLLData, id: Long) {
         if (retrievedData == null) {
             TestCase.fail()

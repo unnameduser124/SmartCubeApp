@@ -9,20 +9,20 @@ import com.example.smartcubeapp.solvedatabase.dataclasses.OLLData
 
 class OLLDBService(context: Context, databaseName: String) : SolveDB(context, databaseName) {
 
-    fun addOLLData(ollData: OLLData): Long{
-        if(ollData.duration < 0){
+    fun addOLLData(ollData: OLLData): Long {
+        if (ollData.duration < 0) {
             throw IllegalArgumentException("Duration must be greater than or equal to 0")
         }
-        if(ollData.moveCount < 0){
+        if (ollData.moveCount < 0) {
             throw IllegalArgumentException("Move count must be greater than or equal to 0")
         }
-        if(ollData.case < 0 || ollData.case > 56){
+        if (ollData.case < 0 || ollData.case > 56) {
             throw IllegalArgumentException("OLL case must be between 0 and 56")
         }
 
         val db = this.writableDatabase
 
-        val contentValues = ContentValues().apply{
+        val contentValues = ContentValues().apply {
             put(SolvesDatabaseConstants.OLLTable.SOLVE_ID_COLUMN, ollData.solveID)
             put(SolvesDatabaseConstants.OLLTable.DURATION_COLUMN, ollData.duration)
             put(SolvesDatabaseConstants.OLLTable.MOVE_COUNT_COLUMN, ollData.moveCount)
@@ -34,7 +34,7 @@ class OLLDBService(context: Context, databaseName: String) : SolveDB(context, da
         return db.insert(SolvesDatabaseConstants.OLLTable.TABLE_NAME, null, contentValues)
     }
 
-    fun getOLLData(id: Long): OLLData?{
+    fun getOLLData(id: Long): OLLData? {
         val db = this.readableDatabase
 
         val projection = arrayOf(
@@ -60,23 +60,37 @@ class OLLDBService(context: Context, databaseName: String) : SolveDB(context, da
             null
         )
 
-        with(cursor){
-            if(moveToFirst()){
-                val solveID = getLong(getColumnIndexOrThrow(SolvesDatabaseConstants.OLLTable.SOLVE_ID_COLUMN))
-                val duration = getLong(getColumnIndexOrThrow(SolvesDatabaseConstants.OLLTable.DURATION_COLUMN))
-                val moveCount = getLong(getColumnIndexOrThrow(SolvesDatabaseConstants.OLLTable.MOVE_COUNT_COLUMN))
-                val startStateID = getLong(getColumnIndexOrThrow(SolvesDatabaseConstants.OLLTable.START_CUBE_STATE_ID_COLUMN))
-                val endStateID = getLong(getColumnIndexOrThrow(SolvesDatabaseConstants.OLLTable.END_CUBE_STATE_ID_COLUMN))
-                val case = getInt(getColumnIndexOrThrow(SolvesDatabaseConstants.OLLTable.CASE_COLUMN))
+        with(cursor) {
+            if (moveToFirst()) {
+                val solveID =
+                    getLong(getColumnIndexOrThrow(SolvesDatabaseConstants.OLLTable.SOLVE_ID_COLUMN))
+                val duration =
+                    getLong(getColumnIndexOrThrow(SolvesDatabaseConstants.OLLTable.DURATION_COLUMN))
+                val moveCount =
+                    getLong(getColumnIndexOrThrow(SolvesDatabaseConstants.OLLTable.MOVE_COUNT_COLUMN))
+                val startStateID =
+                    getLong(getColumnIndexOrThrow(SolvesDatabaseConstants.OLLTable.START_CUBE_STATE_ID_COLUMN))
+                val endStateID =
+                    getLong(getColumnIndexOrThrow(SolvesDatabaseConstants.OLLTable.END_CUBE_STATE_ID_COLUMN))
+                val case =
+                    getInt(getColumnIndexOrThrow(SolvesDatabaseConstants.OLLTable.CASE_COLUMN))
                 val retrievedID = getLong(getColumnIndexOrThrow(BaseColumns._ID))
 
-                return OLLData(solveID, duration, moveCount, startStateID, endStateID, case, retrievedID)
+                return OLLData(
+                    solveID,
+                    duration,
+                    moveCount,
+                    startStateID,
+                    endStateID,
+                    case,
+                    retrievedID
+                )
             }
             return null
         }
     }
 
-    fun deleteOLLData(id: Long){
+    fun deleteOLLData(id: Long) {
         val db = this.writableDatabase
 
         val selection = "${BaseColumns._ID} = ?"
@@ -85,20 +99,20 @@ class OLLDBService(context: Context, databaseName: String) : SolveDB(context, da
         db.delete(SolvesDatabaseConstants.OLLTable.TABLE_NAME, selection, selectionArgs)
     }
 
-    fun updateOLLData(ollData: OLLData, id: Long){
-        if(ollData.duration < 0){
+    fun updateOLLData(ollData: OLLData, id: Long) {
+        if (ollData.duration < 0) {
             throw IllegalArgumentException("Duration must be greater than or equal to 0")
         }
-        if(ollData.moveCount < 0){
+        if (ollData.moveCount < 0) {
             throw IllegalArgumentException("Move count must be greater than or equal to 0")
         }
-        if(ollData.case < 0 || ollData.case > 56){
+        if (ollData.case < 0 || ollData.case > 56) {
             throw IllegalArgumentException("OLL case must be between 0 and 56")
         }
 
         val db = this.writableDatabase
 
-        val contentValues = ContentValues().apply{
+        val contentValues = ContentValues().apply {
             put(SolvesDatabaseConstants.OLLTable.SOLVE_ID_COLUMN, ollData.solveID)
             put(SolvesDatabaseConstants.OLLTable.DURATION_COLUMN, ollData.duration)
             put(SolvesDatabaseConstants.OLLTable.MOVE_COUNT_COLUMN, ollData.moveCount)
@@ -110,6 +124,51 @@ class OLLDBService(context: Context, databaseName: String) : SolveDB(context, da
         val selection = "${BaseColumns._ID} = ?"
         val selectionArgs = arrayOf(id.toString())
 
-        db.update(SolvesDatabaseConstants.OLLTable.TABLE_NAME, contentValues, selection, selectionArgs)
+        db.update(
+            SolvesDatabaseConstants.OLLTable.TABLE_NAME,
+            contentValues,
+            selection,
+            selectionArgs
+        )
+    }
+
+    fun getOLLForSolve(solveID: Long): OLLData? {
+        val db = this.readableDatabase
+
+        val projection = arrayOf(
+            SolvesDatabaseConstants.OLLTable.DURATION_COLUMN,
+            SolvesDatabaseConstants.OLLTable.MOVE_COUNT_COLUMN,
+            SolvesDatabaseConstants.OLLTable.START_CUBE_STATE_ID_COLUMN,
+            SolvesDatabaseConstants.OLLTable.END_CUBE_STATE_ID_COLUMN,
+            SolvesDatabaseConstants.OLLTable.CASE_COLUMN,
+            BaseColumns._ID
+        )
+
+        val selection = "${SolvesDatabaseConstants.OLLTable.SOLVE_ID_COLUMN} = ?"
+        val selectionArgs = arrayOf(solveID.toString())
+
+        val cursor = db.query(
+            SolvesDatabaseConstants.OLLTable.TABLE_NAME,
+            projection,
+            selection,
+            selectionArgs,
+            null,
+            null,
+            null
+        )
+
+        with(cursor){
+            if(cursor.moveToFirst()){
+                val duration = getLong(getColumnIndexOrThrow(SolvesDatabaseConstants.OLLTable.DURATION_COLUMN))
+                val moveCount = getLong(getColumnIndexOrThrow(SolvesDatabaseConstants.OLLTable.MOVE_COUNT_COLUMN))
+                val startStateID = getLong(getColumnIndexOrThrow(SolvesDatabaseConstants.OLLTable.START_CUBE_STATE_ID_COLUMN))
+                val endStateID = getLong(getColumnIndexOrThrow(SolvesDatabaseConstants.OLLTable.END_CUBE_STATE_ID_COLUMN))
+                val case = getInt(getColumnIndexOrThrow(SolvesDatabaseConstants.OLLTable.CASE_COLUMN))
+                val retrievedID = getLong(getColumnIndexOrThrow(BaseColumns._ID))
+
+                return OLLData(solveID, duration, moveCount, startStateID, endStateID, case, retrievedID)
+            }
+            return null
+        }
     }
 }

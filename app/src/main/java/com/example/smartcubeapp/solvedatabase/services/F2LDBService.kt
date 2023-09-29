@@ -101,4 +101,42 @@ class F2LDBService(context: Context, databaseName: String) : SolveDB(context, da
 
         db.update(SolvesDatabaseConstants.F2LTable.TABLE_NAME, contentValues, selection, selectionArgs)
     }
+
+    fun getF2LForSolve(solveID: Long): F2LData?{
+        val db = this.readableDatabase
+
+        val projection = arrayOf(
+            SolvesDatabaseConstants.F2LTable.DURATION_COLUMN,
+            SolvesDatabaseConstants.F2LTable.MOVE_COUNT_COLUMN,
+            SolvesDatabaseConstants.F2LTable.START_CUBE_STATE_ID_COLUMN,
+            SolvesDatabaseConstants.F2LTable.END_CUBE_STATE_ID_COLUMN,
+            BaseColumns._ID
+        )
+
+        val selection = "${SolvesDatabaseConstants.F2LTable.SOLVE_ID_COLUMN} = ?"
+        val selectionArgs = arrayOf(solveID.toString())
+
+        val cursor = db.query(
+            SolvesDatabaseConstants.F2LTable.TABLE_NAME,
+            projection,
+            selection,
+            selectionArgs,
+            null,
+            null,
+            null
+        )
+
+        with(cursor){
+            if(moveToFirst()){
+                val duration = getLong(getColumnIndexOrThrow(SolvesDatabaseConstants.F2LTable.DURATION_COLUMN))
+                val moveCount = getLong(getColumnIndexOrThrow(SolvesDatabaseConstants.F2LTable.MOVE_COUNT_COLUMN))
+                val startStateID = getLong(getColumnIndexOrThrow(SolvesDatabaseConstants.F2LTable.START_CUBE_STATE_ID_COLUMN))
+                val endStateID = getLong(getColumnIndexOrThrow(SolvesDatabaseConstants.F2LTable.END_CUBE_STATE_ID_COLUMN))
+                val retrievedID = getLong(getColumnIndexOrThrow(BaseColumns._ID))
+
+                return F2LData(solveID, duration, moveCount, startStateID, endStateID, retrievedID)
+            }
+            return null
+        }
+    }
 }

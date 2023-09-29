@@ -420,6 +420,66 @@ class PLLDBServiceTests {
         assertPLLDataEquals(pllDataFromDB, pllData, id)
     }
 
+    @Test
+    fun getPLLForSolveTest(){
+        val pllData1 = PLLData(
+            solveID = 1,
+            duration = 1000,
+            moveCount = 10,
+            startStateID = 1,
+            endStateID = 11,
+            case = 1
+        )
+
+        val pllData2 = PLLData(
+            solveID = 2,
+            duration = 2000,
+            moveCount = 20,
+            startStateID = 2,
+            endStateID = 22,
+            case = 1
+        )
+
+        val id1 = pllDBService.addPLLData(pllData1)
+        pllDBService.addPLLData(pllData2)
+
+        val pllForSolveID = pllDBService.getPLLForSolve(1)
+
+        if(pllForSolveID == null){
+            TestCase.fail()
+            return
+        }
+        assertPLLDataEquals(pllForSolveID, pllData1, id1)
+    }
+
+    @Test
+    fun getPLLDataForSolveFailInvalidID(){
+        val pllData1 = PLLData(
+            solveID = 1,
+            duration = 1000,
+            moveCount = 10,
+            startStateID = 1,
+            endStateID = 11,
+            case = 1
+        )
+
+        val pllData2 = PLLData(
+            solveID = 2,
+            duration = 2000,
+            moveCount = 20,
+            startStateID = 2,
+            endStateID = 22,
+            case = 1
+        )
+
+        val id1 = pllDBService.addPLLData(pllData1)
+        pllDBService.addPLLData(pllData2)
+
+        val pllForSolveID = pllDBService.getPLLForSolve(3)
+
+        assert(pllForSolveID == null)
+    }
+
     private fun assertPLLDataEquals(retrievedData: PLLData?, expectedData: PLLData, id: Long) {
         if (retrievedData == null) {
             TestCase.fail()

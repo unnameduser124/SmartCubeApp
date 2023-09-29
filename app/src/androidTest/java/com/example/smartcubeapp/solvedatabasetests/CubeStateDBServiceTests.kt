@@ -443,6 +443,107 @@ class CubeStateDBServiceTests {
         assertCubeStatesEqual(retrievedCubeStateData, cubeStateData, id)
     }
 
+    @Test
+    fun getCubeStatesForSolveTest(){
+        val cubeState1 = CubeState(
+            mutableListOf(0, 1, 2, 3, 4, 5, 7, 6),
+            mutableListOf(2, 2, 2, 2, 2, 2, 2, 2),
+            mutableListOf(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 ,11),
+            mutableListOf(
+                false, true, false, false, false, false, false, false, false, false, false, false
+            ),
+            Move("R", 1, "R"),
+            200,
+            solveID = 1
+        )
+        val cubeStateData1 = CubeStateData(cubeState1, 1)
+
+        val cubeState2 = CubeState(
+            mutableListOf(0, 1, 2, 3, 4, 5, 7, 6),
+            mutableListOf(3, 3, 3, 3, 3, 3, 3, 3),
+            mutableListOf(0, 1, 2, 3, 4, 5, 6, 7, 8, 10 ,9, 11),
+            mutableListOf(
+                false, true, false, false, false, true, false, false, false, false, false, false
+            ),
+            Move("F", 1, "F"),
+            200,
+            solveID = 1
+        )
+        val cubeStateData2 = CubeStateData(cubeState2, 1)
+
+        val cubeState3 = CubeState(
+            mutableListOf(0, 1, 2, 3, 4, 5, 7, 6),
+            mutableListOf(2, 2, 2, 2, 2, 2, 2, 2),
+            mutableListOf(0, 1, 2, 3, 4, 5, 7, 6, 8, 9, 10 ,11),
+            mutableListOf(
+                false, true, false, false, false, false, false, false, false, false, false, false
+            ),
+            Move("B", -1, "B'"),
+            200,
+            solveID = 2
+        )
+
+        val id1 = cubeStateDBService.addCubeState(cubeStateData1)
+        val id2 = cubeStateDBService.addCubeState(cubeStateData2)
+        val id3 = cubeStateDBService.addCubeState(CubeStateData(cubeState3, 2))
+
+        val cubeStatesForSolve = cubeStateDBService.getCubeStatesForSolve(1)
+
+        assert(cubeStatesForSolve.size == 2)
+        assertCubeStatesEqual(cubeStatesForSolve[0], cubeStateData1, id1)
+        assertCubeStatesEqual(cubeStatesForSolve[1], cubeStateData2, id2)
+    }
+
+    @Test
+    fun getCubeStatesForSolveFailInvalidID(){
+
+        val cubeState1 = CubeState(
+            mutableListOf(0, 1, 2, 3, 4, 5, 7, 6),
+            mutableListOf(2, 2, 2, 2, 2, 2, 2, 2),
+            mutableListOf(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 ,11),
+            mutableListOf(
+                false, true, false, false, false, false, false, false, false, false, false, false
+            ),
+            Move("R", 1, "R"),
+            200,
+            solveID = 1
+        )
+        val cubeStateData1 = CubeStateData(cubeState1, 1)
+
+        val cubeState2 = CubeState(
+            mutableListOf(0, 1, 2, 3, 4, 5, 7, 6),
+            mutableListOf(3, 3, 3, 3, 3, 3, 3, 3),
+            mutableListOf(0, 1, 2, 3, 4, 5, 6, 7, 8, 10 ,9, 11),
+            mutableListOf(
+                false, true, false, false, false, true, false, false, false, false, false, false
+            ),
+            Move("F", 1, "F"),
+            200,
+            solveID = 1
+        )
+        val cubeStateData2 = CubeStateData(cubeState2, 1)
+
+        val cubeState3 = CubeState(
+            mutableListOf(0, 1, 2, 3, 4, 5, 7, 6),
+            mutableListOf(2, 2, 2, 2, 2, 2, 2, 2),
+            mutableListOf(0, 1, 2, 3, 4, 5, 7, 6, 8, 9, 10 ,11),
+            mutableListOf(
+                false, true, false, false, false, false, false, false, false, false, false, false
+            ),
+            Move("B", -1, "B'"),
+            200,
+            solveID = 2
+        )
+
+        cubeStateDBService.addCubeState(cubeStateData1)
+        cubeStateDBService.addCubeState(cubeStateData2)
+        cubeStateDBService.addCubeState(CubeStateData(cubeState3, 2))
+
+        val cubeStatesForSolve = cubeStateDBService.getCubeStatesForSolve(3)
+
+        assert(cubeStatesForSolve.isEmpty())
+    }
+
 
     private fun assertCubeStatesEqual(retrievedState: CubeStateData?, expectedState: CubeStateData, id: Long){
         assert(retrievedState != null)

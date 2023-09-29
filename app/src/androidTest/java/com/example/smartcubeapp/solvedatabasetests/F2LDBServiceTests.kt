@@ -334,6 +334,62 @@ class F2LDBServiceTests {
         assertF2LDataEquals(f2lDataFromDB, f2lData, id)
     }
 
+    @Test
+    fun getF2LForSolveTest(){
+        val f2lData1 = F2LData(
+            solveID = 1,
+            duration = 1000,
+            moveCount = 10,
+            startStateID = 1,
+            endStateID = 11
+        )
+
+        val f2lData2 = F2LData(
+            solveID = 2,
+            duration = 2000,
+            moveCount = 20,
+            startStateID = 2,
+            endStateID = 22
+        )
+
+        val id1 = f2lDBService.addF2LData(f2lData1)
+        f2lDBService.addF2LData(f2lData2)
+
+        val f2lForSolveID = f2lDBService.getF2LForSolve(1)
+
+        if(f2lForSolveID == null){
+            TestCase.fail()
+            return
+        }
+        assertF2LDataEquals(f2lForSolveID, f2lData1, id1)
+    }
+
+    @Test
+    fun getF2LDataForSolveFailInvalidID(){
+        val f2lData1 = F2LData(
+            solveID = 1,
+            duration = 1000,
+            moveCount = 10,
+            startStateID = 1,
+            endStateID = 11
+        )
+
+        val f2lData2 = F2LData(
+            solveID = 2,
+            duration = 2000,
+            moveCount = 20,
+            startStateID = 2,
+            endStateID = 22
+        )
+
+        val id1 = f2lDBService.addF2LData(f2lData1)
+        f2lDBService.addF2LData(f2lData2)
+
+        val f2lForSolveID = f2lDBService.getF2LForSolve(3)
+
+        assert(f2lForSolveID == null)
+    }
+
     private fun assertF2LDataEquals(retrievedData: F2LData?, expectedData: F2LData, id: Long){
         if(retrievedData == null){
             TestCase.fail()
