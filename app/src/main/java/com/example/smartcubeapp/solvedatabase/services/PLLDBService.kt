@@ -7,7 +7,7 @@ import com.example.smartcubeapp.solvedatabase.SolveDB
 import com.example.smartcubeapp.solvedatabase.SolvesDatabaseConstants
 import com.example.smartcubeapp.solvedatabase.dataclasses.PLLData
 
-class PLLDBService(context: Context, databaseName: String) : SolveDB(context, databaseName) {
+class PLLDBService(context: Context, databaseName: String = SolvesDatabaseConstants.SOLVE_DATABASE_NAME) : SolveDB(context, databaseName) {
 
     fun addPLLData(pllData: PLLData): Long{
         if(pllData.duration < 0){
@@ -64,7 +64,7 @@ class PLLDBService(context: Context, databaseName: String) : SolveDB(context, da
             if(moveToFirst()){
                 val solveID = getLong(getColumnIndexOrThrow(SolvesDatabaseConstants.PLLTable.SOLVE_ID_COLUMN))
                 val duration = getLong(getColumnIndexOrThrow(SolvesDatabaseConstants.PLLTable.DURATION_COLUMN))
-                val moveCount = getLong(getColumnIndexOrThrow(SolvesDatabaseConstants.PLLTable.MOVE_COUNT_COLUMN))
+                val moveCount = getInt(getColumnIndexOrThrow(SolvesDatabaseConstants.PLLTable.MOVE_COUNT_COLUMN))
                 val startStateID = getLong(getColumnIndexOrThrow(SolvesDatabaseConstants.PLLTable.START_CUBE_STATE_ID_COLUMN))
                 val endStateID = getLong(getColumnIndexOrThrow(SolvesDatabaseConstants.PLLTable.END_CUBE_STATE_ID_COLUMN))
                 val case = getInt(getColumnIndexOrThrow(SolvesDatabaseConstants.PLLTable.CASE_COLUMN))
@@ -141,7 +141,7 @@ class PLLDBService(context: Context, databaseName: String) : SolveDB(context, da
         with(cursor){
             if(cursor.moveToFirst()){
                 val duration = getLong(getColumnIndexOrThrow(SolvesDatabaseConstants.PLLTable.DURATION_COLUMN))
-                val moveCount = getLong(getColumnIndexOrThrow(SolvesDatabaseConstants.PLLTable.MOVE_COUNT_COLUMN))
+                val moveCount = getInt(getColumnIndexOrThrow(SolvesDatabaseConstants.PLLTable.MOVE_COUNT_COLUMN))
                 val startStateID = getLong(getColumnIndexOrThrow(SolvesDatabaseConstants.PLLTable.START_CUBE_STATE_ID_COLUMN))
                 val endStateID = getLong(getColumnIndexOrThrow(SolvesDatabaseConstants.PLLTable.END_CUBE_STATE_ID_COLUMN))
                 val case = getInt(getColumnIndexOrThrow(SolvesDatabaseConstants.PLLTable.CASE_COLUMN))

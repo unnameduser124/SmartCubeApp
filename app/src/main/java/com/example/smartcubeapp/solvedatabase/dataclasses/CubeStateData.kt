@@ -3,9 +3,9 @@ package com.example.smartcubeapp.solvedatabase.dataclasses
 import com.example.smartcubeapp.cube.CubeState
 
 data class CubeStateData(
-    val id: Long,
+    var id: Long,
     val timestamp: Long,
-    val solveID: Long,
+    var solveID: Long,
     val moveIndex: Int,
     val lastMove: String,
     var cornerPositions: String,

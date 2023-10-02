@@ -3,11 +3,12 @@ package com.example.smartcubeapp.solvedatabase.services
 import android.content.ContentValues
 import android.content.Context
 import android.provider.BaseColumns
+import com.example.smartcubeapp.cube.Solve
 import com.example.smartcubeapp.solvedatabase.SolveDB
 import com.example.smartcubeapp.solvedatabase.SolvesDatabaseConstants
 import com.example.smartcubeapp.solvedatabase.dataclasses.OLLData
 
-class OLLDBService(context: Context, databaseName: String) : SolveDB(context, databaseName) {
+class OLLDBService(context: Context, databaseName: String = SolvesDatabaseConstants.SOLVE_DATABASE_NAME) : SolveDB(context, databaseName) {
 
     fun addOLLData(ollData: OLLData): Long {
         if (ollData.duration < 0) {
@@ -67,7 +68,7 @@ class OLLDBService(context: Context, databaseName: String) : SolveDB(context, da
                 val duration =
                     getLong(getColumnIndexOrThrow(SolvesDatabaseConstants.OLLTable.DURATION_COLUMN))
                 val moveCount =
-                    getLong(getColumnIndexOrThrow(SolvesDatabaseConstants.OLLTable.MOVE_COUNT_COLUMN))
+                    getInt(getColumnIndexOrThrow(SolvesDatabaseConstants.OLLTable.MOVE_COUNT_COLUMN))
                 val startStateID =
                     getLong(getColumnIndexOrThrow(SolvesDatabaseConstants.OLLTable.START_CUBE_STATE_ID_COLUMN))
                 val endStateID =
@@ -160,7 +161,7 @@ class OLLDBService(context: Context, databaseName: String) : SolveDB(context, da
         with(cursor){
             if(cursor.moveToFirst()){
                 val duration = getLong(getColumnIndexOrThrow(SolvesDatabaseConstants.OLLTable.DURATION_COLUMN))
-                val moveCount = getLong(getColumnIndexOrThrow(SolvesDatabaseConstants.OLLTable.MOVE_COUNT_COLUMN))
+                val moveCount = getInt(getColumnIndexOrThrow(SolvesDatabaseConstants.OLLTable.MOVE_COUNT_COLUMN))
                 val startStateID = getLong(getColumnIndexOrThrow(SolvesDatabaseConstants.OLLTable.START_CUBE_STATE_ID_COLUMN))
                 val endStateID = getLong(getColumnIndexOrThrow(SolvesDatabaseConstants.OLLTable.END_CUBE_STATE_ID_COLUMN))
                 val case = getInt(getColumnIndexOrThrow(SolvesDatabaseConstants.OLLTable.CASE_COLUMN))

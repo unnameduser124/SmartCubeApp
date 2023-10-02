@@ -7,7 +7,7 @@ import com.example.smartcubeapp.solvedatabase.SolveDB
 import com.example.smartcubeapp.solvedatabase.SolvesDatabaseConstants
 import com.example.smartcubeapp.solvedatabase.dataclasses.SolveData
 
-class SolveDBService(context: Context, databaseName: String) : SolveDB(context, databaseName) {
+class SolveDBService(context: Context, databaseName: String = SolvesDatabaseConstants.SOLVE_DATABASE_NAME) : SolveDB(context, databaseName) {
 
     fun addSolve(solveData: SolveData): Long {
         if(solveData.solveDuration <= 0){

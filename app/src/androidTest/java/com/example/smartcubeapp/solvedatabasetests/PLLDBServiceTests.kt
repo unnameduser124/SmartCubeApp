@@ -66,7 +66,7 @@ class PLLDBServiceTests {
             if (moveToFirst()) {
                 assert(getLong(getColumnIndex(SolvesDatabaseConstants.PLLTable.SOLVE_ID_COLUMN)) == pllData.solveID)
                 assert(getLong(getColumnIndex(SolvesDatabaseConstants.PLLTable.DURATION_COLUMN)) == pllData.duration)
-                assert(getLong(getColumnIndex(SolvesDatabaseConstants.PLLTable.MOVE_COUNT_COLUMN)) == pllData.moveCount)
+                assert(getInt(getColumnIndex(SolvesDatabaseConstants.PLLTable.MOVE_COUNT_COLUMN)) == pllData.moveCount)
                 assert(getLong(getColumnIndex(SolvesDatabaseConstants.PLLTable.END_CUBE_STATE_ID_COLUMN)) == pllData.endStateID)
                 assert(getLong(getColumnIndex(SolvesDatabaseConstants.PLLTable.START_CUBE_STATE_ID_COLUMN)) == pllData.startStateID)
                 assert(getInt(getColumnIndex(SolvesDatabaseConstants.PLLTable.CASE_COLUMN)) == pllData.case)

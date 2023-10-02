@@ -66,7 +66,7 @@ class OLLDBServiceTests {
             if (moveToFirst()) {
                 assert(getLong(getColumnIndex(SolvesDatabaseConstants.OLLTable.SOLVE_ID_COLUMN)) == ollData.solveID)
                 assert(getLong(getColumnIndex(SolvesDatabaseConstants.OLLTable.DURATION_COLUMN)) == ollData.duration)
-                assert(getLong(getColumnIndex(SolvesDatabaseConstants.OLLTable.MOVE_COUNT_COLUMN)) == ollData.moveCount)
+                assert(getInt(getColumnIndex(SolvesDatabaseConstants.OLLTable.MOVE_COUNT_COLUMN)) == ollData.moveCount)
                 assert(getLong(getColumnIndex(SolvesDatabaseConstants.OLLTable.END_CUBE_STATE_ID_COLUMN)) == ollData.endStateID)
                 assert(getLong(getColumnIndex(SolvesDatabaseConstants.OLLTable.START_CUBE_STATE_ID_COLUMN)) == ollData.startStateID)
                 assert(getInt(getColumnIndex(SolvesDatabaseConstants.OLLTable.CASE_COLUMN)) == ollData.case)

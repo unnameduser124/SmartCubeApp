@@ -64,7 +64,7 @@ class F2LDBServiceTests {
             if (moveToFirst()) {
                 assert(getLong(getColumnIndex(SolvesDatabaseConstants.F2LTable.SOLVE_ID_COLUMN)) == f2lData.solveID)
                 assert(getLong(getColumnIndex(SolvesDatabaseConstants.F2LTable.DURATION_COLUMN)) == f2lData.duration)
-                assert(getLong(getColumnIndex(SolvesDatabaseConstants.F2LTable.MOVE_COUNT_COLUMN)) == f2lData.moveCount)
+                assert(getInt(getColumnIndex(SolvesDatabaseConstants.F2LTable.MOVE_COUNT_COLUMN)) == f2lData.moveCount)
                 assert(getLong(getColumnIndex(SolvesDatabaseConstants.F2LTable.END_CUBE_STATE_ID_COLUMN)) == f2lData.endStateID)
                 assert(getLong(getColumnIndex(SolvesDatabaseConstants.F2LTable.START_CUBE_STATE_ID_COLUMN)) == f2lData.startStateID)
                 assert(getLong(getColumnIndex(BaseColumns._ID)) == id)

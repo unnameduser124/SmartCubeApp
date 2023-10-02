@@ -119,6 +119,10 @@ class SolutionPhaseDetection(
         return durationInMillis.toDouble() / MILLIS_IN_SECOND
     }
 
+    fun getPhaseDurationInMillis(phase: SolvePhase, context: Context): Long {
+        return getEndTimeForPhase(phase, context) - getStartTimeForPhase(phase, context)
+    }
+
     fun getPhaseMoveCount(phase: SolvePhase, context: Context): Int {
         return getEndIndexForPhase(phase, context) - getStartIndexForPhase(phase, context)
     }

@@ -7,7 +7,7 @@ import com.example.smartcubeapp.solvedatabase.SolveDB
 import com.example.smartcubeapp.solvedatabase.SolvesDatabaseConstants
 import com.example.smartcubeapp.solvedatabase.dataclasses.CubeStateData
 
-class CubeStateDBService(context: Context, databaseName: String) : SolveDB(context, databaseName) {
+class CubeStateDBService(context: Context, databaseName: String = SolvesDatabaseConstants.SOLVE_DATABASE_NAME) : SolveDB(context, databaseName) {
 
     fun addCubeState(cubeStateData: CubeStateData): Long {
         if (cubeStateData.timestamp <= 0 || cubeStateData.moveIndex < 0) {

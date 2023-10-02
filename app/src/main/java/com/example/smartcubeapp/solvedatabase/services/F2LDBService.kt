@@ -7,7 +7,7 @@ import com.example.smartcubeapp.solvedatabase.SolveDB
 import com.example.smartcubeapp.solvedatabase.SolvesDatabaseConstants
 import com.example.smartcubeapp.solvedatabase.dataclasses.F2LData
 
-class F2LDBService(context: Context, databaseName: String) : SolveDB(context, databaseName) {
+class F2LDBService(context: Context, databaseName: String = SolvesDatabaseConstants.SOLVE_DATABASE_NAME) : SolveDB(context, databaseName) {
 
     fun addF2LData(f2lData: F2LData): Long{
         if(f2lData.duration < 0){
@@ -58,7 +58,7 @@ class F2LDBService(context: Context, databaseName: String) : SolveDB(context, da
             if(moveToFirst()){
                 val solveID = getLong(getColumnIndexOrThrow(SolvesDatabaseConstants.F2LTable.SOLVE_ID_COLUMN))
                 val duration = getLong(getColumnIndexOrThrow(SolvesDatabaseConstants.F2LTable.DURATION_COLUMN))
-                val moveCount = getLong(getColumnIndexOrThrow(SolvesDatabaseConstants.F2LTable.MOVE_COUNT_COLUMN))
+                val moveCount = getInt(getColumnIndexOrThrow(SolvesDatabaseConstants.F2LTable.MOVE_COUNT_COLUMN))
                 val startStateID = getLong(getColumnIndexOrThrow(SolvesDatabaseConstants.F2LTable.START_CUBE_STATE_ID_COLUMN))
                 val endStateID = getLong(getColumnIndexOrThrow(SolvesDatabaseConstants.F2LTable.END_CUBE_STATE_ID_COLUMN))
                 val retrievedID = getLong(getColumnIndexOrThrow(BaseColumns._ID))
@@ -129,7 +129,7 @@ class F2LDBService(context: Context, databaseName: String) : SolveDB(context, da
         with(cursor){
             if(moveToFirst()){
                 val duration = getLong(getColumnIndexOrThrow(SolvesDatabaseConstants.F2LTable.DURATION_COLUMN))
-                val moveCount = getLong(getColumnIndexOrThrow(SolvesDatabaseConstants.F2LTable.MOVE_COUNT_COLUMN))
+                val moveCount = getInt(getColumnIndexOrThrow(SolvesDatabaseConstants.F2LTable.MOVE_COUNT_COLUMN))
                 val startStateID = getLong(getColumnIndexOrThrow(SolvesDatabaseConstants.F2LTable.START_CUBE_STATE_ID_COLUMN))
                 val endStateID = getLong(getColumnIndexOrThrow(SolvesDatabaseConstants.F2LTable.END_CUBE_STATE_ID_COLUMN))
                 val retrievedID = getLong(getColumnIndexOrThrow(BaseColumns._ID))
