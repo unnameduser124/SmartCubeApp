@@ -12,6 +12,7 @@ open class SolveDB(context: Context, databaseName: String = SolvesDatabaseConsta
         createF2LTable(db)
         createOLLTable(db)
         createPLLTable(db)
+        createCrossTable(db)
     }
 
     override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
@@ -36,5 +37,9 @@ open class SolveDB(context: Context, databaseName: String = SolvesDatabaseConsta
 
     fun createPLLTable(db: SQLiteDatabase?) {
         db?.execSQL(SolvesDatabaseConstants.CREATE_PLL_TABLE)
+    }
+
+    fun createCrossTable(db: SQLiteDatabase?){
+        db?.execSQL(SolvesDatabaseConstants.CREATE_CROSS_TABLE)
     }
 }

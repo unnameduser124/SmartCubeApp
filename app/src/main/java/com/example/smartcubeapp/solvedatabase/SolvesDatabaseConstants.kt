@@ -68,6 +68,17 @@ object SolvesDatabaseConstants {
                 "FOREIGN KEY(${PLLTable.START_CUBE_STATE_ID_COLUMN}) REFERENCES ${CubeStateTable.TABLE_NAME}(${BaseColumns._ID}), " +
                 "FOREIGN KEY(${PLLTable.END_CUBE_STATE_ID_COLUMN}) REFERENCES ${CubeStateTable.TABLE_NAME}(${BaseColumns._ID}))"
 
+    const val CREATE_CROSS_TABLE = "CREATE TABLE IF NOT EXISTS ${CrossTable.TABLE_NAME} (" +
+            "${BaseColumns._ID} INTEGER PRIMARY KEY AUTOINCREMENT, " +
+            "${CrossTable.SOLVE_ID_COLUMN} INTEGER NOT NULL, " +
+            "${CrossTable.DURATION_COLUMN} INTEGER NOT NULL, " +
+            "${CrossTable.START_CUBE_STATE_ID_COLUMN} INTEGER NOT NULL, " +
+            "${CrossTable.END_CUBE_STATE_ID_COLUMN} INTEGER NOT NULL, " +
+            "${CrossTable.MOVE_COUNT_COLUMN} INTEGER NOT NULL, " +
+            "FOREIGN KEY(${CrossTable.SOLVE_ID_COLUMN}) REFERENCES ${SolveTable.TABLE_NAME}(${BaseColumns._ID}), " +
+            "FOREIGN KEY(${CrossTable.START_CUBE_STATE_ID_COLUMN}) REFERENCES ${CubeStateTable.TABLE_NAME}(${BaseColumns._ID}), " +
+            "FOREIGN KEY(${CrossTable.END_CUBE_STATE_ID_COLUMN}) REFERENCES ${CubeStateTable.TABLE_NAME}(${BaseColumns._ID}))"
+
     object SolveTable {
         const val TABLE_NAME = "Solve"
         const val DURATION_COLUMN = "Duration"
@@ -115,5 +126,14 @@ object SolvesDatabaseConstants {
         const val END_CUBE_STATE_ID_COLUMN = "EndCubeStateId"
         const val MOVE_COUNT_COLUMN = "MoveCount"
         const val CASE_COLUMN = "PLLCase"
+    }
+
+    object CrossTable{
+        const val TABLE_NAME = "Cross"
+        const val SOLVE_ID_COLUMN = "SolveId"
+        const val DURATION_COLUMN = "Duration"
+        const val START_CUBE_STATE_ID_COLUMN = "StartCubeStateId"
+        const val END_CUBE_STATE_ID_COLUMN = "EndCubeStateId"
+        const val MOVE_COUNT_COLUMN = "MoveCount"
     }
 }
