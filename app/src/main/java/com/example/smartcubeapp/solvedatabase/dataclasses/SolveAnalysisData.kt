@@ -20,6 +20,7 @@ data class SolveAnalysisData(
     val timestamp: Long,
     val solveStateSequence: List<CubeStateData>,
     val scrambleSequence: String,
+    var crossData: CrossData,
     var f2lData: F2LData,
     var ollData: OLLData,
     var pllData: PLLData
@@ -30,7 +31,6 @@ data class SolveAnalysisData(
     //Apparently it turns out that if I want to convert solve to solveAnalysisData I have to save things to the database
     //if I want ids for the cube states and solve
     //TODO("Reconsider the need for SolveAnalysisData class")
-    //TODO("Add cross data class")
     constructor(solve: Solve, context: Context) : this(
         solveID = solve.id,
         solveDuration = solve.time,
@@ -39,6 +39,7 @@ data class SolveAnalysisData(
             CubeStateData(cubeState, index)
         },
         scrambleSequence = solve.scrambleSequence,
+        crossData = CrossData(),
         f2lData = F2LData(),
         ollData = OLLData(),
         pllData = PLLData()
@@ -48,10 +49,12 @@ data class SolveAnalysisData(
             CubeStatePhaseDetection(CubeState.SOLVED_CUBE_STATE)
         )
 
+        val crossDuration = solutionPhaseDetection.getPhaseDurationInMillis(SolvePhase.Cross, context)
         val f2lDuration = solutionPhaseDetection.getPhaseDurationInMillis(SolvePhase.F2L, context)
         val ollDuration = solutionPhaseDetection.getPhaseDurationInMillis(SolvePhase.OLL, context)
         val pllDuration = solutionPhaseDetection.getPhaseDurationInMillis(SolvePhase.PLL, context)
 
+        val crossMoveCount = solutionPhaseDetection.getPhaseMoveCount(SolvePhase.Cross, context)
         val f2lMoveCount = solutionPhaseDetection.getPhaseMoveCount(SolvePhase.F2L, context)
         val ollMoveCount = solutionPhaseDetection.getPhaseMoveCount(SolvePhase.OLL, context)
         val pllMoveCount = solutionPhaseDetection.getPhaseMoveCount(SolvePhase.PLL, context)
@@ -70,6 +73,14 @@ data class SolveAnalysisData(
                 CubeStateData(cubeState, index)
             )
         }
+
+        crossData = CrossData(
+            solveID,
+            crossDuration,
+            crossMoveCount,
+            solveStateSequence[solutionPhaseDetection.getStartIndexForPhase(SolvePhase.Cross, context)].id,
+            solveStateSequence[solutionPhaseDetection.getEndIndexForPhase(SolvePhase.Cross, context)].id
+        )
 
         f2lData = F2LData(
             solveID,

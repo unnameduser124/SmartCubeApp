@@ -1,5 +1,6 @@
 package com.example.smartcubeapp.cube
 
+import com.example.smartcubeapp.solvedatabase.dataclasses.CubeStateData
 import java.util.Calendar
 
 data class CubeState(
@@ -12,6 +13,18 @@ data class CubeState(
     var id: Long = -1,
     var solveID: Long = -1
 ) {
+
+    constructor(state: CubeStateData): this(
+        cornerPositions = intListFromString(state.cornerPositions),
+        cornerOrientations = intListFromString(state.cornerOrientations),
+        edgePositions = intListFromString(state.edgePositions),
+        edgeOrientations = booleanListFromString(state.edgeOrientations),
+        timestamp = state.timestamp,
+        lastMove = Move(state.lastMove),
+        id = state.id,
+        solveID = state.solveID
+    )
+
     fun setCornerPositions(newCornerPositions: MutableList<Int>) {
         cornerPositions.clear()
         cornerPositions.addAll(newCornerPositions)
@@ -67,6 +80,7 @@ data class CubeState(
     }
 
 
+
     companion object {
 
         val SOLVED_CUBE_STATE = CubeState(
@@ -90,5 +104,22 @@ data class CubeState(
             lastMove = Move("F", 1, "F")
         )
 
+        fun intListFromString(string: String): MutableList<Int> {
+            val list = mutableListOf<Int>()
+            val split = string.split(",")
+            for (i in split) {
+                list.add(i.toInt())
+            }
+            return list
+        }
+
+        fun booleanListFromString(string: String): MutableList<Boolean> {
+            val list = mutableListOf<Boolean>()
+            val split = string.split(",")
+            for (value in split) {
+                list.add(value=="true")
+            }
+            return list
+        }
     }
 }

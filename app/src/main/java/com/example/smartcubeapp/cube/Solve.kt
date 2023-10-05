@@ -27,6 +27,8 @@ class Solve(
     }
 
     fun calculateTimeFromStateSequence(){
+        if(solveStateSequence.isEmpty()) throw IllegalArgumentException("Solve state sequence is empty")
+
         val time = solveStateSequence.last().timestamp - solveStateSequence.first().timestamp
         this.time = time
     }
