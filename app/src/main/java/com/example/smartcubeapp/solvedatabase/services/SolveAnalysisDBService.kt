@@ -103,17 +103,15 @@ class SolveAnalysisDBService(val context: Context, val dbName: String = SolvesDa
     }
 
     fun getSolveAnalysisForAllSolves(): List<SolveAnalysisData> {
-        //TODO("Add SolveDBService method for getting all solve IDs")
-        //val solveDataList = SolveDBService(context, dbName).getAllSolveIDs()
-        //val solveAnalysisDataList = mutableListOf<SolveAnalysisData>()
-        //solveDataList.forEach { solveData ->
-        //    val solveAnalysisData = getSolveAnalysisForSolve(solveData.id)
-        //    if(solveAnalysisData != null){
-        //        solveAnalysisDataList.add(solveAnalysisData)
-        //    }
-        //}
-        //return solveAnalysisDataList
-        return listOf()
+        val solveIDs = SolveDBService(context, dbName).getAllSolveIDs()
+        val solveAnalysisDataList = mutableListOf<SolveAnalysisData>()
+        solveIDs.forEach { id ->
+            val solveAnalysisData = getSolveAnalysisForSolve(id)
+            if(solveAnalysisData != null){
+                solveAnalysisDataList.add(solveAnalysisData)
+            }
+        }
+        return solveAnalysisDataList
     }
 
     private fun getPLLData(solve: Solve): PLLData? {

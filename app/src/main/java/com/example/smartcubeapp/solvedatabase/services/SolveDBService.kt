@@ -110,4 +110,31 @@ class SolveDBService(context: Context, databaseName: String = SolvesDatabaseCons
 
         db.update(SolvesDatabaseConstants.SolveTable.TABLE_NAME, contentValues, selection, selectionArgs)
     }
+
+    fun getAllSolveIDs(): List<Long>{
+        val db = this.readableDatabase
+
+        val projection = arrayOf(
+            BaseColumns._ID
+        )
+
+        val cursor = db.query(
+            SolvesDatabaseConstants.SolveTable.TABLE_NAME,
+            projection,
+            null,
+            null,
+            null,
+            null,
+            null
+        )
+
+        val solveIDs = mutableListOf<Long>()
+        with(cursor) {
+            while (moveToNext()) {
+                val solveId = getLong(getColumnIndexOrThrow(BaseColumns._ID))
+                solveIDs.add(solveId)
+            }
+        }
+        return solveIDs
+    }
 }

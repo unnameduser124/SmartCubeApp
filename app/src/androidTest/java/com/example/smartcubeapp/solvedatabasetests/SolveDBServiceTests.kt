@@ -306,4 +306,37 @@ class SolveDBServiceTests {
         assert(retrievedSolveData.scrambledStateID == solve.scrambledState.id)
         assert(retrievedSolveData.scramble == solve.scrambleSequence)
     }
+
+    @Test
+    fun getAllSolveIDsTest(){
+        val solve1 = Solve(
+            time = 1000,
+            date = Calendar.getInstance(),
+            scrambleSequence = "R U R' U'",
+            scrambledState = CubeState.SOLVED_CUBE_STATE
+        )
+        val solve2 = Solve(
+            time = 2000,
+            date = Calendar.getInstance(),
+            scrambleSequence = "R U R' U' R U R' U'",
+            scrambledState = CubeState.SOLVED_CUBE_STATE
+        )
+        val solve3 = Solve(
+            time = 3000,
+            date = Calendar.getInstance(),
+            scrambleSequence = "R U R' U' R U R' U' R U R' U'",
+            scrambledState = CubeState.SOLVED_CUBE_STATE
+        )
+
+        val id1 = solveDBService.addSolve(SolveData(solve1))
+        val id2 = solveDBService.addSolve(SolveData(solve2))
+        val id3 = solveDBService.addSolve(SolveData(solve3))
+
+        val ids = solveDBService.getAllSolveIDs()
+
+        assert(ids.size == 3)
+        assert(ids.contains(id1))
+        assert(ids.contains(id2))
+        assert(ids.contains(id3))
+    }
 }
