@@ -84,7 +84,23 @@ class SolveAnalysisDBService(val context: Context, val dbName: String = SolvesDa
         //CrossDBService(context).deleteCrossDataForSolve(solveID)
     }
     fun getSolveAnalysisForSolve(solveID: Long): SolveAnalysisData? {
-        TODO("Not implemented yet")
+        val solveData = SolveDBService(context, dbName).getSolve(solveID) ?: return null
+        val solve = Solve(solveData)
+        val cubeStateDataList = CubeStateDBService(context, dbName).getCubeStatesForSolve(solveID)
+        val cubeStateList = cubeStateDataList.map { CubeState(it) }
+        solve.solveStateSequence = cubeStateList.toMutableList()
+        val pllData = PLLDBService(context, dbName).getPLLData(solveID)
+        val ollData = OLLDBService(context, dbName).getOLLData(solveID)
+        val f2lData = F2LDBService(context, dbName).getF2LData(solveID)
+        val crossData = CrossDBService(context, dbName).getCrossData(solveID)
+        return SolveAnalysisData(
+            solveData,
+            crossData,
+            f2lData,
+            ollData,
+            pllData,
+            solve.solveStateSequence
+        )
     }
 
     fun getSolveAnalysisForAllSolves(): List<SolveAnalysisData> {

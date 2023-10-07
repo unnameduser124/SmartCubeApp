@@ -344,20 +344,20 @@ class SolveAnalysisDBServiceTests {
 
         assertEquals(crossData.duration, solveAnalysisData.crossData.duration)
         assertEquals(crossData.moveCount, solveAnalysisData.crossData.moveCount)
-        assertEquals(crossData.solveID, solveAnalysisData.crossData.solveID)
+        assertEquals(solveID, solveAnalysisData.crossData.solveID)
 
         assertEquals(f2lData.duration, solveAnalysisData.f2lData.duration)
         assertEquals(f2lData.moveCount, solveAnalysisData.f2lData.moveCount)
-        assertEquals(f2lData.solveID, solveAnalysisData.f2lData.solveID)
+        assertEquals(solveID, solveAnalysisData.f2lData.solveID)
 
         assertEquals(ollData.duration, solveAnalysisData.ollData.duration)
         assertEquals(ollData.moveCount, solveAnalysisData.ollData.moveCount)
-        assertEquals(ollData.solveID, solveAnalysisData.ollData.solveID)
+        assertEquals(solveID, solveAnalysisData.ollData.solveID)
         assertEquals(ollData.case, solveAnalysisData.ollData.case)
 
         assertEquals(pllData.duration, solveAnalysisData.pllData.duration)
         assertEquals(pllData.moveCount, solveAnalysisData.pllData.moveCount)
-        assertEquals(pllData.solveID, solveAnalysisData.pllData.solveID)
+        assertEquals(solveID, solveAnalysisData.pllData.solveID)
         assertEquals(pllData.case, solveAnalysisData.pllData.case)
     }
 
