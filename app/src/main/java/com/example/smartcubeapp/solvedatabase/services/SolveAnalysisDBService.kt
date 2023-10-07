@@ -75,13 +75,12 @@ class SolveAnalysisDBService(val context: Context, val dbName: String = SolvesDa
 
 
     fun deleteSolveWithAnalysisData(solveID: Long){
-        SolveDBService(context).deleteSolve(solveID)
-        //TODO("Add service methods for deleting analysis data for solve ID")
-        //CubeStateDBService(context).deleteCubeStatesForSolve(solveID)
-        //PLLDBService(context).deletePLLDataForSolve(solveID)
-        //OLLDBService(context).deleteOLLDataForSolve(solveID)
-        //F2LDBService(context).deleteF2LDataForSolve(solveID)
-        //CrossDBService(context).deleteCrossDataForSolve(solveID)
+        SolveDBService(context, dbName).deleteSolve(solveID)
+        CubeStateDBService(context, dbName).deleteCubeStatesForSolve(solveID)
+        PLLDBService(context, dbName).deletePLLDataForSolve(solveID)
+        OLLDBService(context, dbName).deleteOLLDataForSolve(solveID)
+        F2LDBService(context, dbName).deleteF2LDataForSolve(solveID)
+        CrossDBService(context, dbName).deleteCrossDataForSolve(solveID)
     }
     fun getSolveAnalysisForSolve(solveID: Long): SolveAnalysisData? {
         val solveData = SolveDBService(context, dbName).getSolve(solveID) ?: return null
@@ -104,7 +103,17 @@ class SolveAnalysisDBService(val context: Context, val dbName: String = SolvesDa
     }
 
     fun getSolveAnalysisForAllSolves(): List<SolveAnalysisData> {
-        TODO("Not implemented yet")
+        //TODO("Add SolveDBService method for getting all solve IDs")
+        //val solveDataList = SolveDBService(context, dbName).getAllSolveIDs()
+        //val solveAnalysisDataList = mutableListOf<SolveAnalysisData>()
+        //solveDataList.forEach { solveData ->
+        //    val solveAnalysisData = getSolveAnalysisForSolve(solveData.id)
+        //    if(solveAnalysisData != null){
+        //        solveAnalysisDataList.add(solveAnalysisData)
+        //    }
+        //}
+        //return solveAnalysisDataList
+        return listOf()
     }
 
     private fun getPLLData(solve: Solve): PLLData? {

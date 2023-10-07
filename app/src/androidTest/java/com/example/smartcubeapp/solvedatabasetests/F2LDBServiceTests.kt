@@ -9,6 +9,7 @@ import com.example.smartcubeapp.solvedatabase.dataclasses.F2LData
 import com.example.smartcubeapp.solvedatabase.services.F2LDBService
 import junit.framework.TestCase
 import org.junit.After
+import org.junit.Assert.assertNull
 import org.junit.Assert.assertThrows
 import org.junit.Before
 import org.junit.Test
@@ -30,6 +31,7 @@ class F2LDBServiceTests {
         context.deleteDatabase(SolvesDatabaseConstants.TEST_DATABASE_NAME)
     }
 
+    @Test
     fun addF2LDataTest() {
         val f2lData = F2LData(
             solveID = 1,
@@ -388,6 +390,41 @@ class F2LDBServiceTests {
         val f2lForSolveID = f2lDBService.getF2LForSolve(3)
 
         assert(f2lForSolveID == null)
+    }
+
+    @Test
+    fun deleteF2LDataForSolveTest(){
+        val f2lData1 = F2LData(
+            solveID = 1,
+            duration = 1000,
+            moveCount = 10,
+            startStateID = 1,
+            endStateID = 11
+        )
+        val f2lData2 = F2LData(
+            solveID = 2,
+            duration = 2000,
+            moveCount = 20,
+            startStateID = 2,
+            endStateID = 22
+        )
+        val f2lData3 = F2LData(
+            solveID = 2,
+            duration = 3000,
+            moveCount = 30,
+            startStateID = 3,
+            endStateID = 33
+        )
+
+        val id1 = f2lDBService.addF2LData(f2lData1)
+        f2lDBService.addF2LData(f2lData2)
+        f2lDBService.addF2LData(f2lData3)
+
+        f2lDBService.deleteF2LDataForSolve(2)
+        val f2lDataForSolve2 = f2lDBService.getF2LForSolve(2)
+        assertNull(f2lDataForSolve2)
+        val f2lDataForSolve1 = f2lDBService.getF2LForSolve(1)
+        assertF2LDataEquals(f2lDataForSolve1, f2lData1, id1)
     }
 
     private fun assertF2LDataEquals(retrievedData: F2LData?, expectedData: F2LData, id: Long){

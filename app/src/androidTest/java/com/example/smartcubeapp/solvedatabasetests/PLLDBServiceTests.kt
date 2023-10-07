@@ -9,6 +9,7 @@ import com.example.smartcubeapp.solvedatabase.services.PLLDBService
 import junit.framework.TestCase
 import org.junit.After
 import org.junit.Assert
+import org.junit.Assert.assertNull
 import org.junit.Before
 import org.junit.Test
 
@@ -478,6 +479,44 @@ class PLLDBServiceTests {
         val pllForSolveID = pllDBService.getPLLForSolve(3)
 
         assert(pllForSolveID == null)
+    }
+
+    @Test
+    fun deletePLLDataForSolveTest(){
+        val pllData1 = PLLData(
+            solveID = 1,
+            duration = 1000,
+            moveCount = 10,
+            startStateID = 1,
+            endStateID = 11,
+            case = 1
+        )
+        val pllData2 = PLLData(
+            solveID = 2,
+            duration = 2000,
+            moveCount = 20,
+            startStateID = 2,
+            endStateID = 22,
+            case = 1
+        )
+        val pllData3 = PLLData(
+            solveID = 1,
+            duration = 3000,
+            moveCount = 30,
+            startStateID = 3,
+            endStateID = 33,
+            case = 1
+        )
+
+        pllDBService.addPLLData(pllData1)
+        pllData2.id = pllDBService.addPLLData(pllData2)
+        pllDBService.addPLLData(pllData3)
+
+        pllDBService.deletePLLDataForSolve(1)
+        val pllDataFromDB = pllDBService.getPLLForSolve(1)
+        assertNull(pllDataFromDB)
+        val pllDataForSolve2 = pllDBService.getPLLForSolve(2)
+        assertPLLDataEquals(pllDataForSolve2, pllData2, pllData2.id)
     }
 
     private fun assertPLLDataEquals(retrievedData: PLLData?, expectedData: PLLData, id: Long) {

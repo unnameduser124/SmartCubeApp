@@ -172,4 +172,13 @@ class OLLDBService(context: Context, databaseName: String = SolvesDatabaseConsta
             return null
         }
     }
+
+    fun deleteOLLDataForSolve(solveID: Long){
+        val db = this.writableDatabase
+
+        val selection = "${SolvesDatabaseConstants.OLLTable.SOLVE_ID_COLUMN} = ?"
+        val selectionArgs = arrayOf(solveID.toString())
+
+        db.delete(SolvesDatabaseConstants.OLLTable.TABLE_NAME, selection, selectionArgs)
+    }
 }

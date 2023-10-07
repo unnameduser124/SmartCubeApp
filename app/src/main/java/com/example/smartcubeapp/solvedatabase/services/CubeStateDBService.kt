@@ -224,6 +224,15 @@ class CubeStateDBService(context: Context, databaseName: String = SolvesDatabase
         return cubeStates
     }
 
+    fun deleteCubeStatesForSolve(solveID: Long){
+        val db = this.writableDatabase
+
+        val selection = "${SolvesDatabaseConstants.CubeStateTable.SOLVE_ID_COLUMN} = ?"
+        val selectionArgs = arrayOf(solveID.toString())
+
+        db.delete(SolvesDatabaseConstants.CubeStateTable.TABLE_NAME, selection, selectionArgs)
+    }
+
     private fun validateMove(move: String): Boolean {
         val validNotations =
             listOf(

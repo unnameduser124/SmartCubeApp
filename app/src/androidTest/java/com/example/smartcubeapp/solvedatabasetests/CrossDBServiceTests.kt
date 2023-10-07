@@ -9,6 +9,7 @@ import com.example.smartcubeapp.solvedatabase.services.CrossDBService
 import junit.framework.TestCase
 import org.junit.After
 import org.junit.Assert
+import org.junit.Assert.assertNull
 import org.junit.Before
 import org.junit.Test
 
@@ -388,6 +389,45 @@ class CrossDBServiceTests {
         val crossForSolveID = crossDBService.getCrossForSolve(3)
 
         assert(crossForSolveID == null)
+    }
+
+    @Test
+    fun deleteCrossDataForSolveTest(){
+        val crossData1 = CrossData(
+            solveID = 1,
+            duration = 1000,
+            moveCount = 10,
+            startStateID = 1,
+            endStateID = 11
+        )
+        val crossData2 = CrossData(
+            solveID = 2,
+            duration = 2000,
+            moveCount = 20,
+            startStateID = 2,
+            endStateID = 22
+        )
+        val crossData3 = CrossData(
+            solveID = 3,
+            duration = 3000,
+            moveCount = 30,
+            startStateID = 3,
+            endStateID = 33
+        )
+
+        val id1 = crossDBService.addCrossData(crossData1)
+        val id2 = crossDBService.addCrossData(crossData2)
+        crossDBService.addCrossData(crossData3)
+
+        crossDBService.deleteCrossDataForSolve(3)
+
+        val crossDataForSolve3 = crossDBService.getCrossForSolve(3)
+        assertNull(crossDataForSolve3)
+
+        val crossDataForSolve1 = crossDBService.getCrossForSolve(1)
+        assertCrossDataEquals(crossDataForSolve1, crossData1, id1)
+        val crossDataForSolve2 = crossDBService.getCrossForSolve(2)
+        assertCrossDataEquals(crossDataForSolve2, crossData2, id2)
     }
 
     private fun assertCrossDataEquals(retrievedData: CrossData?, expectedData: CrossData, id: Long){

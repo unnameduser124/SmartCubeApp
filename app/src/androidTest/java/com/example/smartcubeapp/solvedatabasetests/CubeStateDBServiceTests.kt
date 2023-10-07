@@ -10,6 +10,7 @@ import com.example.smartcubeapp.solvedatabase.dataclasses.CubeStateData
 import com.example.smartcubeapp.solvedatabase.services.CubeStateDBService
 import junit.framework.TestCase
 import org.junit.After
+import org.junit.Assert.assertEquals
 import org.junit.Assert.assertThrows
 import org.junit.Before
 import org.junit.Test
@@ -542,6 +543,53 @@ class CubeStateDBServiceTests {
         val cubeStatesForSolve = cubeStateDBService.getCubeStatesForSolve(3)
 
         assert(cubeStatesForSolve.isEmpty())
+    }
+
+    @Test
+    fun deleteCubeStatesForSolveTest(){
+        val cubeState1 = CubeState(
+            mutableListOf(0, 1, 2, 3, 4, 5, 7, 6),
+            mutableListOf(2, 2, 2, 2, 2, 2, 2, 2),
+            mutableListOf(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 ,11),
+            mutableListOf(
+                false, true, false, false, false, false, false, false, false, false, false, false
+            ),
+            Move("R", 1, "R"),
+            200,
+            solveID = 1
+        )
+        val cubeState2 = CubeState(
+            mutableListOf(0, 1, 2, 3, 4, 5, 7, 6),
+            mutableListOf(3, 3, 3, 3, 3, 3, 3, 3),
+            mutableListOf(0, 1, 2, 3, 4, 5, 6, 7, 8, 10 ,9, 11),
+            mutableListOf(
+                false, true, false, false, false, true, false, false, false, false, false, false
+            ),
+            Move("F", 1, "F"),
+            200,
+            solveID = 1
+        )
+        val cubeState3 = CubeState(
+            mutableListOf(0, 1, 2, 3, 4, 5, 7, 6),
+            mutableListOf(2, 2, 2, 2, 2, 2, 2, 2),
+            mutableListOf(0, 1, 2, 3, 4, 5, 7, 6, 8, 9, 10 ,11),
+            mutableListOf(
+                false, true, false, false, false, false, false, false, false, false, false, false
+            ),
+            Move("B", -1, "B'"),
+            200,
+            solveID = 2
+        )
+
+        cubeStateDBService.addCubeState(CubeStateData(cubeState1, 1))
+        cubeStateDBService.addCubeState(CubeStateData(cubeState2, 1))
+        cubeStateDBService.addCubeState(CubeStateData(cubeState3, 2))
+
+        cubeStateDBService.deleteCubeStatesForSolve(1)
+        val cubeStatesForSolve = cubeStateDBService.getCubeStatesForSolve(1)
+        assert(cubeStatesForSolve.isEmpty())
+        val cubeStatesForSolve2 = cubeStateDBService.getCubeStatesForSolve(2)
+        assertEquals(1, cubeStatesForSolve2.size)
     }
 
 

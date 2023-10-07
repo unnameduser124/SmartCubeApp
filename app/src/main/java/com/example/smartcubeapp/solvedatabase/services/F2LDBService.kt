@@ -139,4 +139,13 @@ class F2LDBService(context: Context, databaseName: String = SolvesDatabaseConsta
             return null
         }
     }
+
+    fun deleteF2LDataForSolve(solveID: Long){
+        val db = this.writableDatabase
+
+        val selection = "${SolvesDatabaseConstants.F2LTable.SOLVE_ID_COLUMN} = ?"
+        val selectionArgs = arrayOf(solveID.toString())
+
+        db.delete(SolvesDatabaseConstants.F2LTable.TABLE_NAME, selection, selectionArgs)
+    }
 }

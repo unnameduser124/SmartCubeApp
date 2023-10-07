@@ -152,4 +152,13 @@ class PLLDBService(context: Context, databaseName: String = SolvesDatabaseConsta
             return null
         }
     }
+
+    fun deletePLLDataForSolve(solveID: Long){
+        val db = this.writableDatabase
+
+        val selection = "${SolvesDatabaseConstants.PLLTable.SOLVE_ID_COLUMN} = ?"
+        val selectionArgs = arrayOf(solveID.toString())
+
+        db.delete(SolvesDatabaseConstants.PLLTable.TABLE_NAME, selection, selectionArgs)
+    }
 }

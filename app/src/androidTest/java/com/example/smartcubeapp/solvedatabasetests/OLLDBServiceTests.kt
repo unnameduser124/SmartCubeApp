@@ -9,6 +9,7 @@ import com.example.smartcubeapp.solvedatabase.services.OLLDBService
 import junit.framework.TestCase
 import org.junit.After
 import org.junit.Assert
+import org.junit.Assert.assertNull
 import org.junit.Before
 import org.junit.Test
 
@@ -478,6 +479,46 @@ class OLLDBServiceTests {
         val ollForSolveID = ollDBService.getOLLForSolve(3)
 
         assert(ollForSolveID == null)
+    }
+
+    @Test
+    fun deleteOLLDataForSolveTest(){
+        val ollData1 = OLLData(
+            solveID = 1,
+            duration = 1000,
+            moveCount = 10,
+            startStateID = 1,
+            endStateID = 11,
+            case = 1,
+        )
+        val ollData2 = OLLData(
+            solveID = 1,
+            duration = 2000,
+            moveCount = 20,
+            startStateID = 2,
+            endStateID = 22,
+            case = 1,
+        )
+        val ollData3 = OLLData(
+            solveID = 2,
+            duration = 3000,
+            moveCount = 30,
+            startStateID = 3,
+            endStateID = 33,
+            case = 1,
+        )
+
+        ollDBService.addOLLData(ollData1)
+        ollDBService.addOLLData(ollData2)
+        val id3 = ollDBService.addOLLData(ollData3)
+
+        ollDBService.deleteOLLDataForSolve(1)
+
+        val ollDataForSolve1 = ollDBService.getOLLForSolve(1)
+        assertNull(ollDataForSolve1)
+        val ollDataForSolve2 = ollDBService.getOLLForSolve(2)
+        assertOLLDataEquals(ollDataForSolve2, ollData3, id3)
+
     }
 
     private fun assertOLLDataEquals(retrievedData: OLLData?, expectedData: OLLData, id: Long) {

@@ -141,4 +141,13 @@ class CrossDBService(context: Context, dbName: String = SolvesDatabaseConstants.
             return null
         }
     }
+
+    fun deleteCrossDataForSolve(solveID: Long){
+        val db = this.writableDatabase
+
+        val selection = "${SolvesDatabaseConstants.CrossTable.SOLVE_ID_COLUMN} = ?"
+        val selectionArgs = arrayOf(solveID.toString())
+
+        db.delete(SolvesDatabaseConstants.CrossTable.TABLE_NAME, selection, selectionArgs)
+    }
 }
