@@ -3,7 +3,7 @@ package com.example.smartcubeapp.solvedatabase.dataclasses
 import com.example.smartcubeapp.cube.Solve
 
 data class SolveData(
-    val id: Long,
+    var id: Long,
     val solveDuration: Long,
     val timestamp: Long,
     val scrambledStateID: Long,

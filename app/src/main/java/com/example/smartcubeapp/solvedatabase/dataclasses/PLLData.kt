@@ -7,7 +7,7 @@ data class PLLData(
     val startStateID: Long,
     val endStateID: Long,
     val case: Int,
-    val id: Long = -1
+    var id: Long = -1
 ){
     constructor(): this(
         solveID = -1,

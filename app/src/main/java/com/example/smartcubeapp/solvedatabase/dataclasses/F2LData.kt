@@ -6,7 +6,7 @@ data class F2LData(
     val moveCount: Int,
     val startStateID: Long,
     val endStateID: Long,
-    val id: Long = -1
+    var id: Long = -1
 ){
     constructor(): this(
         solveID = -1,

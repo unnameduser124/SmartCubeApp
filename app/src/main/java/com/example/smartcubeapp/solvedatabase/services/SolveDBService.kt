@@ -27,7 +27,6 @@ class SolveDBService(context: Context, databaseName: String = SolvesDatabaseCons
             )
             put(SolvesDatabaseConstants.SolveTable.SCRAMBLE_SEQUENCE_COLUMN, solveData.scramble)
         }
-        //TODO("Add solveStateSequence to database")
 
         return db.insert(SolvesDatabaseConstants.SolveTable.TABLE_NAME, null, contentValues)
     }
@@ -110,7 +109,5 @@ class SolveDBService(context: Context, databaseName: String = SolvesDatabaseCons
         val selectionArgs = arrayOf(id.toString())
 
         db.update(SolvesDatabaseConstants.SolveTable.TABLE_NAME, contentValues, selection, selectionArgs)
-
-        //TODO("Update solveStateSequence in database")
     }
 }

@@ -154,14 +154,21 @@ class SolutionPhaseDetection(
         return caseDetection.detectCase(context)
     }
 
-    fun getCrossData(context: Context): CrossData {
-        val crossOppositeSide = getCrossOppositeSide() ?: return CrossData()
+    fun getCrossData(context: Context): CrossData? {
+        getCrossOppositeSide() ?: return null
+        val crossStartIndex = getStartIndexForPhase(SolvePhase.Cross, context)
+        val crossEndIndex = getEndIndexForPhase(SolvePhase.Cross, context)
+        if(crossStartIndex == -1) return null
+        if(crossEndIndex == -1) return null
+
         val crossStartState =
-            solution.solveStateSequence[getStartIndexForPhase(SolvePhase.Cross, context)]
+            solution.solveStateSequence[crossStartIndex]
         val crossDuration = getPhaseDurationInMillis(SolvePhase.Cross, context)
         val crossStartCubeStateID = crossStartState.id
-        val crossEndCubeStateID = solution.solveStateSequence[getEndIndexForPhase(SolvePhase.Cross, context)].id
+        val crossEndCubeStateID = solution.solveStateSequence[crossEndIndex].id
         val crossMoveCount = getPhaseMoveCount(SolvePhase.Cross, context)
+
+        if(crossDuration <= 0 || crossMoveCount <= 0) return null
 
         return CrossData(
             solveID = solution.id,
@@ -172,14 +179,21 @@ class SolutionPhaseDetection(
         )
     }
 
-    fun getF2LData(context: Context): F2LData {
-        val crossOppositeSide = getCrossOppositeSide() ?: return F2LData()
+    fun getF2LData(context: Context): F2LData? {
+        getCrossOppositeSide() ?: return null
+        val f2lStartIndex = getStartIndexForPhase(SolvePhase.F2L, context)
+        val f2lEndIndex = getEndIndexForPhase(SolvePhase.F2L, context)
+        if(f2lStartIndex == -1) return null
+        if(f2lEndIndex == -1) return null
+
         val f2lStartState =
             solution.solveStateSequence[getStartIndexForPhase(SolvePhase.F2L, context)]
         val f2lDuration = getPhaseDurationInMillis(SolvePhase.F2L, context)
         val f2lStartCubeStateID = f2lStartState.id
-        val f2lEndCubeStateID = solution.solveStateSequence[getEndIndexForPhase(SolvePhase.F2L, context)].id
+        val f2lEndCubeStateID = solution.solveStateSequence[f2lEndIndex].id
         val f2lMoveCount = getPhaseMoveCount(SolvePhase.F2L, context)
+
+        if(f2lDuration <= 0 || f2lMoveCount <= 0) return null
 
         return F2LData(
             solveID = solution.id,
@@ -190,16 +204,24 @@ class SolutionPhaseDetection(
         )
     }
 
-    fun getOLLData(context: Context): OLLData {
+    fun getOLLData(context: Context): OLLData? {
+        getCrossOppositeSide() ?: return null
+        val ollStartIndex = getStartIndexForPhase(SolvePhase.OLL, context)
+        val ollEndIndex = getEndIndexForPhase(SolvePhase.OLL, context)
+        if(ollStartIndex == -1) return null
+        if(ollEndIndex == -1) return null
 
-        val crossOppositeSide = getCrossOppositeSide() ?: return OLLData()
         val ollStartState =
-            solution.solveStateSequence[getStartIndexForPhase(SolvePhase.F2L, context)]
-        val ollDuration = getPhaseDurationInMillis(SolvePhase.F2L, context)
+            solution.solveStateSequence[ollStartIndex]
+        val ollDuration = getPhaseDurationInMillis(SolvePhase.OLL, context)
         val ollStartCubeStateID = ollStartState.id
-        val ollEndCubeStateID = solution.solveStateSequence[getEndIndexForPhase(SolvePhase.F2L, context)].id
-        val ollMoveCount = getPhaseMoveCount(SolvePhase.F2L, context)
-        val ollCaseIndex = PredefinedOLLCase.values().indexOf(getOLL(context))
+        val ollEndCubeStateID = solution.solveStateSequence[ollEndIndex].id
+        val ollMoveCount = getPhaseMoveCount(SolvePhase.OLL, context)
+        val case = getOLL(context)
+        val ollCaseIndex = PredefinedOLLCase.values().indexOf(case)
+
+        if(ollCaseIndex == -1) return null
+        if(ollDuration <= 0 || ollMoveCount <= 0) return null
 
         return OLLData(
             solveID = solution.id,
@@ -211,15 +233,23 @@ class SolutionPhaseDetection(
         )
     }
 
-    fun getPLLData(context: Context): PLLData {
-        val crossOppositeSide = getCrossOppositeSide() ?: return PLLData()
+    fun getPLLData(context: Context): PLLData? {
+        getCrossOppositeSide() ?: return null
+        val pllStartIndex = getStartIndexForPhase(SolvePhase.PLL, context)
+        val pllEndIndex = getEndIndexForPhase(SolvePhase.PLL, context)
+        if(pllStartIndex == -1) return null
+        if(pllEndIndex == -1) return null
+
         val pllStartState =
-            solution.solveStateSequence[getStartIndexForPhase(SolvePhase.PLL, context)]
+            solution.solveStateSequence[pllStartIndex]
         val pllDuration = getPhaseDurationInMillis(SolvePhase.PLL, context)
         val pllStartCubeStateID = pllStartState.id
-        val pllEndCubeStateID = solution.solveStateSequence[getEndIndexForPhase(SolvePhase.PLL, context)].id
+        val pllEndCubeStateID = solution.solveStateSequence[pllEndIndex].id
         val pllMoveCount = getPhaseMoveCount(SolvePhase.PLL, context)
         val pllCaseIndex = PredefinedPLLCase.values().indexOf(getPLL(context))
+
+        if(pllCaseIndex == -1) return null
+        if(pllDuration <= 0 || pllMoveCount <= 0) return null
 
         return PLLData(
             solveID = solution.id,

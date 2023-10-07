@@ -1,5 +1,6 @@
 package com.example.smartcubeapp
 
+import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
@@ -17,6 +18,8 @@ import com.example.smartcubeapp.bluetooth.lastMove
 import com.example.smartcubeapp.cube.CubeState
 import com.example.smartcubeapp.cube.Move
 import com.example.smartcubeapp.cube.Solve
+import com.example.smartcubeapp.solvedatabase.services.SolveAnalysisDBService
+import com.example.smartcubeapp.solvedatabase.services.SolveDBService
 import com.example.smartcubeapp.timerUI.ConnectActivity
 import com.example.smartcubeapp.timerUI.TimerActivity
 import java.util.*
