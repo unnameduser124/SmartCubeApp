@@ -46,6 +46,7 @@ class SolveAnalysisDBService(val context: Context, private val dbName: String = 
             val cubeStateData = CubeStateData(cubeState, index)
             cubeState.id = CubeStateDBService(context, dbName).addCubeState(cubeStateData)
         }
+        SolveDBService(context, dbName).updateSolve(SolveData(solve), solve.id)
 
         val pllData = getPLLData(solve)
         val ollData = getOLLData(solve)
