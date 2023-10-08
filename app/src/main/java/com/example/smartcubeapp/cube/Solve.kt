@@ -9,7 +9,7 @@ class Solve(
     var date: Calendar = Calendar.getInstance(),
     var solveStateSequence: MutableList<CubeState> = mutableListOf(),
     var scrambledState: CubeState = CubeState.SOLVED_CUBE_STATE,
-    var solveInProgress: Boolean = false,
+    var solveStatus: SolveStatus = SolveStatus.Scramble,
     var solveStartTime: Long = 0,
     var id: Long = -1,
     var scrambleSequence: String = ""

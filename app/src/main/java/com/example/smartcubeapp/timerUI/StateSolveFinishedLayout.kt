@@ -21,11 +21,14 @@ import androidx.compose.ui.unit.sp
 import com.example.smartcubeapp.MILLIS_IN_SECOND
 import com.example.smartcubeapp.cube.CubeState
 import com.example.smartcubeapp.cube.Solve
+import com.example.smartcubeapp.cube.SolveStatus
 import com.example.smartcubeapp.phasedetection.CubeStatePhaseDetection
 import com.example.smartcubeapp.phasedetection.SolutionPhaseDetection
 import com.example.smartcubeapp.phasedetection.SolvePhase
 import com.example.smartcubeapp.roundDouble
 import com.example.smartcubeapp.simpleTestSolve
+import com.example.smartcubeapp.solvedatabase.services.SolveAnalysisDBService
+import com.example.smartcubeapp.solvedatabase.services.SolveDBService
 
 class StateSolveFinishedLayout(
     private val state: MutableState<TimerState>,
@@ -33,6 +36,8 @@ class StateSolveFinishedLayout(
     private val solve: MutableState<Solve>,
     private val context: Context
 ) {
+
+    private lateinit var solveSaved: MutableState<Boolean>
 
     @Composable
     fun GenerateLayout() {
@@ -42,6 +47,7 @@ class StateSolveFinishedLayout(
             verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
+            solveSaved = remember{ mutableStateOf(false) }
             SolveResults()
             Text(
                 text = "Ready?",
@@ -50,10 +56,26 @@ class StateSolveFinishedLayout(
                     if (!cubeState.value.isSolved()) {
                         solve.value = Solve()
                         solve.value.scrambledState = cubeState.value
+                        solve.value.solveStatus = SolveStatus.Scramble
                         state.value = TimerState.Solving
                     }
                 }
             )
+            if(solveSaved.value){
+                val numberOfSolvesSaved = SolveDBService(context).getAllSolveIDs().size
+                Text(
+                    text = "Solves saved: $numberOfSolvesSaved",
+                    fontSize = 25.sp,
+                )
+            }
+        }
+        //TODO("Replace with real scramble after implementing scramble generation")
+        solve.value.scrambleSequence = "scramble placeholder"
+        if(solve.value.solveStatus == SolveStatus.Solved && !solveSaved.value){
+            val solveData = SolveAnalysisDBService(context).saveSolveWithAnalysis(solve.value)
+            if(solveData.solveID > 0){
+                solveSaved.value = true
+            }
         }
 
     }

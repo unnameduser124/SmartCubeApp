@@ -5,6 +5,7 @@ import androidx.test.platform.app.InstrumentationRegistry
 import com.example.smartcubeapp.cube.CubeState
 import com.example.smartcubeapp.cube.Move
 import com.example.smartcubeapp.cube.Solve
+import com.example.smartcubeapp.cube.SolveStatus
 import com.example.smartcubeapp.phasedetection.CubeStatePhaseDetection
 import com.example.smartcubeapp.phasedetection.SolutionPhaseDetection
 import com.example.smartcubeapp.solvedatabase.SolvesDatabaseConstants
@@ -51,7 +52,7 @@ class SolveAnalysisDBServiceTests {
             Calendar.getInstance(),
             simpleSolveStateSequence(),
             simpleSolveStateSequence().first(),
-            false,
+            SolveStatus.Solved,
             Calendar.getInstance().timeInMillis,
             scrambleSequence = "R U R' U'"
         )
@@ -119,7 +120,7 @@ class SolveAnalysisDBServiceTests {
             Calendar.getInstance(),
             mutableListOf(),
             randomCubeState,
-            false,
+            SolveStatus.Solved,
             0,
             scrambleSequence = "R U R' U'"
         )
@@ -139,7 +140,7 @@ class SolveAnalysisDBServiceTests {
             Calendar.getInstance(),
             simpleSolveStateSequence(),
             CubeState.SOLVED_CUBE_STATE,
-            false,
+            SolveStatus.Solved,
             0,
             scrambleSequence = "R U R' U'"
         )
@@ -157,7 +158,7 @@ class SolveAnalysisDBServiceTests {
             Calendar.getInstance(),
             simpleSolveStateSequence(),
             simpleSolveStateSequence().first(),
-            false,
+            SolveStatus.Solved,
             1,
             scrambleSequence = "R U R' U'"
         )
@@ -174,7 +175,7 @@ class SolveAnalysisDBServiceTests {
             Calendar.getInstance(),
             simpleSolveStateSequence(),
             simpleSolveStateSequence().first(),
-            true,
+            SolveStatus.Solved,
             0,
             scrambleSequence = "R U R' U'"
         )
@@ -192,7 +193,7 @@ class SolveAnalysisDBServiceTests {
             Calendar.getInstance(),
             simpleSolveStateSequence(),
             simpleSolveStateSequence().first(),
-            true,
+            SolveStatus.Solving,
             1,
             scrambleSequence = "R U R' U'"
         )
@@ -210,7 +211,7 @@ class SolveAnalysisDBServiceTests {
             Calendar.getInstance(),
             simpleSolveStateSequence(),
             simpleSolveStateSequence().first(),
-            false,
+            SolveStatus.Solved,
             1,
             scrambleSequence = "R U R' U'"
         )
@@ -259,7 +260,7 @@ class SolveAnalysisDBServiceTests {
             Calendar.getInstance(),
             simpleSolveStateSequence(),
             simpleSolveStateSequence().first(),
-            false,
+            SolveStatus.Solved,
             1,
             scrambleSequence = "R U R' U'"
         )
@@ -308,7 +309,7 @@ class SolveAnalysisDBServiceTests {
             Calendar.getInstance(),
             simpleSolveStateSequence(),
             simpleSolveStateSequence().first(),
-            false,
+            SolveStatus.Solved,
             1,
             scrambleSequence = "R U R' U'"
         )
@@ -368,7 +369,7 @@ class SolveAnalysisDBServiceTests {
             Calendar.getInstance(),
             simpleSolveStateSequence(),
             simpleSolveStateSequence().first(),
-            false,
+            SolveStatus.Solved,
             1,
             scrambleSequence = "R U R' U'"
         )
@@ -386,7 +387,7 @@ class SolveAnalysisDBServiceTests {
             Calendar.getInstance(),
             simpleSolveStateSequence(),
             simpleSolveStateSequence().first(),
-            false,
+            SolveStatus.Solved,
             1,
             scrambleSequence = "R U R' U'"
         )
@@ -395,7 +396,7 @@ class SolveAnalysisDBServiceTests {
             Calendar.getInstance(),
             simpleSolveStateSequence(),
             simpleSolveStateSequence().first(),
-            false,
+            SolveStatus.Solved,
             2,
             scrambleSequence = "R' U' R U"
         )
@@ -404,7 +405,7 @@ class SolveAnalysisDBServiceTests {
             Calendar.getInstance(),
             simpleSolveStateSequence(),
             simpleSolveStateSequence().first(),
-            false,
+            SolveStatus.Solved,
             3,
             scrambleSequence = "R U2 R' U2"
         )

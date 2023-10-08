@@ -3,6 +3,7 @@ package com.example.smartcubeapp.solvedatabase.services
 import android.content.Context
 import com.example.smartcubeapp.cube.CubeState
 import com.example.smartcubeapp.cube.Solve
+import com.example.smartcubeapp.cube.SolveStatus
 import com.example.smartcubeapp.phasedetection.CubeStatePhaseDetection
 import com.example.smartcubeapp.phasedetection.SolutionPhaseDetection
 import com.example.smartcubeapp.solvedatabase.SolveDB
@@ -15,7 +16,7 @@ import com.example.smartcubeapp.solvedatabase.dataclasses.PLLData
 import com.example.smartcubeapp.solvedatabase.dataclasses.SolveAnalysisData
 import com.example.smartcubeapp.solvedatabase.dataclasses.SolveData
 
-class SolveAnalysisDBService(val context: Context, val dbName: String = SolvesDatabaseConstants.SOLVE_DATABASE_NAME) :
+class SolveAnalysisDBService(val context: Context, private val dbName: String = SolvesDatabaseConstants.SOLVE_DATABASE_NAME) :
     SolveDB(context, dbName) {
 
     fun saveSolveWithAnalysis(solve: Solve): SolveAnalysisData{
@@ -32,7 +33,7 @@ class SolveAnalysisDBService(val context: Context, val dbName: String = SolvesDa
         if(solve.solveStartTime <= 0){
             throw IllegalArgumentException("Solve start time must be greater than 0")
         }
-        if(solve.solveInProgress){
+        if(solve.solveStatus!= SolveStatus.Solved){
             throw IllegalArgumentException("Solve must be completed before saving")
         }
 
