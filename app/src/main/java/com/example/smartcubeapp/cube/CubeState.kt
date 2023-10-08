@@ -1,5 +1,6 @@
 package com.example.smartcubeapp.cube
 
+import com.example.smartcubeapp.solvedatabase.dataclasses.CubeStateData
 import java.util.Calendar
 
 data class CubeState(
@@ -8,8 +9,22 @@ data class CubeState(
     val edgePositions: MutableList<Int>,
     val edgeOrientations: MutableList<Boolean>,
     var lastMove: Move = Move(),
-    var timestamp: Long = Calendar.getInstance().timeInMillis
+    var timestamp: Long = Calendar.getInstance().timeInMillis,
+    var id: Long = -1,
+    var solveID: Long = -1
 ) {
+
+    constructor(state: CubeStateData): this(
+        cornerPositions = intListFromString(state.cornerPositions),
+        cornerOrientations = intListFromString(state.cornerOrientations),
+        edgePositions = intListFromString(state.edgePositions),
+        edgeOrientations = booleanListFromString(state.edgeOrientations),
+        timestamp = state.timestamp,
+        lastMove = Move(state.lastMove),
+        id = state.id,
+        solveID = state.solveID
+    )
+
     fun setCornerPositions(newCornerPositions: MutableList<Int>) {
         cornerPositions.clear()
         cornerPositions.addAll(newCornerPositions)
@@ -18,27 +33,6 @@ data class CubeState(
     fun setEdgePositions(newEdgePositions: MutableList<Int>) {
         edgePositions.clear()
         edgePositions.addAll(newEdgePositions)
-    }
-
-    fun getIncorrectlySolvedPieces(): Pair<MutableList<Int>, MutableList<Int>> {
-        val incorrectlySolvedCorners = mutableListOf<Int>()
-        for (i in 0..7) {
-            if (cornerPositions[i] != i) {
-                incorrectlySolvedCorners.add(i)
-            } else if (cornerOrientations[i] != 3) {
-                incorrectlySolvedCorners.add(i)
-            }
-        }
-
-        val incorrectlySolvedEdges = mutableListOf<Int>()
-        for (i in 0..11) {
-            if (edgePositions[i] != i) {
-                incorrectlySolvedEdges.add(i)
-            } else if (edgeOrientations[i]) {
-                incorrectlySolvedEdges.add(i)
-            }
-        }
-        return Pair(incorrectlySolvedCorners, incorrectlySolvedEdges)
     }
 
     fun getCorrectlySolvedPieces(): Pair<MutableList<Int>, MutableList<Int>> {
@@ -86,6 +80,7 @@ data class CubeState(
     }
 
 
+
     companion object {
 
         val SOLVED_CUBE_STATE = CubeState(
@@ -109,5 +104,22 @@ data class CubeState(
             lastMove = Move("F", 1, "F")
         )
 
+        fun intListFromString(string: String): MutableList<Int> {
+            val list = mutableListOf<Int>()
+            val split = string.split(",")
+            for (i in split) {
+                list.add(i.toInt())
+            }
+            return list
+        }
+
+        fun booleanListFromString(string: String): MutableList<Boolean> {
+            val list = mutableListOf<Boolean>()
+            val split = string.split(",")
+            for (value in split) {
+                list.add(value=="true")
+            }
+            return list
+        }
     }
 }

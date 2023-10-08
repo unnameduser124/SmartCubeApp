@@ -14,6 +14,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.sp
 import com.example.smartcubeapp.cube.CubeState
 import com.example.smartcubeapp.cube.Solve
+import com.example.smartcubeapp.cube.SolveStatus
+import com.example.smartcubeapp.roundDouble
 import kotlinx.coroutines.delay
 import java.util.Calendar
 
@@ -33,21 +35,21 @@ class StateSolvingLayout(
         ) {
             val solveTime = remember { mutableStateOf(0L) }
 
-            LaunchedEffect(solve.value.solveInProgress) {
-                while (solve.value.solveInProgress) {
+            LaunchedEffect(solve.value.solveStatus) {
+                while (solve.value.solveStatus == SolveStatus.Solving) {
                     delay(100)
                     solveTime.value =
                         Calendar.getInstance().timeInMillis - solve.value.solveStartTime
                 }
             }
 
-            if (cubeState.value != solve.value.scrambledState && !solve.value.solveInProgress) {
+            if (cubeState.value != solve.value.scrambledState && solve.value.solveStatus != SolveStatus.Solving) {
                 solve.value.solveStartTime = Calendar.getInstance().timeInMillis
-                solve.value.solveInProgress = true
+                solve.value.solveStatus = SolveStatus.Solving
                 solve.value.scrambledState.timestamp = solve.value.solveStartTime
                 solve.value.solveStateSequence.add(solve.value.scrambledState)
-                LaunchedEffect(solve.value.solveInProgress) {
-                    while (solve.value.solveInProgress) {
+                LaunchedEffect(solve.value.solveStatus) {
+                    while (solve.value.solveStatus == SolveStatus.Solving) {
                         delay(100)
                         solveTime.value =
                             Calendar.getInstance().timeInMillis - solve.value.solveStartTime
@@ -56,17 +58,17 @@ class StateSolvingLayout(
             }
             if (cubeState.value != solve.value.scrambledState
                 && cubeState.value != solve.value.solveStateSequence.lastOrNull()
-                && solve.value.solveInProgress) {
+                && solve.value.solveStatus == SolveStatus.Solving) {
                 solve.value.solveStateSequence.add(cubeState.value)
             }
             if (cubeState.value.isSolved()) {
                 state.value = TimerState.SolveFinished
                 solve.value.calculateTimeFromStateSequence()
-                solve.value.solveInProgress = false
+                solve.value.solveStatus = SolveStatus.Solved
             }
 
             Text(
-                text = "${solveTime.value / 1000.0}s",
+                text = "${roundDouble(solveTime.value / 1000.0, 100)}s",
                 fontSize = 50.sp
             )
         }
