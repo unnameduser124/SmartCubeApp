@@ -13,7 +13,7 @@ import org.junit.Test
 import java.util.Calendar
 import kotlin.system.measureTimeMillis
 
-class SolveAnalysisTimeTests {
+class SolveAnalysisTimePerformanceTests {
 
     private lateinit var solveAnalysisDBService: SolveAnalysisDBService
     private lateinit var context: Context

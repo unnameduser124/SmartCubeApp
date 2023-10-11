@@ -3,6 +3,7 @@ package com.example.smartcubeapp.solvedatabase.services
 import android.content.ContentValues
 import android.content.Context
 import android.provider.BaseColumns
+import com.example.smartcubeapp.dbAccesses
 import com.example.smartcubeapp.solvedatabase.SolveDB
 import com.example.smartcubeapp.solvedatabase.SolvesDatabaseConstants
 import com.example.smartcubeapp.solvedatabase.dataclasses.CrossData
@@ -18,6 +19,7 @@ class CrossDBService(context: Context, dbName: String = SolvesDatabaseConstants.
         if(crossData.moveCount < 0){
             throw IllegalArgumentException("Move count must be greater than or equal to 0")
         }
+        dbAccesses++
         val db = this.writableDatabase
 
         val contentValues = ContentValues().apply{
@@ -32,6 +34,7 @@ class CrossDBService(context: Context, dbName: String = SolvesDatabaseConstants.
     }
 
     fun getCrossData(id: Long): CrossData?{
+        dbAccesses++
         val db = this.readableDatabase
 
         val projection = arrayOf(
@@ -72,6 +75,7 @@ class CrossDBService(context: Context, dbName: String = SolvesDatabaseConstants.
     }
 
     fun deleteCrossData(id: Long){
+        dbAccesses++
         val db = this.writableDatabase
 
         val selection = "${BaseColumns._ID} = ?"
@@ -87,6 +91,7 @@ class CrossDBService(context: Context, dbName: String = SolvesDatabaseConstants.
         if(crossData.moveCount < 0){
             throw IllegalArgumentException("Move count must be greater than or equal to 0")
         }
+        dbAccesses++
 
         val db = this.writableDatabase
 
@@ -105,6 +110,7 @@ class CrossDBService(context: Context, dbName: String = SolvesDatabaseConstants.
     }
 
     fun getCrossForSolve(solveID: Long): CrossData?{
+        dbAccesses++
         val db = this.readableDatabase
 
         val projection = arrayOf(
@@ -143,6 +149,7 @@ class CrossDBService(context: Context, dbName: String = SolvesDatabaseConstants.
     }
 
     fun deleteCrossDataForSolve(solveID: Long){
+        dbAccesses++
         val db = this.writableDatabase
 
         val selection = "${SolvesDatabaseConstants.CrossTable.SOLVE_ID_COLUMN} = ?"
