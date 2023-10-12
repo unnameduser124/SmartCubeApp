@@ -144,6 +144,10 @@ class SolveAnalysisDBService(val context: Context, private val dbName: String = 
 
         CubeStateDBService(context, dbName).addCubeStateList(solveSequenceDataList)
         SolveDBService(context, dbName).updateSolve(SolveData(solve), solve.id)
+
+        solveSequenceDataList.forEachIndexed{ index, cubeStateData ->
+            solve.solveStateSequence[index].id = cubeStateData.id
+        }
     }
 
     fun savePhaseData(pllData: PLLData?, ollData: OLLData?, f2lData: F2LData?, crossData: CrossData?){

@@ -5,9 +5,13 @@ import com.example.smartcubeapp.cube.CubeSide
 import com.example.smartcubeapp.cube.CubeState
 import com.example.smartcubeapp.cube.cubeSides
 import com.example.smartcubeapp.cube.getSideIntersectionIndexes
+import com.example.smartcubeapp.cube.piece.ElementOrientation
+import com.example.smartcubeapp.cube.piece.Orientation
 import com.example.smartcubeapp.elementdatabase.phasedetectiondatabase.PhaseElementOrientationDBService
 
 class CubeStatePhaseDetection(private var cubeState: CubeState) {
+
+    private var elements: List<ElementOrientation> = emptyList()
 
     fun changeState(newCubeState: CubeState) {
         cubeState = newCubeState
@@ -70,10 +74,14 @@ class CubeStatePhaseDetection(private var cubeState: CubeState) {
             ).isEmpty()
         } ?: return false
 
-        val correctPositions =
-            PhaseElementOrientationDBService(context).getElementOrientationItemsBySideCorrectlySideRelativeOriented(
-                oppositeSide.sideName
-            )
+        val correctPositions: List<ElementOrientation>
+        if(elements.isEmpty()){
+            elements = PhaseElementOrientationDBService(context).getAllElementOrientationItems()
+            correctPositions = elements.filter { it.sideName == oppositeSide.sideName && it.sideRelativeOrientation == Orientation.Correct }
+        }
+        else{
+           correctPositions = elements.filter { it.sideName == oppositeSide.sideName && it.sideRelativeOrientation == Orientation.Correct }
+        }
 
         oppositeSide.edgeIndexes.forEach { edge ->
             val edgePosition = getEdgePositionAndOrientation(edge)

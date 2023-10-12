@@ -247,7 +247,7 @@ class CubeStateDBService(context: Context, databaseName: String = SolvesDatabase
         db.beginTransaction()
 
         try{
-            states.forEach { cubeStateData ->
+            states.forEachIndexed { index, cubeStateData ->
                 val contentValues = ContentValues().apply{
                     put(SolvesDatabaseConstants.CubeStateTable.TIMESTAMP_COLUMN, cubeStateData.timestamp)
                     put(SolvesDatabaseConstants.CubeStateTable.SOLVE_ID_COLUMN, cubeStateData.solveID)
@@ -271,7 +271,8 @@ class CubeStateDBService(context: Context, databaseName: String = SolvesDatabase
                     )
                 }
 
-                db.insert(SolvesDatabaseConstants.CubeStateTable.TABLE_NAME, null, contentValues)
+                val id = db.insert(SolvesDatabaseConstants.CubeStateTable.TABLE_NAME, null, contentValues)
+                states[index].id = id
             }
             db.setTransactionSuccessful()
         } finally {
