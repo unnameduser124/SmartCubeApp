@@ -41,7 +41,7 @@ class SolveAnalysisTimePerformanceTests {
         }
         val average = time / 10.0
         println("Average time to save solve analysis: $average ms")
-        assert(average < 1000)
+        assert(average < 500)
     }
 
     @Test

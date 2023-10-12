@@ -26,7 +26,7 @@ class SolutionPhaseDetection(
 ) {
 
     private var crossSide: CubeSide? = null
-    private var startEndPLLOLLIndex = -1
+    private var startPLLEndOLLIndex = -1
 
     fun getStartIndexForPhase(phase: SolvePhase, context: Context): Int {
         if (phase == SolvePhase.Cross) {
@@ -39,11 +39,11 @@ class SolutionPhaseDetection(
             return F2LSolvedIndex()
         }
         if (phase == SolvePhase.PLL) {
-            if(startEndPLLOLLIndex == -1){
+            if(startPLLEndOLLIndex == -1){
                 setStarIndexPLLEndIndexOLL(context)
-                return startEndPLLOLLIndex
+                return startPLLEndOLLIndex
             }
-            return startEndPLLOLLIndex
+            return startPLLEndOLLIndex
         }
         return -1
     }
@@ -57,11 +57,11 @@ class SolutionPhaseDetection(
             return F2LSolvedIndex()
         }
         if (phase == SolvePhase.OLL) {
-            if(startEndPLLOLLIndex == -1){
+            if(startPLLEndOLLIndex == -1){
                 setStarIndexPLLEndIndexOLL(context)
-                return startEndPLLOLLIndex
+                return startPLLEndOLLIndex
             }
-            return startEndPLLOLLIndex
+            return startPLLEndOLLIndex
         }
         if (phase == SolvePhase.PLL) {
             return PLLSolvedIndex()
@@ -322,6 +322,6 @@ class SolutionPhaseDetection(
     }
 
     fun setStarIndexPLLEndIndexOLL(context: Context){
-        startEndPLLOLLIndex = OLLSolvedIndex(context)
+        startPLLEndOLLIndex = OLLSolvedIndex(context)
     }
 }

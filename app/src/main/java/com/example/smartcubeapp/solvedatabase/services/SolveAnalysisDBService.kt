@@ -136,11 +136,13 @@ class SolveAnalysisDBService(val context: Context, private val dbName: String = 
 
     fun saveSolveSequence(solve: Solve){
         val solveData = SolveData(solve)
-        solve.solveStateSequence.forEachIndexed{ index, cubeState ->
+
+        val solveSequenceDataList = solve.solveStateSequence.mapIndexed { index, cubeState ->
             cubeState.solveID = solveData.id
-            val cubeStateData = CubeStateData(cubeState, index)
-            cubeState.id = CubeStateDBService(context, dbName).addCubeState(cubeStateData)
+            CubeStateData(cubeState, index)
         }
+
+        CubeStateDBService(context, dbName).addCubeStateList(solveSequenceDataList)
         SolveDBService(context, dbName).updateSolve(SolveData(solve), solve.id)
     }
 

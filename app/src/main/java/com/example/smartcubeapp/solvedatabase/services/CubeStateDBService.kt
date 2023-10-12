@@ -3,6 +3,7 @@ package com.example.smartcubeapp.solvedatabase.services
 import android.content.ContentValues
 import android.content.Context
 import android.provider.BaseColumns
+import com.example.smartcubeapp.cube.CubeState
 import com.example.smartcubeapp.dbAccesses
 import com.example.smartcubeapp.solvedatabase.SolveDB
 import com.example.smartcubeapp.solvedatabase.SolvesDatabaseConstants
@@ -238,6 +239,44 @@ class CubeStateDBService(context: Context, databaseName: String = SolvesDatabase
         val selectionArgs = arrayOf(solveID.toString())
 
         db.delete(SolvesDatabaseConstants.CubeStateTable.TABLE_NAME, selection, selectionArgs)
+    }
+
+    fun addCubeStateList(states: List<CubeStateData>){
+        val db = this.writableDatabase
+
+        db.beginTransaction()
+
+        try{
+            states.forEach { cubeStateData ->
+                val contentValues = ContentValues().apply{
+                    put(SolvesDatabaseConstants.CubeStateTable.TIMESTAMP_COLUMN, cubeStateData.timestamp)
+                    put(SolvesDatabaseConstants.CubeStateTable.SOLVE_ID_COLUMN, cubeStateData.solveID)
+                    put(SolvesDatabaseConstants.CubeStateTable.MOVE_INDEX_COLUMN, cubeStateData.moveIndex)
+                    put(SolvesDatabaseConstants.CubeStateTable.LAST_MOVE_COLUMN, cubeStateData.lastMove)
+                    put(
+                        SolvesDatabaseConstants.CubeStateTable.CORNER_POSITIONS_COLUMN,
+                        cubeStateData.cornerPositions
+                    )
+                    put(
+                        SolvesDatabaseConstants.CubeStateTable.EDGE_POSITIONS_COLUMN,
+                        cubeStateData.edgePositions
+                    )
+                    put(
+                        SolvesDatabaseConstants.CubeStateTable.CORNER_ORIENTATIONS_COLUMN,
+                        cubeStateData.cornerOrientations
+                    )
+                    put(
+                        SolvesDatabaseConstants.CubeStateTable.EDGE_ORIENTATIONS_COLUMN,
+                        cubeStateData.edgeOrientations
+                    )
+                }
+
+                db.insert(SolvesDatabaseConstants.CubeStateTable.TABLE_NAME, null, contentValues)
+            }
+            db.setTransactionSuccessful()
+        } finally {
+            db.endTransaction()
+        }
     }
 
     private fun validateMove(move: String): Boolean {
