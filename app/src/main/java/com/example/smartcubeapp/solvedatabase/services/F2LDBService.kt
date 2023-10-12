@@ -3,6 +3,7 @@ package com.example.smartcubeapp.solvedatabase.services
 import android.content.ContentValues
 import android.content.Context
 import android.provider.BaseColumns
+import com.example.smartcubeapp.dbAccesses
 import com.example.smartcubeapp.solvedatabase.SolveDB
 import com.example.smartcubeapp.solvedatabase.SolvesDatabaseConstants
 import com.example.smartcubeapp.solvedatabase.dataclasses.F2LData
@@ -16,6 +17,7 @@ class F2LDBService(context: Context, databaseName: String = SolvesDatabaseConsta
         if(f2lData.moveCount < 0){
             throw IllegalArgumentException("Move count must be greater than or equal to 0")
         }
+        dbAccesses++
         val db = this.writableDatabase
 
         val contentValues = ContentValues().apply{
@@ -30,6 +32,7 @@ class F2LDBService(context: Context, databaseName: String = SolvesDatabaseConsta
     }
 
     fun getF2LData(id: Long): F2LData?{
+        dbAccesses++
         val db = this.readableDatabase
 
         val projection = arrayOf(
@@ -70,6 +73,7 @@ class F2LDBService(context: Context, databaseName: String = SolvesDatabaseConsta
     }
 
     fun deleteF2LData(id: Long){
+        dbAccesses++
         val db = this.writableDatabase
 
         val selection = "${BaseColumns._ID} = ?"
@@ -85,6 +89,7 @@ class F2LDBService(context: Context, databaseName: String = SolvesDatabaseConsta
         if(f2lData.moveCount < 0){
             throw IllegalArgumentException("Move count must be greater than or equal to 0")
         }
+        dbAccesses++
 
         val db = this.writableDatabase
 

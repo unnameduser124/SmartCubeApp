@@ -6,6 +6,7 @@ import android.database.Cursor
 import com.example.smartcubeapp.cube.piece.ElementOrientation
 import com.example.smartcubeapp.cube.piece.Orientation
 import com.example.smartcubeapp.cube.piece.PieceType
+import com.example.smartcubeapp.dbAccesses
 import com.example.smartcubeapp.elementdatabase.ElementDatabase
 import com.example.smartcubeapp.elementdatabase.ElementDatabaseConstants
 
@@ -149,6 +150,7 @@ class CaseElementOrientationDBService(
     }
 
     fun getElementOrientation(element: ElementOrientation): ElementOrientation? {
+        dbAccesses++
         val db = this.readableDatabase
         val selection =
             "${ElementDatabaseConstants.ElementOrientationTable.SIDE_NAME_COLUMN} = ? AND " +
@@ -204,6 +206,7 @@ class CaseElementOrientationDBService(
     }
 
     fun getOrientationForElement(element: ElementOrientation): Orientation? {
+        dbAccesses++
         val db = this.readableDatabase
         val selection =
             "${ElementDatabaseConstants.ElementOrientationTable.SIDE_NAME_COLUMN} = ? AND " +
@@ -244,7 +247,7 @@ class CaseElementOrientationDBService(
     }
 
     fun getAllElementOrientationItems(): List<ElementOrientation> {
-
+        dbAccesses++
         val cursor = readableDatabase.query(
             ElementDatabaseConstants.ElementOrientationTable.TABLE_NAME,
             fullElementProjection,
@@ -259,7 +262,7 @@ class CaseElementOrientationDBService(
     }
 
     fun getElementOrientationItemsBySide(sideName: String): List<ElementOrientation> {
-
+        dbAccesses++
         val selection = "${ElementDatabaseConstants.ElementOrientationTable.SIDE_NAME_COLUMN} = ?"
         val selectionArgs = arrayOf(sideName)
 
@@ -277,7 +280,7 @@ class CaseElementOrientationDBService(
     }
 
     private fun getElements(cursor: Cursor): List<ElementOrientation> {
-
+        dbAccesses++
         val elementOrientationList = mutableListOf<ElementOrientation>()
 
         with(cursor) {

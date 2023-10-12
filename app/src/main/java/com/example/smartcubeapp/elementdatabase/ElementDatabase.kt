@@ -3,6 +3,7 @@ package com.example.smartcubeapp.elementdatabase
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
+import com.example.smartcubeapp.dbAccesses
 import java.io.FileOutputStream
 
 open class ElementDatabase(val context: Context, databaseName: String = ElementDatabaseConstants.PHASE_DATABASE_NAME) :
@@ -15,6 +16,7 @@ open class ElementDatabase(val context: Context, databaseName: String = ElementD
     }
 
     override fun onCreate(db: SQLiteDatabase?) {
+        dbAccesses++
         if(databaseName == ElementDatabaseConstants.TEST_DATABASE_NAME){
             createElementOrientationTable(db!!)
         }

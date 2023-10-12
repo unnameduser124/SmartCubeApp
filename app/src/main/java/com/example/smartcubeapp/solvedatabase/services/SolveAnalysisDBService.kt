@@ -20,51 +20,23 @@ class SolveAnalysisDBService(val context: Context, private val dbName: String = 
     SolveDB(context, dbName) {
 
     fun saveSolveWithAnalysis(solve: Solve): SolveAnalysisData{
-
-        if(solve.time < 0){
-            throw IllegalArgumentException("Solve time must be greater than 0")
-        }
-        if(solve.solveStateSequence.isEmpty()){
-            throw IllegalArgumentException("Solve must have at least one cube state")
-        }
-        if(solve.scrambledState == CubeState.SOLVED_CUBE_STATE){
-            throw IllegalArgumentException("Solve start state cannot be solved state")
-        }
-        if(solve.solveStartTime <= 0){
-            throw IllegalArgumentException("Solve start time must be greater than 0")
-        }
-        if(solve.solveStatus!= SolveStatus.Solved){
-            throw IllegalArgumentException("Solve must be completed before saving")
-        }
+        solveValidation(solve)
 
         solve.calculateTimeFromStateSequence()
+
         val solveData = SolveData(solve)
         solveData.id = SolveDBService(context, dbName).addSolve(solveData)
         solve.id = solveData.id
-        solve.solveStateSequence.forEachIndexed{ index, cubeState ->
-            cubeState.solveID = solveData.id
-            val cubeStateData = CubeStateData(cubeState, index)
-            cubeState.id = CubeStateDBService(context, dbName).addCubeState(cubeStateData)
-        }
-        SolveDBService(context, dbName).updateSolve(SolveData(solve), solve.id)
+
+        saveSolveSequence(solve)
 
         val pllData = getPLLData(solve)
         val ollData = getOLLData(solve)
         val f2lData = getF2LData(solve)
         val crossData = getCrossData(solve)
 
-        if(pllData!=null){
-            pllData.id = PLLDBService(context, dbName).addPLLData(pllData)
-        }
-        if(ollData!=null){
-            ollData.id = OLLDBService(context, dbName).addOLLData(ollData)
-        }
-        if(f2lData!=null){
-            f2lData.id = F2LDBService(context, dbName).addF2LData(f2lData)
-        }
-        if(crossData!=null){
-            crossData.id = CrossDBService(context, dbName).addCrossData(crossData)
-        }
+        savePhaseData(pllData, ollData, f2lData, crossData)
+
         return SolveAnalysisData(
             solveData,
             crossData,
@@ -116,31 +88,82 @@ class SolveAnalysisDBService(val context: Context, private val dbName: String = 
         return solveAnalysisDataList
     }
 
-    private fun getPLLData(solve: Solve): PLLData? {
+    fun getPLLData(solve: Solve): PLLData? {
         return SolutionPhaseDetection(
             solve,
             CubeStatePhaseDetection(CubeState.SOLVED_CUBE_STATE)
         ).getPLLData(context)
     }
 
-    private fun getOLLData(solve: Solve): OLLData?{
+    fun getOLLData(solve: Solve): OLLData?{
         return SolutionPhaseDetection(
             solve,
             CubeStatePhaseDetection(CubeState.SOLVED_CUBE_STATE)
         ).getOLLData(context)
     }
 
-    private fun getF2LData(solve: Solve): F2LData?{
+    fun getF2LData(solve: Solve): F2LData?{
         return SolutionPhaseDetection(
             solve,
             CubeStatePhaseDetection(CubeState.SOLVED_CUBE_STATE)
         ).getF2LData(context)
     }
 
-    private fun getCrossData(solve: Solve): CrossData?{
+    fun getCrossData(solve: Solve): CrossData?{
         return SolutionPhaseDetection(
             solve,
             CubeStatePhaseDetection(CubeState.SOLVED_CUBE_STATE)
         ).getCrossData(context)
     }
+
+    private fun solveValidation(solve: Solve){
+        if(solve.time < 0){
+            throw IllegalArgumentException("Solve time must be greater than 0")
+        }
+        if(solve.solveStateSequence.isEmpty()){
+            throw IllegalArgumentException("Solve must have at least one cube state")
+        }
+        if(solve.scrambledState == CubeState.SOLVED_CUBE_STATE){
+            throw IllegalArgumentException("Solve start state cannot be solved state")
+        }
+        if(solve.solveStartTime <= 0){
+            throw IllegalArgumentException("Solve start time must be greater than 0")
+        }
+        if(solve.solveStatus!= SolveStatus.Solved){
+            throw IllegalArgumentException("Solve must be completed before saving")
+        }
+    }
+
+    fun saveSolveSequence(solve: Solve){
+        val solveData = SolveData(solve)
+
+        val solveSequenceDataList = solve.solveStateSequence.mapIndexed { index, cubeState ->
+            cubeState.solveID = solveData.id
+            CubeStateData(cubeState, index)
+        }
+
+        CubeStateDBService(context, dbName).addCubeStateList(solveSequenceDataList)
+        SolveDBService(context, dbName).updateSolve(SolveData(solve), solve.id)
+
+        solveSequenceDataList.forEachIndexed{ index, cubeStateData ->
+            solve.solveStateSequence[index].id = cubeStateData.id
+        }
+    }
+
+    fun savePhaseData(pllData: PLLData?, ollData: OLLData?, f2lData: F2LData?, crossData: CrossData?){
+
+        if(pllData!=null){
+            pllData.id = PLLDBService(context, dbName).addPLLData(pllData)
+        }
+        if(ollData!=null){
+            ollData.id = OLLDBService(context, dbName).addOLLData(ollData)
+        }
+        if(f2lData!=null){
+            f2lData.id = F2LDBService(context, dbName).addF2LData(f2lData)
+        }
+        if(crossData!=null){
+            crossData.id = CrossDBService(context, dbName).addCrossData(crossData)
+        }
+    }
+
 }

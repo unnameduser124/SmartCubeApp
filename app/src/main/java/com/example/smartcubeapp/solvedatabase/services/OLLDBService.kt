@@ -4,6 +4,7 @@ import android.content.ContentValues
 import android.content.Context
 import android.provider.BaseColumns
 import com.example.smartcubeapp.cube.Solve
+import com.example.smartcubeapp.dbAccesses
 import com.example.smartcubeapp.solvedatabase.SolveDB
 import com.example.smartcubeapp.solvedatabase.SolvesDatabaseConstants
 import com.example.smartcubeapp.solvedatabase.dataclasses.OLLData
@@ -20,6 +21,7 @@ class OLLDBService(context: Context, databaseName: String = SolvesDatabaseConsta
         if (ollData.case < 0 || ollData.case > 56) {
             throw IllegalArgumentException("OLL case must be between 0 and 56")
         }
+        dbAccesses++
 
         val db = this.writableDatabase
 
@@ -36,6 +38,7 @@ class OLLDBService(context: Context, databaseName: String = SolvesDatabaseConsta
     }
 
     fun getOLLData(id: Long): OLLData? {
+        dbAccesses++
         val db = this.readableDatabase
 
         val projection = arrayOf(
@@ -92,6 +95,7 @@ class OLLDBService(context: Context, databaseName: String = SolvesDatabaseConsta
     }
 
     fun deleteOLLData(id: Long) {
+        dbAccesses++
         val db = this.writableDatabase
 
         val selection = "${BaseColumns._ID} = ?"
@@ -110,6 +114,7 @@ class OLLDBService(context: Context, databaseName: String = SolvesDatabaseConsta
         if (ollData.case < 0 || ollData.case > 56) {
             throw IllegalArgumentException("OLL case must be between 0 and 56")
         }
+        dbAccesses++
 
         val db = this.writableDatabase
 
@@ -134,6 +139,7 @@ class OLLDBService(context: Context, databaseName: String = SolvesDatabaseConsta
     }
 
     fun getOLLForSolve(solveID: Long): OLLData? {
+        dbAccesses++
         val db = this.readableDatabase
 
         val projection = arrayOf(
@@ -174,6 +180,7 @@ class OLLDBService(context: Context, databaseName: String = SolvesDatabaseConsta
     }
 
     fun deleteOLLDataForSolve(solveID: Long){
+        dbAccesses++
         val db = this.writableDatabase
 
         val selection = "${SolvesDatabaseConstants.OLLTable.SOLVE_ID_COLUMN} = ?"

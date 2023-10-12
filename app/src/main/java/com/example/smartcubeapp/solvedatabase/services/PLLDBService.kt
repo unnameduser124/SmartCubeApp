@@ -3,6 +3,7 @@ package com.example.smartcubeapp.solvedatabase.services
 import android.content.ContentValues
 import android.content.Context
 import android.provider.BaseColumns
+import com.example.smartcubeapp.dbAccesses
 import com.example.smartcubeapp.solvedatabase.SolveDB
 import com.example.smartcubeapp.solvedatabase.SolvesDatabaseConstants
 import com.example.smartcubeapp.solvedatabase.dataclasses.PLLData
@@ -19,6 +20,7 @@ class PLLDBService(context: Context, databaseName: String = SolvesDatabaseConsta
         if(pllData.case < 0 || pllData.case > 56){
             throw IllegalArgumentException("PLL case must be between 0 and 56")
         }
+        dbAccesses++
 
         val db = this.writableDatabase
 
@@ -35,6 +37,7 @@ class PLLDBService(context: Context, databaseName: String = SolvesDatabaseConsta
     }
 
     fun getPLLData(id: Long): PLLData?{
+        dbAccesses++
         val db = this.readableDatabase
 
         val projection = arrayOf(
@@ -77,6 +80,7 @@ class PLLDBService(context: Context, databaseName: String = SolvesDatabaseConsta
     }
 
     fun deletePLLData(id: Long){
+        dbAccesses++
         val db = this.writableDatabase
 
         val selection = "${BaseColumns._ID} = ?"
@@ -95,6 +99,7 @@ class PLLDBService(context: Context, databaseName: String = SolvesDatabaseConsta
         if(pllData.case < 0 || pllData.case > 56){
             throw IllegalArgumentException("PLL case must be between 0 and 56")
         }
+        dbAccesses++
 
         val db = this.writableDatabase
 
@@ -114,6 +119,7 @@ class PLLDBService(context: Context, databaseName: String = SolvesDatabaseConsta
     }
 
     fun getPLLForSolve(solveID: Long): PLLData? {
+        dbAccesses++
         val db = this.readableDatabase
 
         val projection = arrayOf(
@@ -154,6 +160,7 @@ class PLLDBService(context: Context, databaseName: String = SolvesDatabaseConsta
     }
 
     fun deletePLLDataForSolve(solveID: Long){
+        dbAccesses++
         val db = this.writableDatabase
 
         val selection = "${SolvesDatabaseConstants.PLLTable.SOLVE_ID_COLUMN} = ?"

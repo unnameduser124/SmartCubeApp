@@ -20,6 +20,8 @@ import com.example.smartcubeapp.elementdatabase.casedetectiondatabase.CaseElemen
 
 class PositionRepresentationTransformer(var cubeState: CubeState, var cubeSide: CubeSide) {
 
+    private var elements: List<ElementOrientation> = emptyList()
+
     inline fun <reified T> transformStateToPositionRepresentation(context: Context): Array<Array<T>> {
         when (cubeSide) {
             YellowSide -> {
@@ -108,19 +110,20 @@ class PositionRepresentationTransformer(var cubeState: CubeState, var cubeSide: 
     inline fun <reified CaseType, reified T> positionRepresentationToCase(position: Array<Array<T>>): CaseType {
 
         if (CaseType::class.java == CustomOLLCase::class.java
-            && T::class.java == PLLElementPosition::class.java) {
+            && T::class.java == PLLElementPosition::class.java
+        ) {
             throw Exception("Cannot use PLLPositionRepresentationElement in OLLCase")
-        }
-        else if(CaseType::class.java == CustomPLLCase::class.java
-            && T::class.java == OLLElementOrientation::class.java) {
+        } else if (CaseType::class.java == CustomPLLCase::class.java
+            && T::class.java == OLLElementOrientation::class.java
+        ) {
             throw Exception("Cannot use OLLPositionRepresentationElement in PLLCase")
-        }
-        else if(CaseType::class.java != CustomPLLCase::class.java
-            && CaseType::class.java != CustomOLLCase::class.java) {
+        } else if (CaseType::class.java != CustomPLLCase::class.java
+            && CaseType::class.java != CustomOLLCase::class.java
+        ) {
             throw Exception("Unknown case type")
-        }
-        else if(T::class.java != OLLElementOrientation::class.java
-            && T::class.java != PLLElementPosition::class.java) {
+        } else if (T::class.java != OLLElementOrientation::class.java
+            && T::class.java != PLLElementPosition::class.java
+        ) {
             throw Exception("Unknown element type")
         }
 
@@ -131,8 +134,7 @@ class PositionRepresentationTransformer(var cubeState: CubeState, var cubeSide: 
                     if (element.sideRelativeOrientation != Orientation.Correct) {
                         elements.add(element as T)
                     }
-                }
-                else {
+                } else {
                     elements.add(element)
                 }
             }
@@ -171,17 +173,24 @@ class PositionRepresentationTransformer(var cubeState: CubeState, var cubeSide: 
         pieceOrientation: Int,
         context: Context
     ): Orientation {
-        val db =
-            CaseElementOrientationDBService(context, ElementDatabaseConstants.CASE_DATABASE_NAME)
 
-        val element = ElementOrientation(
-            sideName = cubeSide.sideName,
-            pieceNumber = pieceNumber,
-            pieceType = pieceType,
-            piecePosition = piecePosition,
-            pieceOrientation = pieceOrientation
-        )
-        return db.getOrientationForElement(element) ?: Orientation.Incorrect
+        if (elements.isEmpty()) {
+            val db =
+                CaseElementOrientationDBService(
+                    context,
+                    ElementDatabaseConstants.CASE_DATABASE_NAME
+                )
+            elements = db.getAllElementOrientationItems()
+        }
+        val element = elements.firstOrNull {
+            it.sideName == cubeSide.sideName
+                    && it.pieceNumber == pieceNumber
+                    && it.pieceType == pieceType
+                    && it.piecePosition == piecePosition
+                    && it.pieceOrientation == pieceOrientation
+        } ?: return Orientation.Incorrect
+
+        return element.sideRelativeOrientation ?: Orientation.Incorrect
     }
 
     inline fun <reified T> createPositionRepresentationElement(

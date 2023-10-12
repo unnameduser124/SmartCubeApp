@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase
 import com.example.smartcubeapp.cube.piece.ElementOrientation
 import com.example.smartcubeapp.cube.piece.Orientation
 import com.example.smartcubeapp.cube.piece.PieceType
+import com.example.smartcubeapp.dbAccesses
 import com.example.smartcubeapp.elementdatabase.ElementDatabase
 import com.example.smartcubeapp.elementdatabase.ElementDatabaseConstants
 
@@ -138,6 +139,7 @@ class PhaseElementOrientationDBService(
     }
 
     fun getElementOrientation(element: ElementOrientation): ElementOrientation? {
+        dbAccesses++
         val db = this.readableDatabase
         val selection = "${ElementDatabaseConstants.ElementOrientationTable.SIDE_NAME_COLUMN} = ? AND " +
                 "${ElementDatabaseConstants.ElementOrientationTable.PIECE_TYPE_COLUMN} = ? AND " +
@@ -191,7 +193,7 @@ class PhaseElementOrientationDBService(
     }
 
     fun getAllElementOrientationItems(): List<ElementOrientation> {
-
+        dbAccesses++
         val cursor = readableDatabase.query(
             ElementDatabaseConstants.ElementOrientationTable.TABLE_NAME,
             fullElementProjection,
@@ -206,7 +208,7 @@ class PhaseElementOrientationDBService(
     }
 
     fun getElementOrientationItemsBySide(sideName: String): List<ElementOrientation> {
-
+        dbAccesses++
         val selection = "${ElementDatabaseConstants.ElementOrientationTable.SIDE_NAME_COLUMN} = ?"
         val selectionArgs = arrayOf(sideName)
 
@@ -224,7 +226,7 @@ class PhaseElementOrientationDBService(
     }
 
     fun getElementOrientationItemsBySideCorrectlySideRelativeOriented(sideName: String): List<ElementOrientation> {
-
+        dbAccesses++
         val selection = "${ElementDatabaseConstants.ElementOrientationTable.SIDE_NAME_COLUMN} = ? AND " +
                 "${ElementDatabaseConstants.ElementOrientationTable.SIDE_RELATIVE_ORIENTATION_COLUMN} = ?"
         val selectionArgs = arrayOf(sideName, "1")
@@ -246,7 +248,7 @@ class PhaseElementOrientationDBService(
         pieceNumber: Int,
         pieceType: PieceType
     ): List<ElementOrientation> {
-
+        dbAccesses++
         val selection =
             "${ElementDatabaseConstants.ElementOrientationTable.PIECE_NUMBER_COLUMN} = ? AND " +
                     "${ElementDatabaseConstants.ElementOrientationTable.PIECE_TYPE_COLUMN} = ?"
@@ -266,7 +268,7 @@ class PhaseElementOrientationDBService(
     }
 
     private fun getElements(cursor: Cursor): List<ElementOrientation> {
-
+        dbAccesses++
         val elementOrientationList = mutableListOf<ElementOrientation>()
 
         with(cursor) {

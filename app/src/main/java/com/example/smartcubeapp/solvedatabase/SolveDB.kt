@@ -3,10 +3,12 @@ package com.example.smartcubeapp.solvedatabase
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
+import com.example.smartcubeapp.dbAccesses
 
 open class SolveDB(context: Context, databaseName: String = SolvesDatabaseConstants.SOLVE_DATABASE_NAME) :
     SQLiteOpenHelper(context, databaseName, null, SolvesDatabaseConstants.DATABASE_VERSION) {
     override fun onCreate(db: SQLiteDatabase?) {
+        dbAccesses++
         createSolveTable(db)
         createCubeStateTable(db)
         createF2LTable(db)

@@ -3,6 +3,7 @@ package com.example.smartcubeapp.solvedatabase.services
 import android.content.ContentValues
 import android.content.Context
 import android.provider.BaseColumns
+import com.example.smartcubeapp.dbAccesses
 import com.example.smartcubeapp.solvedatabase.SolveDB
 import com.example.smartcubeapp.solvedatabase.SolvesDatabaseConstants
 import com.example.smartcubeapp.solvedatabase.dataclasses.SolveData
@@ -16,6 +17,7 @@ class SolveDBService(context: Context, databaseName: String = SolvesDatabaseCons
         else if(solveData.scramble == ""){
             throw IllegalArgumentException("Scramble must not be empty")
         }
+        dbAccesses++
         val db = this.writableDatabase
 
         val contentValues = ContentValues().apply {
@@ -32,6 +34,7 @@ class SolveDBService(context: Context, databaseName: String = SolvesDatabaseCons
     }
 
     fun getSolve(id: Long): SolveData? {
+        dbAccesses++
         val db = this.readableDatabase
 
         val projection = arrayOf(
@@ -80,6 +83,7 @@ class SolveDBService(context: Context, databaseName: String = SolvesDatabaseCons
     }
 
     fun deleteSolve(id: Long){
+        dbAccesses++
         val db = this.writableDatabase
 
         val selection = "${BaseColumns._ID} = ?"
@@ -97,6 +101,7 @@ class SolveDBService(context: Context, databaseName: String = SolvesDatabaseCons
         else if(solveData.scramble == ""){
             throw IllegalArgumentException("Scramble must not be empty")
         }
+        dbAccesses++
 
         val contentValues = ContentValues().apply {
             put(SolvesDatabaseConstants.SolveTable.DURATION_COLUMN, solveData.solveDuration)
@@ -112,6 +117,7 @@ class SolveDBService(context: Context, databaseName: String = SolvesDatabaseCons
     }
 
     fun getAllSolveIDs(): List<Long>{
+        dbAccesses++
         val db = this.readableDatabase
 
         val projection = arrayOf(

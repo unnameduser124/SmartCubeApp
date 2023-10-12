@@ -3,6 +3,8 @@ package com.example.smartcubeapp.solvedatabase.services
 import android.content.ContentValues
 import android.content.Context
 import android.provider.BaseColumns
+import com.example.smartcubeapp.cube.CubeState
+import com.example.smartcubeapp.dbAccesses
 import com.example.smartcubeapp.solvedatabase.SolveDB
 import com.example.smartcubeapp.solvedatabase.SolvesDatabaseConstants
 import com.example.smartcubeapp.solvedatabase.dataclasses.CubeStateData
@@ -15,6 +17,7 @@ class CubeStateDBService(context: Context, databaseName: String = SolvesDatabase
         } else if (!validateMove(cubeStateData.lastMove)) {
             throw IllegalArgumentException("Invalid lastMove")
         }
+        dbAccesses++
 
         val db = this.writableDatabase
 
@@ -45,6 +48,7 @@ class CubeStateDBService(context: Context, databaseName: String = SolvesDatabase
     }
 
     fun getCubeState(id: Long): CubeStateData? {
+        dbAccesses++
         val db = this.readableDatabase
 
         val projection = arrayOf(
@@ -109,6 +113,7 @@ class CubeStateDBService(context: Context, databaseName: String = SolvesDatabase
     }
 
     fun deleteCubeState(id: Long) {
+        dbAccesses++
         val db = this.writableDatabase
 
         val selection = "${BaseColumns._ID} = ?"
@@ -123,6 +128,7 @@ class CubeStateDBService(context: Context, databaseName: String = SolvesDatabase
         } else if (!validateMove(cubeStateData.lastMove)) {
             throw IllegalArgumentException("Invalid lastMove")
         }
+        dbAccesses++
 
         val db = this.writableDatabase
 
@@ -161,6 +167,7 @@ class CubeStateDBService(context: Context, databaseName: String = SolvesDatabase
     }
 
     fun getCubeStatesForSolve(solveID: Long): List<CubeStateData> {
+        dbAccesses++
         val db = this.readableDatabase
 
         val projection = arrayOf(
@@ -225,12 +232,52 @@ class CubeStateDBService(context: Context, databaseName: String = SolvesDatabase
     }
 
     fun deleteCubeStatesForSolve(solveID: Long){
+        dbAccesses++
         val db = this.writableDatabase
 
         val selection = "${SolvesDatabaseConstants.CubeStateTable.SOLVE_ID_COLUMN} = ?"
         val selectionArgs = arrayOf(solveID.toString())
 
         db.delete(SolvesDatabaseConstants.CubeStateTable.TABLE_NAME, selection, selectionArgs)
+    }
+
+    fun addCubeStateList(states: List<CubeStateData>){
+        val db = this.writableDatabase
+
+        db.beginTransaction()
+
+        try{
+            states.forEachIndexed { index, cubeStateData ->
+                val contentValues = ContentValues().apply{
+                    put(SolvesDatabaseConstants.CubeStateTable.TIMESTAMP_COLUMN, cubeStateData.timestamp)
+                    put(SolvesDatabaseConstants.CubeStateTable.SOLVE_ID_COLUMN, cubeStateData.solveID)
+                    put(SolvesDatabaseConstants.CubeStateTable.MOVE_INDEX_COLUMN, cubeStateData.moveIndex)
+                    put(SolvesDatabaseConstants.CubeStateTable.LAST_MOVE_COLUMN, cubeStateData.lastMove)
+                    put(
+                        SolvesDatabaseConstants.CubeStateTable.CORNER_POSITIONS_COLUMN,
+                        cubeStateData.cornerPositions
+                    )
+                    put(
+                        SolvesDatabaseConstants.CubeStateTable.EDGE_POSITIONS_COLUMN,
+                        cubeStateData.edgePositions
+                    )
+                    put(
+                        SolvesDatabaseConstants.CubeStateTable.CORNER_ORIENTATIONS_COLUMN,
+                        cubeStateData.cornerOrientations
+                    )
+                    put(
+                        SolvesDatabaseConstants.CubeStateTable.EDGE_ORIENTATIONS_COLUMN,
+                        cubeStateData.edgeOrientations
+                    )
+                }
+
+                val id = db.insert(SolvesDatabaseConstants.CubeStateTable.TABLE_NAME, null, contentValues)
+                states[index].id = id
+            }
+            db.setTransactionSuccessful()
+        } finally {
+            db.endTransaction()
+        }
     }
 
     private fun validateMove(move: String): Boolean {
