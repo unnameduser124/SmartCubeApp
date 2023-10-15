@@ -136,14 +136,18 @@ class SolveAnalysisDBService(val context: Context, private val dbName: String = 
 
     fun saveSolveSequence(solve: Solve){
         val solveData = SolveData(solve)
+        val stateDB = CubeStateDBService(context, dbName)
+        val solveDB = SolveDBService(context, dbName)
 
         val solveSequenceDataList = solve.solveStateSequence.mapIndexed { index, cubeState ->
             cubeState.solveID = solveData.id
             CubeStateData(cubeState, index)
         }
 
-        CubeStateDBService(context, dbName).addCubeStateList(solveSequenceDataList)
-        SolveDBService(context, dbName).updateSolve(SolveData(solve), solve.id)
+        stateDB.addCubeStateList(solveSequenceDataList)
+        stateDB.close()
+        solveDB.updateSolve(SolveData(solve), solve.id)
+        solveDB.close()
 
         solveSequenceDataList.forEachIndexed{ index, cubeStateData ->
             solve.solveStateSequence[index].id = cubeStateData.id
@@ -153,16 +157,24 @@ class SolveAnalysisDBService(val context: Context, private val dbName: String = 
     fun savePhaseData(pllData: PLLData?, ollData: OLLData?, f2lData: F2LData?, crossData: CrossData?){
 
         if(pllData!=null){
-            pllData.id = PLLDBService(context, dbName).addPLLData(pllData)
+            val pllService = PLLDBService(context, dbName)
+            pllData.id = pllService.addPLLData(pllData)
+            pllService.close()
         }
         if(ollData!=null){
-            ollData.id = OLLDBService(context, dbName).addOLLData(ollData)
+            val ollService = OLLDBService(context, dbName)
+            ollData.id = ollService.addOLLData(ollData)
+            ollService.close()
         }
         if(f2lData!=null){
-            f2lData.id = F2LDBService(context, dbName).addF2LData(f2lData)
+            val f2lService = F2LDBService(context, dbName)
+            f2lData.id = f2lService.addF2LData(f2lData)
+            f2lService.close()
         }
         if(crossData!=null){
-            crossData.id = CrossDBService(context, dbName).addCrossData(crossData)
+            val crossService = CrossDBService(context, dbName)
+            crossData.id = crossService.addCrossData(crossData)
+            crossService.close()
         }
     }
 

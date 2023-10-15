@@ -2,6 +2,7 @@ package com.example.smartcubeapp.solvedatabase.services
 
 import android.content.ContentValues
 import android.content.Context
+import android.database.sqlite.SQLiteDatabase
 import android.provider.BaseColumns
 import com.example.smartcubeapp.dbAccesses
 import com.example.smartcubeapp.solvedatabase.SolveDB
@@ -30,7 +31,9 @@ class SolveDBService(context: Context, databaseName: String = SolvesDatabaseCons
             put(SolvesDatabaseConstants.SolveTable.SCRAMBLE_SEQUENCE_COLUMN, solveData.scramble)
         }
 
-        return db.insert(SolvesDatabaseConstants.SolveTable.TABLE_NAME, null, contentValues)
+        val id = db.insert(SolvesDatabaseConstants.SolveTable.TABLE_NAME, null, contentValues)
+        db.close()
+        return id
     }
 
     fun getSolve(id: Long): SolveData? {
@@ -70,6 +73,8 @@ class SolveDBService(context: Context, databaseName: String = SolvesDatabaseCons
                 val scramble =
                     getString(getColumnIndexOrThrow(SolvesDatabaseConstants.SolveTable.SCRAMBLE_SEQUENCE_COLUMN))
 
+                cursor.close()
+                db.close()
                 return SolveData(
                     solveId,
                     duration,
@@ -79,6 +84,8 @@ class SolveDBService(context: Context, databaseName: String = SolvesDatabaseCons
                 )
             }
         }
+        cursor.close()
+        db.close()
         return null
     }
 
@@ -141,6 +148,8 @@ class SolveDBService(context: Context, databaseName: String = SolvesDatabaseCons
                 solveIDs.add(solveId)
             }
         }
+        cursor.close()
+        db.close()
         return solveIDs
     }
 }

@@ -179,6 +179,8 @@ class PhaseElementOrientationDBService(
                 val sideRelativeOrientation =
                     getInt(getColumnIndexOrThrow(ElementDatabaseConstants.ElementOrientationTable.SIDE_RELATIVE_ORIENTATION_COLUMN))
 
+                cursor.close()
+                db.close()
                 return ElementOrientation(
                     sideName,
                     PieceType.values()[pieceType],
@@ -189,6 +191,8 @@ class PhaseElementOrientationDBService(
                 )
             }
         }
+        cursor.close()
+        db.close()
         return null
     }
 
@@ -297,6 +301,8 @@ class PhaseElementOrientationDBService(
                 elementOrientationList.add(element)
             }
         }
+        cursor.close()
+        this.close()
         return elementOrientationList
     }
 

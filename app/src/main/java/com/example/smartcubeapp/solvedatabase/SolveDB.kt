@@ -5,8 +5,8 @@ import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import com.example.smartcubeapp.dbAccesses
 
-open class SolveDB(context: Context, databaseName: String = SolvesDatabaseConstants.SOLVE_DATABASE_NAME) :
-    SQLiteOpenHelper(context, databaseName, null, SolvesDatabaseConstants.DATABASE_VERSION) {
+open class SolveDB(private val context: Context, private val dbName: String = SolvesDatabaseConstants.SOLVE_DATABASE_NAME) :
+    SQLiteOpenHelper(context, dbName, null, SolvesDatabaseConstants.DATABASE_VERSION) {
     override fun onCreate(db: SQLiteDatabase?) {
         dbAccesses++
         createSolveTable(db)
@@ -43,5 +43,15 @@ open class SolveDB(context: Context, databaseName: String = SolvesDatabaseConsta
 
     fun createCrossTable(db: SQLiteDatabase?){
         db?.execSQL(SolvesDatabaseConstants.CREATE_CROSS_TABLE)
+    }
+
+    fun getDatabaseSizeInMegabytes(): Double {
+        val dbFile = context.getDatabasePath(dbName)
+        return if (dbFile.exists()) {
+            val megabyte = 1024 * 1024
+            dbFile.length() / megabyte.toDouble()
+        } else {
+            0.0
+        }
     }
 }

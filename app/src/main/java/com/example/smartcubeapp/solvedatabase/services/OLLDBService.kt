@@ -80,6 +80,8 @@ class OLLDBService(context: Context, databaseName: String = SolvesDatabaseConsta
                     getInt(getColumnIndexOrThrow(SolvesDatabaseConstants.OLLTable.CASE_COLUMN))
                 val retrievedID = getLong(getColumnIndexOrThrow(BaseColumns._ID))
 
+                cursor.close()
+                db.close()
                 return OLLData(
                     solveID,
                     duration,
@@ -90,6 +92,8 @@ class OLLDBService(context: Context, databaseName: String = SolvesDatabaseConsta
                     retrievedID
                 )
             }
+            cursor.close()
+            db.close()
             return null
         }
     }
@@ -173,8 +177,12 @@ class OLLDBService(context: Context, databaseName: String = SolvesDatabaseConsta
                 val case = getInt(getColumnIndexOrThrow(SolvesDatabaseConstants.OLLTable.CASE_COLUMN))
                 val retrievedID = getLong(getColumnIndexOrThrow(BaseColumns._ID))
 
+                cursor.close()
+                db.close()
                 return OLLData(solveID, duration, moveCount, startStateID, endStateID, case, retrievedID)
             }
+            cursor.close()
+            db.close()
             return null
         }
     }

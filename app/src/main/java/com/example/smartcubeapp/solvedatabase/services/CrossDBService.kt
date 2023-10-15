@@ -68,8 +68,12 @@ class CrossDBService(context: Context, dbName: String = SolvesDatabaseConstants.
                 val endStateID = getLong(getColumnIndexOrThrow(SolvesDatabaseConstants.CrossTable.END_CUBE_STATE_ID_COLUMN))
                 val retrievedID = getLong(getColumnIndexOrThrow(BaseColumns._ID))
 
+                cursor.close()
+                db.close()
                 return CrossData(solveID, duration, moveCount, startStateID, endStateID, retrievedID)
             }
+            cursor.close()
+            db.close()
             return null
         }
     }
@@ -142,8 +146,12 @@ class CrossDBService(context: Context, dbName: String = SolvesDatabaseConstants.
                 val endStateID = getLong(getColumnIndexOrThrow(SolvesDatabaseConstants.CrossTable.END_CUBE_STATE_ID_COLUMN))
                 val retrievedID = getLong(getColumnIndexOrThrow(BaseColumns._ID))
 
+                cursor.close()
+                db.close()
                 return CrossData(solveID, duration, moveCount, startStateID, endStateID, retrievedID)
             }
+            cursor.close()
+            db.close()
             return null
         }
     }

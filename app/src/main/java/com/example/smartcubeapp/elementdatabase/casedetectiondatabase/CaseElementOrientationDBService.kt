@@ -63,6 +63,7 @@ class CaseElementOrientationDBService(
             null,
             contentValues
         )
+        this.close()
     }
 
     fun updateElementOrientation(element: ElementOrientation) {
@@ -191,6 +192,8 @@ class CaseElementOrientationDBService(
                 val sideRelativeOrientation =
                     getInt(getColumnIndexOrThrow(ElementDatabaseConstants.ElementOrientationTable.SIDE_RELATIVE_ORIENTATION_COLUMN))
 
+                cursor.close()
+                db.close()
                 return ElementOrientation(
                     sideName,
                     PieceType.values()[pieceType],
@@ -202,6 +205,8 @@ class CaseElementOrientationDBService(
                 )
             }
         }
+        cursor.close()
+        db.close()
         return null
     }
 
@@ -240,9 +245,13 @@ class CaseElementOrientationDBService(
             if (moveToNext()) {
                 val sideRelativeOrientation =
                     getInt(getColumnIndexOrThrow(ElementDatabaseConstants.ElementOrientationTable.SIDE_RELATIVE_ORIENTATION_COLUMN))
+                cursor.close()
+                db.close()
                 return Orientation.values()[sideRelativeOrientation]
             }
         }
+        cursor.close()
+        db.close()
         return null
     }
 
@@ -309,6 +318,8 @@ class CaseElementOrientationDBService(
                 elementOrientationList.add(element)
             }
         }
+        cursor.close()
+        this.close()
         return elementOrientationList
     }
 }

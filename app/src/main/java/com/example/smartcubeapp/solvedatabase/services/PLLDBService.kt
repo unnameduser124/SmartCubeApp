@@ -72,9 +72,12 @@ class PLLDBService(context: Context, databaseName: String = SolvesDatabaseConsta
                 val endStateID = getLong(getColumnIndexOrThrow(SolvesDatabaseConstants.PLLTable.END_CUBE_STATE_ID_COLUMN))
                 val case = getInt(getColumnIndexOrThrow(SolvesDatabaseConstants.PLLTable.CASE_COLUMN))
                 val retrievedID = getLong(getColumnIndexOrThrow(BaseColumns._ID))
-
+                cursor.close()
+                db.close()
                 return PLLData(solveID, duration, moveCount, startStateID, endStateID, case, retrievedID)
             }
+            cursor.close()
+            db.close()
             return null
         }
     }
@@ -153,8 +156,12 @@ class PLLDBService(context: Context, databaseName: String = SolvesDatabaseConsta
                 val case = getInt(getColumnIndexOrThrow(SolvesDatabaseConstants.PLLTable.CASE_COLUMN))
                 val retrievedID = getLong(getColumnIndexOrThrow(BaseColumns._ID))
 
+                cursor.close()
+                db.close()
                 return PLLData(solveID, duration, moveCount, startStateID, endStateID, case, retrievedID)
             }
+            cursor.close()
+            db.close()
             return null
         }
     }

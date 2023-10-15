@@ -44,7 +44,9 @@ class CubeStateDBService(context: Context, databaseName: String = SolvesDatabase
             )
         }
 
-        return db.insert(SolvesDatabaseConstants.CubeStateTable.TABLE_NAME, null, contentValues)
+        val id = db.insert(SolvesDatabaseConstants.CubeStateTable.TABLE_NAME, null, contentValues)
+        db.close()
+        return id
     }
 
     fun getCubeState(id: Long): CubeStateData? {
@@ -96,6 +98,8 @@ class CubeStateDBService(context: Context, databaseName: String = SolvesDatabase
                 val edgeOrientations =
                     getString(getColumnIndexOrThrow(SolvesDatabaseConstants.CubeStateTable.EDGE_ORIENTATIONS_COLUMN))
 
+                cursor.close()
+                db.close()
                 return CubeStateData(
                     id = retrievedID,
                     timestamp = timestamp,
@@ -108,6 +112,8 @@ class CubeStateDBService(context: Context, databaseName: String = SolvesDatabase
                     edgeOrientations = edgeOrientations
                 )
             }
+            cursor.close()
+            db.close()
             return null
         }
     }
@@ -228,6 +234,8 @@ class CubeStateDBService(context: Context, databaseName: String = SolvesDatabase
                 )
             }
         }
+        cursor.close()
+        db.close()
         return cubeStates
     }
 
@@ -248,35 +256,40 @@ class CubeStateDBService(context: Context, databaseName: String = SolvesDatabase
 
         try{
             states.forEachIndexed { index, cubeStateData ->
-                val contentValues = ContentValues().apply{
-                    put(SolvesDatabaseConstants.CubeStateTable.TIMESTAMP_COLUMN, cubeStateData.timestamp)
-                    put(SolvesDatabaseConstants.CubeStateTable.SOLVE_ID_COLUMN, cubeStateData.solveID)
-                    put(SolvesDatabaseConstants.CubeStateTable.MOVE_INDEX_COLUMN, cubeStateData.moveIndex)
-                    put(SolvesDatabaseConstants.CubeStateTable.LAST_MOVE_COLUMN, cubeStateData.lastMove)
-                    put(
-                        SolvesDatabaseConstants.CubeStateTable.CORNER_POSITIONS_COLUMN,
-                        cubeStateData.cornerPositions
-                    )
-                    put(
-                        SolvesDatabaseConstants.CubeStateTable.EDGE_POSITIONS_COLUMN,
-                        cubeStateData.edgePositions
-                    )
-                    put(
-                        SolvesDatabaseConstants.CubeStateTable.CORNER_ORIENTATIONS_COLUMN,
-                        cubeStateData.cornerOrientations
-                    )
-                    put(
-                        SolvesDatabaseConstants.CubeStateTable.EDGE_ORIENTATIONS_COLUMN,
-                        cubeStateData.edgeOrientations
-                    )
-                }
+                if (cubeStateData.timestamp <= 0 || cubeStateData.moveIndex < 0 || !validateMove(cubeStateData.lastMove) || !validateMove(cubeStateData.lastMove) || !validateMove(cubeStateData.lastMove) || !validateMove(cubeStateData.lastMove) || !validateMove(cubeStateData.lastMove) || !validateMove(cubeStateData.lastMove) || !validateMove(cubeStateData.lastMove) || !validateMove(cubeStateData.lastMove) || !validateMove(cubeStateData.lastMove)) {
+                    println("Invalid arguments for cube state at index $index")
+                } else {
+                    val contentValues = ContentValues().apply{
+                        put(SolvesDatabaseConstants.CubeStateTable.TIMESTAMP_COLUMN, cubeStateData.timestamp)
+                        put(SolvesDatabaseConstants.CubeStateTable.SOLVE_ID_COLUMN, cubeStateData.solveID)
+                        put(SolvesDatabaseConstants.CubeStateTable.MOVE_INDEX_COLUMN, cubeStateData.moveIndex)
+                        put(SolvesDatabaseConstants.CubeStateTable.LAST_MOVE_COLUMN, cubeStateData.lastMove)
+                        put(
+                            SolvesDatabaseConstants.CubeStateTable.CORNER_POSITIONS_COLUMN,
+                            cubeStateData.cornerPositions
+                        )
+                        put(
+                            SolvesDatabaseConstants.CubeStateTable.EDGE_POSITIONS_COLUMN,
+                            cubeStateData.edgePositions
+                        )
+                        put(
+                            SolvesDatabaseConstants.CubeStateTable.CORNER_ORIENTATIONS_COLUMN,
+                            cubeStateData.cornerOrientations
+                        )
+                        put(
+                            SolvesDatabaseConstants.CubeStateTable.EDGE_ORIENTATIONS_COLUMN,
+                            cubeStateData.edgeOrientations
+                        )
+                    }
 
-                val id = db.insert(SolvesDatabaseConstants.CubeStateTable.TABLE_NAME, null, contentValues)
-                states[index].id = id
+                    val id = db.insert(SolvesDatabaseConstants.CubeStateTable.TABLE_NAME, null, contentValues)
+                    states[index].id = id
+                }
             }
             db.setTransactionSuccessful()
         } finally {
             db.endTransaction()
+            db.close()
         }
     }
 

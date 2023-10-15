@@ -66,8 +66,12 @@ class F2LDBService(context: Context, databaseName: String = SolvesDatabaseConsta
                 val endStateID = getLong(getColumnIndexOrThrow(SolvesDatabaseConstants.F2LTable.END_CUBE_STATE_ID_COLUMN))
                 val retrievedID = getLong(getColumnIndexOrThrow(BaseColumns._ID))
 
+                cursor.close()
+                db.close()
                 return F2LData(solveID, duration, moveCount, startStateID, endStateID, retrievedID)
             }
+            cursor.close()
+            db.close()
             return null
         }
     }
@@ -139,8 +143,12 @@ class F2LDBService(context: Context, databaseName: String = SolvesDatabaseConsta
                 val endStateID = getLong(getColumnIndexOrThrow(SolvesDatabaseConstants.F2LTable.END_CUBE_STATE_ID_COLUMN))
                 val retrievedID = getLong(getColumnIndexOrThrow(BaseColumns._ID))
 
+                cursor.close()
+                db.close()
                 return F2LData(solveID, duration, moveCount, startStateID, endStateID, retrievedID)
             }
+            cursor.close()
+            db.close()
             return null
         }
     }
