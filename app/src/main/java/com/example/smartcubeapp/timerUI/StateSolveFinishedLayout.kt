@@ -27,8 +27,10 @@ import com.example.smartcubeapp.phasedetection.SolutionPhaseDetection
 import com.example.smartcubeapp.phasedetection.SolvePhase
 import com.example.smartcubeapp.roundDouble
 import com.example.smartcubeapp.simpleTestSolve
+import com.example.smartcubeapp.solvedatabase.dataclasses.SolveAnalysisData
 import com.example.smartcubeapp.solvedatabase.services.SolveAnalysisDBService
 import com.example.smartcubeapp.solvedatabase.services.SolveDBService
+import kotlin.system.measureTimeMillis
 
 class StateSolveFinishedLayout(
     private val state: MutableState<TimerState>,
@@ -38,6 +40,7 @@ class StateSolveFinishedLayout(
 ) {
 
     private lateinit var solveSaved: MutableState<Boolean>
+    private lateinit var saveTime: MutableState<Long>
 
     @Composable
     fun GenerateLayout() {
@@ -67,12 +70,20 @@ class StateSolveFinishedLayout(
                     text = "Solves saved: $numberOfSolvesSaved",
                     fontSize = 25.sp,
                 )
+                Text(
+                    text = "Time to save solve: ${saveTime.value}ms",
+                    fontSize = 25.sp,
+                )
             }
         }
         //TODO("Replace with real scramble after implementing scramble generation")
         solve.value.scrambleSequence = "scramble placeholder"
         if(solve.value.solveStatus == SolveStatus.Solved && !solveSaved.value){
-            val solveData = SolveAnalysisDBService(context).saveSolveWithAnalysis(solve.value)
+            saveTime = remember{ mutableStateOf(0L) }
+            var solveData: SolveAnalysisData
+            saveTime.value = measureTimeMillis {
+                solveData = SolveAnalysisDBService(context).saveSolveWithAnalysis(solve.value)
+            }
             if(solveData.solveID > 0){
                 solveSaved.value = true
             }
