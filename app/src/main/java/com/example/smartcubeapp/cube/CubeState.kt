@@ -117,7 +117,7 @@ data class CubeState(
             val list = mutableListOf<Boolean>()
             val split = string.split(",")
             for (value in split) {
-                list.add(value=="true")
+                list.add(value=="1")
             }
             return list
         }

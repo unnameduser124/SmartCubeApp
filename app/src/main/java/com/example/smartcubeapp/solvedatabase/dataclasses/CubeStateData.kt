@@ -22,6 +22,9 @@ data class CubeStateData(
         cornerPositions = cubeState.cornerPositions.joinToString(","),
         edgePositions = cubeState.edgePositions.joinToString(","),
         cornerOrientations = cubeState.cornerOrientations.joinToString(","),
-        edgeOrientations = cubeState.edgeOrientations.joinToString(",")
-    )
+        edgeOrientations = ""
+    ){
+        val orientationsBoolToByte = cubeState.edgeOrientations.map { if(it) 1 else 0 }
+        edgeOrientations = orientationsBoolToByte.joinToString(",")
+    }
 }

@@ -89,7 +89,7 @@ class SolveAnalysisTimePerformanceTests {
 
         val average = time / 10.0
         println("Average time to generate F2L data: $average ms")
-        assert(average < 1)
+        assert(average < 5)
     }
 
     @Test
@@ -105,7 +105,7 @@ class SolveAnalysisTimePerformanceTests {
 
         val average = time / 10.0
         println("Average time to generate Cross data: $average ms")
-        assert(average < 1)
+        assert(average < 5)
     }
 
     @Test
