@@ -79,6 +79,10 @@ object SolvesDatabaseConstants {
             "FOREIGN KEY(${CrossTable.START_CUBE_STATE_ID_COLUMN}) REFERENCES ${CubeStateTable.TABLE_NAME}(${BaseColumns._ID}), " +
             "FOREIGN KEY(${CrossTable.END_CUBE_STATE_ID_COLUMN}) REFERENCES ${CubeStateTable.TABLE_NAME}(${BaseColumns._ID}))"
 
+    const val CREATE_STATS_TABLE = "CREATE TABLE IF NOT EXISTS ${StatsTable.TABLE_NAME} (" +
+            "${StatsTable.STATISTIC_NAME_COLUMN} TEXT NOT NULL, " +
+            "${StatsTable.STATISTIC_VALUE_COLUMN} TEXT NOT NULL)"
+
     object SolveTable {
         const val TABLE_NAME = "Solve"
         const val DURATION_COLUMN = "Duration"
@@ -135,5 +139,11 @@ object SolvesDatabaseConstants {
         const val START_CUBE_STATE_ID_COLUMN = "StartCubeStateId"
         const val END_CUBE_STATE_ID_COLUMN = "EndCubeStateId"
         const val MOVE_COUNT_COLUMN = "MoveCount"
+    }
+
+    object StatsTable{
+        const val TABLE_NAME = "Stats"
+        const val STATISTIC_NAME_COLUMN = "StatisticName"
+        const val STATISTIC_VALUE_COLUMN = "StatisticValue"
     }
 }
