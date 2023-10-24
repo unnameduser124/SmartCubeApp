@@ -1,4 +1,4 @@
-package com.example.smartcubeapp.correctnesstests.solvedatabasetests
+package com.example.smartcubeapp.correctnesstests.dbtests.solvedatabasetests
 
 import android.content.Context
 import androidx.test.platform.app.InstrumentationRegistry
@@ -168,7 +168,8 @@ class SolveDBTests {
         val stats = mutableListOf<String>()
         with(cursor){
             while(moveToNext()){
-                stats.add(getString(getColumnIndexOrThrow(SolvesDatabaseConstants.StatsTable.STATISTIC_NAME_COLUMN)))
+                val statName = getString(getColumnIndexOrThrow(SolvesDatabaseConstants.StatsTable.STATISTIC_NAME_COLUMN))
+                stats.add(statName)
                 assertEquals(0.0, getString(getColumnIndexOrThrow(SolvesDatabaseConstants.StatsTable.STATISTIC_VALUE_COLUMN)).toDouble())
             }
         }
@@ -201,7 +202,7 @@ class SolveDBTests {
                     for(oll in PredefinedOLLCase.values()){
                         for(numberOfSolves in numberOfSolvesValues){
                             var modifiedName = name.replace("Y", numberOfSolves.toString())
-                            modifiedName = modifiedName.replace("X", oll.name)
+                            modifiedName = modifiedName.replace("OLLX", oll.name)
                             expectedStats.add(modifiedName)
                         }
                     }

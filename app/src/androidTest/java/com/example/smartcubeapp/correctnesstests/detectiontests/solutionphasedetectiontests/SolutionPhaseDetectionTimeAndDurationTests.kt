@@ -1,4 +1,4 @@
-package com.example.smartcubeapp.correctnesstests.solutionphasedetectiontests
+package com.example.smartcubeapp.correctnesstests.detectiontests.solutionphasedetectiontests
 
 import android.content.Context
 import com.example.smartcubeapp.cube.CubeState

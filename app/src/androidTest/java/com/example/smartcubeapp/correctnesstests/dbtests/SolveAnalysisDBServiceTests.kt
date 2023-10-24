@@ -1,4 +1,4 @@
-package com.example.smartcubeapp.correctnesstests
+package com.example.smartcubeapp.correctnesstests.dbtests
 
 import android.content.Context
 import androidx.test.platform.app.InstrumentationRegistry

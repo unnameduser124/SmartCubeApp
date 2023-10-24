@@ -1,4 +1,4 @@
-package com.example.smartcubeapp.correctnesstests.elementorientationtests
+package com.example.smartcubeapp.correctnesstests.detectiontests.elementorientationtests
 
 import android.content.Context
 import com.example.smartcubeapp.cube.CubeState

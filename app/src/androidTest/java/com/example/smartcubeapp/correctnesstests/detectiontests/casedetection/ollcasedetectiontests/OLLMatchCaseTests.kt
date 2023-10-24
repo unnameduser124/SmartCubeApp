@@ -1,4 +1,4 @@
-package com.example.smartcubeapp.correctnesstests.casedetection.ollcasedetectiontests
+package com.example.smartcubeapp.correctnesstests.detectiontests.casedetection.ollcasedetectiontests
 
 import android.content.Context
 import androidx.test.platform.app.InstrumentationRegistry

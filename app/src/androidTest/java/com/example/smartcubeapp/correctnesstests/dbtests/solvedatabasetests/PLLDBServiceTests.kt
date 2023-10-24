@@ -1,4 +1,4 @@
-package com.example.smartcubeapp.correctnesstests.solvedatabasetests
+package com.example.smartcubeapp.correctnesstests.dbtests.solvedatabasetests
 
 import android.content.Context
 import android.provider.BaseColumns

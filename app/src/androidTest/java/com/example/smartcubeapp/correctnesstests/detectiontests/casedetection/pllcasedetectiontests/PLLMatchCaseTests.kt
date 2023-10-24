@@ -1,8 +1,10 @@
-package com.example.smartcubeapp.correctnesstests.casedetection.pllcasedetectiontests
+package com.example.smartcubeapp.correctnesstests.detectiontests.casedetection.pllcasedetectiontests
 
 import android.content.Context
 import androidx.test.platform.app.InstrumentationRegistry
+import com.example.smartcubeapp.casedetection.PositionRepresentationTransformer
 import com.example.smartcubeapp.casedetection.plldetection.PLLCaseDetection
+import com.example.smartcubeapp.casedetection.plldetection.PLLElementPosition
 import com.example.smartcubeapp.casedetection.plldetection.pllcase.PredefinedPLLCase
 import com.example.smartcubeapp.cube.BlueSide
 import com.example.smartcubeapp.cube.CubeState
@@ -11,11 +13,12 @@ import com.example.smartcubeapp.cube.OrangeSide
 import com.example.smartcubeapp.cube.RedSide
 import com.example.smartcubeapp.cube.WhiteSide
 import com.example.smartcubeapp.cube.YellowSide
-import junit.framework.TestCase
+import junit.framework.TestCase.fail
 import org.junit.Before
 import org.junit.Test
 
-class DetectPLLCaseTests {
+
+class PLLMatchCaseTests {
 
     private lateinit var context: Context
     private lateinit var pllCaseDetection: PLLCaseDetection
@@ -50,10 +53,14 @@ class DetectPLLCaseTests {
 
         pllCaseDetection.changeCubeState(cubeState)
         pllCaseDetection.changeCubeSide(WhiteSide)
+        val position = PositionRepresentationTransformer(
+            cubeState,
+            WhiteSide
+        ).transformStateToPositionRepresentation<PLLElementPosition>(context)
 
-        val case = pllCaseDetection.detectCase(context)
+        val case = pllCaseDetection.matchCase(context, position)
         if (case == null) {
-            TestCase.fail()
+            fail()
         } else {
             assert(case == PredefinedPLLCase.Aa)
         }
@@ -83,10 +90,14 @@ class DetectPLLCaseTests {
 
         pllCaseDetection.changeCubeState(cubeState)
         pllCaseDetection.changeCubeSide(WhiteSide)
+        val position = PositionRepresentationTransformer(
+            cubeState,
+            WhiteSide
+        ).transformStateToPositionRepresentation<PLLElementPosition>(context)
 
-        val case = pllCaseDetection.detectCase(context)
+        val case = pllCaseDetection.matchCase(context, position)
         if (case == null) {
-            TestCase.fail()
+            fail()
         } else {
             assert(case == PredefinedPLLCase.Ab)
         }
@@ -116,10 +127,14 @@ class DetectPLLCaseTests {
 
         pllCaseDetection.changeCubeState(cubeState)
         pllCaseDetection.changeCubeSide(YellowSide)
+        val position = PositionRepresentationTransformer(
+            cubeState,
+            YellowSide
+        ).transformStateToPositionRepresentation<PLLElementPosition>(context)
 
-        val case = pllCaseDetection.detectCase(context)
+        val case = pllCaseDetection.matchCase(context, position)
         if (case == null) {
-            TestCase.fail()
+            fail()
         } else {
             assert(case == PredefinedPLLCase.E)
         }
@@ -149,10 +164,14 @@ class DetectPLLCaseTests {
 
         pllCaseDetection.changeCubeState(cubeState)
         pllCaseDetection.changeCubeSide(YellowSide)
+        val position = PositionRepresentationTransformer(
+            cubeState,
+            YellowSide
+        ).transformStateToPositionRepresentation<PLLElementPosition>(context)
 
-        val case = pllCaseDetection.detectCase(context)
+        val case = pllCaseDetection.matchCase(context, position)
         if (case == null) {
-            TestCase.fail()
+            fail()
         } else {
             assert(case == PredefinedPLLCase.F)
         }
@@ -182,10 +201,14 @@ class DetectPLLCaseTests {
 
         pllCaseDetection.changeCubeState(cubeState)
         pllCaseDetection.changeCubeSide(RedSide)
+        val position = PositionRepresentationTransformer(
+            cubeState,
+            RedSide
+        ).transformStateToPositionRepresentation<PLLElementPosition>(context)
 
-        val case = pllCaseDetection.detectCase(context)
+        val case = pllCaseDetection.matchCase(context, position)
         if (case == null) {
-            TestCase.fail()
+            fail()
         } else {
             assert(case == PredefinedPLLCase.Ga)
         }
@@ -215,10 +238,14 @@ class DetectPLLCaseTests {
 
         pllCaseDetection.changeCubeState(cubeState)
         pllCaseDetection.changeCubeSide(RedSide)
+        val position = PositionRepresentationTransformer(
+            cubeState,
+            RedSide
+        ).transformStateToPositionRepresentation<PLLElementPosition>(context)
 
-        val case = pllCaseDetection.detectCase(context)
+        val case = pllCaseDetection.matchCase(context, position)
         if (case == null) {
-            TestCase.fail()
+            fail()
         } else {
             assert(case == PredefinedPLLCase.Gb)
         }
@@ -248,10 +275,14 @@ class DetectPLLCaseTests {
 
         pllCaseDetection.changeCubeState(cubeState)
         pllCaseDetection.changeCubeSide(OrangeSide)
+        val position = PositionRepresentationTransformer(
+            cubeState,
+            OrangeSide
+        ).transformStateToPositionRepresentation<PLLElementPosition>(context)
 
-        val case = pllCaseDetection.detectCase(context)
+        val case = pllCaseDetection.matchCase(context, position)
         if (case == null) {
-            TestCase.fail()
+            fail()
         } else {
             assert(case == PredefinedPLLCase.Gc)
         }
@@ -281,10 +312,14 @@ class DetectPLLCaseTests {
 
         pllCaseDetection.changeCubeState(cubeState)
         pllCaseDetection.changeCubeSide(OrangeSide)
+        val position = PositionRepresentationTransformer(
+            cubeState,
+            OrangeSide
+        ).transformStateToPositionRepresentation<PLLElementPosition>(context)
 
-        val case = pllCaseDetection.detectCase(context)
+        val case = pllCaseDetection.matchCase(context, position)
         if (case == null) {
-            TestCase.fail()
+            fail()
         } else {
             assert(case == PredefinedPLLCase.Gd)
         }
@@ -314,10 +349,14 @@ class DetectPLLCaseTests {
 
         pllCaseDetection.changeCubeState(cubeState)
         pllCaseDetection.changeCubeSide(BlueSide)
+        val position = PositionRepresentationTransformer(
+            cubeState,
+            BlueSide
+        ).transformStateToPositionRepresentation<PLLElementPosition>(context)
 
-        val case = pllCaseDetection.detectCase(context)
+        val case = pllCaseDetection.matchCase(context, position)
         if (case == null) {
-            TestCase.fail()
+            fail()
         } else {
             assert(case == PredefinedPLLCase.H)
         }
@@ -347,10 +386,14 @@ class DetectPLLCaseTests {
 
         pllCaseDetection.changeCubeState(cubeState)
         pllCaseDetection.changeCubeSide(BlueSide)
+        val position = PositionRepresentationTransformer(
+            cubeState,
+            BlueSide
+        ).transformStateToPositionRepresentation<PLLElementPosition>(context)
 
-        val case = pllCaseDetection.detectCase(context)
+        val case = pllCaseDetection.matchCase(context, position)
         if (case == null) {
-            TestCase.fail()
+            fail()
         } else {
             assert(case == PredefinedPLLCase.Ja)
         }
@@ -380,10 +423,14 @@ class DetectPLLCaseTests {
 
         pllCaseDetection.changeCubeState(cubeState)
         pllCaseDetection.changeCubeSide(GreenSide)
+        val position = PositionRepresentationTransformer(
+            cubeState,
+            GreenSide
+        ).transformStateToPositionRepresentation<PLLElementPosition>(context)
 
-        val case = pllCaseDetection.detectCase(context)
+        val case = pllCaseDetection.matchCase(context, position)
         if (case == null) {
-            TestCase.fail()
+            fail()
         } else {
             assert(case == PredefinedPLLCase.Jb)
         }
@@ -413,10 +460,14 @@ class DetectPLLCaseTests {
 
         pllCaseDetection.changeCubeState(cubeState)
         pllCaseDetection.changeCubeSide(GreenSide)
+        val position = PositionRepresentationTransformer(
+            cubeState,
+            GreenSide
+        ).transformStateToPositionRepresentation<PLLElementPosition>(context)
 
-        val case = pllCaseDetection.detectCase(context)
+        val case = pllCaseDetection.matchCase(context, position)
         if (case == null) {
-            TestCase.fail()
+            fail()
         } else {
             assert(case == PredefinedPLLCase.Na)
         }
@@ -446,10 +497,14 @@ class DetectPLLCaseTests {
 
         pllCaseDetection.changeCubeState(cubeState)
         pllCaseDetection.changeCubeSide(WhiteSide)
+        val position = PositionRepresentationTransformer(
+            cubeState,
+            WhiteSide
+        ).transformStateToPositionRepresentation<PLLElementPosition>(context)
 
-        val case = pllCaseDetection.detectCase(context)
+        val case = pllCaseDetection.matchCase(context, position)
         if (case == null) {
-            TestCase.fail()
+            fail()
         } else {
             assert(case == PredefinedPLLCase.Nb)
         }
@@ -479,10 +534,14 @@ class DetectPLLCaseTests {
 
         pllCaseDetection.changeCubeState(cubeState)
         pllCaseDetection.changeCubeSide(YellowSide)
+        val position = PositionRepresentationTransformer(
+            cubeState,
+            YellowSide
+        ).transformStateToPositionRepresentation<PLLElementPosition>(context)
 
-        val case = pllCaseDetection.detectCase(context)
+        val case = pllCaseDetection.matchCase(context, position)
         if (case == null) {
-            TestCase.fail()
+            fail()
         } else {
             assert(case == PredefinedPLLCase.Ra)
         }
@@ -512,10 +571,14 @@ class DetectPLLCaseTests {
 
         pllCaseDetection.changeCubeState(cubeState)
         pllCaseDetection.changeCubeSide(RedSide)
+        val position = PositionRepresentationTransformer(
+            cubeState,
+            RedSide
+        ).transformStateToPositionRepresentation<PLLElementPosition>(context)
 
-        val case = pllCaseDetection.detectCase(context)
+        val case = pllCaseDetection.matchCase(context, position)
         if (case == null) {
-            TestCase.fail()
+            fail()
         } else {
             assert(case == PredefinedPLLCase.Rb)
         }
@@ -545,10 +608,14 @@ class DetectPLLCaseTests {
 
         pllCaseDetection.changeCubeState(cubeState)
         pllCaseDetection.changeCubeSide(OrangeSide)
+        val position = PositionRepresentationTransformer(
+            cubeState,
+            OrangeSide
+        ).transformStateToPositionRepresentation<PLLElementPosition>(context)
 
-        val case = pllCaseDetection.detectCase(context)
+        val case = pllCaseDetection.matchCase(context, position)
         if (case == null) {
-            TestCase.fail()
+            fail()
         } else {
             assert(case == PredefinedPLLCase.T)
         }
@@ -578,10 +645,14 @@ class DetectPLLCaseTests {
 
         pllCaseDetection.changeCubeState(cubeState)
         pllCaseDetection.changeCubeSide(BlueSide)
+        val position = PositionRepresentationTransformer(
+            cubeState,
+            BlueSide
+        ).transformStateToPositionRepresentation<PLLElementPosition>(context)
 
-        val case = pllCaseDetection.detectCase(context)
+        val case = pllCaseDetection.matchCase(context, position)
         if (case == null) {
-            TestCase.fail()
+            fail()
         } else {
             assert(case == PredefinedPLLCase.Ua)
         }
@@ -611,10 +682,14 @@ class DetectPLLCaseTests {
 
         pllCaseDetection.changeCubeState(cubeState)
         pllCaseDetection.changeCubeSide(GreenSide)
+        val position = PositionRepresentationTransformer(
+            cubeState,
+            GreenSide
+        ).transformStateToPositionRepresentation<PLLElementPosition>(context)
 
-        val case = pllCaseDetection.detectCase(context)
+        val case = pllCaseDetection.matchCase(context, position)
         if (case == null) {
-            TestCase.fail()
+            fail()
         } else {
             assert(case == PredefinedPLLCase.Ub)
         }
@@ -644,10 +719,14 @@ class DetectPLLCaseTests {
 
         pllCaseDetection.changeCubeState(cubeState)
         pllCaseDetection.changeCubeSide(WhiteSide)
+        val position = PositionRepresentationTransformer(
+            cubeState,
+            WhiteSide
+        ).transformStateToPositionRepresentation<PLLElementPosition>(context)
 
-        val case = pllCaseDetection.detectCase(context)
+        val case = pllCaseDetection.matchCase(context, position)
         if (case == null) {
-            TestCase.fail()
+            fail()
         } else {
             assert(case == PredefinedPLLCase.V)
         }
@@ -677,10 +756,14 @@ class DetectPLLCaseTests {
 
         pllCaseDetection.changeCubeState(cubeState)
         pllCaseDetection.changeCubeSide(YellowSide)
+        val position = PositionRepresentationTransformer(
+            cubeState,
+            YellowSide
+        ).transformStateToPositionRepresentation<PLLElementPosition>(context)
 
-        val case = pllCaseDetection.detectCase(context)
+        val case = pllCaseDetection.matchCase(context, position)
         if (case == null) {
-            TestCase.fail()
+            fail()
         } else {
             assert(case == PredefinedPLLCase.Y)
         }
@@ -710,10 +793,14 @@ class DetectPLLCaseTests {
 
         pllCaseDetection.changeCubeState(cubeState)
         pllCaseDetection.changeCubeSide(RedSide)
+        val position = PositionRepresentationTransformer(
+            cubeState,
+            RedSide
+        ).transformStateToPositionRepresentation<PLLElementPosition>(context)
 
-        val case = pllCaseDetection.detectCase(context)
+        val case = pllCaseDetection.matchCase(context, position)
         if (case == null) {
-            TestCase.fail()
+            fail()
         } else {
             assert(case == PredefinedPLLCase.Z)
         }
