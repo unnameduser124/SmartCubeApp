@@ -9,7 +9,9 @@ class StatsDB(val context: Context, private val dbName: String = StatsDBConstant
     SQLiteOpenHelper(context, dbName, null, StatsDBConstants.DATABASE_VERSION) {
 
     init{
-        copyDatabaseFromAssets()
+        if (!context.getDatabasePath(dbName).exists()) {
+            copyDatabaseFromAssets()
+        }
     }
     override fun onCreate(db: SQLiteDatabase?) {
 
