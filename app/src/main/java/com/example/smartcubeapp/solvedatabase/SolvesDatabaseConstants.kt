@@ -6,6 +6,7 @@ object SolvesDatabaseConstants {
 
     const val SOLVE_DATABASE_NAME = "SolvesDB.db"
     const val TEST_DATABASE_NAME = "SolvesDBTest.db"
+    const val STATS_TESTS_DATABASE_NAME = "SolvesDBForStatsTests.db"
     const val DATABASE_VERSION = 1
 
     const val CREATE_SOLVE_TABLE =
@@ -15,6 +16,7 @@ object SolvesDatabaseConstants {
                 "${SolveTable.TIMESTAMP_COLUMN} INTEGER NOT NULL, " +
                 "${SolveTable.SCRAMBLED_STATE_ID_COLUMN} INTEGER NOT NULL, " +
                 "${SolveTable.SCRAMBLE_SEQUENCE_COLUMN} TEXT NOT NULL, " +
+                "${SolveTable.MOVE_COUNT} INTEGER NOT NULL, " +
                 "FOREIGN KEY(${SolveTable.SCRAMBLED_STATE_ID_COLUMN}) REFERENCES ${CubeStateTable.TABLE_NAME}(${BaseColumns._ID}))"
 
     const val CREATE_CUBE_STATE_TABLE =
@@ -86,6 +88,7 @@ object SolvesDatabaseConstants {
         const val TIMESTAMP_COLUMN = "Timestamp"
         const val SCRAMBLED_STATE_ID_COLUMN = "ScrambledStateId"
         const val SCRAMBLE_SEQUENCE_COLUMN = "ScrambleSequence"
+        const val MOVE_COUNT = "MoveCount"
     }
 
     object CubeStateTable {

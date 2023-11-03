@@ -7,13 +7,15 @@ data class SolveData(
     val solveDuration: Long,
     val timestamp: Long,
     val scrambledStateID: Long,
-    val scramble: String
+    val scramble: String,
+    val moveCount: Int = 0
 ){
     constructor(solve: Solve): this(
         solve.id,
         solve.time,
         solve.date.timeInMillis,
         solve.scrambledState.id,
-        solve.scrambleSequence
+        solve.scrambleSequence,
+        solve.solveStateSequence.size - 1
     )
 }

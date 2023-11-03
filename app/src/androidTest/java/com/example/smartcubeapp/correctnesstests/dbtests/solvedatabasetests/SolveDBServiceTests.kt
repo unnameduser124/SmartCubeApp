@@ -10,6 +10,7 @@ import com.example.smartcubeapp.solvedatabase.SolvesDatabaseConstants
 import com.example.smartcubeapp.solvedatabase.dataclasses.SolveData
 import junit.framework.TestCase
 import org.junit.After
+import org.junit.Assert.assertEquals
 import org.junit.Assert.assertThrows
 import org.junit.Before
 import org.junit.Test
@@ -48,6 +49,7 @@ class SolveDBServiceTests {
             SolvesDatabaseConstants.SolveTable.TIMESTAMP_COLUMN,
             SolvesDatabaseConstants.SolveTable.SCRAMBLED_STATE_ID_COLUMN,
             SolvesDatabaseConstants.SolveTable.SCRAMBLE_SEQUENCE_COLUMN,
+            SolvesDatabaseConstants.SolveTable.MOVE_COUNT,
             BaseColumns._ID
         )
 
@@ -68,6 +70,7 @@ class SolveDBServiceTests {
                 assert(getLong(getColumnIndexOrThrow(SolvesDatabaseConstants.SolveTable.SCRAMBLED_STATE_ID_COLUMN)) == -1L)
                 assert(getString(getColumnIndexOrThrow(SolvesDatabaseConstants.SolveTable.SCRAMBLE_SEQUENCE_COLUMN)) == "R U R' U'")
                 assert(getLong(getColumnIndexOrThrow(BaseColumns._ID)) == id)
+                assertEquals(-1, getInt(getColumnIndexOrThrow(SolvesDatabaseConstants.SolveTable.MOVE_COUNT)))
             }
             else{
                 TestCase.fail()
@@ -164,6 +167,8 @@ class SolveDBServiceTests {
         assert(retrievedSolveData.solveDuration == solveData.solveDuration)
         assert(retrievedSolveData.timestamp == solveData.timestamp)
         assert(retrievedSolveData.scrambledStateID == solveData.scrambledStateID)
+        assert(retrievedSolveData.scramble == solveData.scramble)
+        assertEquals(solveData.moveCount, retrievedSolveData.moveCount)
     }
 
     @Test
@@ -243,6 +248,7 @@ class SolveDBServiceTests {
         assert(retrievedSolveData.timestamp == newSolve.date.timeInMillis)
         assert(retrievedSolveData.scrambledStateID == newSolve.scrambledState.id)
         assert(retrievedSolveData.scramble == newSolve.scrambleSequence)
+        assert(retrievedSolveData.moveCount == newSolve.solveStateSequence.size)
     }
 
     @Test
