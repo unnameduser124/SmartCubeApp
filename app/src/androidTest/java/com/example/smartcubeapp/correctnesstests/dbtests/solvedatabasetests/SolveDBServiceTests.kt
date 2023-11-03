@@ -248,7 +248,7 @@ class SolveDBServiceTests {
         assert(retrievedSolveData.timestamp == newSolve.date.timeInMillis)
         assert(retrievedSolveData.scrambledStateID == newSolve.scrambledState.id)
         assert(retrievedSolveData.scramble == newSolve.scrambleSequence)
-        assert(retrievedSolveData.moveCount == newSolve.solveStateSequence.size)
+        assertEquals(newSolve.solveStateSequence.size - 1, retrievedSolveData.moveCount)
     }
 
     @Test

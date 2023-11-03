@@ -6,9 +6,18 @@ import com.example.smartcubeapp.casedetection.plldetection.pllcase.PredefinedPLL
 import com.example.smartcubeapp.phasedetection.SolvePhase
 import com.example.smartcubeapp.solvedatabase.SolveDB
 import com.example.smartcubeapp.solvedatabase.SolvesDatabaseConstants
+import java.io.FileOutputStream
 
-class StatsService(private val context: Context, dbName: String = SolvesDatabaseConstants.SOLVE_DATABASE_NAME):
+class StatsService(private val context: Context, private val dbName: String = SolvesDatabaseConstants.SOLVE_DATABASE_NAME):
     SolveDB(context, dbName){
+
+    init {
+        if (!context.getDatabasePath(dbName).exists()
+            && databaseName != SolvesDatabaseConstants.STATS_TESTS_DATABASE_NAME
+        ) {
+            copyDatabaseForStatsTests()
+        }
+    }
 
     fun averageTimeForPhaseInLastXSolves(x: Int, phase: SolvePhase): Double{
         TODO("Not implemented yet")
@@ -71,4 +80,20 @@ class StatsService(private val context: Context, dbName: String = SolvesDatabase
     }
 
     //TODO("Write more methods for stats not utilizing smart cube potential")
+
+    private fun copyDatabaseForStatsTests() {
+        val dbPath = context.getDatabasePath(dbName)
+        if (!dbPath.exists()) {
+            val inputStream = context.assets.open(dbName)
+            val outputStream = FileOutputStream(dbPath)
+            val buffer = ByteArray(1024)
+            var length: Int
+            while (inputStream.read(buffer).also { length = it } > 0) {
+                outputStream.write(buffer, 0, length)
+            }
+            outputStream.flush()
+            outputStream.close()
+            inputStream.close()
+        }
+    }
 }
