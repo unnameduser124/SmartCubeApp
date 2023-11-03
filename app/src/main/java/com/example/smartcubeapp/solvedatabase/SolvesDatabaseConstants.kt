@@ -2,11 +2,20 @@ package com.example.smartcubeapp.solvedatabase
 
 import android.provider.BaseColumns
 
+interface PhaseTable{
+    val TABLE_NAME: String
+    val SOLVE_ID_COLUMN: String
+    val DURATION_COLUMN: String
+    val START_CUBE_STATE_ID_COLUMN: String
+    val END_CUBE_STATE_ID_COLUMN: String
+    val MOVE_COUNT_COLUMN: String
+}
+
 object SolvesDatabaseConstants {
 
     const val SOLVE_DATABASE_NAME = "SolvesDB.db"
     const val TEST_DATABASE_NAME = "SolvesDBTest.db"
-    const val STATS_TESTS_DATABASE_NAME = "SolvesDBForStatsTests.db"
+    const val STATS_TESTS_DATABASE_NAME = "SolveDBForStatsTests.db"
     const val DATABASE_VERSION = 1
 
     const val CREATE_SOLVE_TABLE =
@@ -32,7 +41,7 @@ object SolvesDatabaseConstants {
                 "${CubeStateTable.EDGE_ORIENTATIONS_COLUMN} TEXT NOT NULL, " +
                 "FOREIGN KEY(${CubeStateTable.SOLVE_ID_COLUMN}) REFERENCES ${SolveTable.TABLE_NAME}(${BaseColumns._ID}))"
 
-    const val CREATE_F2L_TABLE =
+    val CREATE_F2L_TABLE =
         "CREATE TABLE IF NOT EXISTS ${F2LTable.TABLE_NAME} (" +
                 "${BaseColumns._ID} INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 "${F2LTable.SOLVE_ID_COLUMN} INTEGER NOT NULL, " +
@@ -44,7 +53,7 @@ object SolvesDatabaseConstants {
                 "FOREIGN KEY(${F2LTable.START_CUBE_STATE_ID_COLUMN}) REFERENCES ${CubeStateTable.TABLE_NAME}(${BaseColumns._ID}), " +
                 "FOREIGN KEY(${F2LTable.END_CUBE_STATE_ID_COLUMN}) REFERENCES ${CubeStateTable.TABLE_NAME}(${BaseColumns._ID}))"
 
-    const val CREATE_OLL_TABLE =
+    val CREATE_OLL_TABLE =
         "CREATE TABLE IF NOT EXISTS ${OLLTable.TABLE_NAME} (" +
                 "${BaseColumns._ID} INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 "${OLLTable.SOLVE_ID_COLUMN} INTEGER NOT NULL, " +
@@ -57,7 +66,7 @@ object SolvesDatabaseConstants {
                 "FOREIGN KEY(${OLLTable.START_CUBE_STATE_ID_COLUMN}) REFERENCES ${CubeStateTable.TABLE_NAME}(${BaseColumns._ID}), " +
                 "FOREIGN KEY(${OLLTable.END_CUBE_STATE_ID_COLUMN}) REFERENCES ${CubeStateTable.TABLE_NAME}(${BaseColumns._ID}))"
 
-    const val CREATE_PLL_TABLE =
+    val CREATE_PLL_TABLE =
         "CREATE TABLE IF NOT EXISTS ${PLLTable.TABLE_NAME} (" +
                 "${BaseColumns._ID} INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 "${PLLTable.SOLVE_ID_COLUMN} INTEGER NOT NULL, " +
@@ -70,7 +79,7 @@ object SolvesDatabaseConstants {
                 "FOREIGN KEY(${PLLTable.START_CUBE_STATE_ID_COLUMN}) REFERENCES ${CubeStateTable.TABLE_NAME}(${BaseColumns._ID}), " +
                 "FOREIGN KEY(${PLLTable.END_CUBE_STATE_ID_COLUMN}) REFERENCES ${CubeStateTable.TABLE_NAME}(${BaseColumns._ID}))"
 
-    const val CREATE_CROSS_TABLE = "CREATE TABLE IF NOT EXISTS ${CrossTable.TABLE_NAME} (" +
+    val CREATE_CROSS_TABLE = "CREATE TABLE IF NOT EXISTS ${CrossTable.TABLE_NAME} (" +
             "${BaseColumns._ID} INTEGER PRIMARY KEY AUTOINCREMENT, " +
             "${CrossTable.SOLVE_ID_COLUMN} INTEGER NOT NULL, " +
             "${CrossTable.DURATION_COLUMN} INTEGER NOT NULL, " +
@@ -103,41 +112,41 @@ object SolvesDatabaseConstants {
         const val EDGE_ORIENTATIONS_COLUMN = "EdgeOrientations"
     }
 
-    object F2LTable {
-        const val TABLE_NAME = "F2L"
-        const val SOLVE_ID_COLUMN = "SolveId"
-        const val DURATION_COLUMN = "Duration"
-        const val START_CUBE_STATE_ID_COLUMN = "StartCubeStateId"
-        const val END_CUBE_STATE_ID_COLUMN = "EndCubeStateId"
-        const val MOVE_COUNT_COLUMN = "MoveCount"
+    object F2LTable: PhaseTable {
+        override val TABLE_NAME = "F2L"
+        override val SOLVE_ID_COLUMN = "SolveId"
+        override val DURATION_COLUMN = "Duration"
+        override val START_CUBE_STATE_ID_COLUMN = "StartCubeStateId"
+        override val END_CUBE_STATE_ID_COLUMN = "EndCubeStateId"
+        override val MOVE_COUNT_COLUMN = "MoveCount"
     }
 
-    object OLLTable {
-        const val TABLE_NAME = "OLL"
-        const val SOLVE_ID_COLUMN = "SolveId"
-        const val DURATION_COLUMN = "Duration"
-        const val START_CUBE_STATE_ID_COLUMN = "StartCubeStateId"
-        const val END_CUBE_STATE_ID_COLUMN = "EndCubeStateId"
-        const val MOVE_COUNT_COLUMN = "MoveCount"
+    object OLLTable: PhaseTable {
+        override val TABLE_NAME = "OLL"
+        override val SOLVE_ID_COLUMN = "SolveId"
+        override val DURATION_COLUMN = "Duration"
+        override val START_CUBE_STATE_ID_COLUMN = "StartCubeStateId"
+        override val END_CUBE_STATE_ID_COLUMN = "EndCubeStateId"
+        override val MOVE_COUNT_COLUMN = "MoveCount"
         const val CASE_COLUMN = "OLLCase"
     }
 
-    object PLLTable {
-        const val TABLE_NAME = "PLL"
-        const val SOLVE_ID_COLUMN = "SolveId"
-        const val DURATION_COLUMN = "Duration"
-        const val START_CUBE_STATE_ID_COLUMN = "StartCubeStateId"
-        const val END_CUBE_STATE_ID_COLUMN = "EndCubeStateId"
-        const val MOVE_COUNT_COLUMN = "MoveCount"
+    object PLLTable: PhaseTable {
+        override val TABLE_NAME = "PLL"
+        override val SOLVE_ID_COLUMN = "SolveId"
+        override val DURATION_COLUMN = "Duration"
+        override val START_CUBE_STATE_ID_COLUMN = "StartCubeStateId"
+        override val END_CUBE_STATE_ID_COLUMN = "EndCubeStateId"
+        override val MOVE_COUNT_COLUMN = "MoveCount"
         const val CASE_COLUMN = "PLLCase"
     }
 
-    object CrossTable{
-        const val TABLE_NAME = "Cross"
-        const val SOLVE_ID_COLUMN = "SolveId"
-        const val DURATION_COLUMN = "Duration"
-        const val START_CUBE_STATE_ID_COLUMN = "StartCubeStateId"
-        const val END_CUBE_STATE_ID_COLUMN = "EndCubeStateId"
-        const val MOVE_COUNT_COLUMN = "MoveCount"
+    object CrossTable: PhaseTable{
+        override val TABLE_NAME = "Cross"
+        override val SOLVE_ID_COLUMN = "SolveId"
+        override val DURATION_COLUMN = "Duration"
+        override val START_CUBE_STATE_ID_COLUMN = "StartCubeStateId"
+        override val END_CUBE_STATE_ID_COLUMN = "EndCubeStateId"
+        override val MOVE_COUNT_COLUMN = "MoveCount"
     }
 }

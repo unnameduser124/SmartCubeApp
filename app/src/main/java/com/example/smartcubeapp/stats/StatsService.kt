@@ -6,21 +6,53 @@ import com.example.smartcubeapp.casedetection.plldetection.pllcase.PredefinedPLL
 import com.example.smartcubeapp.phasedetection.SolvePhase
 import com.example.smartcubeapp.solvedatabase.SolveDB
 import com.example.smartcubeapp.solvedatabase.SolvesDatabaseConstants
-import java.io.FileOutputStream
 
-class StatsService(private val context: Context, private val dbName: String = SolvesDatabaseConstants.SOLVE_DATABASE_NAME):
+class StatsService(context: Context, dbName: String = SolvesDatabaseConstants.SOLVE_DATABASE_NAME):
     SolveDB(context, dbName){
 
-    init {
-        if (!context.getDatabasePath(dbName).exists()
-            && databaseName != SolvesDatabaseConstants.STATS_TESTS_DATABASE_NAME
-        ) {
-            copyDatabaseForStatsTests()
-        }
-    }
-
     fun averageTimeForPhaseInLastXSolves(x: Int, phase: SolvePhase): Double{
-        TODO("Not implemented yet")
+        val phaseTable = when (phase) {
+            SolvePhase.Cross -> {
+                SolvesDatabaseConstants.CrossTable
+            }
+            SolvePhase.F2L -> {
+                SolvesDatabaseConstants.F2LTable
+            }
+            SolvePhase.OLL -> {
+                SolvesDatabaseConstants.OLLTable
+            }
+            SolvePhase.PLL -> {
+                SolvesDatabaseConstants.PLLTable
+            }
+            else -> {
+                throw IllegalArgumentException("Phase must be one of the four phases")
+            }
+        }
+
+        val db = this.readableDatabase
+
+        val resultColumn = "average_time"
+        val projection = arrayOf("AVG(${phaseTable.DURATION_COLUMN}) as $resultColumn")
+        val table = "(SELECT ${phaseTable.DURATION_COLUMN} " +
+                "FROM ${phaseTable.TABLE_NAME} " +
+                "ORDER BY ${phaseTable.SOLVE_ID_COLUMN} DESC LIMIT $x)"
+
+        val cursor = db.query(
+            table,
+            projection,
+            null,
+            null,
+            null,
+            null,
+            null
+        )
+
+        with(cursor){
+            moveToFirst()
+            val averageTime = getDouble(getColumnIndexOrThrow(resultColumn))
+            close()
+            return averageTime
+        }
     }
 
     fun bestAverageTimeForPhaseInXSolves(x: Int, phase: SolvePhase): Double{
@@ -28,7 +60,31 @@ class StatsService(private val context: Context, private val dbName: String = So
     }
 
     fun averageTimeForPLLCaseInLastXSolves(x: Int, case: PredefinedPLLCase): Double{
-        TODO("Not implemented yet")
+        val db = this.readableDatabase
+
+        val projection = arrayOf("AVG(${SolvesDatabaseConstants.PLLTable.DURATION_COLUMN}) as average_time")
+
+        val table = "(SELECT ${SolvesDatabaseConstants.PLLTable.DURATION_COLUMN} " +
+                "FROM ${SolvesDatabaseConstants.PLLTable.TABLE_NAME} " +
+                "WHERE ${SolvesDatabaseConstants.PLLTable.CASE_COLUMN} = ${case.ordinal} " +
+                "ORDER BY ${SolvesDatabaseConstants.PLLTable.SOLVE_ID_COLUMN} DESC LIMIT $x)"
+
+        val cursor = db.query(
+            table,
+            projection,
+            null,
+            null,
+            null,
+            null,
+            null
+        )
+
+        with(cursor){
+            moveToFirst()
+            val averageTime = getDouble(getColumnIndexOrThrow("average_time"))
+            close()
+            return averageTime
+        }
     }
 
     fun bestAverageTimeForPLLCaseInXSolves(x: Int, case: PredefinedPLLCase): Double{
@@ -36,7 +92,31 @@ class StatsService(private val context: Context, private val dbName: String = So
     }
 
     fun averageTimeForOLLCaseInLastXSolves(x: Int, case: PredefinedOLLCase): Double{
-        TODO("Not implemented yet")
+        val db = this.readableDatabase
+
+        val projection = arrayOf("AVG(${SolvesDatabaseConstants.OLLTable.DURATION_COLUMN}) as average_time")
+
+        val table = "(SELECT ${SolvesDatabaseConstants.OLLTable.DURATION_COLUMN} " +
+                "FROM ${SolvesDatabaseConstants.OLLTable.TABLE_NAME} " +
+                "WHERE ${SolvesDatabaseConstants.OLLTable.CASE_COLUMN} = ${case.ordinal} " +
+                "ORDER BY ${SolvesDatabaseConstants.OLLTable.SOLVE_ID_COLUMN} DESC LIMIT $x)"
+
+        val cursor = db.query(
+            table,
+            projection,
+            null,
+            null,
+            null,
+            null,
+            null
+        )
+
+        with(cursor){
+            moveToFirst()
+            val averageTime = getDouble(getColumnIndexOrThrow("average_time"))
+            close()
+            return averageTime
+        }
     }
 
     fun bestAverageTimeForOLLCaseInXSolves(x: Int, case: PredefinedOLLCase): Double{
@@ -81,19 +161,4 @@ class StatsService(private val context: Context, private val dbName: String = So
 
     //TODO("Write more methods for stats not utilizing smart cube potential")
 
-    private fun copyDatabaseForStatsTests() {
-        val dbPath = context.getDatabasePath(dbName)
-        if (!dbPath.exists()) {
-            val inputStream = context.assets.open(dbName)
-            val outputStream = FileOutputStream(dbPath)
-            val buffer = ByteArray(1024)
-            var length: Int
-            while (inputStream.read(buffer).also { length = it } > 0) {
-                outputStream.write(buffer, 0, length)
-            }
-            outputStream.flush()
-            outputStream.close()
-            inputStream.close()
-        }
-    }
 }
