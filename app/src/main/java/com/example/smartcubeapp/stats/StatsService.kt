@@ -124,7 +124,30 @@ class StatsService(context: Context, dbName: String = SolvesDatabaseConstants.SO
     }
 
     fun averageNumberOfMovesPerSolveInLastXSolves(x: Int): Double{
-        TODO("Not implemented yet")
+        val db = this.readableDatabase
+
+        val result = "average_moves"
+        val projection = arrayOf("AVG(${SolvesDatabaseConstants.SolveTable.MOVE_COUNT}) as $result")
+        val table = "(SELECT ${SolvesDatabaseConstants.SolveTable.MOVE_COUNT} " +
+                "FROM ${SolvesDatabaseConstants.SolveTable.TABLE_NAME} " +
+                "ORDER BY ${SolvesDatabaseConstants.SolveTable.TIMESTAMP_COLUMN} DESC LIMIT $x)"
+
+        val cursor = db.query(
+            table,
+            projection,
+            null,
+            null,
+            null,
+            null,
+            null
+        )
+
+        with(cursor){
+            moveToFirst()
+            val averageMoves = getDouble(getColumnIndexOrThrow(result))
+            close()
+            return averageMoves
+        }
     }
 
     fun bestAverageNumberOfMovesPerSolveInXSolves(x: Int): Double{
@@ -132,7 +155,49 @@ class StatsService(context: Context, dbName: String = SolvesDatabaseConstants.SO
     }
 
     fun averageNumberOfMovesForPhaseInLastXSolves(x: Int, phase: SolvePhase): Double{
-        TODO("Not implemented yet")
+        val db = this.readableDatabase
+
+        val phaseTable = when (phase) {
+            SolvePhase.Cross -> {
+                SolvesDatabaseConstants.CrossTable
+            }
+            SolvePhase.F2L -> {
+                SolvesDatabaseConstants.F2LTable
+            }
+            SolvePhase.OLL -> {
+                SolvesDatabaseConstants.OLLTable
+            }
+            SolvePhase.PLL -> {
+                SolvesDatabaseConstants.PLLTable
+            }
+            else -> {
+                throw IllegalArgumentException("Phase must be one of the four phases")
+            }
+        }
+
+        val result = "average_moves"
+        val projection = arrayOf("AVG(${phaseTable.MOVE_COUNT_COLUMN}) as $result")
+
+        val table = "(SELECT ${phaseTable.MOVE_COUNT_COLUMN} " +
+                "FROM ${phaseTable.TABLE_NAME} " +
+                "ORDER BY ${phaseTable.SOLVE_ID_COLUMN} DESC LIMIT $x)"
+
+        val cursor = db.query(
+            table,
+            projection,
+            null,
+            null,
+            null,
+            null,
+            null
+        )
+
+        with(cursor){
+            moveToFirst()
+            val averageMoves = getDouble(getColumnIndexOrThrow(result))
+            close()
+            return averageMoves
+        }
     }
 
     fun bestAverageNumberOfMovesForPhaseInXSolves(x: Int, phase: SolvePhase): Double{
@@ -140,7 +205,33 @@ class StatsService(context: Context, dbName: String = SolvesDatabaseConstants.SO
     }
 
     fun averageNumberOfMovesForPLLCaseInLastXSolves(x: Int, case: PredefinedPLLCase): Double{
-        TODO("Not implemented yet")
+        val db = this.readableDatabase
+
+        val result = "average_moves"
+        val projection = arrayOf("AVG(${SolvesDatabaseConstants.PLLTable.MOVE_COUNT_COLUMN}) as $result")
+
+        val table = "(SELECT ${SolvesDatabaseConstants.PLLTable.MOVE_COUNT_COLUMN} " +
+                "FROM ${SolvesDatabaseConstants.PLLTable.TABLE_NAME} " +
+                "WHERE ${SolvesDatabaseConstants.PLLTable.CASE_COLUMN} = ${case.ordinal} " +
+                "ORDER BY ${SolvesDatabaseConstants.PLLTable.SOLVE_ID_COLUMN} DESC LIMIT $x)"
+
+        val cursor = db.query(
+            table,
+            projection,
+            null,
+            null,
+            null,
+            null,
+            null
+        )
+
+        with(cursor){
+            moveToFirst()
+            val averageMoves = getDouble(getColumnIndexOrThrow(result))
+            close()
+            return averageMoves
+        }
+
     }
 
     fun bestAverageNumberOfMovesForPLLCaseInXSolves(x: Int, case: PredefinedPLLCase): Double{
@@ -148,7 +239,32 @@ class StatsService(context: Context, dbName: String = SolvesDatabaseConstants.SO
     }
 
     fun averageNumberOfMovesForOLLCaseInLastXSolves(x: Int, case: PredefinedOLLCase): Double{
-        TODO("Not implemented yet")
+        val db = this.readableDatabase
+
+        val result = "average_moves"
+        val projection = arrayOf("AVG(${SolvesDatabaseConstants.OLLTable.MOVE_COUNT_COLUMN}) as $result")
+
+        val table = "(SELECT ${SolvesDatabaseConstants.OLLTable.MOVE_COUNT_COLUMN} " +
+                "FROM ${SolvesDatabaseConstants.OLLTable.TABLE_NAME} " +
+                "WHERE ${SolvesDatabaseConstants.OLLTable.CASE_COLUMN} = ${case.ordinal} " +
+                "ORDER BY ${SolvesDatabaseConstants.OLLTable.SOLVE_ID_COLUMN} DESC LIMIT $x)"
+
+        val cursor = db.query(
+            table,
+            projection,
+            null,
+            null,
+            null,
+            null,
+            null
+        )
+
+        with(cursor){
+            moveToFirst()
+            val averageMoves = getDouble(getColumnIndexOrThrow(result))
+            close()
+            return averageMoves
+        }
     }
 
     fun bestAverageNumberOfMovesForOLLCaseInXSolves(x: Int, case: PredefinedOLLCase): Double{

@@ -8,26 +8,14 @@ import com.example.smartcubeapp.phasedetection.SolvePhase
 import com.example.smartcubeapp.solvedatabase.SolvesDatabaseConstants
 import com.example.smartcubeapp.stats.StatsService
 import org.junit.After
+import org.junit.AfterClass
 import org.junit.Assert.assertEquals
 import org.junit.Before
+import org.junit.BeforeClass
 import org.junit.Test
+import java.io.FileOutputStream
 
 class RelativeMovesTests {
-
-    private lateinit var statsService: StatsService
-    private lateinit var context: Context
-
-    @Before
-    fun setup() {
-        context = InstrumentationRegistry.getInstrumentation().targetContext
-        statsService = StatsService(context, SolvesDatabaseConstants.STATS_TESTS_DATABASE_NAME)
-    }
-
-    @After
-    fun teardown() {
-        statsService.close()
-        context.deleteDatabase(SolvesDatabaseConstants.STATS_TESTS_DATABASE_NAME)
-    }
 
     @Test
     fun averageNumberOfMovesForCrossPhaseInLast3SolvesTest(){
@@ -160,5 +148,37 @@ class RelativeMovesTests {
         val averageNumberOfMoves =
             statsService.averageNumberOfMovesPerSolveInLastXSolves(1000)
         assertEquals(averageNumberOfMoves, 70.02, 0.01)
+    }
+
+    companion object {
+        val context: Context = InstrumentationRegistry.getInstrumentation().targetContext
+        val statsService = StatsService(context, SolvesDatabaseConstants.STATS_TESTS_DATABASE_NAME)
+        private fun copyDatabaseForStatsTests() {
+            val dbPath = context.getDatabasePath(SolvesDatabaseConstants.STATS_TESTS_DATABASE_NAME)
+            if (!dbPath.exists()) {
+                val inputStream = context.assets.open(SolvesDatabaseConstants.STATS_TESTS_DATABASE_NAME)
+                val outputStream = FileOutputStream(dbPath)
+                val buffer = ByteArray(1024)
+                var length: Int
+                while (inputStream.read(buffer).also { length = it } > 0) {
+                    outputStream.write(buffer, 0, length)
+                }
+                outputStream.flush()
+                outputStream.close()
+                inputStream.close()
+            }
+        }
+        @BeforeClass
+        @JvmStatic
+        fun copyDatabase(){
+            copyDatabaseForStatsTests()
+        }
+
+        @AfterClass
+        @JvmStatic
+        fun deleteDatabase(){
+            statsService.close()
+            context.deleteDatabase(SolvesDatabaseConstants.STATS_TESTS_DATABASE_NAME)
+        }
     }
 }
