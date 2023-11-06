@@ -1,14 +1,21 @@
 package com.example.smartcubeapp.stats
 
 import android.content.Context
+import android.text.TextUtils.replace
 import com.example.smartcubeapp.casedetection.olldetection.ollcase.PredefinedOLLCase
 import com.example.smartcubeapp.casedetection.plldetection.pllcase.PredefinedPLLCase
 import com.example.smartcubeapp.phasedetection.SolvePhase
 import com.example.smartcubeapp.solvedatabase.SolveDB
 import com.example.smartcubeapp.solvedatabase.SolvesDatabaseConstants
 
-class StatsService(context: Context, dbName: String = SolvesDatabaseConstants.SOLVE_DATABASE_NAME):
+class StatsService(private val context: Context, dbName: String = SolvesDatabaseConstants.SOLVE_DATABASE_NAME):
     SolveDB(context, dbName){
+
+    private val statsDBName = if(dbName == SolvesDatabaseConstants.SOLVE_DATABASE_NAME){
+        StatsDBConstants.STATS_DATABASE_NAME
+    } else{
+        StatsDBConstants.TEST_DATABASE_NAME
+    }
 
     fun averageTimeForPhaseInLastXSolves(x: Int, phase: SolvePhase): Double{
         val phaseTable = when (phase) {
@@ -56,7 +63,33 @@ class StatsService(context: Context, dbName: String = SolvesDatabaseConstants.SO
     }
 
     fun bestAverageTimeForPhaseInXSolves(x: Int, phase: SolvePhase): Double{
-        TODO("Not implemented yet")
+
+        val statsDB = StatsDB(context, statsDBName)
+        val field = when(phase){
+            SolvePhase.Cross -> {
+                StatsDBConstants.BEST_AVERAGE_TIME_FOR_CROSS_PHASE_IN_X_SOLVES
+            }
+            SolvePhase.F2L -> {
+                StatsDBConstants.BEST_AVERAGE_TIME_FOR_F2L_PHASE_IN_X_SOLVES
+            }
+            SolvePhase.OLL -> {
+                StatsDBConstants.BEST_AVERAGE_TIME_FOR_OLL_PHASE_IN_X_SOLVES
+            }
+            SolvePhase.PLL -> {
+                StatsDBConstants.BEST_AVERAGE_TIME_FOR_PLL_PHASE_IN_X_SOLVES
+            }
+            else -> {
+                throw IllegalArgumentException("Phase must be one of the four phases")
+            }
+        }.replace("X", x.toString())
+
+        val fieldValue = statsDB.getFieldValue(field)
+        val currentValue = averageTimeForPhaseInLastXSolves(x, phase)
+        if(fieldValue == 0.0 || currentValue < fieldValue){
+            statsDB.updateFieldValue(field, currentValue.toString())
+            return currentValue
+        }
+        return fieldValue
     }
 
     fun averageTimeForPLLCaseInLastXSolves(x: Int, case: PredefinedPLLCase): Double{
@@ -88,7 +121,18 @@ class StatsService(context: Context, dbName: String = SolvesDatabaseConstants.SO
     }
 
     fun bestAverageTimeForPLLCaseInXSolves(x: Int, case: PredefinedPLLCase): Double{
-        TODO("Not implemented yet")
+        val statsDB = StatsDB(context, statsDBName)
+        val field = StatsDBConstants.BEST_AVERAGE_TIME_FOR_PLL_X_IN_Y_SOLVES
+            .replace("Y", x.toString())
+            .replace("X", case.name)
+
+        val fieldValue = statsDB.getFieldValue(field)
+        val currentValue = averageTimeForPLLCaseInLastXSolves(x, case)
+        if(fieldValue == 0.0 || currentValue < fieldValue){
+            statsDB.updateFieldValue(field, currentValue.toString())
+            return currentValue
+        }
+        return fieldValue
     }
 
     fun averageTimeForOLLCaseInLastXSolves(x: Int, case: PredefinedOLLCase): Double{
@@ -120,7 +164,18 @@ class StatsService(context: Context, dbName: String = SolvesDatabaseConstants.SO
     }
 
     fun bestAverageTimeForOLLCaseInXSolves(x: Int, case: PredefinedOLLCase): Double{
-        TODO("Not implemented yet")
+        val statsDB = StatsDB(context, statsDBName)
+        val field = StatsDBConstants.BEST_AVERAGE_TIME_FOR_OLL_X_IN_Y_SOLVES
+            .replace("Y", x.toString())
+            .replace("OLLX", case.name)
+
+        val fieldValue = statsDB.getFieldValue(field)
+        val currentValue = averageTimeForOLLCaseInLastXSolves(x, case)
+        if(fieldValue == 0.0 || currentValue < fieldValue){
+            statsDB.updateFieldValue(field, currentValue.toString())
+            return currentValue
+        }
+        return fieldValue
     }
 
     fun averageNumberOfMovesPerSolveInLastXSolves(x: Int): Double{
@@ -151,7 +206,17 @@ class StatsService(context: Context, dbName: String = SolvesDatabaseConstants.SO
     }
 
     fun bestAverageNumberOfMovesPerSolveInXSolves(x: Int): Double{
-        TODO("Not implemented yet")
+        val statsDB = StatsDB(context, statsDBName)
+        val field = StatsDBConstants.BEST_AVERAGE_NUMBER_OF_MOVES_IN_X_SOLVES
+            .replace("X", x.toString())
+
+        val fieldValue = statsDB.getFieldValue(field)
+        val currentValue = averageNumberOfMovesPerSolveInLastXSolves(x)
+        if(fieldValue == 0.0 || currentValue < fieldValue){
+            statsDB.updateFieldValue(field, currentValue.toString())
+            return currentValue
+        }
+        return fieldValue
     }
 
     fun averageNumberOfMovesForPhaseInLastXSolves(x: Int, phase: SolvePhase): Double{
@@ -201,7 +266,32 @@ class StatsService(context: Context, dbName: String = SolvesDatabaseConstants.SO
     }
 
     fun bestAverageNumberOfMovesForPhaseInXSolves(x: Int, phase: SolvePhase): Double{
-        TODO("Not implemented yet")
+        val statsDB = StatsDB(context, statsDBName)
+        val field = when(phase){
+            SolvePhase.Cross -> {
+                StatsDBConstants.BEST_AVERAGE_NUMBER_OF_MOVES_FOR_CROSS_IN_X_SOLVES
+            }
+            SolvePhase.F2L -> {
+                StatsDBConstants.BEST_AVERAGE_NUMBER_OF_MOVES_FOR_F2L_IN_X_SOLVES
+            }
+            SolvePhase.OLL -> {
+                StatsDBConstants.BEST_AVERAGE_NUMBER_OF_MOVES_FOR_OLL_IN_X_SOLVES
+            }
+            SolvePhase.PLL -> {
+                StatsDBConstants.BEST_AVERAGE_NUMBER_OF_MOVES_FOR_PLL_IN_X_SOLVES
+            }
+            else -> {
+                throw IllegalArgumentException("Phase must be one of the four phases")
+            }
+        }.replace("X", x.toString())
+
+        val fieldValue = statsDB.getFieldValue(field)
+        val currentValue = averageNumberOfMovesForPhaseInLastXSolves(x, phase)
+        if(fieldValue == 0.0 || currentValue < fieldValue){
+            statsDB.updateFieldValue(field, currentValue.toString())
+            return currentValue
+        }
+        return fieldValue
     }
 
     fun averageNumberOfMovesForPLLCaseInLastXSolves(x: Int, case: PredefinedPLLCase): Double{
@@ -235,7 +325,18 @@ class StatsService(context: Context, dbName: String = SolvesDatabaseConstants.SO
     }
 
     fun bestAverageNumberOfMovesForPLLCaseInXSolves(x: Int, case: PredefinedPLLCase): Double{
-        TODO("Not implemented yet")
+        val statsDB = StatsDB(context, statsDBName)
+        val field = StatsDBConstants.BEST_AVERAGE_NUMBER_OF_MOVES_FOR_PLL_X_IN_Y_SOLVES
+            .replace("Y", x.toString())
+            .replace("X", case.name)
+
+        val fieldValue = statsDB.getFieldValue(field)
+        val currentValue = averageNumberOfMovesForPLLCaseInLastXSolves(x, case)
+        if(fieldValue == 0.0 || currentValue < fieldValue){
+            statsDB.updateFieldValue(field, currentValue.toString())
+            return currentValue
+        }
+        return fieldValue
     }
 
     fun averageNumberOfMovesForOLLCaseInLastXSolves(x: Int, case: PredefinedOLLCase): Double{
@@ -268,13 +369,41 @@ class StatsService(context: Context, dbName: String = SolvesDatabaseConstants.SO
     }
 
     fun bestAverageNumberOfMovesForOLLCaseInXSolves(x: Int, case: PredefinedOLLCase): Double{
-        TODO("Not implemented yet")
+        val statsDB = StatsDB(context, statsDBName)
+        val field = StatsDBConstants.BEST_AVERAGE_NUMBER_OF_MOVES_FOR_OLL_X_IN_Y_SOLVES
+            .replace("Y", x.toString())
+            .replace("OLLX", case.name)
+
+        val fieldValue = statsDB.getFieldValue(field)
+        val currentValue = averageNumberOfMovesForOLLCaseInLastXSolves(x, case)
+        if(fieldValue == 0.0 || currentValue < fieldValue){
+            statsDB.updateFieldValue(field, currentValue.toString())
+            return currentValue
+        }
+        return fieldValue
     }
 
     fun totalNumberOfMoves(): Int{
-        TODO("Not implemented yet")
-    }
+        val db = this.readableDatabase
 
-    //TODO("Write more methods for stats not utilizing smart cube potential")
+        val projection = arrayOf("SUM(${SolvesDatabaseConstants.SolveTable.MOVE_COUNT}) as total_moves")
+
+        val cursor = db.query(
+            SolvesDatabaseConstants.SolveTable.TABLE_NAME,
+            projection,
+            null,
+            null,
+            null,
+            null,
+            null
+        )
+
+        with(cursor){
+            moveToFirst()
+            val totalMoves = getInt(getColumnIndexOrThrow("total_moves"))
+            close()
+            return totalMoves
+        }
+    }
 
 }
