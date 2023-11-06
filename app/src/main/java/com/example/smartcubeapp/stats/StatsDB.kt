@@ -1,5 +1,6 @@
 package com.example.smartcubeapp.stats
 
+import android.content.ContentValues
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
@@ -25,6 +26,45 @@ class StatsDB(val context: Context, private val dbName: String = StatsDBConstant
         TODO("Not yet implemented")
     }
 
+    fun getFieldValue(field: String): Double{
+        val db = this.readableDatabase
+        val projection = arrayOf(StatsDBConstants.StatsTable.STATISTIC_VALUE_COLUMN)
+        val selection = "${StatsDBConstants.StatsTable.STATISTIC_NAME_COLUMN} = ?"
+        val selectionArgs = arrayOf(field)
+        val cursor = db.query(
+            StatsDBConstants.StatsTable.TABLE_NAME,
+            projection,
+            selection,
+            selectionArgs,
+            null,
+            null,
+            null
+        )
+        with(cursor){
+            if(moveToFirst()){
+                val result = getDouble(getColumnIndexOrThrow(StatsDBConstants.StatsTable.STATISTIC_VALUE_COLUMN))
+                close()
+                return result
+            }
+        }
+        throw Exception("Field $field not found in database")
+    }
+
+    fun updateFieldValue(field: String, value: String){
+        val db = this.writableDatabase
+        val selection = "${StatsDBConstants.StatsTable.STATISTIC_NAME_COLUMN} = ?"
+        val selectionArgs = arrayOf(field)
+        val values = ContentValues().apply {
+            put(StatsDBConstants.StatsTable.STATISTIC_VALUE_COLUMN, value)
+        }
+        db.update(
+            StatsDBConstants.StatsTable.TABLE_NAME,
+            values,
+            selection,
+            selectionArgs
+        )
+    }
+
     private fun copyDatabaseFromAssets(){
         val dbPath = context.getDatabasePath(dbName)
         if (!dbPath.exists()) {
@@ -40,4 +80,5 @@ class StatsDB(val context: Context, private val dbName: String = StatsDBConstant
             inputStream.close()
         }
     }
+
 }

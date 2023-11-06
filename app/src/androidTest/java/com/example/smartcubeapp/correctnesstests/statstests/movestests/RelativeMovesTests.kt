@@ -7,10 +7,8 @@ import com.example.smartcubeapp.casedetection.plldetection.pllcase.PredefinedPLL
 import com.example.smartcubeapp.phasedetection.SolvePhase
 import com.example.smartcubeapp.solvedatabase.SolvesDatabaseConstants
 import com.example.smartcubeapp.stats.StatsService
-import org.junit.After
 import org.junit.AfterClass
 import org.junit.Assert.assertEquals
-import org.junit.Before
 import org.junit.BeforeClass
 import org.junit.Test
 import java.io.FileOutputStream
