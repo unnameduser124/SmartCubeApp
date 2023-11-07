@@ -24,9 +24,9 @@ enum class PredefinedPLLCase() {
                 )
             )
         }
-    },
+    }, //#1
 
-    Ab {
+    Ab { //#1
         override fun performPermutation(position: Array<Array<PLLElementPosition>>): Array<Array<PLLElementPosition>> {
             return arrayOf(
                 arrayOf(
@@ -45,7 +45,7 @@ enum class PredefinedPLLCase() {
                 )
             )
         }
-    },
+    }, //#2
 
     E {
         override fun performPermutation(position: Array<Array<PLLElementPosition>>): Array<Array<PLLElementPosition>> {
@@ -66,7 +66,7 @@ enum class PredefinedPLLCase() {
                 )
             )
         }
-    },
+    }, //#3
 
     F {
         override fun performPermutation(position: Array<Array<PLLElementPosition>>): Array<Array<PLLElementPosition>> {
@@ -87,7 +87,7 @@ enum class PredefinedPLLCase() {
                 )
             )
         }
-    },
+    }, //#4
 
     Ga {
         override fun performPermutation(position: Array<Array<PLLElementPosition>>): Array<Array<PLLElementPosition>> {
@@ -108,7 +108,7 @@ enum class PredefinedPLLCase() {
                 )
             )
         }
-    },
+    }, //#5
 
     Gb {
         override fun performPermutation(position: Array<Array<PLLElementPosition>>): Array<Array<PLLElementPosition>> {
@@ -129,7 +129,7 @@ enum class PredefinedPLLCase() {
                 )
             )
         }
-    },
+    }, //#6
 
     Gc {
         override fun performPermutation(position: Array<Array<PLLElementPosition>>): Array<Array<PLLElementPosition>> {
@@ -150,7 +150,7 @@ enum class PredefinedPLLCase() {
                 )
             )
         }
-    },
+    }, //#7
 
     Gd {
         override fun performPermutation(position: Array<Array<PLLElementPosition>>): Array<Array<PLLElementPosition>> {
@@ -171,7 +171,7 @@ enum class PredefinedPLLCase() {
                 )
             )
         }
-    },
+    }, //#8
 
     H {
         override fun performPermutation(position: Array<Array<PLLElementPosition>>): Array<Array<PLLElementPosition>> {
@@ -192,7 +192,7 @@ enum class PredefinedPLLCase() {
                 )
             )
         }
-    },
+    }, //#9
 
     Ja {
         override fun performPermutation(position: Array<Array<PLLElementPosition>>): Array<Array<PLLElementPosition>> {
@@ -213,7 +213,7 @@ enum class PredefinedPLLCase() {
                 )
             )
         }
-    },
+    }, //#10
 
     Jb {
         override fun performPermutation(position: Array<Array<PLLElementPosition>>): Array<Array<PLLElementPosition>> {
@@ -234,7 +234,7 @@ enum class PredefinedPLLCase() {
                 )
             )
         }
-    },
+    }, //#11
 
     Na {
         override fun performPermutation(position: Array<Array<PLLElementPosition>>): Array<Array<PLLElementPosition>> {
@@ -255,7 +255,7 @@ enum class PredefinedPLLCase() {
                 )
             )
         }
-    },
+    }, //#12
 
     Nb {
         override fun performPermutation(position: Array<Array<PLLElementPosition>>): Array<Array<PLLElementPosition>> {
@@ -276,7 +276,7 @@ enum class PredefinedPLLCase() {
                 )
             )
         }
-    },
+    }, //#13
 
     Ra {
         override fun performPermutation(position: Array<Array<PLLElementPosition>>): Array<Array<PLLElementPosition>> {
@@ -297,7 +297,7 @@ enum class PredefinedPLLCase() {
                 )
             )
         }
-    },
+    }, //#14
 
     Rb {
         override fun performPermutation(position: Array<Array<PLLElementPosition>>): Array<Array<PLLElementPosition>> {
@@ -318,7 +318,7 @@ enum class PredefinedPLLCase() {
                 )
             )
         }
-    },
+    }, //#15
 
     T {
         override fun performPermutation(position: Array<Array<PLLElementPosition>>): Array<Array<PLLElementPosition>> {
@@ -339,7 +339,7 @@ enum class PredefinedPLLCase() {
                 )
             )
         }
-    },
+    }, //#16
 
     Ua {
         override fun performPermutation(position: Array<Array<PLLElementPosition>>): Array<Array<PLLElementPosition>> {
@@ -360,7 +360,7 @@ enum class PredefinedPLLCase() {
                 )
             )
         }
-    },
+    }, //#17
 
     Ub {
         override fun performPermutation(position: Array<Array<PLLElementPosition>>): Array<Array<PLLElementPosition>> {
@@ -381,7 +381,7 @@ enum class PredefinedPLLCase() {
                 )
             )
         }
-    },
+    }, //#18
 
     V {
         override fun performPermutation(position: Array<Array<PLLElementPosition>>): Array<Array<PLLElementPosition>> {
@@ -402,7 +402,7 @@ enum class PredefinedPLLCase() {
                 )
             )
         }
-    },
+    }, //#19
 
     Y {
         override fun performPermutation(position: Array<Array<PLLElementPosition>>): Array<Array<PLLElementPosition>> {
@@ -423,7 +423,7 @@ enum class PredefinedPLLCase() {
                 )
             )
         }
-    },
+    }, //#20
 
     Z {
         override fun performPermutation(position: Array<Array<PLLElementPosition>>): Array<Array<PLLElementPosition>> {
@@ -444,7 +444,7 @@ enum class PredefinedPLLCase() {
                 )
             )
         }
-    };
+    }; //#21
 
     abstract fun performPermutation(position: Array<Array<PLLElementPosition>>): Array<Array<PLLElementPosition>>
 }
