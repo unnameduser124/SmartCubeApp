@@ -4,7 +4,6 @@ import com.example.smartcubeapp.casedetection.plldetection.PLLElementPosition
 import com.example.smartcubeapp.cube.piece.PieceType
 
 enum class PredefinedPLLCase() {
-    //PLL cases to be populated with hardcoded values
     Aa {
         override fun performPermutation(position: Array<Array<PLLElementPosition>>): Array<Array<PLLElementPosition>> {
             return arrayOf(

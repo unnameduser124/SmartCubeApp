@@ -4,9 +4,11 @@ import android.content.Context
 import android.text.TextUtils.replace
 import com.example.smartcubeapp.casedetection.olldetection.ollcase.PredefinedOLLCase
 import com.example.smartcubeapp.casedetection.plldetection.pllcase.PredefinedPLLCase
+import com.example.smartcubeapp.cube.Solve
 import com.example.smartcubeapp.phasedetection.SolvePhase
 import com.example.smartcubeapp.solvedatabase.SolveDB
 import com.example.smartcubeapp.solvedatabase.SolvesDatabaseConstants
+import com.example.smartcubeapp.solvedatabase.dataclasses.SolveData
 
 class StatsService(private val context: Context, dbName: String = SolvesDatabaseConstants.SOLVE_DATABASE_NAME):
     SolveDB(context, dbName){
@@ -63,6 +65,10 @@ class StatsService(private val context: Context, dbName: String = SolvesDatabase
     }
 
     fun bestAverageTimeForPhaseInXSolves(x: Int, phase: SolvePhase): Double{
+
+        if(x !in StatsDBConstants.numberOfSolvesValues){
+            throw IllegalArgumentException("x must be one of the following numbers: ${StatsDBConstants.numberOfSolvesValues}")
+        }
 
         val statsDB = StatsDB(context, statsDBName)
         val field = when(phase){
@@ -121,6 +127,10 @@ class StatsService(private val context: Context, dbName: String = SolvesDatabase
     }
 
     fun bestAverageTimeForPLLCaseInXSolves(x: Int, case: PredefinedPLLCase): Double{
+        if(x !in StatsDBConstants.numberOfSolvesValues){
+            throw IllegalArgumentException("x must be one of the following numbers: ${StatsDBConstants.numberOfSolvesValues}")
+        }
+
         val statsDB = StatsDB(context, statsDBName)
         val field = StatsDBConstants.BEST_AVERAGE_TIME_FOR_PLL_X_IN_Y_SOLVES
             .replace("Y", x.toString())
@@ -164,6 +174,10 @@ class StatsService(private val context: Context, dbName: String = SolvesDatabase
     }
 
     fun bestAverageTimeForOLLCaseInXSolves(x: Int, case: PredefinedOLLCase): Double{
+        if(x !in StatsDBConstants.numberOfSolvesValues){
+            throw IllegalArgumentException("x must be one of the following numbers: ${StatsDBConstants.numberOfSolvesValues}")
+        }
+
         val statsDB = StatsDB(context, statsDBName)
         val field = StatsDBConstants.BEST_AVERAGE_TIME_FOR_OLL_X_IN_Y_SOLVES
             .replace("Y", x.toString())
@@ -206,6 +220,10 @@ class StatsService(private val context: Context, dbName: String = SolvesDatabase
     }
 
     fun bestAverageNumberOfMovesPerSolveInXSolves(x: Int): Double{
+        if(x !in StatsDBConstants.numberOfSolvesValues){
+            throw IllegalArgumentException("x must be one of the following numbers: ${StatsDBConstants.numberOfSolvesValues}")
+        }
+
         val statsDB = StatsDB(context, statsDBName)
         val field = StatsDBConstants.BEST_AVERAGE_NUMBER_OF_MOVES_IN_X_SOLVES
             .replace("X", x.toString())
@@ -266,6 +284,10 @@ class StatsService(private val context: Context, dbName: String = SolvesDatabase
     }
 
     fun bestAverageNumberOfMovesForPhaseInXSolves(x: Int, phase: SolvePhase): Double{
+        if(x !in StatsDBConstants.numberOfSolvesValues){
+            throw IllegalArgumentException("x must be one of the following numbers: ${StatsDBConstants.numberOfSolvesValues}")
+        }
+
         val statsDB = StatsDB(context, statsDBName)
         val field = when(phase){
             SolvePhase.Cross -> {
@@ -325,6 +347,10 @@ class StatsService(private val context: Context, dbName: String = SolvesDatabase
     }
 
     fun bestAverageNumberOfMovesForPLLCaseInXSolves(x: Int, case: PredefinedPLLCase): Double{
+        if(x !in StatsDBConstants.numberOfSolvesValues){
+            throw IllegalArgumentException("x must be one of the following numbers: ${StatsDBConstants.numberOfSolvesValues}")
+        }
+
         val statsDB = StatsDB(context, statsDBName)
         val field = StatsDBConstants.BEST_AVERAGE_NUMBER_OF_MOVES_FOR_PLL_X_IN_Y_SOLVES
             .replace("Y", x.toString())
@@ -369,6 +395,10 @@ class StatsService(private val context: Context, dbName: String = SolvesDatabase
     }
 
     fun bestAverageNumberOfMovesForOLLCaseInXSolves(x: Int, case: PredefinedOLLCase): Double{
+        if(x !in StatsDBConstants.numberOfSolvesValues){
+            throw IllegalArgumentException("x must be one of the following numbers: ${StatsDBConstants.numberOfSolvesValues}")
+        }
+
         val statsDB = StatsDB(context, statsDBName)
         val field = StatsDBConstants.BEST_AVERAGE_NUMBER_OF_MOVES_FOR_OLL_X_IN_Y_SOLVES
             .replace("Y", x.toString())
@@ -406,4 +436,35 @@ class StatsService(private val context: Context, dbName: String = SolvesDatabase
         }
     }
 
+    fun bestTime(): SolveData {
+        TODO("Not implemented yet")
+    }
+
+    fun worstTime(): SolveData{
+        TODO("Not implemented yet")
+    }
+
+    fun totalNumberOfSolves(): Int{
+        TODO("Not implemented yet")
+    }
+
+    fun totalSolvingTime(): Long{
+        TODO("Not implemented yet")
+    }
+
+    fun standardDeviation(): Double{
+        TODO("Not implemented yet")
+    }
+
+    fun averageOf(numberOfSolves: Int): Double{
+        TODO("Not implemented yet")
+    }
+
+    fun bestAverageOf(numberOfSolves: Int): Double{
+        TODO("Not implemented yet")
+    }
+
+    fun meanTime(): Double {
+        TODO("Not implemented yet")
+    }
 }
