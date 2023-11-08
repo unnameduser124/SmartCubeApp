@@ -15,7 +15,7 @@ class RelativeTimeTests {
 
     @Test
     fun averageTimeFor3LastSolvesTest(){
-        val statsService = StatsService(context, StatsDBConstants.TEST_DATABASE_NAME)
+        val statsService = StatsService(context, SolvesDatabaseConstants.STATS_TESTS_DATABASE_NAME)
         val averageTimeFor3LastSolves = statsService.averageOf(3)
 
         assertEquals(averageTimeFor3LastSolves, 9333.33, 0.01)
@@ -23,7 +23,7 @@ class RelativeTimeTests {
 
     @Test
     fun averageTimeForLast5SolvesTest(){
-        val statsService = StatsService(context, StatsDBConstants.TEST_DATABASE_NAME)
+        val statsService = StatsService(context, SolvesDatabaseConstants.STATS_TESTS_DATABASE_NAME)
         val averageTimeForLast5Solves = statsService.averageOf(5)
 
         assertEquals(averageTimeForLast5Solves, 9400.0, 0.01)
@@ -31,7 +31,7 @@ class RelativeTimeTests {
 
     @Test
     fun averageTimeForLast12SolvesTest(){
-        val statsService = StatsService(context, StatsDBConstants.TEST_DATABASE_NAME)
+        val statsService = StatsService(context, SolvesDatabaseConstants.STATS_TESTS_DATABASE_NAME)
         val averageTimeForLast12Solves = statsService.averageOf(12)
 
         assertEquals(averageTimeForLast12Solves, 9250.0, 0.01)
@@ -39,7 +39,7 @@ class RelativeTimeTests {
 
     @Test
     fun averageTimeForLast50SolvesTest(){
-        val statsService = StatsService(context, StatsDBConstants.TEST_DATABASE_NAME)
+        val statsService = StatsService(context, SolvesDatabaseConstants.STATS_TESTS_DATABASE_NAME)
         val averageTimeForLast50Solves = statsService.averageOf(50)
 
         assertEquals(averageTimeForLast50Solves, 9300.0, 0.01)
@@ -47,7 +47,7 @@ class RelativeTimeTests {
 
     @Test
     fun averageTimeForLast100SolvesTest(){
-        val statsService = StatsService(context, StatsDBConstants.TEST_DATABASE_NAME)
+        val statsService = StatsService(context, SolvesDatabaseConstants.STATS_TESTS_DATABASE_NAME)
         val averageTimeForLast100Solves = statsService.averageOf(100)
 
         assertEquals(averageTimeForLast100Solves, 9270.0, 0.01)
@@ -55,7 +55,7 @@ class RelativeTimeTests {
 
     @Test
     fun averageTimeForLast500SolvesTest(){
-        val statsService = StatsService(context, StatsDBConstants.TEST_DATABASE_NAME)
+        val statsService = StatsService(context, SolvesDatabaseConstants.STATS_TESTS_DATABASE_NAME)
         val averageTimeForLast500Solves = statsService.averageOf(500)
 
         assertEquals(averageTimeForLast500Solves, 9254.0, 0.01)
@@ -63,7 +63,7 @@ class RelativeTimeTests {
 
     @Test
     fun averageTimeForLast1000SolvesTest(){
-        val statsService = StatsService(context, StatsDBConstants.TEST_DATABASE_NAME)
+        val statsService = StatsService(context, SolvesDatabaseConstants.STATS_TESTS_DATABASE_NAME)
         val averageTimeForLast1000Solves = statsService.averageOf(1000)
 
         assertEquals(averageTimeForLast1000Solves, 9254.0, 0.01)
@@ -71,8 +71,6 @@ class RelativeTimeTests {
 
     companion object {
         val context: Context = InstrumentationRegistry.getInstrumentation().targetContext
-        private val statsService =
-            StatsService(context, SolvesDatabaseConstants.STATS_TESTS_DATABASE_NAME)
 
         private fun copyDatabaseForStatsTests() {
             val dbPath = context.getDatabasePath(SolvesDatabaseConstants.STATS_TESTS_DATABASE_NAME)
@@ -118,7 +116,6 @@ class RelativeTimeTests {
         @AfterClass
         @JvmStatic
         fun deleteDatabase() {
-            statsService.close()
             context.deleteDatabase(SolvesDatabaseConstants.STATS_TESTS_DATABASE_NAME)
             context.deleteDatabase(StatsDBConstants.TEST_DATABASE_NAME)
         }

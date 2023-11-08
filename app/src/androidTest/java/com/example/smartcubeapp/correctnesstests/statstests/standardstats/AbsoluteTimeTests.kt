@@ -2,7 +2,6 @@ package com.example.smartcubeapp.correctnesstests.statstests.standardstats
 
 import android.content.Context
 import androidx.test.platform.app.InstrumentationRegistry
-import com.example.smartcubeapp.cube.Solve
 import com.example.smartcubeapp.solvedatabase.SolvesDatabaseConstants
 import com.example.smartcubeapp.solvedatabase.dataclasses.SolveData
 import com.example.smartcubeapp.stats.StatsDBConstants
@@ -17,7 +16,7 @@ class AbsoluteTimeTests {
 
     @Test
     fun bestTimeTest() {
-        val statsService = StatsService(context, StatsDBConstants.TEST_DATABASE_NAME)
+        val statsService = StatsService(context, SolvesDatabaseConstants.STATS_TESTS_DATABASE_NAME)
         val bestTime = statsService.bestTime()
 
         val expectedSolve = SolveData(
@@ -34,7 +33,7 @@ class AbsoluteTimeTests {
 
     @Test
     fun worstTimeTest(){
-        val statsService = StatsService(context, StatsDBConstants.TEST_DATABASE_NAME)
+        val statsService = StatsService(context, SolvesDatabaseConstants.STATS_TESTS_DATABASE_NAME)
         val worstTime = statsService.worstTime()
 
         val expectedSolve = SolveData(
@@ -51,7 +50,7 @@ class AbsoluteTimeTests {
 
     @Test
     fun numberOfSolvesTest(){
-        val statsService = StatsService(context, StatsDBConstants.TEST_DATABASE_NAME)
+        val statsService = StatsService(context, SolvesDatabaseConstants.STATS_TESTS_DATABASE_NAME)
         val numberOfSolves = statsService.totalNumberOfSolves()
 
         assertEquals(numberOfSolves, 4788)
@@ -59,7 +58,7 @@ class AbsoluteTimeTests {
 
     @Test
     fun totalSolvingTimeTest(){
-        val statsService = StatsService(context, StatsDBConstants.TEST_DATABASE_NAME)
+        val statsService = StatsService(context, SolvesDatabaseConstants.STATS_TESTS_DATABASE_NAME)
         val totalTime = statsService.totalSolvingTime()
 
         assertEquals(totalTime, 44289000)
@@ -67,7 +66,7 @@ class AbsoluteTimeTests {
 
     @Test
     fun meanTimeTest(){
-        val statsService = StatsService(context, StatsDBConstants.TEST_DATABASE_NAME)
+        val statsService = StatsService(context, SolvesDatabaseConstants.STATS_TESTS_DATABASE_NAME)
         val meanTime = statsService.meanTime()
 
         assertEquals(meanTime, 9250.0, 0.01)
@@ -75,7 +74,7 @@ class AbsoluteTimeTests {
 
     @Test
     fun bestAverageTimeFor3SolvesTest(){
-        val statsService = StatsService(context, StatsDBConstants.TEST_DATABASE_NAME)
+        val statsService = StatsService(context, SolvesDatabaseConstants.STATS_TESTS_DATABASE_NAME)
         val bestAverageTimeFor3Solves = statsService.bestAverageOf(3)
 
         assertEquals(bestAverageTimeFor3Solves, 9333.33, 0.01)
@@ -83,7 +82,7 @@ class AbsoluteTimeTests {
 
     @Test
     fun bestAverageTimeFor5SolvesTest(){
-        val statsService = StatsService(context, StatsDBConstants.TEST_DATABASE_NAME)
+        val statsService = StatsService(context, SolvesDatabaseConstants.STATS_TESTS_DATABASE_NAME)
         val bestAverageTimeFor5Solves = statsService.bestAverageOf(5)
 
         assertEquals(bestAverageTimeFor5Solves, 9400.0, 0.01)
@@ -91,7 +90,7 @@ class AbsoluteTimeTests {
 
     @Test
     fun bestAverageTimeFor12SolvesTest(){
-        val statsService = StatsService(context, StatsDBConstants.TEST_DATABASE_NAME)
+        val statsService = StatsService(context, SolvesDatabaseConstants.STATS_TESTS_DATABASE_NAME)
         val bestAverageTimeFor12Solves = statsService.bestAverageOf(12)
 
         assertEquals(bestAverageTimeFor12Solves, 9250.0, 0.01)
@@ -99,7 +98,7 @@ class AbsoluteTimeTests {
 
     @Test
     fun bestAverageTimeFor50SolvesTest(){
-        val statsService = StatsService(context, StatsDBConstants.TEST_DATABASE_NAME)
+        val statsService = StatsService(context, SolvesDatabaseConstants.STATS_TESTS_DATABASE_NAME)
         val bestAverageTimeFor50Solves = statsService.bestAverageOf(50)
 
         assertEquals(bestAverageTimeFor50Solves, 9300.0, 0.01)
@@ -107,7 +106,7 @@ class AbsoluteTimeTests {
 
     @Test
     fun bestAverageTimeFor100SolvesTest(){
-        val statsService = StatsService(context, StatsDBConstants.TEST_DATABASE_NAME)
+        val statsService = StatsService(context, SolvesDatabaseConstants.STATS_TESTS_DATABASE_NAME)
         val bestAverageTimeFor100Solves = statsService.bestAverageOf(100)
 
         assertEquals(bestAverageTimeFor100Solves, 9270.0, 0.01)
@@ -115,7 +114,7 @@ class AbsoluteTimeTests {
 
     @Test
     fun bestAverageTimeFor500SolvesTest(){
-        val statsService = StatsService(context, StatsDBConstants.TEST_DATABASE_NAME)
+        val statsService = StatsService(context, SolvesDatabaseConstants.STATS_TESTS_DATABASE_NAME)
         val bestAverageTimeFor500Solves = statsService.bestAverageOf(500)
 
         assertEquals(bestAverageTimeFor500Solves, 9254.0, 0.01)
@@ -123,7 +122,7 @@ class AbsoluteTimeTests {
 
     @Test
     fun bestAverageTimeFor1000SolvesTest(){
-        val statsService = StatsService(context, StatsDBConstants.TEST_DATABASE_NAME)
+        val statsService = StatsService(context, SolvesDatabaseConstants.STATS_TESTS_DATABASE_NAME)
         val bestAverageTimeFor1000Solves = statsService.bestAverageOf(1000)
 
         assertEquals(bestAverageTimeFor1000Solves, 9254.0, 0.01)
@@ -131,7 +130,7 @@ class AbsoluteTimeTests {
 
     @Test
     fun standardDeviationTest(){
-        val statsService = StatsService(context, StatsDBConstants.TEST_DATABASE_NAME)
+        val statsService = StatsService(context, SolvesDatabaseConstants.STATS_TESTS_DATABASE_NAME)
         val standardDeviation = statsService.standardDeviation()
 
         assertEquals(standardDeviation, 1479.019945774904, 0.01)
@@ -139,8 +138,6 @@ class AbsoluteTimeTests {
 
     companion object {
         val context: Context = InstrumentationRegistry.getInstrumentation().targetContext
-        private val statsService =
-            StatsService(context, SolvesDatabaseConstants.STATS_TESTS_DATABASE_NAME)
 
         private fun copyDatabaseForStatsTests() {
             val dbPath = context.getDatabasePath(SolvesDatabaseConstants.STATS_TESTS_DATABASE_NAME)
@@ -186,7 +183,6 @@ class AbsoluteTimeTests {
         @AfterClass
         @JvmStatic
         fun deleteDatabase() {
-            statsService.close()
             context.deleteDatabase(SolvesDatabaseConstants.STATS_TESTS_DATABASE_NAME)
             context.deleteDatabase(StatsDBConstants.TEST_DATABASE_NAME)
         }
