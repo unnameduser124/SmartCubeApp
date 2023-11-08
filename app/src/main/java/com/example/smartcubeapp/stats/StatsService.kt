@@ -1,12 +1,14 @@
 package com.example.smartcubeapp.stats
 
 import android.content.Context
-import android.text.TextUtils.replace
+import android.provider.BaseColumns
 import com.example.smartcubeapp.casedetection.olldetection.ollcase.PredefinedOLLCase
 import com.example.smartcubeapp.casedetection.plldetection.pllcase.PredefinedPLLCase
 import com.example.smartcubeapp.phasedetection.SolvePhase
 import com.example.smartcubeapp.solvedatabase.SolveDB
 import com.example.smartcubeapp.solvedatabase.SolvesDatabaseConstants
+import com.example.smartcubeapp.solvedatabase.dataclasses.SolveData
+import kotlin.math.pow
 
 class StatsService(private val context: Context, dbName: String = SolvesDatabaseConstants.SOLVE_DATABASE_NAME):
     SolveDB(context, dbName){
@@ -63,6 +65,10 @@ class StatsService(private val context: Context, dbName: String = SolvesDatabase
     }
 
     fun bestAverageTimeForPhaseInXSolves(x: Int, phase: SolvePhase): Double{
+
+        if(x !in StatsDBConstants.numberOfSolvesValues){
+            throw IllegalArgumentException("x must be one of the following numbers: ${StatsDBConstants.numberOfSolvesValues}")
+        }
 
         val statsDB = StatsDB(context, statsDBName)
         val field = when(phase){
@@ -121,6 +127,10 @@ class StatsService(private val context: Context, dbName: String = SolvesDatabase
     }
 
     fun bestAverageTimeForPLLCaseInXSolves(x: Int, case: PredefinedPLLCase): Double{
+        if(x !in StatsDBConstants.numberOfSolvesValues){
+            throw IllegalArgumentException("x must be one of the following numbers: ${StatsDBConstants.numberOfSolvesValues}")
+        }
+
         val statsDB = StatsDB(context, statsDBName)
         val field = StatsDBConstants.BEST_AVERAGE_TIME_FOR_PLL_X_IN_Y_SOLVES
             .replace("Y", x.toString())
@@ -164,6 +174,10 @@ class StatsService(private val context: Context, dbName: String = SolvesDatabase
     }
 
     fun bestAverageTimeForOLLCaseInXSolves(x: Int, case: PredefinedOLLCase): Double{
+        if(x !in StatsDBConstants.numberOfSolvesValues){
+            throw IllegalArgumentException("x must be one of the following numbers: ${StatsDBConstants.numberOfSolvesValues}")
+        }
+
         val statsDB = StatsDB(context, statsDBName)
         val field = StatsDBConstants.BEST_AVERAGE_TIME_FOR_OLL_X_IN_Y_SOLVES
             .replace("Y", x.toString())
@@ -206,6 +220,10 @@ class StatsService(private val context: Context, dbName: String = SolvesDatabase
     }
 
     fun bestAverageNumberOfMovesPerSolveInXSolves(x: Int): Double{
+        if(x !in StatsDBConstants.numberOfSolvesValues){
+            throw IllegalArgumentException("x must be one of the following numbers: ${StatsDBConstants.numberOfSolvesValues}")
+        }
+
         val statsDB = StatsDB(context, statsDBName)
         val field = StatsDBConstants.BEST_AVERAGE_NUMBER_OF_MOVES_IN_X_SOLVES
             .replace("X", x.toString())
@@ -266,6 +284,10 @@ class StatsService(private val context: Context, dbName: String = SolvesDatabase
     }
 
     fun bestAverageNumberOfMovesForPhaseInXSolves(x: Int, phase: SolvePhase): Double{
+        if(x !in StatsDBConstants.numberOfSolvesValues){
+            throw IllegalArgumentException("x must be one of the following numbers: ${StatsDBConstants.numberOfSolvesValues}")
+        }
+
         val statsDB = StatsDB(context, statsDBName)
         val field = when(phase){
             SolvePhase.Cross -> {
@@ -325,6 +347,10 @@ class StatsService(private val context: Context, dbName: String = SolvesDatabase
     }
 
     fun bestAverageNumberOfMovesForPLLCaseInXSolves(x: Int, case: PredefinedPLLCase): Double{
+        if(x !in StatsDBConstants.numberOfSolvesValues){
+            throw IllegalArgumentException("x must be one of the following numbers: ${StatsDBConstants.numberOfSolvesValues}")
+        }
+
         val statsDB = StatsDB(context, statsDBName)
         val field = StatsDBConstants.BEST_AVERAGE_NUMBER_OF_MOVES_FOR_PLL_X_IN_Y_SOLVES
             .replace("Y", x.toString())
@@ -369,6 +395,10 @@ class StatsService(private val context: Context, dbName: String = SolvesDatabase
     }
 
     fun bestAverageNumberOfMovesForOLLCaseInXSolves(x: Int, case: PredefinedOLLCase): Double{
+        if(x !in StatsDBConstants.numberOfSolvesValues){
+            throw IllegalArgumentException("x must be one of the following numbers: ${StatsDBConstants.numberOfSolvesValues}")
+        }
+
         val statsDB = StatsDB(context, statsDBName)
         val field = StatsDBConstants.BEST_AVERAGE_NUMBER_OF_MOVES_FOR_OLL_X_IN_Y_SOLVES
             .replace("Y", x.toString())
@@ -406,4 +436,195 @@ class StatsService(private val context: Context, dbName: String = SolvesDatabase
         }
     }
 
+    fun bestTime(): SolveData {
+        val db = this.readableDatabase
+        print(databaseName)
+
+        val projection = arrayOf("*")
+
+        val orderBy = "${SolvesDatabaseConstants.SolveTable.DURATION_COLUMN} LIMIT 1"
+
+
+        val cursor = db.query(
+            SolvesDatabaseConstants.SolveTable.TABLE_NAME,
+            projection,
+            null,
+            null,
+            null,
+            null,
+            orderBy
+        )
+
+        with(cursor){
+            moveToFirst()
+            val bestSolve = SolveData(
+                id = getLong(getColumnIndexOrThrow(BaseColumns._ID)),
+                solveDuration = getLong(getColumnIndexOrThrow(SolvesDatabaseConstants.SolveTable.DURATION_COLUMN)),
+                timestamp = getLong(getColumnIndexOrThrow(SolvesDatabaseConstants.SolveTable.TIMESTAMP_COLUMN)),
+                scrambledStateID = getLong(getColumnIndexOrThrow(SolvesDatabaseConstants.SolveTable.SCRAMBLED_STATE_ID_COLUMN)),
+                scramble = getString(getColumnIndexOrThrow(SolvesDatabaseConstants.SolveTable.SCRAMBLE_SEQUENCE_COLUMN)),
+                moveCount = getInt(getColumnIndexOrThrow(SolvesDatabaseConstants.SolveTable.MOVE_COUNT))
+            )
+            close()
+            return bestSolve
+        }
+    }
+
+    fun worstTime(): SolveData{
+        val db = this.readableDatabase
+
+        val projection = arrayOf("*")
+
+        val orderBy = "${SolvesDatabaseConstants.SolveTable.DURATION_COLUMN} DESC LIMIT 1"
+
+        val cursor = db.query(
+            SolvesDatabaseConstants.SolveTable.TABLE_NAME,
+            projection,
+            null,
+            null,
+            null,
+            null,
+            orderBy
+        )
+
+        with(cursor){
+            moveToFirst()
+            val worstSolve = SolveData(
+                id = getLong(getColumnIndexOrThrow(BaseColumns._ID)),
+                solveDuration = getLong(getColumnIndexOrThrow(SolvesDatabaseConstants.SolveTable.DURATION_COLUMN)),
+                timestamp = getLong(getColumnIndexOrThrow(SolvesDatabaseConstants.SolveTable.TIMESTAMP_COLUMN)),
+                scrambledStateID = getLong(getColumnIndexOrThrow(SolvesDatabaseConstants.SolveTable.SCRAMBLED_STATE_ID_COLUMN)),
+                scramble = getString(getColumnIndexOrThrow(SolvesDatabaseConstants.SolveTable.SCRAMBLE_SEQUENCE_COLUMN)),
+                moveCount = getInt(getColumnIndexOrThrow(SolvesDatabaseConstants.SolveTable.MOVE_COUNT))
+            )
+            close()
+            return worstSolve
+        }
+    }
+
+    fun totalNumberOfSolves(): Int{
+        val db = this.readableDatabase
+
+        val result = "total_solves"
+        val projection = arrayOf("COUNT(*) as $result")
+
+        val cursor = db.query(
+            SolvesDatabaseConstants.SolveTable.TABLE_NAME,
+            projection,
+            null,
+            null,
+            null,
+            null,
+            null
+        )
+
+        with(cursor){
+            moveToFirst()
+            val totalSolves = getInt(getColumnIndexOrThrow(result))
+            close()
+            return totalSolves
+        }
+    }
+
+    fun totalSolvingTime(): Long{
+        val db = this.readableDatabase
+
+        val result = "total_time"
+        val projection = arrayOf("SUM(${SolvesDatabaseConstants.SolveTable.DURATION_COLUMN}) as $result")
+
+        val cursor = db.query(
+            SolvesDatabaseConstants.SolveTable.TABLE_NAME,
+            projection,
+            null,
+            null,
+            null,
+            null,
+            null
+        )
+
+        with(cursor){
+            moveToFirst()
+            val totalTime = getLong(getColumnIndexOrThrow(result))
+            close()
+            return totalTime
+        }
+    }
+
+    fun standardDeviation(): Double {
+        val db = this.readableDatabase
+
+        val projection = arrayOf(SolvesDatabaseConstants.SolveTable.DURATION_COLUMN)
+        val cursor = db.query(
+            SolvesDatabaseConstants.SolveTable.TABLE_NAME,
+            projection,
+            null,
+            null,
+            null,
+            null,
+            null
+        )
+
+        val average = meanTime()
+
+        val sumForStandardDeviation = cursor.use {
+            var sum = 0.0
+            while (it.moveToNext()) {
+                val solveDuration =
+                    it.getLong(it.getColumnIndexOrThrow(SolvesDatabaseConstants.SolveTable.DURATION_COLUMN))
+                sum += (solveDuration.toDouble() - average).pow(2)
+            }
+            sum
+        }
+
+        return (sumForStandardDeviation / totalNumberOfSolves()).pow(0.5)
+    }
+
+    fun averageOf(numberOfSolves: Int): Double{
+        val db = this.readableDatabase
+
+        val result = "average_time"
+        val projection = arrayOf("AVG(${SolvesDatabaseConstants.SolveTable.DURATION_COLUMN}) as $result")
+        val table = "(SELECT ${SolvesDatabaseConstants.SolveTable.DURATION_COLUMN} " +
+                "FROM ${SolvesDatabaseConstants.SolveTable.TABLE_NAME} " +
+                "ORDER BY ${SolvesDatabaseConstants.SolveTable.TIMESTAMP_COLUMN} DESC LIMIT $numberOfSolves)"
+
+        val cursor = db.query(
+            table,
+            projection,
+            null,
+            null,
+            null,
+            null,
+            null
+        )
+
+        with(cursor){
+            moveToFirst()
+            val averageTime = getDouble(getColumnIndexOrThrow(result))
+            close()
+            return averageTime
+        }
+    }
+
+    fun bestAverageOf(numberOfSolves: Int): Double{
+        if(numberOfSolves !in StatsDBConstants.numberOfSolvesValues){
+            throw IllegalArgumentException("numberOfSolves must be one of the following numbers: ${StatsDBConstants.numberOfSolvesValues}")
+        }
+
+        val statsDB = StatsDB(context, statsDBName)
+        val field = StatsDBConstants.BEST_AVERAGE_TIME_FOR_SOLVE_IN_X_SOLVES
+            .replace("X", numberOfSolves.toString())
+
+        val fieldValue = statsDB.getFieldValue(field)
+        val currentValue = averageOf(numberOfSolves)
+        if(fieldValue == 0.0 || currentValue < fieldValue){
+            statsDB.updateFieldValue(field, currentValue.toString())
+            return currentValue
+        }
+        return fieldValue
+    }
+
+    fun meanTime(): Double {
+        return totalSolvingTime().toDouble() / totalNumberOfSolves()
+    }
 }
