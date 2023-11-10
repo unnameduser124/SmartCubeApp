@@ -2,13 +2,10 @@ package com.example.smartcubeapp.timerUI
 
 import org.worldcubeassociation.tnoodle.puzzle.CubePuzzle
 
-class ScrambleGenerator {
-    fun generate3x3CubeScramble(): String {
-        val puzzle = CubePuzzle(CUBE_SIZE)
+object ScrambleGenerator {
+    private const val CUBE_SIZE_3x3x3 = 3
+    fun generateScramble(cubeSize: Int = CUBE_SIZE_3x3x3): String {
+        val puzzle = CubePuzzle(cubeSize)
         return puzzle.generateScramble()
-    }
-
-    companion object{
-        const val CUBE_SIZE = 3
     }
 }
