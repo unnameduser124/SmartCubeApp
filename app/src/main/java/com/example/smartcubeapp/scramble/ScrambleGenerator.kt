@@ -1,4 +1,4 @@
-package com.example.smartcubeapp.timerUI
+package com.example.smartcubeapp.scramble
 
 import org.worldcubeassociation.tnoodle.puzzle.CubePuzzle
 

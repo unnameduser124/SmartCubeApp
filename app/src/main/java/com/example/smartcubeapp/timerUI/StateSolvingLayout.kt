@@ -11,6 +11,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
 import com.example.smartcubeapp.cube.CubeState
 import com.example.smartcubeapp.cube.Solve
@@ -73,4 +74,23 @@ class StateSolvingLayout(
             )
         }
     }
+}
+
+@Preview
+@Composable
+fun StateSolvingLayoutPreview() {
+    val state = remember { mutableStateOf(TimerState.Solving) }
+    val cubeState = remember {
+        mutableStateOf(
+            CubeState(
+                mutableListOf(),
+                mutableListOf(),
+                mutableListOf(),
+                mutableListOf(),
+            )
+        )
+    }
+    val solve = remember { mutableStateOf(Solve()) }
+
+    StateSolvingLayout(state, cubeState, solve).GenerateLayout()
 }

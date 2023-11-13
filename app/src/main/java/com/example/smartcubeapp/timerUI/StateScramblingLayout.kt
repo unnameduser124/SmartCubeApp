@@ -31,6 +31,7 @@ import androidx.compose.ui.unit.sp
 import com.example.smartcubeapp.R
 import com.example.smartcubeapp.cube.CubeState
 import com.example.smartcubeapp.cube.Solve
+import com.example.smartcubeapp.scramble.ScrambleGenerator
 
 class StateScramblingLayout(
     private val state: MutableState<TimerState>,
