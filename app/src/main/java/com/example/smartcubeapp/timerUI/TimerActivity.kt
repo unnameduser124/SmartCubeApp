@@ -38,7 +38,7 @@ class TimerActivity: ComponentActivity() {
 
         when (timerState.value) {
             TimerState.Scrambling -> {
-                StateScramblingLayout(timerState, cubeState, solve).GenerateLayout()
+                StateScramblingLayout(timerState, cubeState, solve).GenerateLayout(this)
             }
 
             TimerState.Solving -> {
