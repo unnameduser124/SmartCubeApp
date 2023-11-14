@@ -3,7 +3,7 @@ package com.example.smartcubeapp
 import com.example.smartcubeapp.scramble.ScrambleGenerator
 import org.junit.Test
 
-class ScrambleTest {
+class ScrambleGeneratorTest {
 
     @Test
     fun generate2x2ScrambleTest(){
