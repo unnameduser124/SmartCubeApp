@@ -24,6 +24,13 @@ class Scramble(
         this.sequence = sequence
     }
 
+    fun processMove(move: String): Boolean {
+        if (scramblingMode == ScramblingMode.Fixing) {
+            return fixMove(move)
+        }
+        return nextMove(move)
+    }
+
     fun getCurrentMove(): String {
         if (scramblingMode == ScramblingMode.Fixing) {
             if (wrongMoves.isEmpty()) {

@@ -15,6 +15,7 @@ import org.junit.Test
 class ScrambleTests {
 
     private lateinit var scramble: Scramble
+
     @get:Rule
     val composeTestRule = createComposeRule()
 
@@ -32,17 +33,17 @@ class ScrambleTests {
     }
 
     @Test
-    fun nextMoveTest(){
+    fun nextMoveTest() {
         val movesList = scramble.getRemainingMoves().split(" ")
 
-        for(move in movesList){
+        for (move in movesList) {
             val nextMove = scramble.nextMove(move)
             assert(nextMove)
         }
     }
 
     @Test
-    fun nextMoveNoDoubleMovesTest(){
+    fun nextMoveNoDoubleMovesTest() {
         val movesDoublesReplacedWithSingle = scramble.getRemainingMoves().replace("R2", "R R")
             .replace("L2", "L L")
             .replace("U2", "U U")
@@ -52,17 +53,17 @@ class ScrambleTests {
 
         val movesList = movesDoublesReplacedWithSingle.split(" ")
 
-        for(move in movesList){
+        for (move in movesList) {
             val nextMove = scramble.nextMove(move)
             assert(nextMove)
         }
     }
 
     @Test
-    fun nextMoveTestScrambleCompleted(){
+    fun nextMoveTestScrambleCompleted() {
         val movesList = scramble.getRemainingMoves().split(" ")
 
-        for(move in movesList){
+        for (move in movesList) {
             val nextMove = scramble.nextMove(move)
             assert(nextMove)
         }
@@ -72,10 +73,10 @@ class ScrambleTests {
     }
 
     @Test
-    fun getCurrentMoveTest(){
+    fun getCurrentMoveTest() {
         val movesList = scramble.getRemainingMoves().split(" ")
 
-        for(move in movesList){
+        for (move in movesList) {
             val currentMove = scramble.getCurrentMove()
             assertEquals(move, currentMove)
             val nextMove = scramble.nextMove(move)
@@ -84,10 +85,10 @@ class ScrambleTests {
     }
 
     @Test
-    fun getCurrentMoveScramblingCompleted(){
+    fun getCurrentMoveScramblingCompleted() {
         val movesList = scramble.getRemainingMoves().split(" ")
 
-        for(move in movesList){
+        for (move in movesList) {
             val currentMove = scramble.getCurrentMove()
             assert(currentMove == move)
             val nextMove = scramble.nextMove(move)
@@ -99,7 +100,7 @@ class ScrambleTests {
     }
 
     @Test
-    fun getCurrentMoveFixingMode(){
+    fun getCurrentMoveFixingMode() {
         scramble.scramblingMode = ScramblingMode.Fixing
 
         scramble.wrongMoves.add("U")
@@ -117,7 +118,7 @@ class ScrambleTests {
     }
 
     @Test
-    fun getCurrentMoveFixingModeFixingFinished(){
+    fun getCurrentMoveFixingModeFixingFinished() {
         scramble.scramblingMode = ScramblingMode.Fixing
 
         assert(scramble.nextMove("F"))
@@ -125,10 +126,10 @@ class ScrambleTests {
     }
 
     @Test
-    fun getRemainingMovesTest(){
+    fun getRemainingMovesTest() {
         val movesList = scramble.getRemainingMoves().split(" ")
 
-        movesList.forEachIndexed{ index, move ->
+        movesList.forEachIndexed { index, move ->
             val remainingMoves = scramble.getRemainingMoves()
             val expectedRemainingMoves = movesList.subList(index, movesList.size).joinToString(" ")
             val nextMove = scramble.nextMove(move)
@@ -140,7 +141,7 @@ class ScrambleTests {
     }
 
     @Test
-    fun generateNewScrambleTest(){
+    fun generateNewScrambleTest() {
         val currentScramble = scramble.getRemainingMoves()
         scramble.generateNewScramble()
         val newScramble = scramble.getRemainingMoves()
@@ -148,7 +149,7 @@ class ScrambleTests {
     }
 
     @Test
-    fun fixMoveTest(){
+    fun fixMoveTest() {
         scramble.scramblingMode = ScramblingMode.Fixing
 
         scramble.wrongMoves.add("U")
@@ -165,7 +166,7 @@ class ScrambleTests {
     }
 
     @Test
-    fun fixMoveNoWrongMoves(){
+    fun fixMoveNoWrongMoves() {
         scramble.scramblingMode = ScramblingMode.Fixing
 
         val currentMove = scramble.getCurrentMove()
@@ -173,22 +174,36 @@ class ScrambleTests {
         assert(!scramble.fixMove("U"))
     }
 
+    @Test
+    fun fullScramblingTest() {
+        //scramble sequence:
+        //F U' L B' D' F' L2 D' B' U2 R2 D2 B2 F2 U' L' R' F2 B2 L' D2 B2 U2 F2 U
+        val moves =
+            "F U U' U' L B' D' F' L L D D' D' B' U' U' R R D D B' B' F' F' U U' U' L' R' F F B B L' D D B B U U F' F' U' U U"
+        val movesToList = moves.split(" ")
 
-    private fun reverseMove(move: String): String{
-        return when (move){
+        for (move in movesToList) {
+            scramble.processMove(move)
+        }
+        assert(scramble.getRemainingMoves() == "")
+    }
+
+
+    private fun reverseMove(move: String): String {
+        return when (move) {
             "U" -> "U'"
             "U'" -> "U"
-            "R" ->  "R'"
-            "R'" ->  "R"
-            "L" ->  "L'"
-            "L'" ->  "L"
-            "F" ->  "F'"
-            "F'" ->  "F"
-            "B" ->  "B'"
-            "B'" ->  "B"
-            "D" ->  "D'"
-            "D'" ->  "D"
-            else ->  move
+            "R" -> "R'"
+            "R'" -> "R"
+            "L" -> "L'"
+            "L'" -> "L"
+            "F" -> "F'"
+            "F'" -> "F"
+            "B" -> "B'"
+            "B'" -> "B"
+            "D" -> "D'"
+            "D'" -> "D"
+            else -> move
         }
     }
 
