@@ -32,4 +32,11 @@ class Solve(
         val time = solveStateSequence.last().timestamp - solveStateSequence.first().timestamp
         this.time = time
     }
+
+    fun prepareForNewSolve(){
+        solveStateSequence.clear()
+        solveStatus = SolveStatus.Scramble
+        solveStartTime = 0
+        scrambledState = CubeState.SOLVED_CUBE_STATE
+    }
 }

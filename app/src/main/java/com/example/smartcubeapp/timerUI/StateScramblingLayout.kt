@@ -98,7 +98,11 @@ class StateScramblingLayout(
                     lastState = cubeState.value
                 }
                 if(scramble.getRemainingMoves() == ""){
+                    solve.value.prepareForNewSolve()
+                    solve.value.scrambledState = cubeState.value
+                    solve.value.scrambleSequence = scramble.getScramble()
                     Toast.makeText(context, "Scrambled", Toast.LENGTH_SHORT).show()
+                    timerState.value = TimerState.Solving
                 }
             }
 

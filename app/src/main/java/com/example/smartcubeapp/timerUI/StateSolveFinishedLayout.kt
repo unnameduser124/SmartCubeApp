@@ -1,6 +1,7 @@
 package com.example.smartcubeapp.timerUI
 
 import android.content.Context
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -33,14 +34,20 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.smartcubeapp.MILLIS_IN_SECOND
 import com.example.smartcubeapp.R
+import com.example.smartcubeapp.bluetooth.lastMove
+import com.example.smartcubeapp.bluetooth.timerState
 import com.example.smartcubeapp.cube.CubeState
 import com.example.smartcubeapp.cube.Solve
 import com.example.smartcubeapp.phasedetection.CubeStatePhaseDetection
 import com.example.smartcubeapp.phasedetection.SolutionPhaseDetection
 import com.example.smartcubeapp.phasedetection.SolvePhase
 import com.example.smartcubeapp.roundDouble
+import com.example.smartcubeapp.scramble.Scramble
 import com.example.smartcubeapp.scramble.ScrambleGenerator
+import com.example.smartcubeapp.scramble.ScramblingMode
 import com.example.smartcubeapp.simpleTestSolve
+import com.example.smartcubeapp.solvedatabase.services.SolveAnalysisDBService
+import com.example.smartcubeapp.stats.StatsService
 
 class StateSolveFinishedLayout(
     private val state: MutableState<TimerState>,
@@ -58,10 +65,19 @@ class StateSolveFinishedLayout(
     private lateinit var ao50: MutableState<Double>
     private lateinit var ao100: MutableState<Double>
     private lateinit var noSolves: MutableState<Int>
+    private val generatedScramble = ScrambleGenerator.generateScramble()
+    private val scramble: Scramble = Scramble(generatedScramble)
+    private var lastState = CubeState(
+        mutableListOf(),
+        mutableListOf(),
+        mutableListOf(),
+        mutableListOf(),
+    )
 
     @Composable
     fun GenerateLayout() {
-        scrambleSequence = remember { mutableStateOf(ScrambleGenerator.generateScramble()) }
+        SolveAnalysisDBService(context).saveSolveWithAnalysis(solve.value)
+        scrambleSequence = remember { mutableStateOf(scramble.getRemainingMoves()) }
         solveTime = remember { mutableStateOf("0.00") }
         ao5 = remember { mutableStateOf(0.00) }
         ao12 = remember { mutableStateOf(0.00) }
@@ -69,6 +85,13 @@ class StateSolveFinishedLayout(
         ao100 = remember { mutableStateOf(0.00) }
         noSolves = remember { mutableStateOf(0) }
         solveSaved = remember { mutableStateOf(false) }
+
+        val statsService = StatsService(context)
+        ao5.value = millisToSeconds(statsService.averageOf(5))
+        ao12.value = millisToSeconds(statsService.averageOf(12))
+        ao50.value = millisToSeconds(statsService.averageOf(50))
+        ao100.value = millisToSeconds(statsService.averageOf(100))
+        noSolves.value = statsService.totalNumberOfSolves()
 
         SolveResults()
         CurrentStatsColumn()
@@ -82,7 +105,27 @@ class StateSolveFinishedLayout(
             SettingsButtonRow()
         }
 
-        solve.value.scrambleSequence = scrambleSequence.value
+        if (cubeState.value != lastState) {
+            if(lastState.cornerPositions.isNotEmpty()){
+                lastState = cubeState.value
+                scramble.processMove(lastMove.value.notation)
+                if (scramble.scramblingMode == ScramblingMode.Scrambling) {
+                    scrambleSequence.value = scramble.getRemainingMoves()
+                } else {
+                    scrambleSequence.value = scramble.getCurrentMove()
+                }
+            }
+            else{
+                lastState = cubeState.value
+            }
+            if(scramble.getRemainingMoves() == ""){
+                solve.value.prepareForNewSolve()
+                solve.value.scrambledState = cubeState.value
+                solve.value.scrambleSequence = scramble.getScramble()
+                Toast.makeText(context, "Scrambled", Toast.LENGTH_SHORT).show()
+                timerState.value = TimerState.Solving
+            }
+        }
     }
 
     @Composable
@@ -373,6 +416,11 @@ class StateSolveFinishedLayout(
         val time = solve.value.time / MILLIS_IN_SECOND.toDouble()
         val timeRounded = roundDouble(time, 100)
         return timeRounded.toString()
+    }
+
+    private fun millisToSeconds(millis: Double): Double {
+        val time = millis / MILLIS_IN_SECOND.toDouble()
+        return roundDouble(time, 100)
     }
 
     @Composable
