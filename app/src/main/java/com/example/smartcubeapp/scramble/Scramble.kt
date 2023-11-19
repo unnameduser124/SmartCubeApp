@@ -54,6 +54,7 @@ class Scramble(
         sequence= ScrambleGenerator.generateScramble()
         remainingMoves = sequence
         wrongMoves.clear()
+        scramblingMode = ScramblingMode.Scrambling
     }
 
     fun nextMove(move: String): Boolean {

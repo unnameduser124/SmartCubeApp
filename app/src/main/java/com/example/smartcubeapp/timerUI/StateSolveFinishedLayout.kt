@@ -74,9 +74,12 @@ class StateSolveFinishedLayout(
         mutableListOf(),
     )
 
+    init{
+        SolveAnalysisDBService(context).saveSolveWithAnalysis(solve.value)
+    }
+
     @Composable
     fun GenerateLayout() {
-        SolveAnalysisDBService(context).saveSolveWithAnalysis(solve.value)
         scrambleSequence = remember { mutableStateOf(scramble.getRemainingMoves()) }
         solveTime = remember { mutableStateOf("0.00") }
         ao5 = remember { mutableStateOf(0.00) }
@@ -227,7 +230,8 @@ class StateSolveFinishedLayout(
             modifier = Modifier
                 .fillMaxWidth()
                 .clickable(interactionSource = interactionSource, indication = null) {
-                    scrambleSequence.value = ScrambleGenerator.generateScramble()
+                    scramble.generateNewScramble()
+                    scrambleSequence.value = scramble.getRemainingMoves()
                 }
                 .padding(16.dp)
                 .background(color = Color.LightGray, shape = RoundedCornerShape(20.dp))
@@ -239,7 +243,8 @@ class StateSolveFinishedLayout(
                     .padding(top = 10.dp, bottom = 10.dp, start = 15.dp, end = 5.dp),
                 fontSize = 25.sp,
                 overflow = TextOverflow.Ellipsis,
-                maxLines = 1
+                maxLines = 1,
+                textAlign = TextAlign.Center
             )
         }
     }
