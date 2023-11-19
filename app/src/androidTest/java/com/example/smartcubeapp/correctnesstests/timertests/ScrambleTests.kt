@@ -1,8 +1,5 @@
 package com.example.smartcubeapp.correctnesstests.timertests
 
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.test.junit4.createComposeRule
 import com.example.smartcubeapp.scramble.Scramble
 import com.example.smartcubeapp.scramble.ScramblingMode
@@ -21,15 +18,8 @@ class ScrambleTests {
 
     @Before
     fun setUp() {
-        var sequence: MutableState<String>
-        composeTestRule.setContent {
-            sequence =
-                remember {
-                    mutableStateOf("F U' L B' D' F' L2 D' B' U2 R2 D2 B2 F2 U' L' R' F2 B2 L' D2 B2 U2 F2 U")
-                }
-
+            val sequence = "F U' L B' D' F' L2 D' B' U2 R2 D2 B2 F2 U' L' R' F2 B2 L' D2 B2 U2 F2 U"
             scramble = Scramble(sequence)
-        }
     }
 
     @Test

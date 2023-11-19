@@ -1,6 +1,7 @@
 package com.example.smartcubeapp.timerUI
 
 import android.content.Context
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -24,14 +25,19 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.smartcubeapp.R
+import com.example.smartcubeapp.bluetooth.lastMove
+import com.example.smartcubeapp.bluetooth.timerState
 import com.example.smartcubeapp.cube.CubeState
 import com.example.smartcubeapp.cube.Solve
+import com.example.smartcubeapp.scramble.Scramble
 import com.example.smartcubeapp.scramble.ScrambleGenerator
+import com.example.smartcubeapp.scramble.ScramblingMode
 
 class StateScramblingLayout(
     private val state: MutableState<TimerState>,
@@ -47,11 +53,19 @@ class StateScramblingLayout(
     private lateinit var ao50: MutableState<Double>
     private lateinit var ao100: MutableState<Double>
     private lateinit var noSolves: MutableState<Int>
+    private val generatedScramble = ScrambleGenerator.generateScramble()
+    private val scramble: Scramble = Scramble(generatedScramble)
+    private var lastState = CubeState(
+        mutableListOf(),
+        mutableListOf(),
+        mutableListOf(),
+        mutableListOf(),
+    )
 
     @Composable
     fun GenerateLayout(context: Context) {
+        scrambleSequence = remember { mutableStateOf(scramble.getRemainingMoves()) }
 
-        scrambleSequence = remember { mutableStateOf(ScrambleGenerator.generateScramble()) }
         solveTime = remember { mutableStateOf("0.00") }
         ao5 = remember { mutableStateOf(0.00) }
         ao12 = remember { mutableStateOf(0.00) }
@@ -70,7 +84,26 @@ class StateScramblingLayout(
             SolveHistoryButtonRow()
             StatisticsButtonRow()
             SettingsButtonRow()
+            if (cubeState.value != lastState) {
+                if(lastState.cornerPositions.isNotEmpty()){
+                    lastState = cubeState.value
+                    scramble.processMove(lastMove.value.notation)
+                    if (scramble.scramblingMode == ScramblingMode.Scrambling) {
+                        scrambleSequence.value = scramble.getRemainingMoves()
+                    } else {
+                        scrambleSequence.value = scramble.getCurrentMove()
+                    }
+                }
+                else{
+                    lastState = cubeState.value
+                }
+                if(scramble.getRemainingMoves() == ""){
+                    Toast.makeText(context, "Scrambled", Toast.LENGTH_SHORT).show()
+                }
+            }
+
         }
+
     }
 
     @Composable
@@ -80,7 +113,12 @@ class StateScramblingLayout(
             modifier = Modifier
                 .fillMaxWidth()
                 .clickable(interactionSource = interactionSource, indication = null) {
-                    scrambleSequence.value = ScrambleGenerator.generateScramble()
+                    try {
+                        scramble.generateNewScramble()
+                        scrambleSequence.value = scramble.getRemainingMoves()
+                    } catch (error: Exception) {
+                        println(error.message)
+                    }
                 }
                 .padding(16.dp)
                 .background(color = Color.LightGray, shape = RoundedCornerShape(20.dp))
@@ -92,7 +130,8 @@ class StateScramblingLayout(
                     .padding(top = 10.dp, bottom = 10.dp, start = 15.dp, end = 5.dp),
                 fontSize = 25.sp,
                 overflow = TextOverflow.Ellipsis,
-                maxLines = 1
+                maxLines = 1,
+                textAlign = TextAlign.Center
             )
         }
     }

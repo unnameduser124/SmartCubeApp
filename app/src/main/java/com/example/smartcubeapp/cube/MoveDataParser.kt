@@ -59,6 +59,7 @@ class MoveDataParser(private val data: ByteBuffer) {
                         val newMove = parseMove(highNibble, lowNibble)
                         if (newMove != null) {
                             moves.add(newMove)
+                            break
                         }
                     }
                 }

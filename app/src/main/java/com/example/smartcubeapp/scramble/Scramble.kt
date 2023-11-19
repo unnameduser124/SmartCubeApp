@@ -1,30 +1,32 @@
 package com.example.smartcubeapp.scramble
 
-import androidx.compose.runtime.MutableState
-
 enum class ScramblingMode {
     Scrambling,
     Fixing,
-    PreparingToScramble
+    PreparingToScramble,
+    Scrambled
 }
 
 class Scramble(
-    private var sequence: MutableState<String>,
+    private var sequence: String,
     val wrongMoves: MutableList<String>,
-    private var currentMoveIndex: Int,
     var scramblingMode: ScramblingMode,
-    private var remainingMoves: String = sequence.value
+    private var remainingMoves: String = sequence
 ) {
-    constructor(sequence: MutableState<String>) : this(
+
+    constructor(sequence: String) : this(
         sequence,
         mutableListOf(),
-        0,
         ScramblingMode.Scrambling
     ) {
         this.sequence = sequence
+        this.remainingMoves = sequence
     }
 
     fun processMove(move: String): Boolean {
+        if(scramblingMode == ScramblingMode.Scrambled){
+            return false
+        }
         if (scramblingMode == ScramblingMode.Fixing) {
             return fixMove(move)
         }
@@ -36,7 +38,7 @@ class Scramble(
             if (wrongMoves.isEmpty()) {
                 return ""
             }
-            return reverseMove(wrongMoves.first())
+            return reverseMove(wrongMoves.last())
         }
         if (remainingMoves.isEmpty()) {
             return ""
@@ -49,16 +51,15 @@ class Scramble(
     }
 
     fun generateNewScramble() {
-        sequence.value = ScrambleGenerator.generateScramble()
-        remainingMoves = sequence.value
+        sequence= ScrambleGenerator.generateScramble()
+        remainingMoves = sequence
+        wrongMoves.clear()
     }
 
     fun nextMove(move: String): Boolean {
-        if(scramblingMode == ScramblingMode.Fixing && wrongMoves.isEmpty()){
-            scramblingMode = ScramblingMode.Scrambling
-        }
         if(remainingMoves == move){
             remainingMoves = ""
+            scramblingMode = ScramblingMode.Scrambled
             return true
         }
         val expectedMove = getCurrentMove()
@@ -76,23 +77,25 @@ class Scramble(
             return true
         }
         wrongMoves.add(move)
+        scramblingMode = ScramblingMode.Fixing
         return false
     }
 
     fun fixMove(move: String): Boolean {
         val expectedMove = getCurrentMove()
         if(move == expectedMove){
-            wrongMoves.remove(reverseMove(move))
+            wrongMoves.removeLast()
             if(wrongMoves.isEmpty()){
                 scramblingMode = ScramblingMode.Scrambling
             }
             return true
         }
+        wrongMoves.add(move)
         return false
     }
 
     fun getScramble(): String {
-        return sequence.value
+        return sequence
     }
 
     private fun reverseMove(move: String): String {
