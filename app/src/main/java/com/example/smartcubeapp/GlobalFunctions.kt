@@ -620,3 +620,7 @@ fun simpleSolveStateSequence(): MutableList<CubeState> {
         ),
     )
 }
+fun millisToSeconds(millis: Double): Double {
+    val time = millis / MILLIS_IN_SECOND.toDouble()
+    return roundDouble(time, 100)
+}

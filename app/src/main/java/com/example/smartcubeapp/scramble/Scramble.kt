@@ -47,6 +47,9 @@ class Scramble(
     }
 
     fun getRemainingMoves(): String {
+        if(scramblingMode == ScramblingMode.Fixing){
+            return reverseWrongMoves(wrongMoves.reversed()).joinToString(" ")
+        }
         return remainingMoves
     }
 
@@ -115,6 +118,10 @@ class Scramble(
             "B'" -> "B"
             else -> move
         }
+    }
+
+    private fun reverseWrongMoves(wrongMoves: List<String>): List<String>{
+        return wrongMoves.map { reverseMove(it) }
     }
 }
 

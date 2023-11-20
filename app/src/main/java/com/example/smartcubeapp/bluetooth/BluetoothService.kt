@@ -119,7 +119,6 @@ class BluetoothService(
     ) {
 
         val device = bluetoothAdapter.getRemoteDevice(address)
-        bluetoothState.value = BluetoothState.Connecting
         val gattCallback = object : BluetoothGattCallback() {
             @RequiresApi(Build.VERSION_CODES.S)
             override fun onConnectionStateChange(gatt: BluetoothGatt, status: Int, newState: Int) {
@@ -162,6 +161,7 @@ class BluetoothService(
             bluetoothUtilities.requestBluetoothConnectPermission()
             return
         }
+        bluetoothState.value = BluetoothState.Connecting
         device.connectGatt(activityContext, false, gattCallback)
     }
 

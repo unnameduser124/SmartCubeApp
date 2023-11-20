@@ -35,9 +35,11 @@ import com.example.smartcubeapp.bluetooth.lastMove
 import com.example.smartcubeapp.bluetooth.timerState
 import com.example.smartcubeapp.cube.CubeState
 import com.example.smartcubeapp.cube.Solve
+import com.example.smartcubeapp.millisToSeconds
 import com.example.smartcubeapp.scramble.Scramble
 import com.example.smartcubeapp.scramble.ScrambleGenerator
 import com.example.smartcubeapp.scramble.ScramblingMode
+import com.example.smartcubeapp.stats.StatsService
 
 class StateScramblingLayout(
     private val state: MutableState<TimerState>,
@@ -64,15 +66,8 @@ class StateScramblingLayout(
 
     @Composable
     fun GenerateLayout(context: Context) {
-        scrambleSequence = remember { mutableStateOf(scramble.getRemainingMoves()) }
-
-        solveTime = remember { mutableStateOf("0.00") }
-        ao5 = remember { mutableStateOf(0.00) }
-        ao12 = remember { mutableStateOf(0.00) }
-        ao50 = remember { mutableStateOf(0.00) }
-        ao100 = remember { mutableStateOf(0.00) }
-        noSolves = remember { mutableStateOf(0) }
         this.context = context
+        InitializeVariables()
 
         SolveTimeRow()
         CurrentStatsColumn()
@@ -88,16 +83,12 @@ class StateScramblingLayout(
                 if(lastState.cornerPositions.isNotEmpty()){
                     lastState = cubeState.value
                     scramble.processMove(lastMove.value.notation)
-                    if (scramble.scramblingMode == ScramblingMode.Scrambling) {
-                        scrambleSequence.value = scramble.getRemainingMoves()
-                    } else {
-                        scrambleSequence.value = scramble.getCurrentMove()
-                    }
+                    scrambleSequence.value = scramble.getRemainingMoves()
                 }
                 else{
                     lastState = cubeState.value
                 }
-                if(scramble.getRemainingMoves() == ""){
+                if(scramble.scramblingMode == ScramblingMode.Scrambled){
                     solve.value.prepareForNewSolve()
                     solve.value.scrambledState = cubeState.value
                     solve.value.scrambleSequence = scramble.getScramble()
@@ -105,9 +96,36 @@ class StateScramblingLayout(
                     timerState.value = TimerState.Solving
                 }
             }
-
         }
+    }
 
+    @Composable
+    fun InitializeVariables(){
+        scrambleSequence = remember { mutableStateOf(scramble.getRemainingMoves()) }
+
+        solveTime = remember { mutableStateOf("0.00") }
+        ao5 = remember { mutableStateOf(0.00) }
+        ao12 = remember { mutableStateOf(0.00) }
+        ao50 = remember { mutableStateOf(0.00) }
+        ao100 = remember { mutableStateOf(0.00) }
+        noSolves = remember { mutableStateOf(0) }
+
+        val statsService = StatsService(context)
+        if(noSolves.value == 0){
+            noSolves.value = statsService.totalNumberOfSolves()
+        }
+        if(noSolves.value >= 5 && ao5.value == 0.00){
+            ao5.value = millisToSeconds(statsService.averageOf(5))
+        }
+        if(noSolves.value >= 12 && ao12.value == 0.00){
+            ao12.value = millisToSeconds(statsService.averageOf(12))
+        }
+        if(noSolves.value >= 50 && ao50.value == 0.00){
+            ao50.value = millisToSeconds(statsService.averageOf(50))
+        }
+        if(noSolves.value >= 100 && ao100.value == 0.00){
+            ao100.value = millisToSeconds(statsService.averageOf(100))
+        }
     }
 
     @Composable
@@ -192,8 +210,8 @@ class StateScramblingLayout(
                     .padding(bottom = 10.dp)
                     .fillMaxWidth()
             ) {
-                Text(text = "ao5: ${ao5.value}", fontSize = 20.sp)
-                Text(text = "ao12: ${ao12.value}", fontSize = 20.sp)
+                Text(text = "ao5: ${if(noSolves.value >= 5) ao5.value else "-"}", fontSize = 20.sp)
+                Text(text = "ao12: ${if(noSolves.value >= 12) ao12.value else "-"}", fontSize = 20.sp)
             }
             Row(
                 horizontalArrangement = Arrangement.SpaceEvenly,
@@ -202,8 +220,8 @@ class StateScramblingLayout(
                     .padding(bottom = 10.dp)
                     .fillMaxWidth()
             ) {
-                Text(text = "ao50: ${ao50.value}", fontSize = 20.sp)
-                Text(text = "ao100: ${ao100.value}", fontSize = 20.sp)
+                Text(text = "ao50: ${if(noSolves.value >= 50) ao50.value else "-"}", fontSize = 20.sp)
+                Text(text = "ao100: ${if(noSolves.value >=100) ao100.value else "-"}", fontSize = 20.sp)
             }
 
             Row(
