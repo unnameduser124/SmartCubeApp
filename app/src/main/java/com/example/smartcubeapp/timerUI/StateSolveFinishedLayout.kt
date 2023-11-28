@@ -34,6 +34,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.smartcubeapp.MILLIS_IN_SECOND
 import com.example.smartcubeapp.R
+import com.example.smartcubeapp.bluetooth.cubeState
 import com.example.smartcubeapp.bluetooth.lastMove
 import com.example.smartcubeapp.bluetooth.timerState
 import com.example.smartcubeapp.cube.CubeState
@@ -46,28 +47,17 @@ import com.example.smartcubeapp.roundDouble
 import com.example.smartcubeapp.scramble.Scramble
 import com.example.smartcubeapp.scramble.ScrambleGenerator
 import com.example.smartcubeapp.scramble.ScramblingMode
-import com.example.smartcubeapp.simpleTestSolve
 import com.example.smartcubeapp.solvedatabase.services.SolveAnalysisDBService
 import com.example.smartcubeapp.stats.StatsService
 
 class StateSolveFinishedLayout(
-    private val state: MutableState<TimerState>,
-    val cubeState: MutableState<CubeState>,
-    private val solve: MutableState<Solve>,
-    private val context: Context
+    private val solve: Solve
 ) {
 
-    private lateinit var solveSaved: MutableState<Boolean>
-    private lateinit var saveTime: MutableState<Long>
     private lateinit var scrambleSequence: MutableState<String>
-    private lateinit var solveTime: MutableState<String>
-    private lateinit var ao5: MutableState<Double>
-    private lateinit var ao12: MutableState<Double>
-    private lateinit var ao50: MutableState<Double>
-    private lateinit var ao100: MutableState<Double>
-    private lateinit var noSolves: MutableState<Int>
     private val generatedScramble = ScrambleGenerator.generateScramble()
     private val scramble: Scramble = Scramble(generatedScramble)
+    private lateinit var context: Context
     private var lastState = CubeState(
         mutableListOf(),
         mutableListOf(),
@@ -75,13 +65,13 @@ class StateSolveFinishedLayout(
         mutableListOf(),
     )
 
-    init{
-        SolveAnalysisDBService(context).saveSolveWithAnalysis(solve.value)
-    }
-
     @Composable
-    fun GenerateLayout() {
-        InitializeVariables()
+    fun GenerateLayout(context: Context) {
+        this.context = context
+        if (solve.id == -1L) {
+            val id = SolveAnalysisDBService(context).saveSolveWithAnalysis(solve).solveID
+            solve.id = id
+        }
 
         SolveResults()
         CurrentStatsColumn()
@@ -94,52 +84,32 @@ class StateSolveFinishedLayout(
             StatisticsButtonRow()
             SettingsButtonRow()
         }
+    }
 
-        if (cubeState.value != lastState) {
-            if(lastState.cornerPositions.isNotEmpty()){
+    private fun handleScrambling() {
+        if (scramble.scramblingMode == ScramblingMode.PreparingToScramble) {
+            scrambleSequence.value = "Solve the cube before scrambling"
+            if (scramble.scramblingMode == ScramblingMode.PreparingToScramble && cubeState.value.isSolved()) {
+                scramble.scramblingMode = ScramblingMode.Scrambling
+                scramble.wrongMoves.clear()
+                scrambleSequence.value = scramble.getRemainingMoves()
+                lastState = cubeState.value
+            }
+        } else if (cubeState.value != lastState) {
+            if (lastState.cornerPositions.isNotEmpty()) {
                 lastState = cubeState.value
                 scramble.processMove(lastMove.value.notation)
                 scrambleSequence.value = scramble.getRemainingMoves()
-            }
-            else{
+            } else {
                 lastState = cubeState.value
             }
-            if(scramble.scramblingMode == ScramblingMode.Scrambled){
-                solve.value.prepareForNewSolve()
-                solve.value.scrambledState = cubeState.value
-                solve.value.scrambleSequence = scramble.getScramble()
+            if (scramble.scramblingMode == ScramblingMode.Scrambled) {
+                solve.prepareForNewSolve()
+                solve.scrambledState = cubeState.value
+                solve.scrambleSequence = scramble.getScramble()
                 Toast.makeText(context, "Scrambled", Toast.LENGTH_SHORT).show()
                 timerState.value = TimerState.Solving
             }
-        }
-    }
-
-    @Composable
-    fun InitializeVariables(){
-        scrambleSequence = remember { mutableStateOf(scramble.getRemainingMoves()) }
-        solveTime = remember { mutableStateOf("0.00") }
-        ao5 = remember { mutableStateOf(0.00) }
-        ao12 = remember { mutableStateOf(0.00) }
-        ao50 = remember { mutableStateOf(0.00) }
-        ao100 = remember { mutableStateOf(0.00) }
-        noSolves = remember { mutableStateOf(0) }
-        solveSaved = remember { mutableStateOf(false) }
-
-        val statsService = StatsService(context)
-        if(noSolves.value == 0){
-            noSolves.value = statsService.totalNumberOfSolves()
-        }
-        if(noSolves.value >= 5 && ao5.value == 0.00){
-            ao5.value = millisToSeconds(statsService.averageOf(5))
-        }
-        if(noSolves.value >= 12 && ao12.value == 0.00){
-            ao12.value = millisToSeconds(statsService.averageOf(12))
-        }
-        if(noSolves.value >= 50 && ao50.value == 0.00){
-            ao50.value = millisToSeconds(statsService.averageOf(50))
-        }
-        if(noSolves.value >= 100 && ao100.value == 0.00){
-            ao100.value = millisToSeconds(statsService.averageOf(100))
         }
     }
 
@@ -153,13 +123,13 @@ class StateSolveFinishedLayout(
         ) {
             SolveTimeRow()
             Row(horizontalArrangement = Arrangement.Center) {
-                val moveCount = solve.value.solveStateSequence.size - 1
+                val moveCount = solve.solveStateSequence.size - 1
                 Text(
                     text = "$moveCount moves",
                     fontSize = 25.sp,
                     modifier = Modifier.padding(horizontal = 10.dp)
                 )
-                val tpsRounded = roundDouble(solve.value.getTurnsPerSecond(), 100)
+                val tpsRounded = roundDouble(solve.getTurnsPerSecond(), 100)
                 Text(
                     text = "${tpsRounded}tps",
                     fontSize = 25.sp,
@@ -175,7 +145,7 @@ class StateSolveFinishedLayout(
     @Composable
     fun OLLCaseRow() {
         val ollCase = SolutionPhaseDetection(
-            solve.value,
+            solve,
             CubeStatePhaseDetection(CubeState.SOLVED_CUBE_STATE)
         ).getOLL(context)
 
@@ -196,7 +166,7 @@ class StateSolveFinishedLayout(
     @Composable
     fun PLLCaseRow() {
         val pllCase = SolutionPhaseDetection(
-            solve.value,
+            solve,
             CubeStatePhaseDetection(CubeState.SOLVED_CUBE_STATE)
         ).getPLL(context)
 
@@ -217,7 +187,7 @@ class StateSolveFinishedLayout(
     @Composable
     fun CrossSideRow() {
         val crossSide = SolutionPhaseDetection(
-            solve.value,
+            solve,
             CubeStatePhaseDetection(CubeState.SOLVED_CUBE_STATE)
         ).getCrossSide() ?: return
 
@@ -235,8 +205,21 @@ class StateSolveFinishedLayout(
         }
     }
 
+    private fun handleCubeNotSolved() {
+        if (
+            !cubeState.value.isSolved()
+            && scramble.getRemainingMoves() == scramble.getScramble()
+            && !lastState.isSolved()
+        ) {
+            scramble.scramblingMode = ScramblingMode.PreparingToScramble
+        }
+    }
+
     @Composable
     fun ScrambleSequenceRow() {
+        scrambleSequence = remember { mutableStateOf(scramble.getRemainingMoves()) }
+        handleCubeNotSolved()
+        handleScrambling()
         val interactionSource = remember { MutableInteractionSource() }
         Row(
             modifier = Modifier
@@ -244,6 +227,12 @@ class StateSolveFinishedLayout(
                 .clickable(interactionSource = interactionSource, indication = null) {
                     scramble.generateNewScramble()
                     scrambleSequence.value = scramble.getRemainingMoves()
+                    if (!cubeState.value.isSolved()) {
+                        scramble.scramblingMode = ScramblingMode.PreparingToScramble
+                        scrambleSequence.value = "Solve the cube before scrambling"
+                    } else {
+                        scrambleSequence.value = scramble.getRemainingMoves()
+                    }
                 }
                 .padding(16.dp)
                 .background(color = Color.LightGray, shape = RoundedCornerShape(20.dp))
@@ -301,6 +290,25 @@ class StateSolveFinishedLayout(
 
     @Composable
     fun CurrentStatsColumn() {
+        val statsService = StatsService(context)
+        val noSolves = statsService.totalNumberOfSolves()
+        var ao5 = "-"
+        var ao12 = "-"
+        var ao50 = "-"
+        var ao100 = "-"
+
+        if (noSolves >= 5) {
+            ao5 = millisToSeconds(statsService.averageOf(5)).toString()
+        }
+        if (noSolves >= 12) {
+            ao12 = millisToSeconds(statsService.averageOf(12)).toString()
+        }
+        if (noSolves >= 50) {
+            ao50 = millisToSeconds(statsService.averageOf(50)).toString()
+        }
+        if (noSolves >= 100) {
+            ao100 = millisToSeconds(statsService.averageOf(100)).toString()
+        }
         Column(
             modifier = Modifier.fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -313,8 +321,8 @@ class StateSolveFinishedLayout(
                     .padding(bottom = 10.dp)
                     .fillMaxWidth()
             ) {
-                Text(text = "ao5: ${if(noSolves.value >= 5) ao5.value else "-"}", fontSize = 20.sp)
-                Text(text = "ao12: ${if(noSolves.value >= 12) ao12.value else "-"}", fontSize = 20.sp)
+                Text(text = "ao5: $ao5", fontSize = 20.sp)
+                Text(text = "ao12: $ao12", fontSize = 20.sp)
             }
             Row(
                 horizontalArrangement = Arrangement.SpaceEvenly,
@@ -323,8 +331,8 @@ class StateSolveFinishedLayout(
                     .padding(bottom = 10.dp)
                     .fillMaxWidth()
             ) {
-                Text(text = "ao50: ${if(noSolves.value >= 50) ao50.value else "-"}", fontSize = 20.sp)
-                Text(text = "ao100: ${if(noSolves.value >=100) ao100.value else "-"}", fontSize = 20.sp)
+                Text(text = "ao50: $ao50", fontSize = 20.sp)
+                Text(text = "ao100: $ao100", fontSize = 20.sp)
             }
 
             Row(
@@ -334,7 +342,7 @@ class StateSolveFinishedLayout(
                     .padding(bottom = 30.dp)
                     .fillMaxWidth()
             ) {
-                Text(text = "Solves: ${noSolves.value}", fontSize = 20.sp)
+                Text(text = "Solves: ${noSolves}", fontSize = 20.sp)
             }
         }
     }
@@ -360,9 +368,9 @@ class StateSolveFinishedLayout(
 
     @Composable
     fun SolveTimeRow() {
-        solveTime.value = calculateTime()
-        val solveSeconds = solveTime.value.split(".")[0]
-        val solveMilliseconds = solveTime.value.split(".")[1]
+        val solveTime = calculateTime()
+        val solveSeconds = solveTime.split(".")[0]
+        val solveMilliseconds = solveTime.split(".")[1]
         Row(
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.Bottom
@@ -401,7 +409,7 @@ class StateSolveFinishedLayout(
             items(phases.size) { index ->
 
                 val solutionPhaseDetection = SolutionPhaseDetection(
-                    solve.value,
+                    solve,
                     CubeStatePhaseDetection(CubeState.SOLVED_CUBE_STATE)
                 )
                 val phase = phases[index]
@@ -429,8 +437,8 @@ class StateSolveFinishedLayout(
     }
 
     private fun calculateTime(): String {
-        solve.value.calculateTimeFromStateSequence()
-        val time = solve.value.time / MILLIS_IN_SECOND.toDouble()
+        solve.calculateTimeFromStateSequence()
+        val time = solve.time / MILLIS_IN_SECOND.toDouble()
         val timeRounded = roundDouble(time, 100)
         return timeRounded.toString()
     }
@@ -455,9 +463,7 @@ class StateSolveFinishedLayout(
 @Preview
 @Composable
 fun PreviewStateSolveFinishedLayout() {
-    val state = remember { mutableStateOf(TimerState.SolveFinished) }
-    val cubeState = remember { mutableStateOf(CubeState.SOLVED_CUBE_STATE) }
-    val solve = remember { mutableStateOf(simpleTestSolve()) }
+    val solve = Solve()
     val context = androidx.compose.ui.platform.LocalContext.current
-    StateSolveFinishedLayout(state, cubeState, solve, context).GenerateLayout()
+    StateSolveFinishedLayout(solve).GenerateLayout(context)
 }

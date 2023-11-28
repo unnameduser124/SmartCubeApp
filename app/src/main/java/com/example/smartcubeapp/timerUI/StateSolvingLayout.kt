@@ -6,14 +6,14 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
-import com.example.smartcubeapp.cube.CubeState
+import com.example.smartcubeapp.bluetooth.cubeState
+import com.example.smartcubeapp.bluetooth.timerState
 import com.example.smartcubeapp.cube.Solve
 import com.example.smartcubeapp.cube.SolveStatus
 import com.example.smartcubeapp.roundDouble
@@ -21,9 +21,7 @@ import kotlinx.coroutines.delay
 import java.util.Calendar
 
 class StateSolvingLayout(
-    private val state: MutableState<TimerState>,
-    val cubeState: MutableState<CubeState>,
-    val solve: MutableState<Solve>
+    val solve: Solve
 ) {
 
     @Composable
@@ -36,36 +34,36 @@ class StateSolvingLayout(
         ) {
             val solveTime = remember { mutableStateOf(0L) }
 
-            LaunchedEffect(solve.value.solveStatus) {
-                while (solve.value.solveStatus == SolveStatus.Solving) {
+            LaunchedEffect(solve.solveStatus) {
+                while (solve.solveStatus == SolveStatus.Solving) {
                     delay(100)
                     solveTime.value =
-                        Calendar.getInstance().timeInMillis - solve.value.solveStartTime
+                        Calendar.getInstance().timeInMillis - solve.solveStartTime
                 }
             }
 
-            if (cubeState.value != solve.value.scrambledState && solve.value.solveStatus != SolveStatus.Solving) {
-                solve.value.solveStartTime = Calendar.getInstance().timeInMillis
-                solve.value.solveStatus = SolveStatus.Solving
-                solve.value.scrambledState.timestamp = solve.value.solveStartTime
-                solve.value.solveStateSequence.add(solve.value.scrambledState)
-                LaunchedEffect(solve.value.solveStatus) {
-                    while (solve.value.solveStatus == SolveStatus.Solving) {
+            if (cubeState.value != solve.scrambledState && solve.solveStatus != SolveStatus.Solving) {
+                solve.solveStartTime = Calendar.getInstance().timeInMillis
+                solve.solveStatus = SolveStatus.Solving
+                solve.scrambledState.timestamp = solve.solveStartTime
+                solve.solveStateSequence.add(solve.scrambledState)
+                LaunchedEffect(solve.solveStatus) {
+                    while (solve.solveStatus == SolveStatus.Solving) {
                         delay(100)
                         solveTime.value =
-                            Calendar.getInstance().timeInMillis - solve.value.solveStartTime
+                            Calendar.getInstance().timeInMillis - solve.solveStartTime
                     }
                 }
             }
-            if (cubeState.value != solve.value.scrambledState
-                && cubeState.value != solve.value.solveStateSequence.lastOrNull()
-                && solve.value.solveStatus == SolveStatus.Solving) {
-                solve.value.solveStateSequence.add(cubeState.value)
+            if (cubeState.value != solve.scrambledState
+                && cubeState.value != solve.solveStateSequence.lastOrNull()
+                && solve.solveStatus == SolveStatus.Solving) {
+                solve.solveStateSequence.add(cubeState.value)
             }
             if (cubeState.value.isSolved()) {
-                state.value = TimerState.SolveFinished
-                solve.value.calculateTimeFromStateSequence()
-                solve.value.solveStatus = SolveStatus.Solved
+                timerState.value = TimerState.SolveFinished
+                solve.calculateTimeFromStateSequence()
+                solve.solveStatus = SolveStatus.Solved
             }
 
             Text(
@@ -79,18 +77,7 @@ class StateSolvingLayout(
 @Preview
 @Composable
 fun StateSolvingLayoutPreview() {
-    val state = remember { mutableStateOf(TimerState.Solving) }
-    val cubeState = remember {
-        mutableStateOf(
-            CubeState(
-                mutableListOf(),
-                mutableListOf(),
-                mutableListOf(),
-                mutableListOf(),
-            )
-        )
-    }
-    val solve = remember { mutableStateOf(Solve()) }
+    val solve = Solve()
 
-    StateSolvingLayout(state, cubeState, solve).GenerateLayout()
+    StateSolvingLayout(solve).GenerateLayout()
 }

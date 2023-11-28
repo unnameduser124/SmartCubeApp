@@ -34,6 +34,7 @@ class Solve(
     }
 
     fun prepareForNewSolve(){
+        id = -1
         solveStateSequence.clear()
         solveStatus = SolveStatus.Scramble
         solveStartTime = 0

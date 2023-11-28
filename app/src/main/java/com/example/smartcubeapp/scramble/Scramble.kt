@@ -24,7 +24,7 @@ class Scramble(
     }
 
     fun processMove(move: String): Boolean {
-        if(scramblingMode == ScramblingMode.Scrambled){
+        if(scramblingMode == ScramblingMode.Scrambled || scramblingMode == ScramblingMode.PreparingToScramble){
             return false
         }
         if (scramblingMode == ScramblingMode.Fixing) {
