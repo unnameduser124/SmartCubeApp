@@ -39,6 +39,7 @@ import com.example.smartcubeapp.bluetooth.lastMove
 import com.example.smartcubeapp.bluetooth.timerState
 import com.example.smartcubeapp.cube.CubeState
 import com.example.smartcubeapp.cube.Solve
+import com.example.smartcubeapp.cube.SolvePenalty
 import com.example.smartcubeapp.millisToSeconds
 import com.example.smartcubeapp.phasedetection.CubeStatePhaseDetection
 import com.example.smartcubeapp.phasedetection.SolutionPhaseDetection
@@ -68,7 +69,7 @@ class StateSolveFinishedLayout(
     @Composable
     fun GenerateLayout(context: Context) {
         this.context = context
-        if (solve.id == -1L) {
+        if (solve.id == -1L && solve.solvePenalty != SolvePenalty.DNF) {
             val id = SolveAnalysisDBService(context).saveSolveWithAnalysis(solve).solveID
             solve.id = id
         }
@@ -122,23 +123,25 @@ class StateSolveFinishedLayout(
             verticalArrangement = Arrangement.Center
         ) {
             SolveTimeRow()
-            Row(horizontalArrangement = Arrangement.Center) {
-                val moveCount = solve.solveStateSequence.size - 1
-                Text(
-                    text = "$moveCount moves",
-                    fontSize = 25.sp,
-                    modifier = Modifier.padding(horizontal = 10.dp)
-                )
-                val tpsRounded = roundDouble(solve.getTurnsPerSecond(), 100)
-                Text(
-                    text = "${tpsRounded}tps",
-                    fontSize = 25.sp,
-                    modifier = Modifier.padding(horizontal = 10.dp)
-                )
+            if(solve.solvePenalty != SolvePenalty.DNF) {
+                Row(horizontalArrangement = Arrangement.Center) {
+                    val moveCount = solve.solveStateSequence.size - 1
+                    Text(
+                        text = "$moveCount moves",
+                        fontSize = 25.sp,
+                        modifier = Modifier.padding(horizontal = 10.dp)
+                    )
+                    val tpsRounded = roundDouble(solve.getTurnsPerSecond(), 100)
+                    Text(
+                        text = "${tpsRounded}tps",
+                        fontSize = 25.sp,
+                        modifier = Modifier.padding(horizontal = 10.dp)
+                    )
+                }
+                PhaseStatsDataTable()
+                OLLCaseRow()
+                PLLCaseRow()
             }
-            PhaseStatsDataTable()
-            OLLCaseRow()
-            PLLCaseRow()
         }
     }
 
@@ -368,22 +371,42 @@ class StateSolveFinishedLayout(
 
     @Composable
     fun SolveTimeRow() {
-        val solveTime = calculateTime()
-        val solveSeconds = solveTime.split(".")[0]
-        val solveMilliseconds = solveTime.split(".")[1]
         Row(
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.Bottom
         ) {
-            Text(
-                text = "$solveSeconds.",
-                fontSize = 70.sp,
-            )
-            Text(
-                text = solveMilliseconds,
-                fontSize = 50.sp,
-                modifier = Modifier.padding(bottom = 6.dp)
-            )
+            if (solve.solvePenalty == SolvePenalty.DNF) {
+                Text(
+                    text = "DNF",
+                    fontSize = 70.sp,
+                )
+            } else if (solve.solvePenalty == SolvePenalty.PlusTwo) {
+                val solveTime = calculateTime()
+                val solveSeconds = solveTime.split(".")[0]
+                val solveMilliseconds = solveTime.split(".")[1]
+                Text(
+                    text = "$solveSeconds.",
+                    fontSize = 70.sp,
+                )
+                Text(
+                    text = solveMilliseconds,
+                    fontSize = 50.sp,
+                    modifier = Modifier.padding(bottom = 6.dp)
+                )
+            } else {
+                val solveTime = calculateTime()
+                val solveSeconds = solveTime.split(".")[0]
+                val solveMilliseconds = solveTime.split(".")[1]
+                Text(
+                    text = "$solveSeconds.",
+                    fontSize = 70.sp,
+                )
+                Text(
+                    text = solveMilliseconds,
+                    fontSize = 50.sp,
+                    modifier = Modifier.padding(bottom = 6.dp)
+                )
+            }
         }
     }
 
@@ -438,7 +461,12 @@ class StateSolveFinishedLayout(
 
     private fun calculateTime(): String {
         solve.calculateTimeFromStateSequence()
-        val time = solve.time / MILLIS_IN_SECOND.toDouble()
+        val time =
+            when (solve.solvePenalty) {
+                SolvePenalty.None -> solve.time / MILLIS_IN_SECOND.toDouble()
+                SolvePenalty.PlusTwo -> solve.time / MILLIS_IN_SECOND.toDouble() + 2.0
+                else -> 0.0
+            }
         val timeRounded = roundDouble(time, 100)
         return timeRounded.toString()
     }

@@ -41,5 +41,6 @@ class Solve(
         solveStatus = SolveStatus.Scramble
         solveStartTime = 0
         scrambledState = CubeState.SOLVED_CUBE_STATE
+        solvePenalty = SolvePenalty.None
     }
 }
