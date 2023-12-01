@@ -26,6 +26,7 @@ object SolvesDatabaseConstants {
                 "${SolveTable.SCRAMBLED_STATE_ID_COLUMN} INTEGER NOT NULL, " +
                 "${SolveTable.SCRAMBLE_SEQUENCE_COLUMN} TEXT NOT NULL, " +
                 "${SolveTable.MOVE_COUNT} INTEGER NOT NULL, " +
+                "${SolveTable.PENALTY_COLUMN} INTEGER NOT NULL, " +
                 "FOREIGN KEY(${SolveTable.SCRAMBLED_STATE_ID_COLUMN}) REFERENCES ${CubeStateTable.TABLE_NAME}(${BaseColumns._ID}))"
 
     const val CREATE_CUBE_STATE_TABLE =
@@ -98,6 +99,7 @@ object SolvesDatabaseConstants {
         const val SCRAMBLED_STATE_ID_COLUMN = "ScrambledStateId"
         const val SCRAMBLE_SEQUENCE_COLUMN = "ScrambleSequence"
         const val MOVE_COUNT = "MoveCount"
+        const val PENALTY_COLUMN = "Penalty"
     }
 
     object CubeStateTable {

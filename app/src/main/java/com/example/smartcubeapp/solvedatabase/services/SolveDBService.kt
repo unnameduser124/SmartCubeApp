@@ -29,6 +29,7 @@ class SolveDBService(context: Context, databaseName: String = SolvesDatabaseCons
             )
             put(SolvesDatabaseConstants.SolveTable.SCRAMBLE_SEQUENCE_COLUMN, solveData.scramble)
             put(SolvesDatabaseConstants.SolveTable.MOVE_COUNT, solveData.moveCount)
+            put(SolvesDatabaseConstants.SolveTable.PENALTY_COLUMN, solveData.penalty)
         }
 
         val id = db.insert(SolvesDatabaseConstants.SolveTable.TABLE_NAME, null, contentValues)
@@ -46,7 +47,8 @@ class SolveDBService(context: Context, databaseName: String = SolvesDatabaseCons
             SolvesDatabaseConstants.SolveTable.TIMESTAMP_COLUMN,
             SolvesDatabaseConstants.SolveTable.SCRAMBLED_STATE_ID_COLUMN,
             SolvesDatabaseConstants.SolveTable.SCRAMBLE_SEQUENCE_COLUMN,
-            SolvesDatabaseConstants.SolveTable.MOVE_COUNT
+            SolvesDatabaseConstants.SolveTable.MOVE_COUNT,
+            SolvesDatabaseConstants.SolveTable.PENALTY_COLUMN
         )
 
         val selection = "${BaseColumns._ID} = ?"
@@ -75,6 +77,8 @@ class SolveDBService(context: Context, databaseName: String = SolvesDatabaseCons
                     getString(getColumnIndexOrThrow(SolvesDatabaseConstants.SolveTable.SCRAMBLE_SEQUENCE_COLUMN))
                 val moveCount =
                     getInt(getColumnIndexOrThrow(SolvesDatabaseConstants.SolveTable.MOVE_COUNT))
+                val penalty =
+                    getInt(getColumnIndexOrThrow(SolvesDatabaseConstants.SolveTable.PENALTY_COLUMN))
 
                 cursor.close()
                 db.close()
@@ -84,7 +88,8 @@ class SolveDBService(context: Context, databaseName: String = SolvesDatabaseCons
                     timestamp,
                     scrambledStateID,
                     scramble,
-                    moveCount
+                    moveCount,
+                    penalty
                 )
             }
         }
@@ -120,6 +125,7 @@ class SolveDBService(context: Context, databaseName: String = SolvesDatabaseCons
             put(SolvesDatabaseConstants.SolveTable.SCRAMBLED_STATE_ID_COLUMN, solveData.scrambledStateID)
             put(SolvesDatabaseConstants.SolveTable.SCRAMBLE_SEQUENCE_COLUMN, solveData.scramble)
             put(SolvesDatabaseConstants.SolveTable.MOVE_COUNT, solveData.moveCount)
+            put(SolvesDatabaseConstants.SolveTable.PENALTY_COLUMN, solveData.penalty)
         }
 
         val selection = "${BaseColumns._ID} = ?"

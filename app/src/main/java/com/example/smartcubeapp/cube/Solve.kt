@@ -12,14 +12,16 @@ class Solve(
     var solveStatus: SolveStatus = SolveStatus.Scramble,
     var solveStartTime: Long = 0,
     var id: Long = -1,
-    var scrambleSequence: String = ""
+    var scrambleSequence: String = "",
+    var solvePenalty: SolvePenalty = SolvePenalty.None
 ) {
 
     constructor(solveData: SolveData): this(
         time = solveData.solveDuration,
         date = Calendar.getInstance().apply { timeInMillis = solveData.timestamp },
         id = solveData.id,
-        scrambleSequence = solveData.scramble
+        scrambleSequence = solveData.scramble,
+        solvePenalty = SolvePenalty.values()[solveData.penalty]
     )
 
     fun getTurnsPerSecond(): Double{
