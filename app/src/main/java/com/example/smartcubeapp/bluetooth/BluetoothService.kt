@@ -17,11 +17,7 @@ import android.os.Build.VERSION.SDK_INT
 import android.os.Parcelable
 import androidx.activity.ComponentActivity
 import androidx.annotation.RequiresApi
-import androidx.compose.runtime.MutableState
-import com.example.smartcubeapp.cube.CubeState
-import com.example.smartcubeapp.cube.Move
 import com.example.smartcubeapp.cube.MoveDataParser
-import com.example.smartcubeapp.timerUI.TimerState
 import java.nio.ByteBuffer
 import java.util.Calendar
 import java.util.UUID
@@ -123,7 +119,6 @@ class BluetoothService(
     ) {
 
         val device = bluetoothAdapter.getRemoteDevice(address)
-        bluetoothState.value = BluetoothState.Connecting
         val gattCallback = object : BluetoothGattCallback() {
             @RequiresApi(Build.VERSION_CODES.S)
             override fun onConnectionStateChange(gatt: BluetoothGatt, status: Int, newState: Int) {
@@ -146,6 +141,7 @@ class BluetoothService(
                 val state = dataParser.parseCubeValue()
                 state.timestamp = timestamp
                 cubeState.value = state
+                lastMove.value = state.lastMove
             }
 
             @RequiresApi(Build.VERSION_CODES.TIRAMISU)
@@ -157,6 +153,7 @@ class BluetoothService(
                 val dataParser = MoveDataParser(ByteBuffer.wrap(value))
                 val state = dataParser.parseCubeValue()
                 cubeState.value = state
+                lastMove.value = state.lastMove
             }
         }
 
@@ -164,6 +161,7 @@ class BluetoothService(
             bluetoothUtilities.requestBluetoothConnectPermission()
             return
         }
+        bluetoothState.value = BluetoothState.Connecting
         device.connectGatt(activityContext, false, gattCallback)
     }
 

@@ -79,8 +79,6 @@ data class CubeState(
         return result
     }
 
-
-
     companion object {
 
         val SOLVED_CUBE_STATE = CubeState(

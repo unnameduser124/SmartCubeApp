@@ -5,9 +5,10 @@ import android.provider.BaseColumns
 import androidx.test.platform.app.InstrumentationRegistry
 import com.example.smartcubeapp.cube.CubeState
 import com.example.smartcubeapp.cube.Solve
-import com.example.smartcubeapp.solvedatabase.services.SolveDBService
+import com.example.smartcubeapp.cube.SolvePenalty
 import com.example.smartcubeapp.solvedatabase.SolvesDatabaseConstants
 import com.example.smartcubeapp.solvedatabase.dataclasses.SolveData
+import com.example.smartcubeapp.solvedatabase.services.SolveDBService
 import junit.framework.TestCase
 import org.junit.After
 import org.junit.Assert.assertEquals
@@ -50,6 +51,7 @@ class SolveDBServiceTests {
             SolvesDatabaseConstants.SolveTable.SCRAMBLED_STATE_ID_COLUMN,
             SolvesDatabaseConstants.SolveTable.SCRAMBLE_SEQUENCE_COLUMN,
             SolvesDatabaseConstants.SolveTable.MOVE_COUNT,
+            SolvesDatabaseConstants.SolveTable.PENALTY_COLUMN,
             BaseColumns._ID
         )
 
@@ -69,6 +71,7 @@ class SolveDBServiceTests {
                 assert(getLong(getColumnIndexOrThrow(SolvesDatabaseConstants.SolveTable.TIMESTAMP_COLUMN)) == solve.date.timeInMillis)
                 assert(getLong(getColumnIndexOrThrow(SolvesDatabaseConstants.SolveTable.SCRAMBLED_STATE_ID_COLUMN)) == -1L)
                 assert(getString(getColumnIndexOrThrow(SolvesDatabaseConstants.SolveTable.SCRAMBLE_SEQUENCE_COLUMN)) == "R U R' U'")
+                assert(getInt(getColumnIndexOrThrow(SolvesDatabaseConstants.SolveTable.PENALTY_COLUMN)) == 0)
                 assert(getLong(getColumnIndexOrThrow(BaseColumns._ID)) == id)
                 assertEquals(-1, getInt(getColumnIndexOrThrow(SolvesDatabaseConstants.SolveTable.MOVE_COUNT)))
             }
@@ -168,6 +171,8 @@ class SolveDBServiceTests {
         assert(retrievedSolveData.timestamp == solveData.timestamp)
         assert(retrievedSolveData.scrambledStateID == solveData.scrambledStateID)
         assert(retrievedSolveData.scramble == solveData.scramble)
+        assert(retrievedSolveData.moveCount == solveData.moveCount)
+        assert(retrievedSolveData.penalty == solveData.penalty)
         assertEquals(solveData.moveCount, retrievedSolveData.moveCount)
     }
 
@@ -236,7 +241,8 @@ class SolveDBServiceTests {
             time = 2000,
             date = Calendar.getInstance(),
             scrambleSequence = "R U R' U' R U R' U'",
-            scrambledState = CubeState.SOLVED_CUBE_STATE
+            scrambledState = CubeState.SOLVED_CUBE_STATE,
+            solvePenalty = SolvePenalty.PlusTwo
         )
 
         solveDBService.updateSolve(SolveData(newSolve), id)
@@ -248,6 +254,7 @@ class SolveDBServiceTests {
         assert(retrievedSolveData.timestamp == newSolve.date.timeInMillis)
         assert(retrievedSolveData.scrambledStateID == newSolve.scrambledState.id)
         assert(retrievedSolveData.scramble == newSolve.scrambleSequence)
+        assertEquals(newSolve.solvePenalty.ordinal, retrievedSolveData.penalty)
         assertEquals(newSolve.solveStateSequence.size - 1, retrievedSolveData.moveCount)
     }
 
@@ -280,6 +287,7 @@ class SolveDBServiceTests {
         assert(retrievedSolveData.timestamp == solve.date.timeInMillis)
         assert(retrievedSolveData.scrambledStateID == solve.scrambledState.id)
         assert(retrievedSolveData.scramble == solve.scrambleSequence)
+        assert(retrievedSolveData.penalty == solve.solvePenalty.ordinal)
     }
 
     @Test
@@ -311,6 +319,7 @@ class SolveDBServiceTests {
         assert(retrievedSolveData.timestamp == solve.date.timeInMillis)
         assert(retrievedSolveData.scrambledStateID == solve.scrambledState.id)
         assert(retrievedSolveData.scramble == solve.scrambleSequence)
+        assert(retrievedSolveData.penalty == solve.solvePenalty.ordinal)
     }
 
     @Test

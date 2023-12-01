@@ -11,66 +11,144 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
-import com.example.smartcubeapp.cube.CubeState
+import com.example.smartcubeapp.bluetooth.cubeState
+import com.example.smartcubeapp.bluetooth.timerState
 import com.example.smartcubeapp.cube.Solve
+import com.example.smartcubeapp.cube.SolvePenalty
 import com.example.smartcubeapp.cube.SolveStatus
 import com.example.smartcubeapp.roundDouble
 import kotlinx.coroutines.delay
 import java.util.Calendar
 
+enum class SolvingLayoutState {
+    Inspection,
+    Solving
+}
+
 class StateSolvingLayout(
-    private val state: MutableState<TimerState>,
-    val cubeState: MutableState<CubeState>,
-    val solve: MutableState<Solve>
+    val solve: Solve
 ) {
+
+    private lateinit var solvingLayoutState: MutableState<SolvingLayoutState>
+    private val inspectionStartTime = Calendar.getInstance().timeInMillis
 
     @Composable
     fun GenerateLayout() {
-        Column(
-            modifier = Modifier
-                .fillMaxSize(),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            val solveTime = remember { mutableStateOf(0L) }
-
-            LaunchedEffect(solve.value.solveStatus) {
-                while (solve.value.solveStatus == SolveStatus.Solving) {
-                    delay(100)
-                    solveTime.value =
-                        Calendar.getInstance().timeInMillis - solve.value.solveStartTime
-                }
+        solvingLayoutState = remember { mutableStateOf(SolvingLayoutState.Inspection) }
+        if (solvingLayoutState.value == SolvingLayoutState.Inspection) {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize(),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                InspectionPhaseLayout()
             }
-
-            if (cubeState.value != solve.value.scrambledState && solve.value.solveStatus != SolveStatus.Solving) {
-                solve.value.solveStartTime = Calendar.getInstance().timeInMillis
-                solve.value.solveStatus = SolveStatus.Solving
-                solve.value.scrambledState.timestamp = solve.value.solveStartTime
-                solve.value.solveStateSequence.add(solve.value.scrambledState)
-                LaunchedEffect(solve.value.solveStatus) {
-                    while (solve.value.solveStatus == SolveStatus.Solving) {
-                        delay(100)
-                        solveTime.value =
-                            Calendar.getInstance().timeInMillis - solve.value.solveStartTime
-                    }
-                }
+        } else if (solvingLayoutState.value == SolvingLayoutState.Solving) {
+            initializeSolve()
+            Column(
+                modifier = Modifier
+                    .fillMaxSize(),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                SolvingPhaseLayout()
             }
-            if (cubeState.value != solve.value.scrambledState
-                && cubeState.value != solve.value.solveStateSequence.lastOrNull()
-                && solve.value.solveStatus == SolveStatus.Solving) {
-                solve.value.solveStateSequence.add(cubeState.value)
-            }
-            if (cubeState.value.isSolved()) {
-                state.value = TimerState.SolveFinished
-                solve.value.calculateTimeFromStateSequence()
-                solve.value.solveStatus = SolveStatus.Solved
-            }
-
-            Text(
-                text = "${roundDouble(solveTime.value / 1000.0, 100)}s",
-                fontSize = 50.sp
-            )
         }
     }
+
+    @Composable
+    fun InspectionPhaseLayout() {
+        val inspectionTime = remember { mutableStateOf(1L) }
+
+        InitializeInspectionTimer(inspectionTime)
+
+        if (cubeState.value != solve.scrambledState) {
+            solvingLayoutState.value = SolvingLayoutState.Solving
+        }
+
+        val inspectionTimeString = "${roundDouble(inspectionTime.value / 1000.0, 1).toInt()}"
+        if(inspectionTime.value <= 0 && inspectionTime.value > -2000){
+            solve.solvePenalty = SolvePenalty.PlusTwo
+        }
+        else if(inspectionTime.value < -2000){
+            solve.solvePenalty = SolvePenalty.DNF
+            timerState.value = TimerState.SolveFinished
+            return
+        }
+
+        Text(
+            text = if (inspectionTimeString.toInt() > 0) inspectionTimeString
+            else if (inspectionTimeString.toInt() <= 0 && inspectionTimeString.toInt() > -2) "+2"
+            else "DNF",
+            fontSize = 50.sp
+        )
+    }
+
+    @Composable
+    fun InitializeInspectionTimer(inspectionTime: MutableState<Long>) {
+        LaunchedEffect(solve.solveStatus) {
+            while (inspectionTime.value < 17000) {
+                delay(100)
+                inspectionTime.value =
+                    15000 - (Calendar.getInstance().timeInMillis - inspectionStartTime)
+            }
+        }
+    }
+
+    private fun initializeSolve() {
+        solve.solveStartTime = Calendar.getInstance().timeInMillis
+        solve.solveStatus = SolveStatus.Solving
+        solve.scrambledState.timestamp = solve.solveStartTime
+        solve.solveStateSequence.add(solve.scrambledState)
+    }
+
+    @Composable
+    fun SolvingPhaseLayout() {
+        val solveTime = remember { mutableStateOf(0L) }
+
+        InitializeTimer(solveTime)
+        UpdateTimer()
+
+        Text(
+            text = "${roundDouble(solveTime.value / 1000.0, 100)}s",
+            fontSize = 50.sp
+        )
+    }
+
+    @Composable
+    fun InitializeTimer(solveTime: MutableState<Long>) {
+        LaunchedEffect(solve.solveStatus) {
+            while (solve.solveStatus == SolveStatus.Solving) {
+                delay(100)
+                solveTime.value =
+                    Calendar.getInstance().timeInMillis - solve.solveStartTime
+            }
+        }
+    }
+
+    @Composable
+    fun UpdateTimer() {
+        if (cubeState.value != solve.scrambledState
+            && cubeState.value != solve.solveStateSequence.lastOrNull()
+            && solve.solveStatus == SolveStatus.Solving
+        ) {
+            solve.solveStateSequence.add(cubeState.value)
+        }
+        if (cubeState.value.isSolved()) {
+            timerState.value = TimerState.SolveFinished
+            solve.calculateTimeFromStateSequence()
+            solve.solveStatus = SolveStatus.Solved
+        }
+    }
+}
+
+@Preview
+@Composable
+fun StateSolvingLayoutPreview() {
+    val solve = Solve()
+
+    StateSolvingLayout(solve).GenerateLayout()
 }

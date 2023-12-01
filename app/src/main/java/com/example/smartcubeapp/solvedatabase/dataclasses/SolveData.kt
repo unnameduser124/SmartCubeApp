@@ -8,7 +8,8 @@ data class SolveData(
     val timestamp: Long,
     val scrambledStateID: Long,
     val scramble: String,
-    val moveCount: Int = 0
+    val moveCount: Int = 0,
+    val penalty: Int = 0
 ){
     constructor(solve: Solve): this(
         solve.id,
@@ -16,6 +17,7 @@ data class SolveData(
         solve.date.timeInMillis,
         solve.scrambledState.id,
         solve.scrambleSequence,
-        solve.solveStateSequence.size - 1
+        solve.solveStateSequence.size - 1,
+        solve.solvePenalty.ordinal
     )
 }
