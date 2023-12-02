@@ -354,4 +354,57 @@ class SolveDBServiceTests {
         assert(ids.contains(id2))
         assert(ids.contains(id3))
     }
+
+    @Test
+    fun getAllSolvesWithPagingTest(){
+        for(i in 0..100){
+            val solve = Solve(
+                time = 1000+i.toLong(),
+                date = Calendar.getInstance(),
+                scrambleSequence = "R U R' U'",
+                scrambledState = CubeState.SOLVED_CUBE_STATE
+            )
+            solveDBService.addSolve(SolveData(solve))
+        }
+
+        var solves = solveDBService.getAllSolves(size = 10)
+        assert(solves.size == 10)
+        solves.forEachIndexed{ index, solve ->
+            assert(solve.solveDuration == 1000+index.toLong())
+        }
+        solves = solveDBService.getAllSolves(size = 10, page = 2).toMutableList()
+        assert(solves.size == 10)
+        solves.forEachIndexed{ index, solve ->
+            assert(solve.solveDuration == 1010+index.toLong())
+        }
+        solves = solveDBService.getAllSolves()
+        assert(solves.size == 20)
+        solves.forEachIndexed{ index, solve ->
+            assert(solve.solveDuration == 1000+index.toLong())
+        }
+        solves = solveDBService.getAllSolves(size = 100).toMutableList()
+        assert(solves.size == 100)
+        solves.forEachIndexed{ index, solve ->
+            assert(solve.solveDuration == 1000+index.toLong())
+        }
+    }
+
+    @Test
+    fun getAllSolvesWithPagingFailInvalidPage(){
+        for(i in 0..100){
+            val solve = Solve(
+                time = 1000+i.toLong(),
+                date = Calendar.getInstance(),
+                scrambleSequence = "R U R' U'",
+                scrambledState = CubeState.SOLVED_CUBE_STATE
+            )
+            solveDBService.addSolve(SolveData(solve))
+        }
+
+        var solves = solveDBService.getAllSolves(size = 10, page = 11)
+        assert(solves.isEmpty())
+        solves = solveDBService.getAllSolves(size = 10, page = -1)
+        assert(solves.isEmpty())
+    }
+
 }

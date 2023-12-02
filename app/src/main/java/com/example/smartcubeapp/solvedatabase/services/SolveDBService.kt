@@ -163,4 +163,12 @@ class SolveDBService(context: Context, databaseName: String = SolvesDatabaseCons
         db.close()
         return solveIDs
     }
+
+    fun getAllSolves(page: Int = 0, size: Int = PAGE_SIZE): List<SolveData>{
+        TODO("Not implemented yet")
+    }
+
+    companion object{
+        const val PAGE_SIZE = 20
+    }
 }
