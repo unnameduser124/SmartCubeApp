@@ -1,4 +1,4 @@
-package com.example.smartcubeapp.timerUI
+package com.example.smartcubeapp.ui.timerUI
 
 import android.content.Context
 import android.widget.Toast

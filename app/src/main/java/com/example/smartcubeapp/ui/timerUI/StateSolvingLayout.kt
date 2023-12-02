@@ -1,4 +1,4 @@
-package com.example.smartcubeapp.timerUI
+package com.example.smartcubeapp.ui.timerUI
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
