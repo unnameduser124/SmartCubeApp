@@ -367,25 +367,25 @@ class SolveDBServiceTests {
             solveDBService.addSolve(SolveData(solve))
         }
 
-        var solves = solveDBService.getAllSolves(size = 10)
+        var solves = solveDBService.getAllSolves(size = 10, orderBy = "")
         assert(solves.size == 10)
         solves.forEachIndexed{ index, solve ->
-            assert(solve.solveDuration == 1000+index.toLong())
+            assertEquals(1000+index.toLong(), solve.solveDuration)
         }
         solves = solveDBService.getAllSolves(size = 10, page = 2).toMutableList()
         assert(solves.size == 10)
         solves.forEachIndexed{ index, solve ->
-            assert(solve.solveDuration == 1010+index.toLong())
+            assertEquals(1080-index.toLong(), solve.solveDuration)
         }
         solves = solveDBService.getAllSolves()
         assert(solves.size == 20)
         solves.forEachIndexed{ index, solve ->
-            assert(solve.solveDuration == 1000+index.toLong())
+            assertEquals(1100-index.toLong(), solve.solveDuration)
         }
         solves = solveDBService.getAllSolves(size = 100).toMutableList()
         assert(solves.size == 100)
         solves.forEachIndexed{ index, solve ->
-            assert(solve.solveDuration == 1000+index.toLong())
+            assertEquals(1100-index.toLong(), solve.solveDuration)
         }
     }
 
