@@ -52,6 +52,7 @@ import com.example.smartcubeapp.scramble.ScramblingMode
 import com.example.smartcubeapp.solvedatabase.services.SolveAnalysisDBService
 import com.example.smartcubeapp.stats.StatsService
 import com.example.smartcubeapp.ui.historyUI.HistoryActivity
+import java.util.Calendar
 
 class StateSolveFinishedLayout(
     private val solve: Solve
@@ -72,6 +73,7 @@ class StateSolveFinishedLayout(
     fun GenerateLayout(context: Context) {
         this.context = context
         if (solve.id == -1L && solve.solvePenalty != SolvePenalty.DNF) {
+            solve.date = Calendar.getInstance()
             val id = SolveAnalysisDBService(context).saveSolveWithAnalysis(solve).solveID
             solve.id = id
         }
