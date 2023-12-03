@@ -11,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -48,20 +49,27 @@ class SolveListItem(val solveData: SolveData) {
 
             Text(
                 text = durationString,
-                fontSize = 25.sp,
-                modifier = Modifier.padding(vertical = 10.dp)
+                fontSize = 23.sp,
+                modifier = Modifier.padding(start = 10.dp).weight(1f),
+                textAlign = TextAlign.Start
             )
             Text(
                 text = solveData.moveCount.toString(),
-                fontSize = 25.sp
+                fontSize = 23.sp,
+                modifier = Modifier.padding(vertical = 10.dp).weight(0.7f),
+                textAlign = TextAlign.Center
             )
             Text(
                 text = roundDouble(solveTPS, 10).toString(),
-                fontSize = 25.sp
+                fontSize = 23.sp,
+                modifier = Modifier.padding(vertical = 10.dp).weight(0.5f),
+                textAlign = TextAlign.Center
             )
             Text(
                 text = dateString,
-                fontSize = 25.sp
+                fontSize = 23.sp,
+                modifier = Modifier.padding(end = 10.dp).weight(2f),
+                textAlign = TextAlign.End
             )
         }
     }
