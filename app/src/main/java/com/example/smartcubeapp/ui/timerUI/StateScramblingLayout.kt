@@ -1,6 +1,7 @@
 package com.example.smartcubeapp.ui.timerUI
 
 import android.content.Context
+import android.content.Intent
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -41,6 +42,7 @@ import com.example.smartcubeapp.scramble.Scramble
 import com.example.smartcubeapp.scramble.ScrambleGenerator
 import com.example.smartcubeapp.scramble.ScramblingMode
 import com.example.smartcubeapp.stats.StatsService
+import com.example.smartcubeapp.ui.historyUI.HistoryActivity
 
 class StateScramblingLayout(
     val solve: Solve,
@@ -158,7 +160,10 @@ class StateScramblingLayout(
             horizontalArrangement = Arrangement.End,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            IconButton(onClick = { /*TODO("Open solve history activity")*/ }) {
+            IconButton(onClick = {
+                val intent = Intent(context, HistoryActivity::class.java)
+                context.startActivity(intent)
+            }) {
                 Icon(
                     painter = painterResource(id = R.drawable.baseline_history_24),
                     contentDescription = "Solve history button",

@@ -31,6 +31,8 @@
             android:parentActivityName=".MainActivity"/>
         <activity android:name=".ui.timerUI.TimerActivity"
             android:parentActivityName=".MainActivity"/>
+        <activity android:name=".ui.historyUI.HistoryActivity"
+            android:parentActivityName=".MainActivity"/>
     </application>
 
 </manifest>
