@@ -1037,5 +1037,6 @@ enum class PredefinedOLLCase(override val incorrectlyOrientedPieces: MutableList
                 PieceType.EDGE, Orientation.Incorrect, Pair(2, 1)
             )
         )
-    )
+    ),
+    OLLSkip
 }

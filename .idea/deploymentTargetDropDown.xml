@@ -2,6 +2,9 @@
 <project version="4">
   <component name="deploymentTargetDropDown">
     <value>
+      <entry key="PreviewHistoryActivityLayout">
+        <State />
+      </entry>
       <entry key="PreviewSolveListItem">
         <State />
       </entry>
@@ -9,9 +12,6 @@
         <State />
       </entry>
       <entry key="SolveDetailsPopupPreview">
-        <State />
-      </entry>
-      <entry key="Tests in 'com.example.smartcubeapp.correctnesstests.timertests'">
         <State />
       </entry>
       <entry key="app">

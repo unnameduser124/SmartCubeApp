@@ -16,10 +16,13 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
@@ -50,7 +53,10 @@ import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
 
-class SolveDetailsPopup(val popupVisible: MutableState<Boolean>) {
+class SolveDetailsPopup(
+    val popupVisible: MutableState<Boolean>,
+    val solvesList: SnapshotStateList<SolveData>
+) {
 
 
     @Composable
@@ -65,7 +71,8 @@ class SolveDetailsPopup(val popupVisible: MutableState<Boolean>) {
         Column(
             modifier = Modifier
                 .padding(10.dp)
-                .background(color = Color.White, shape = RoundedCornerShape(10.dp))
+                .shadow(elevation = 10.dp, shape = RoundedCornerShape(20.dp))
+                .background(color = Color.White)
                 .widthIn(max = 300.dp),
             verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.CenterHorizontally
@@ -79,10 +86,14 @@ class SolveDetailsPopup(val popupVisible: MutableState<Boolean>) {
             )
             MovesTPSRow(moves = data.solveStateSequence.size, tps = tps)
             PhaseStatsDataTable(data = data)
-            val ollCase = PredefinedOLLCase.values()[data.ollData.case]
-            val pllCase = PredefinedPLLCase.values()[data.pllData.case]
+            val ollCase =
+                if (data.ollData.case > 0) PredefinedOLLCase.values()[data.ollData.case] else null
+            val pllCase =
+                if (data.pllData.case > 0) PredefinedPLLCase.values()[data.pllData.case] else null
             LLCasesRow(ollCase = ollCase, pllCase = pllCase)
-            SolveMoveSequenceRow(sequence = data.solveStateSequence)
+            val sequenceWithoutScrambledState =
+                data.solveStateSequence.subList(1, data.solveStateSequence.size)
+            SolveMoveSequenceRow(sequence = sequenceWithoutScrambledState)
             DeleteButtonRow(id = data.solveID, context = context)
         }
     }
@@ -197,9 +208,9 @@ class SolveDetailsPopup(val popupVisible: MutableState<Boolean>) {
     }
 
     @Composable
-    fun LLCasesRow(ollCase: PredefinedOLLCase, pllCase: PredefinedPLLCase) {
+    fun LLCasesRow(ollCase: PredefinedOLLCase?, pllCase: PredefinedPLLCase?) {
         val columnWeight = 1f
-        Column{
+        Column {
             Row(
                 horizontalArrangement = Arrangement.SpaceEvenly,
                 modifier = Modifier
@@ -250,6 +261,8 @@ class SolveDetailsPopup(val popupVisible: MutableState<Boolean>) {
             Button(
                 onClick = {
                     SolveAnalysisDBService(context).deleteSolveWithAnalysisData(id)
+                    solvesList.removeIf { it.id == id }
+                    popupVisible.value = false
                 },
                 modifier = Modifier
                     .fillMaxWidth(0.9f),
@@ -333,5 +346,6 @@ fun SolveDetailsPopupPreview() {
         endStateID = 1
     )
     CrossDBService(context).addCrossData(crossData)
-    SolveDetailsPopup(popupVisible).GenerateLayout(context = context, solveID = 1)
+    val solvesList = remember { mutableStateListOf<SolveData>() }
+    SolveDetailsPopup(popupVisible, solvesList).GenerateLayout(context = context, solveID = 1)
 }

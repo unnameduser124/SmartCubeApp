@@ -62,10 +62,10 @@ class SolveAnalysisDBService(val context: Context, private val dbName: String = 
         val cubeStateDataList = CubeStateDBService(context, dbName).getCubeStatesForSolve(solveID)
         val cubeStateList = cubeStateDataList.map { CubeState(it) }
         solve.solveStateSequence = cubeStateList.toMutableList()
-        val pllData = PLLDBService(context, dbName).getPLLData(solveID)
-        val ollData = OLLDBService(context, dbName).getOLLData(solveID)
-        val f2lData = F2LDBService(context, dbName).getF2LData(solveID)
-        val crossData = CrossDBService(context, dbName).getCrossData(solveID)
+        val pllData = PLLDBService(context, dbName).getPLLForSolve(solveID)
+        val ollData = OLLDBService(context, dbName).getOLLForSolve(solveID)
+        val f2lData = F2LDBService(context, dbName).getF2LForSolve(solveID)
+        val crossData = CrossDBService(context, dbName).getCrossForSolve(solveID)
         return SolveAnalysisData(
             solveData,
             crossData,

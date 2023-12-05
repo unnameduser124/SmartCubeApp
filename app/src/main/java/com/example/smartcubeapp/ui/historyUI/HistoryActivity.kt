@@ -15,9 +15,11 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -25,11 +27,17 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Popup
+import androidx.compose.ui.window.PopupProperties
 import com.example.smartcubeapp.solvedatabase.SolvesDatabaseConstants
 import com.example.smartcubeapp.solvedatabase.dataclasses.SolveData
 import com.example.smartcubeapp.solvedatabase.services.SolveDBService
 
 class HistoryActivity : ComponentActivity() {
+
+    private lateinit var popupVisible: MutableState<Boolean>
+    private lateinit var popupSolveID: MutableState<Long>
+    private lateinit var solvesList: SnapshotStateList<SolveData>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,9 +49,22 @@ class HistoryActivity : ComponentActivity() {
 
     @Composable
     fun GenerateLayout(context: Context = this@HistoryActivity) {
+        popupVisible = remember { mutableStateOf(false) }
+        popupSolveID = remember { mutableStateOf(-1) }
         Column(modifier = Modifier.fillMaxSize()) {
             ListHeader()
             SolvesListLazyColumn(context)
+        }
+        if (popupVisible.value) {
+            Popup(
+                alignment = Alignment.Center,
+                onDismissRequest = {
+                    popupVisible.value = false
+                },
+                properties = PopupProperties(focusable = true)
+            ) {
+                SolveDetailsPopup(popupVisible, solvesList).GenerateLayout(context = context, solveID = popupSolveID.value)
+            }
         }
     }
 
@@ -56,18 +77,40 @@ class HistoryActivity : ComponentActivity() {
             horizontalArrangement = Arrangement.SpaceAround,
             verticalAlignment = Alignment.Bottom
         ) {
-            Text(text = "Duration", fontSize = 17.sp, modifier = Modifier.weight(1f), textAlign = TextAlign.Center)
-            Text(text = "Moves", fontSize = 17.sp, modifier = Modifier.weight(0.7f), textAlign = TextAlign.Center)
-            Text(text = "TPS", fontSize = 17.sp, modifier = Modifier.weight(0.5f), textAlign = TextAlign.Center)
-            Text(text = "Date", fontSize = 17.sp, modifier = Modifier.weight(2f), textAlign = TextAlign.Center)
+            Text(
+                text = "Duration",
+                fontSize = 17.sp,
+                modifier = Modifier.weight(1f),
+                textAlign = TextAlign.Center
+            )
+            Text(
+                text = "Moves",
+                fontSize = 17.sp,
+                modifier = Modifier.weight(0.7f),
+                textAlign = TextAlign.Center
+            )
+            Text(
+                text = "TPS",
+                fontSize = 17.sp,
+                modifier = Modifier.weight(0.5f),
+                textAlign = TextAlign.Center
+            )
+            Text(
+                text = "Date",
+                fontSize = 17.sp,
+                modifier = Modifier.weight(2f),
+                textAlign = TextAlign.Center
+            )
         }
     }
 
     @Composable
     fun SolvesListLazyColumn(context: Context) {
-        val solvesList = remember { mutableStateListOf<SolveData>() }
+        solvesList = remember { mutableStateListOf<SolveData>() }
         val page = remember { mutableStateOf(2) }
-        solvesList.addAll(SolveDBService(context).getAllSolves().toMutableList())
+        if(solvesList.isEmpty()){
+            solvesList.addAll(SolveDBService(context).getAllSolves().toMutableList())
+        }
 
         Column(modifier = Modifier.fillMaxSize()) {
             LazyColumn(
@@ -76,7 +119,7 @@ class HistoryActivity : ComponentActivity() {
                     .fillMaxWidth()
             ) {
                 items(solvesList.size) { index ->
-                    SolveListItem(solvesList[index]).GenerateLayout()
+                    SolveListItem(solvesList[index], popupVisible, popupSolveID).GenerateLayout()
                 }
                 item {
                     Row(modifier = Modifier.padding(horizontal = 10.dp)) {
@@ -101,7 +144,7 @@ class HistoryActivity : ComponentActivity() {
 
 @Preview
 @Composable
-fun PreviewSolvesListLazyColumn() {
+fun PreviewHistoryActivityLayout() {
     val context = LocalContext.current
     context.deleteDatabase(SolvesDatabaseConstants.SOLVE_DATABASE_NAME)
     for (i in 0..100) {

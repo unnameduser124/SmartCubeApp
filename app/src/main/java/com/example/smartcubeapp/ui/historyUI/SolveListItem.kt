@@ -1,6 +1,7 @@
 package com.example.smartcubeapp.ui.historyUI
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -8,6 +9,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -22,7 +26,11 @@ import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
 
-class SolveListItem(val solveData: SolveData) {
+class SolveListItem(
+    private val solveData: SolveData,
+    val popupVisible: MutableState<Boolean>,
+    val solveID: MutableState<Long>
+) {
 
     @Composable
     fun GenerateLayout() {
@@ -35,7 +43,11 @@ class SolveListItem(val solveData: SolveData) {
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(10.dp)
-                .background(color = Color.LightGray, shape = RoundedCornerShape(16.dp)),
+                .background(color = Color.LightGray, shape = RoundedCornerShape(16.dp))
+                .clickable{
+                    solveID.value = solveData.id
+                    popupVisible.value = true
+                },
             horizontalArrangement = Arrangement.SpaceEvenly,
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -50,25 +62,33 @@ class SolveListItem(val solveData: SolveData) {
             Text(
                 text = durationString,
                 fontSize = 23.sp,
-                modifier = Modifier.padding(start = 10.dp).weight(1f),
+                modifier = Modifier
+                    .padding(start = 10.dp)
+                    .weight(1f),
                 textAlign = TextAlign.Start
             )
             Text(
                 text = solveData.moveCount.toString(),
                 fontSize = 23.sp,
-                modifier = Modifier.padding(vertical = 10.dp).weight(0.7f),
+                modifier = Modifier
+                    .padding(vertical = 10.dp)
+                    .weight(0.7f),
                 textAlign = TextAlign.Center
             )
             Text(
                 text = roundDouble(solveTPS, 10).toString(),
                 fontSize = 23.sp,
-                modifier = Modifier.padding(vertical = 10.dp).weight(0.5f),
+                modifier = Modifier
+                    .padding(vertical = 10.dp)
+                    .weight(0.5f),
                 textAlign = TextAlign.Center
             )
             Text(
                 text = dateString,
                 fontSize = 23.sp,
-                modifier = Modifier.padding(end = 10.dp).weight(2f),
+                modifier = Modifier
+                    .padding(end = 10.dp)
+                    .weight(2f),
                 textAlign = TextAlign.End
             )
         }
@@ -78,6 +98,8 @@ class SolveListItem(val solveData: SolveData) {
 @Preview
 @Composable
 fun PreviewSolveListItem() {
+    val popupVisible = remember { mutableStateOf(false) }
+    val popupSolveID = remember { mutableStateOf(-1L) }
     SolveListItem(
         SolveData(
             1,
@@ -87,6 +109,8 @@ fun PreviewSolveListItem() {
             ScrambleGenerator.generateScramble(),
             50,
             0
-        )
+        ),
+        popupVisible,
+        popupSolveID
     ).GenerateLayout()
 }
