@@ -58,7 +58,7 @@ class PLLMatchCaseTests {
             WhiteSide
         ).transformStateToPositionRepresentation<PLLElementPosition>(context)
 
-        val case = pllCaseDetection.matchCase(context, position)
+        val case = pllCaseDetection.matchCase(position)
         if (case == null) {
             fail()
         } else {
@@ -95,7 +95,7 @@ class PLLMatchCaseTests {
             WhiteSide
         ).transformStateToPositionRepresentation<PLLElementPosition>(context)
 
-        val case = pllCaseDetection.matchCase(context, position)
+        val case = pllCaseDetection.matchCase(position)
         if (case == null) {
             fail()
         } else {
@@ -132,7 +132,7 @@ class PLLMatchCaseTests {
             YellowSide
         ).transformStateToPositionRepresentation<PLLElementPosition>(context)
 
-        val case = pllCaseDetection.matchCase(context, position)
+        val case = pllCaseDetection.matchCase(position)
         if (case == null) {
             fail()
         } else {
@@ -169,7 +169,7 @@ class PLLMatchCaseTests {
             YellowSide
         ).transformStateToPositionRepresentation<PLLElementPosition>(context)
 
-        val case = pllCaseDetection.matchCase(context, position)
+        val case = pllCaseDetection.matchCase(position)
         if (case == null) {
             fail()
         } else {
@@ -206,7 +206,7 @@ class PLLMatchCaseTests {
             RedSide
         ).transformStateToPositionRepresentation<PLLElementPosition>(context)
 
-        val case = pllCaseDetection.matchCase(context, position)
+        val case = pllCaseDetection.matchCase(position)
         if (case == null) {
             fail()
         } else {
@@ -243,7 +243,7 @@ class PLLMatchCaseTests {
             RedSide
         ).transformStateToPositionRepresentation<PLLElementPosition>(context)
 
-        val case = pllCaseDetection.matchCase(context, position)
+        val case = pllCaseDetection.matchCase(position)
         if (case == null) {
             fail()
         } else {
@@ -280,7 +280,7 @@ class PLLMatchCaseTests {
             OrangeSide
         ).transformStateToPositionRepresentation<PLLElementPosition>(context)
 
-        val case = pllCaseDetection.matchCase(context, position)
+        val case = pllCaseDetection.matchCase(position)
         if (case == null) {
             fail()
         } else {
@@ -317,7 +317,7 @@ class PLLMatchCaseTests {
             OrangeSide
         ).transformStateToPositionRepresentation<PLLElementPosition>(context)
 
-        val case = pllCaseDetection.matchCase(context, position)
+        val case = pllCaseDetection.matchCase(position)
         if (case == null) {
             fail()
         } else {
@@ -354,7 +354,7 @@ class PLLMatchCaseTests {
             BlueSide
         ).transformStateToPositionRepresentation<PLLElementPosition>(context)
 
-        val case = pllCaseDetection.matchCase(context, position)
+        val case = pllCaseDetection.matchCase(position)
         if (case == null) {
             fail()
         } else {
@@ -391,7 +391,7 @@ class PLLMatchCaseTests {
             BlueSide
         ).transformStateToPositionRepresentation<PLLElementPosition>(context)
 
-        val case = pllCaseDetection.matchCase(context, position)
+        val case = pllCaseDetection.matchCase(position)
         if (case == null) {
             fail()
         } else {
@@ -428,7 +428,7 @@ class PLLMatchCaseTests {
             GreenSide
         ).transformStateToPositionRepresentation<PLLElementPosition>(context)
 
-        val case = pllCaseDetection.matchCase(context, position)
+        val case = pllCaseDetection.matchCase(position)
         if (case == null) {
             fail()
         } else {
@@ -465,7 +465,7 @@ class PLLMatchCaseTests {
             GreenSide
         ).transformStateToPositionRepresentation<PLLElementPosition>(context)
 
-        val case = pllCaseDetection.matchCase(context, position)
+        val case = pllCaseDetection.matchCase(position)
         if (case == null) {
             fail()
         } else {
@@ -502,7 +502,7 @@ class PLLMatchCaseTests {
             WhiteSide
         ).transformStateToPositionRepresentation<PLLElementPosition>(context)
 
-        val case = pllCaseDetection.matchCase(context, position)
+        val case = pllCaseDetection.matchCase(position)
         if (case == null) {
             fail()
         } else {
@@ -539,7 +539,7 @@ class PLLMatchCaseTests {
             YellowSide
         ).transformStateToPositionRepresentation<PLLElementPosition>(context)
 
-        val case = pllCaseDetection.matchCase(context, position)
+        val case = pllCaseDetection.matchCase(position)
         if (case == null) {
             fail()
         } else {
@@ -576,7 +576,7 @@ class PLLMatchCaseTests {
             RedSide
         ).transformStateToPositionRepresentation<PLLElementPosition>(context)
 
-        val case = pllCaseDetection.matchCase(context, position)
+        val case = pllCaseDetection.matchCase(position)
         if (case == null) {
             fail()
         } else {
@@ -613,7 +613,7 @@ class PLLMatchCaseTests {
             OrangeSide
         ).transformStateToPositionRepresentation<PLLElementPosition>(context)
 
-        val case = pllCaseDetection.matchCase(context, position)
+        val case = pllCaseDetection.matchCase(position)
         if (case == null) {
             fail()
         } else {
@@ -650,7 +650,7 @@ class PLLMatchCaseTests {
             BlueSide
         ).transformStateToPositionRepresentation<PLLElementPosition>(context)
 
-        val case = pllCaseDetection.matchCase(context, position)
+        val case = pllCaseDetection.matchCase(position)
         if (case == null) {
             fail()
         } else {
@@ -687,7 +687,7 @@ class PLLMatchCaseTests {
             GreenSide
         ).transformStateToPositionRepresentation<PLLElementPosition>(context)
 
-        val case = pllCaseDetection.matchCase(context, position)
+        val case = pllCaseDetection.matchCase(position)
         if (case == null) {
             fail()
         } else {
@@ -724,7 +724,7 @@ class PLLMatchCaseTests {
             WhiteSide
         ).transformStateToPositionRepresentation<PLLElementPosition>(context)
 
-        val case = pllCaseDetection.matchCase(context, position)
+        val case = pllCaseDetection.matchCase(position)
         if (case == null) {
             fail()
         } else {
@@ -761,7 +761,7 @@ class PLLMatchCaseTests {
             YellowSide
         ).transformStateToPositionRepresentation<PLLElementPosition>(context)
 
-        val case = pllCaseDetection.matchCase(context, position)
+        val case = pllCaseDetection.matchCase(position)
         if (case == null) {
             fail()
         } else {
@@ -798,7 +798,7 @@ class PLLMatchCaseTests {
             RedSide
         ).transformStateToPositionRepresentation<PLLElementPosition>(context)
 
-        val case = pllCaseDetection.matchCase(context, position)
+        val case = pllCaseDetection.matchCase(position)
         if (case == null) {
             fail()
         } else {

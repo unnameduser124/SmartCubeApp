@@ -227,11 +227,8 @@ class SolutionPhaseDetection(
         val ollEndCubeStateID = solution.solveStateSequence[ollEndIndex].id
         val ollMoveCount = getPhaseMoveCount(SolvePhase.OLL, context)
         val case = getOLL(context)
-        val ollCaseIndex = if (PredefinedOLLCase.values().indexOf(case) != -1) {
-            PredefinedOLLCase.values().indexOf(case)
-        } else {
-            PredefinedOLLCase.values().indexOf(PredefinedOLLCase.OLLSkip)
-        }
+        var ollCaseIndex = PredefinedOLLCase.values().indexOf(case)
+        if(ollCaseIndex == -1) ollCaseIndex = PredefinedOLLCase.values().indexOf(PredefinedOLLCase.OLLSkip)
 
         if (ollDuration <= 0 || ollMoveCount <= 0) return null
 
@@ -258,10 +255,8 @@ class SolutionPhaseDetection(
         val pllStartCubeStateID = pllStartState.id
         val pllEndCubeStateID = solution.solveStateSequence[pllEndIndex].id
         val pllMoveCount = getPhaseMoveCount(SolvePhase.PLL, context)
-        val pllCaseIndex = if (PredefinedPLLCase.values()
-                .indexOf(getPLL(context)) != -1
-        ) PredefinedPLLCase.values().indexOf(getPLL(context)) else PredefinedPLLCase.values()
-            .indexOf(PredefinedPLLCase.PLLSkip)
+        var pllCaseIndex = PredefinedPLLCase.values().indexOf(getPLL(context))
+        if(pllCaseIndex == -1) pllCaseIndex = PredefinedPLLCase.values().indexOf(PredefinedPLLCase.PLLSkip)
 
         if (pllDuration <= 0 || pllMoveCount <= 0) return null
 

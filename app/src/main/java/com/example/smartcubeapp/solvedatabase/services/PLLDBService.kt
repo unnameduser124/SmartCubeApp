@@ -17,8 +17,8 @@ class PLLDBService(context: Context, databaseName: String = SolvesDatabaseConsta
         if(pllData.moveCount < 0){
             throw IllegalArgumentException("Move count must be greater than or equal to 0")
         }
-        if(pllData.case < 0 || pllData.case > 56){
-            throw IllegalArgumentException("PLL case must be between 0 and 56")
+        if(pllData.case < 0 || pllData.case > 22){
+            throw IllegalArgumentException("PLL case must be between 0 and 22, it was ${pllData.case}")
         }
         dbAccesses++
 

@@ -718,4 +718,20 @@ class DetectPLLCaseTests {
             assert(case == PredefinedPLLCase.Z)
         }
     }
+
+    @Test
+    fun matchCasePLLSkip(){
+        val cubeState = CubeState(
+            mutableListOf(4, 1, 2, 0, 7, 5, 6, 3),
+            mutableListOf(2, 3, 3, 2, 2, 3, 3, 2),
+            mutableListOf(4, 1, 2, 3, 8, 5, 6, 0, 7, 9, 10, 11),
+            mutableListOf(true, false, false, false, true, false, false, true, true, false, false, false)
+        )
+        pllCaseDetection.changeCubeState(cubeState)
+        pllCaseDetection.changeCubeSide(WhiteSide)
+
+        val case = pllCaseDetection.detectCase(context)
+
+        TestCase.assertEquals(PredefinedPLLCase.PLLSkip, case)
+    }
 }

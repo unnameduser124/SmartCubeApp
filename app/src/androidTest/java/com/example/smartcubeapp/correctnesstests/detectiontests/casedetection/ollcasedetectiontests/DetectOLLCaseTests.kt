@@ -2,6 +2,8 @@ package com.example.smartcubeapp.correctnesstests.detectiontests.casedetection.o
 
 import android.content.Context
 import androidx.test.platform.app.InstrumentationRegistry
+import com.example.smartcubeapp.casedetection.olldetection.OLLCaseDetection
+import com.example.smartcubeapp.casedetection.olldetection.ollcase.PredefinedOLLCase
 import com.example.smartcubeapp.cube.BlueSide
 import com.example.smartcubeapp.cube.CubeState
 import com.example.smartcubeapp.cube.GreenSide
@@ -9,8 +11,6 @@ import com.example.smartcubeapp.cube.OrangeSide
 import com.example.smartcubeapp.cube.RedSide
 import com.example.smartcubeapp.cube.WhiteSide
 import com.example.smartcubeapp.cube.YellowSide
-import com.example.smartcubeapp.casedetection.olldetection.OLLCaseDetection
-import com.example.smartcubeapp.casedetection.olldetection.ollcase.PredefinedOLLCase
 import junit.framework.TestCase
 import org.junit.Before
 import org.junit.Test
@@ -137,5 +137,17 @@ class DetectOLLCaseTests {
         val case = caseDetection.detectCase(context)
 
         TestCase.assertNull(case)
+    }
+
+    @Test
+    fun detectOLLCaseOLLSkip(){
+        val cubeState = CubeState.SOLVED_CUBE_STATE
+
+        caseDetection.changeCubeState(cubeState)
+        caseDetection.changeCubeSide(OrangeSide)
+
+        val case = caseDetection.detectCase(context)
+
+        TestCase.assertEquals(PredefinedOLLCase.OLLSkip, case)
     }
 }

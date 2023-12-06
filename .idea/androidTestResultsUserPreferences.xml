@@ -354,6 +354,19 @@
             </AndroidTestResultsTableState>
           </value>
         </entry>
+        <entry key="-677455575">
+          <value>
+            <AndroidTestResultsTableState>
+              <option name="preferredColumnWidths">
+                <map>
+                  <entry key="Duration" value="90" />
+                  <entry key="Tests" value="360" />
+                  <entry key="realme RMX2155" value="120" />
+                </map>
+              </option>
+            </AndroidTestResultsTableState>
+          </value>
+        </entry>
         <entry key="-598729405">
           <value>
             <AndroidTestResultsTableState>
@@ -901,6 +914,19 @@
           </value>
         </entry>
         <entry key="1535183163">
+          <value>
+            <AndroidTestResultsTableState>
+              <option name="preferredColumnWidths">
+                <map>
+                  <entry key="Duration" value="90" />
+                  <entry key="Tests" value="360" />
+                  <entry key="realme RMX2155" value="120" />
+                </map>
+              </option>
+            </AndroidTestResultsTableState>
+          </value>
+        </entry>
+        <entry key="1759380278">
           <value>
             <AndroidTestResultsTableState>
               <option name="preferredColumnWidths">
