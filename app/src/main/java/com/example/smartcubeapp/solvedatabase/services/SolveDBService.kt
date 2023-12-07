@@ -163,4 +163,71 @@ class SolveDBService(context: Context, databaseName: String = SolvesDatabaseCons
         db.close()
         return solveIDs
     }
+
+    fun getAllSolves(page: Int = 0, size: Int = PAGE_SIZE, orderBy: String = "DESC"): List<SolveData>{
+        if(page < 0 || size < 0){
+            return listOf()
+        }
+        dbAccesses++
+        val db = this.readableDatabase
+
+        val projection = arrayOf(
+            BaseColumns._ID,
+            SolvesDatabaseConstants.SolveTable.DURATION_COLUMN,
+            SolvesDatabaseConstants.SolveTable.TIMESTAMP_COLUMN,
+            SolvesDatabaseConstants.SolveTable.SCRAMBLED_STATE_ID_COLUMN,
+            SolvesDatabaseConstants.SolveTable.SCRAMBLE_SEQUENCE_COLUMN,
+            SolvesDatabaseConstants.SolveTable.MOVE_COUNT,
+            SolvesDatabaseConstants.SolveTable.PENALTY_COLUMN
+        )
+
+        val cursor = db.query(
+            SolvesDatabaseConstants.SolveTable.TABLE_NAME,
+            projection,
+            null,
+            null,
+            null,
+            null,
+            "${BaseColumns._ID} $orderBy",
+            "${page * size}, $size"
+        )
+
+        val solveDataList = mutableListOf<SolveData>()
+        with(cursor) {
+            while (moveToNext()) {
+                val solveId = getLong(getColumnIndexOrThrow(BaseColumns._ID))
+                val duration =
+                    getLong(getColumnIndexOrThrow(SolvesDatabaseConstants.SolveTable.DURATION_COLUMN))
+                val timestamp =
+                    getLong(getColumnIndexOrThrow(SolvesDatabaseConstants.SolveTable.TIMESTAMP_COLUMN))
+                val scrambledStateID =
+                    getLong(getColumnIndexOrThrow(SolvesDatabaseConstants.SolveTable.SCRAMBLED_STATE_ID_COLUMN))
+                val scramble =
+                    getString(getColumnIndexOrThrow(SolvesDatabaseConstants.SolveTable.SCRAMBLE_SEQUENCE_COLUMN))
+                val moveCount =
+                    getInt(getColumnIndexOrThrow(SolvesDatabaseConstants.SolveTable.MOVE_COUNT))
+                val penalty =
+                    getInt(getColumnIndexOrThrow(SolvesDatabaseConstants.SolveTable.PENALTY_COLUMN))
+
+                solveDataList.add(
+                    SolveData(
+                        solveId,
+                        duration,
+                        timestamp,
+                        scrambledStateID,
+                        scramble,
+                        moveCount,
+                        penalty
+                    )
+                )
+            }
+        }
+        cursor.close()
+        db.close()
+        return solveDataList
+    }
+
+    companion object{
+        const val PAGE_SIZE = 20
+    }
 }

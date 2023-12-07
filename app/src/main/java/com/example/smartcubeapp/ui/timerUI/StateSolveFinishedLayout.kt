@@ -1,6 +1,7 @@
-package com.example.smartcubeapp.timerUI
+package com.example.smartcubeapp.ui.timerUI
 
 import android.content.Context
+import android.content.Intent
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -8,10 +9,13 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -23,33 +27,41 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.smartcubeapp.MILLIS_IN_SECOND
 import com.example.smartcubeapp.R
 import com.example.smartcubeapp.bluetooth.cubeState
 import com.example.smartcubeapp.bluetooth.lastMove
 import com.example.smartcubeapp.bluetooth.timerState
 import com.example.smartcubeapp.cube.CubeState
 import com.example.smartcubeapp.cube.Solve
+import com.example.smartcubeapp.cube.SolvePenalty
 import com.example.smartcubeapp.millisToSeconds
+import com.example.smartcubeapp.phasedetection.CubeStatePhaseDetection
+import com.example.smartcubeapp.phasedetection.SolutionPhaseDetection
+import com.example.smartcubeapp.phasedetection.SolvePhase
+import com.example.smartcubeapp.roundDouble
 import com.example.smartcubeapp.scramble.Scramble
 import com.example.smartcubeapp.scramble.ScrambleGenerator
 import com.example.smartcubeapp.scramble.ScramblingMode
+import com.example.smartcubeapp.solvedatabase.services.SolveAnalysisDBService
 import com.example.smartcubeapp.stats.StatsService
+import com.example.smartcubeapp.ui.historyUI.HistoryActivity
+import java.util.Calendar
 
-class StateScramblingLayout(
-    val solve: Solve,
+class StateSolveFinishedLayout(
+    private val solve: Solve
 ) {
 
     private lateinit var scrambleSequence: MutableState<String>
-    private lateinit var context: Context
     private val generatedScramble = ScrambleGenerator.generateScramble()
     private val scramble: Scramble = Scramble(generatedScramble)
+    private lateinit var context: Context
     private var lastState = CubeState(
         mutableListOf(),
         mutableListOf(),
@@ -60,8 +72,13 @@ class StateScramblingLayout(
     @Composable
     fun GenerateLayout(context: Context) {
         this.context = context
+        if (solve.id == -1L && solve.solvePenalty != SolvePenalty.DNF) {
+            solve.date = Calendar.getInstance()
+            val id = SolveAnalysisDBService(context).saveSolveWithAnalysis(solve).solveID
+            solve.id = id
+        }
 
-        SolveTimeRow()
+        SolveResults()
         CurrentStatsColumn()
         Column(
             modifier = Modifier.fillMaxSize(),
@@ -102,8 +119,100 @@ class StateScramblingLayout(
     }
 
     @Composable
-    fun ScrambleSequenceRow() {
-        scrambleSequence = remember { mutableStateOf(scramble.getRemainingMoves()) }
+    fun SolveResults() {
+
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
+            SolveTimeRow()
+            if (solve.solvePenalty != SolvePenalty.DNF) {
+                Row(horizontalArrangement = Arrangement.Center) {
+                    val moveCount = solve.solveStateSequence.size - 1
+                    Text(
+                        text = "$moveCount moves",
+                        fontSize = 25.sp,
+                        modifier = Modifier.padding(horizontal = 10.dp)
+                    )
+                    val tpsRounded = roundDouble(solve.getTurnsPerSecond(), 100)
+                    Text(
+                        text = "${tpsRounded}tps",
+                        fontSize = 25.sp,
+                        modifier = Modifier.padding(horizontal = 10.dp)
+                    )
+                }
+                PhaseStatsDataTable()
+                OLLCaseRow()
+                PLLCaseRow()
+            }
+        }
+    }
+
+    @Composable
+    fun OLLCaseRow() {
+        val ollCase = SolutionPhaseDetection(
+            solve,
+            CubeStatePhaseDetection(CubeState.SOLVED_CUBE_STATE)
+        ).getOLL(context)
+
+        Row(horizontalArrangement = Arrangement.Center) {
+            Text(
+                text = "OLL Case",
+                fontSize = 25.sp,
+                modifier = Modifier.padding(horizontal = 10.dp)
+            )
+            Text(
+                text = ollCase.toString(),
+                fontSize = 25.sp,
+                modifier = Modifier.padding(horizontal = 10.dp)
+            )
+        }
+    }
+
+    @Composable
+    fun PLLCaseRow() {
+        val pllCase = SolutionPhaseDetection(
+            solve,
+            CubeStatePhaseDetection(CubeState.SOLVED_CUBE_STATE)
+        ).getPLL(context)
+
+        Row(horizontalArrangement = Arrangement.Center) {
+            Text(
+                text = "PLL Case",
+                fontSize = 25.sp,
+                modifier = Modifier.padding(horizontal = 10.dp)
+            )
+            Text(
+                text = pllCase.toString(),
+                fontSize = 25.sp,
+                modifier = Modifier.padding(horizontal = 10.dp)
+            )
+        }
+    }
+
+    @Composable
+    fun CrossSideRow() {
+        val crossSide = SolutionPhaseDetection(
+            solve,
+            CubeStatePhaseDetection(CubeState.SOLVED_CUBE_STATE)
+        ).getCrossSide() ?: return
+
+        Row(horizontalArrangement = Arrangement.Center) {
+            Text(
+                text = "Cross Side",
+                fontSize = 25.sp,
+                modifier = Modifier.padding(horizontal = 10.dp)
+            )
+            Text(
+                text = crossSide.sideName,
+                fontSize = 25.sp,
+                modifier = Modifier.padding(horizontal = 10.dp)
+            )
+        }
+    }
+
+    private fun handleCubeNotSolved() {
         if (
             !cubeState.value.isSolved()
             && scramble.getRemainingMoves() == scramble.getScramble()
@@ -111,30 +220,32 @@ class StateScramblingLayout(
         ) {
             scramble.scramblingMode = ScramblingMode.PreparingToScramble
         }
+    }
+
+    @Composable
+    fun ScrambleSequenceRow() {
+        scrambleSequence = remember { mutableStateOf(scramble.getRemainingMoves()) }
+        handleCubeNotSolved()
         handleScrambling()
         val interactionSource = remember { MutableInteractionSource() }
         Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .clickable(interactionSource = interactionSource, indication = null) {
-                    try {
-                        scramble.generateNewScramble()
-                        if (!cubeState.value.isSolved()) {
-                            scramble.scramblingMode = ScramblingMode.PreparingToScramble
-                            scrambleSequence.value = "Solve the cube before scrambling"
-                        } else {
-                            scrambleSequence.value = scramble.getRemainingMoves()
-                        }
-                    } catch (error: Exception) {
-                        println(error.message)
+                    scramble.generateNewScramble()
+                    scrambleSequence.value = scramble.getRemainingMoves()
+                    if (!cubeState.value.isSolved()) {
+                        scramble.scramblingMode = ScramblingMode.PreparingToScramble
+                        scrambleSequence.value = "Solve the cube before scrambling"
+                    } else {
+                        scrambleSequence.value = scramble.getRemainingMoves()
                     }
                 }
                 .padding(16.dp)
                 .background(color = Color.LightGray, shape = RoundedCornerShape(20.dp))
         ) {
             Text(
-                if (scramble.scramblingMode != ScramblingMode.PreparingToScramble) scrambleSequence.value
-                else "Solve the cube before scrambling",
+                scrambleSequence.value,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(top = 10.dp, bottom = 10.dp, start = 15.dp, end = 5.dp),
@@ -146,9 +257,6 @@ class StateScramblingLayout(
         }
     }
 
-    private fun handleCubeNotSolved() {
-    }
-
     @Composable
     fun SolveHistoryButtonRow() {
         Row(
@@ -158,7 +266,10 @@ class StateScramblingLayout(
             horizontalArrangement = Arrangement.End,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            IconButton(onClick = { /*TODO("Open solve history activity")*/ }) {
+            IconButton(onClick = {
+                val intent = Intent(context, HistoryActivity::class.java)
+                context.startActivity(intent)
+            }) {
                 Icon(
                     painter = painterResource(id = R.drawable.baseline_history_24),
                     contentDescription = "Solve history button",
@@ -267,34 +378,127 @@ class StateScramblingLayout(
 
     @Composable
     fun SolveTimeRow() {
-        Column(
-            modifier = Modifier.fillMaxSize(),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
+        Row(
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.Bottom
         ) {
-            Row(
-                horizontalArrangement = Arrangement.Center,
-                verticalAlignment = Alignment.Bottom
-            ) {
+            if (solve.solvePenalty == SolvePenalty.DNF) {
                 Text(
-                    text = "0.",
+                    text = "DNF",
+                    fontSize = 70.sp,
+                )
+            } else if (solve.solvePenalty == SolvePenalty.PlusTwo) {
+                val solveTime = calculateTime()
+                val solveSeconds = solveTime.split(".")[0]
+                val solveMilliseconds = solveTime.split(".")[1]
+                Text(
+                    text = "$solveSeconds.",
                     fontSize = 70.sp,
                 )
                 Text(
-                    text = "00",
+                    text = solveMilliseconds,
+                    fontSize = 50.sp,
+                    modifier = Modifier.padding(bottom = 6.dp)
+                )
+            } else {
+                val solveTime = calculateTime()
+                val solveSeconds = solveTime.split(".")[0]
+                val solveMilliseconds = solveTime.split(".")[1]
+                Text(
+                    text = "$solveSeconds.",
+                    fontSize = 70.sp,
+                )
+                Text(
+                    text = solveMilliseconds,
                     fontSize = 50.sp,
                     modifier = Modifier.padding(bottom = 6.dp)
                 )
             }
         }
     }
+
+    @Composable
+    fun PhaseStatsDataTable() {
+        val columnWeight = 1f
+
+        LazyColumn(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier.widthIn(100.dp, 300.dp)
+        ) {
+            item {
+                Row(horizontalArrangement = Arrangement.Center) {
+                    TableCell("Phase", columnWeight)
+                    TableCell("Time", columnWeight)
+                    TableCell("Moves", columnWeight)
+                    TableCell("TPS", columnWeight)
+                }
+            }
+            val phases = SolvePhase.values().toMutableList()
+            phases.remove(SolvePhase.Scrambled)
+
+            items(phases.size) { index ->
+
+                val solutionPhaseDetection = SolutionPhaseDetection(
+                    solve,
+                    CubeStatePhaseDetection(CubeState.SOLVED_CUBE_STATE)
+                )
+                val phase = phases[index]
+
+                val phaseTime = remember { mutableStateOf(0.0) }
+                val phaseTps = remember { mutableStateOf(0.0) }
+                val phaseMoves = remember { mutableStateOf(0) }
+
+                phaseTime.value = roundDouble(
+                    solutionPhaseDetection.getPhaseDurationInSeconds(phase, context),
+                    100
+                )
+                phaseTps.value =
+                    roundDouble(solutionPhaseDetection.getPhaseTPS(phase, context), 10)
+                phaseMoves.value = solutionPhaseDetection.getPhaseMoveCount(phase, context)
+
+                Row(horizontalArrangement = Arrangement.Center) {
+                    TableCell(phase.toString(), columnWeight)
+                    TableCell(phaseTime.value.toString(), columnWeight)
+                    TableCell(phaseMoves.value.toString(), columnWeight)
+                    TableCell(phaseTps.value.toString(), columnWeight)
+                }
+            }
+        }
+    }
+
+    private fun calculateTime(): String {
+        solve.calculateTimeFromStateSequence()
+        val time =
+            when (solve.solvePenalty) {
+                SolvePenalty.None -> solve.time / MILLIS_IN_SECOND.toDouble()
+                SolvePenalty.PlusTwo -> solve.time / MILLIS_IN_SECOND.toDouble() + 2.0
+                else -> 0.0
+            }
+        val timeRounded = roundDouble(time, 100)
+        return timeRounded.toString()
+    }
+
+    @Composable
+    fun RowScope.TableCell(
+        text: String,
+        weight: Float
+    ) {
+        Text(
+            text = text,
+            modifier = Modifier.weight(weight),
+            maxLines = 1,
+            fontSize = 20.sp,
+            textAlign = TextAlign.Center
+        )
+    }
+
+
 }
 
 @Preview
 @Composable
-fun StateScramblingLayoutPreview() {
-    val solve = remember { mutableStateOf(Solve()) }
-    val context = LocalContext.current
-
-    StateScramblingLayout(solve.value).GenerateLayout(context)
+fun PreviewStateSolveFinishedLayout() {
+    val solve = Solve()
+    val context = androidx.compose.ui.platform.LocalContext.current
+    StateSolveFinishedLayout(solve).GenerateLayout(context)
 }

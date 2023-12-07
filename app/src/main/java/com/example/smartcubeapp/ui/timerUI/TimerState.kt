@@ -1,4 +1,4 @@
-package com.example.smartcubeapp.timerUI
+package com.example.smartcubeapp.ui.timerUI
 
 enum class TimerState {
     Scrambling,

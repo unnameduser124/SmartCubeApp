@@ -12,11 +12,10 @@ class PLLCaseDetection(private var cubeState: CubeState, private var cubeSide: C
         val positionTransformer = PositionRepresentationTransformer(cubeState, cubeSide)
         val position =
             positionTransformer.transformStateToPositionRepresentation<PLLElementPosition>(context)
-        return matchCase(context, position)
+        return matchCase(position)
     }
 
     fun matchCase(
-        context: Context,
         position: Array<Array<PLLElementPosition>>
     ): PredefinedPLLCase? {
         val positionTransformer = PositionRepresentationTransformer(cubeState, cubeSide)
@@ -33,7 +32,8 @@ class PLLCaseDetection(private var cubeState: CubeState, private var cubeSide: C
                 positionCopy = positionTransformer.rotatePositionClockwise(positionCopy)
             }
         }
-        return null
+        println("PLL case not found")
+        return PredefinedPLLCase.PLLSkip
     }
 
     fun comparePositions(
@@ -61,10 +61,7 @@ class PLLCaseDetection(private var cubeState: CubeState, private var cubeSide: C
         if (permutationPosition[2][1].pieceNumber != solvedSidePosition[2][1]) {
             return false
         }
-        if (permutationPosition[2][2].pieceNumber != solvedSidePosition[2][2]) {
-            return false
-        }
-        return true
+        return permutationPosition[2][2].pieceNumber == solvedSidePosition[2][2]
     }
 
     fun changeCubeSide(cubeSide: CubeSide) {

@@ -27,9 +27,11 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".timerUI.ConnectActivity"
+        <activity android:name=".ui.timerUI.ConnectActivity"
             android:parentActivityName=".MainActivity"/>
-        <activity android:name=".timerUI.TimerActivity"
+        <activity android:name=".ui.timerUI.TimerActivity"
+            android:parentActivityName=".MainActivity"/>
+        <activity android:name=".ui.historyUI.HistoryActivity"
             android:parentActivityName=".MainActivity"/>
     </application>
 

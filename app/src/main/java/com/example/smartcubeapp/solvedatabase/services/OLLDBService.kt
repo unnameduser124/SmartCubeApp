@@ -3,7 +3,6 @@ package com.example.smartcubeapp.solvedatabase.services
 import android.content.ContentValues
 import android.content.Context
 import android.provider.BaseColumns
-import com.example.smartcubeapp.cube.Solve
 import com.example.smartcubeapp.dbAccesses
 import com.example.smartcubeapp.solvedatabase.SolveDB
 import com.example.smartcubeapp.solvedatabase.SolvesDatabaseConstants
@@ -18,8 +17,8 @@ class OLLDBService(context: Context, databaseName: String = SolvesDatabaseConsta
         if (ollData.moveCount < 0) {
             throw IllegalArgumentException("Move count must be greater than or equal to 0")
         }
-        if (ollData.case < 0 || ollData.case > 56) {
-            throw IllegalArgumentException("OLL case must be between 0 and 56")
+        if (ollData.case < 0 || ollData.case > 57) {
+            throw IllegalArgumentException("OLL case must be between 0 and 56, it was ${ollData.case}")
         }
         dbAccesses++
 

@@ -3,13 +3,18 @@ package com.example.smartcubeapp.casedetection.olldetection
 import android.content.Context
 import com.example.smartcubeapp.casedetection.PositionRepresentationTransformer
 import com.example.smartcubeapp.casedetection.olldetection.ollcase.CustomOLLCase
+import com.example.smartcubeapp.casedetection.olldetection.ollcase.PredefinedOLLCase
 import com.example.smartcubeapp.cube.CubeSide
 import com.example.smartcubeapp.cube.CubeState
-import com.example.smartcubeapp.casedetection.olldetection.ollcase.PredefinedOLLCase
+import com.example.smartcubeapp.phasedetection.CubeStatePhaseDetection
 
 class OLLCaseDetection(var cubeState: CubeState, private var cubeSide: CubeSide) {
 
-    fun detectCase(context: Context): PredefinedOLLCase? {
+    fun detectCase(context: Context): PredefinedOLLCase {
+        val phaseDetection = CubeStatePhaseDetection(cubeState)
+        if(phaseDetection.OLLSolved(context)){
+            return PredefinedOLLCase.OLLSkip
+        }
         val positionTransformer =
             PositionRepresentationTransformer(
                 cubeState,
@@ -29,7 +34,8 @@ class OLLCaseDetection(var cubeState: CubeState, private var cubeSide: CubeSide)
             positionRepresentation =
                 positionTransformer.rotatePositionClockwise(positionRepresentation)
         }
-        return null
+        println("OLL case not found")
+        return PredefinedOLLCase.OLLSkip
     }
 
 

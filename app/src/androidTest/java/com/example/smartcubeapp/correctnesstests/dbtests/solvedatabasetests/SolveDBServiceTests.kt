@@ -354,4 +354,57 @@ class SolveDBServiceTests {
         assert(ids.contains(id2))
         assert(ids.contains(id3))
     }
+
+    @Test
+    fun getAllSolvesWithPagingTest(){
+        for(i in 0..100){
+            val solve = Solve(
+                time = 1000+i.toLong(),
+                date = Calendar.getInstance(),
+                scrambleSequence = "R U R' U'",
+                scrambledState = CubeState.SOLVED_CUBE_STATE
+            )
+            solveDBService.addSolve(SolveData(solve))
+        }
+
+        var solves = solveDBService.getAllSolves(size = 10, orderBy = "")
+        assert(solves.size == 10)
+        solves.forEachIndexed{ index, solve ->
+            assertEquals(1000+index.toLong(), solve.solveDuration)
+        }
+        solves = solveDBService.getAllSolves(size = 10, page = 2).toMutableList()
+        assert(solves.size == 10)
+        solves.forEachIndexed{ index, solve ->
+            assertEquals(1080-index.toLong(), solve.solveDuration)
+        }
+        solves = solveDBService.getAllSolves()
+        assert(solves.size == 20)
+        solves.forEachIndexed{ index, solve ->
+            assertEquals(1100-index.toLong(), solve.solveDuration)
+        }
+        solves = solveDBService.getAllSolves(size = 100).toMutableList()
+        assert(solves.size == 100)
+        solves.forEachIndexed{ index, solve ->
+            assertEquals(1100-index.toLong(), solve.solveDuration)
+        }
+    }
+
+    @Test
+    fun getAllSolvesWithPagingFailInvalidPage(){
+        for(i in 0..100){
+            val solve = Solve(
+                time = 1000+i.toLong(),
+                date = Calendar.getInstance(),
+                scrambleSequence = "R U R' U'",
+                scrambledState = CubeState.SOLVED_CUBE_STATE
+            )
+            solveDBService.addSolve(SolveData(solve))
+        }
+
+        var solves = solveDBService.getAllSolves(size = 10, page = 11)
+        assert(solves.isEmpty())
+        solves = solveDBService.getAllSolves(size = 10, page = -1)
+        assert(solves.isEmpty())
+    }
+
 }

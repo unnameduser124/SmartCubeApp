@@ -75,12 +75,13 @@ class CubeStatePhaseDetection(private var cubeState: CubeState) {
         } ?: return false
 
         val correctPositions: List<ElementOrientation>
-        if(elements.isEmpty()){
+        if (elements.isEmpty()) {
             elements = PhaseElementOrientationDBService(context).getAllElementOrientationItems()
-            correctPositions = elements.filter { it.sideName == oppositeSide.sideName && it.sideRelativeOrientation == Orientation.Correct }
-        }
-        else{
-           correctPositions = elements.filter { it.sideName == oppositeSide.sideName && it.sideRelativeOrientation == Orientation.Correct }
+            correctPositions =
+                elements.filter { it.sideName == oppositeSide.sideName && it.sideRelativeOrientation == Orientation.Correct }
+        } else {
+            correctPositions =
+                elements.filter { it.sideName == oppositeSide.sideName && it.sideRelativeOrientation == Orientation.Correct }
         }
 
         oppositeSide.edgeIndexes.forEach { edge ->
@@ -129,13 +130,9 @@ class CubeStatePhaseDetection(private var cubeState: CubeState) {
     fun checkIfSideIsSolved(sideCorners: Array<Int>, sideEdges: Array<Int>): Boolean {
         val correctlySolvedEdges = cubeState.getCorrectlySolvedPieces().second
         val correctlySolvedCorners = cubeState.getCorrectlySolvedPieces().first
-        if (correctlySolvedEdges.containsAll(sideEdges.toList()) && correctlySolvedCorners.containsAll(
-                sideCorners.toList()
-            )
-        ) {
-            return true
-        }
-        return false
+        return correctlySolvedEdges.containsAll(sideEdges.toList()) && correctlySolvedCorners.containsAll(
+            sideCorners.toList()
+        )
     }
 
 }

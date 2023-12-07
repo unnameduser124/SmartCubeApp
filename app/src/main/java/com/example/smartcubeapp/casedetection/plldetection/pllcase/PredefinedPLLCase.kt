@@ -443,7 +443,13 @@ enum class PredefinedPLLCase() {
                 )
             )
         }
-    }; //#21
+    }, //#21
+    PLLSkip{
+        override fun performPermutation(position: Array<Array<PLLElementPosition>>): Array<Array<PLLElementPosition>> {
+            return position
+        }
+    };
+
 
     abstract fun performPermutation(position: Array<Array<PLLElementPosition>>): Array<Array<PLLElementPosition>>
 }
