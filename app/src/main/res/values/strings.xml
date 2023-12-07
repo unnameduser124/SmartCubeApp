@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">SmartCubeApp</string>
+    <string name="total_solves_stats_label">Total solves</string>
+    <string name="total_time_spent_solving_stats_label">Total time spent solving</string>
 </resources>

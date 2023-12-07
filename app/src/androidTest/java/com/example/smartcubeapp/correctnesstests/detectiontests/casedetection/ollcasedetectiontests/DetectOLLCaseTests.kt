@@ -136,7 +136,7 @@ class DetectOLLCaseTests {
 
         val case = caseDetection.detectCase(context)
 
-        TestCase.assertNull(case)
+        TestCase.assertEquals(PredefinedOLLCase.OLLSkip, case)
     }
 
     @Test
