@@ -627,4 +627,8 @@ class StatsService(private val context: Context, dbName: String = SolvesDatabase
     fun meanTime(): Double {
         return totalSolvingTime().toDouble() / totalNumberOfSolves()
     }
+
+    fun meanMoveCount(): Double{
+        return totalNumberOfMoves().toDouble() / totalNumberOfSolves()
+    }
 }
