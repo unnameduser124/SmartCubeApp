@@ -2,13 +2,19 @@
 <project version="4">
   <component name="deploymentTargetDropDown">
     <value>
-      <entry key="OLLDBServiceTests">
+      <entry key="AveragesTableLayoutPreview">
         <State />
       </entry>
       <entry key="StatsActivityLayoutPreview">
         <State />
       </entry>
-      <entry key="Tests in 'com.example.smartcubeapp.correctnesstests.detectiontests.casedetection'">
+      <entry key="Tests in 'com.example.smartcubeapp.correctnesstests.detectiontests'">
+        <State />
+      </entry>
+      <entry key="Tests in 'com.example.smartcubeapp.correctnesstests.statstests'">
+        <State />
+      </entry>
+      <entry key="Tests in 'com.example.smartcubeapp.correctnesstests.timertests'">
         <State />
       </entry>
       <entry key="app">
@@ -17,13 +23,7 @@
       <entry key="correctnesstests">
         <State />
       </entry>
-      <entry key="databasePopulatedWithStats()">
-        <State />
-      </entry>
       <entry key="dbtests">
-        <State />
-      </entry>
-      <entry key="detectOLLCaseTestWhite()">
         <State />
       </entry>
       <entry key="performancetests">

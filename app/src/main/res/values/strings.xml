@@ -10,4 +10,7 @@
     <string name="aox_moves_table_stats_label">Moves averages</string>
     <string name="aox_average_stats_label">ao%1$s</string>
     <string name="best_aox_average_stats_label">Best ao%1$s</string>
+    <string name="average_of_stats_table_header_label">Average of</string>
+    <string name="current_stats_table_header">Current</string>
+    <string name="best_stats_table_header">Best</string>
 </resources>
