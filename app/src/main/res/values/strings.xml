@@ -13,4 +13,13 @@
     <string name="average_of_stats_table_header_label">Average of</string>
     <string name="current_stats_table_header">Current</string>
     <string name="best_stats_table_header">Best</string>
+    <string name="time_averages_table_label">Time averages</string>
+    <string name="move_averages_table_label">Move averages</string>
+    <string name="phase_card_average_time">Average time:</string>
+    <string name="phase_card_average_moves">Average moves:</string>
+    <string name="ll_cases_table_header_case">Case</string>
+    <string name="ll_cases_table_header_average_time">avg time</string>
+    <string name="ll_cases_table_header_average_moves">avg moves</string>
+    <string name="oll_cases_table_label">OLL cases</string>
+    <string name="pll_cases_table_label">PLL cases</string>
 </resources>

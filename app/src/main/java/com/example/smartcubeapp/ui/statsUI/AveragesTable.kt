@@ -15,11 +15,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.smartcubeapp.R
+import com.example.smartcubeapp.millisToSeconds
 import com.example.smartcubeapp.roundDouble
 import com.example.smartcubeapp.stats.StatsDBConstants
-import com.example.smartcubeapp.stats.StatsService
 
-class AveragesTable {
+class AveragesTable(val values: List<Pair<Double, Double>>) {
 
     private lateinit var context: Context
 
@@ -32,8 +32,11 @@ class AveragesTable {
                 .widthIn(min = 200.dp, max = 350.dp)
         ) {
             Header()
-            for(numberOfSolves in StatsDBConstants.numberOfSolvesValues){
-                TableRow(numberOfSolves = numberOfSolves)
+            values.forEachIndexed{ index, averagesPair ->
+                val average = averagesPair.first
+                val bestAverage = averagesPair.second
+                val numberOfSolves = StatsDBConstants.numberOfSolvesValues[index]
+                TableRow(average, bestAverage, numberOfSolves)
             }
         }
     }
@@ -43,7 +46,7 @@ class AveragesTable {
         Row {
             TableCell(
                 text = context.getString(R.string.average_of_stats_table_header_label),
-                weight = 0.8f,
+                weight = 0.7f,
                 textAlign = TextAlign.End
             )
             TableCell(text = context.getString(R.string.current_stats_table_header), weight = 1f)
@@ -52,10 +55,7 @@ class AveragesTable {
     }
 
     @Composable
-    fun TableRow(numberOfSolves: Int) {
-        val statsService = StatsService(context)
-        val currentAverage = statsService.averageOf(numberOfSolves)
-        val bestAverage = statsService.bestAverageOf(numberOfSolves)
+    fun TableRow(average: Double, bestAverage: Double, numberOfSolves: Int) {
         Row {
             TableCell(
                 text = String.format(
@@ -67,7 +67,7 @@ class AveragesTable {
             )
             TableCell(
                 text =
-                roundDouble(currentAverage, 100).toString(), weight = 1f
+                roundDouble(average, 100).toString(), weight = 1f
             )
             TableCell(
                 text =
@@ -96,5 +96,11 @@ class AveragesTable {
 @Composable
 fun AveragesTableLayoutPreview() {
     val context = LocalContext.current
-    AveragesTable().GenerateTableLayout(context = context)
+    val averagesList = mutableListOf<Pair<Double, Double>>()
+    for(value in StatsDBConstants.numberOfSolvesValues){
+        val average = millisToSeconds((10000..20000).random().toDouble())
+        val bestAverage = millisToSeconds((9000..average.toInt()).random().toDouble())
+        averagesList.add(Pair(average, bestAverage))
+    }
+    AveragesTable(averagesList).GenerateTableLayout(context = context)
 }
