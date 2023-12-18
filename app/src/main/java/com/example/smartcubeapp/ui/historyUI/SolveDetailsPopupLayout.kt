@@ -53,7 +53,7 @@ import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
 
-class SolveDetailsPopup(
+class SolveDetailsPopupLayout(
     val popupVisible: MutableState<Boolean>,
     val solvesList: SnapshotStateList<SolveData>
 ) {
@@ -347,5 +347,5 @@ fun SolveDetailsPopupPreview() {
     )
     CrossDBService(context).addCrossData(crossData)
     val solvesList = remember { mutableStateListOf<SolveData>() }
-    SolveDetailsPopup(popupVisible, solvesList).GenerateLayout(context = context, solveID = 1)
+    SolveDetailsPopupLayout(popupVisible, solvesList).GenerateLayout(context = context, solveID = 1)
 }

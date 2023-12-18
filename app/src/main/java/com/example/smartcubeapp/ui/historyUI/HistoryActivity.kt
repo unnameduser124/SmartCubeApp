@@ -63,7 +63,7 @@ class HistoryActivity : ComponentActivity() {
                 },
                 properties = PopupProperties(focusable = true)
             ) {
-                SolveDetailsPopup(popupVisible, solvesList).GenerateLayout(context = context, solveID = popupSolveID.value)
+                SolveDetailsPopupLayout(popupVisible, solvesList).GenerateLayout(context = context, solveID = popupSolveID.value)
             }
         }
     }

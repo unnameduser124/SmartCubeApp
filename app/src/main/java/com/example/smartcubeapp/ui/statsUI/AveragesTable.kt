@@ -46,7 +46,7 @@ class AveragesTable(val values: List<Pair<Double, Double>>) {
         Row {
             TableCell(
                 text = context.getString(R.string.average_of_stats_table_header_label),
-                weight = 0.7f,
+                weight = 1f,
                 textAlign = TextAlign.End
             )
             TableCell(text = context.getString(R.string.current_stats_table_header), weight = 1f)
@@ -62,7 +62,7 @@ class AveragesTable(val values: List<Pair<Double, Double>>) {
                     context.getString(R.string.aox_average_stats_label),
                     numberOfSolves
                 ),
-                weight = 0.7f,
+                weight = 1f,
                 textAlign = TextAlign.End
             )
             TableCell(

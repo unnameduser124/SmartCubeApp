@@ -17,6 +17,8 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -94,8 +96,9 @@ class StatsActivity : ComponentActivity() {
 
     @Composable
     fun TotalStats() {
-        val time = StatsService(context).totalSolvingTime()
+        val time = statsService.totalSolvingTime()
         val timeHours = roundDouble((time / 1000.0 / 60.0 / 60.0), 10)
+        val bestSolveTime = roundDouble(statsService.bestTime().solveDuration / 1000.0, 100)
         StatLabelAndValue(
             label = context.getString(R.string.total_solves_stats_label),
             value = StatsService(context).totalNumberOfSolves().toString()
@@ -107,6 +110,10 @@ class StatsActivity : ComponentActivity() {
         StatLabelAndValue(
             label = context.getString(R.string.total_moves_stats_label),
             value = StatsService(context).totalNumberOfMoves().toString()
+        )
+        StatLabelAndValue(
+            label = context.getString(R.string.best_solve_stats_label),
+            value = bestSolveTime.toString()
         )
     }
 
@@ -144,7 +151,7 @@ class StatsActivity : ComponentActivity() {
                 .fillMaxWidth(),
             horizontalArrangement = Arrangement.Center
         ) {
-            Text(text = labelText, fontSize = 20.sp)
+            Text(text = labelText, fontSize = 25.sp)
         }
     }
 
@@ -170,6 +177,12 @@ class StatsActivity : ComponentActivity() {
 
     @Composable
     fun PhaseCard(phase: SolvePhase, modifier: Modifier) {
+        val phaseSheetVisible = remember { mutableStateOf(false) }
+        if(phaseSheetVisible.value){
+            PhaseStatsSheet(phase, context).GenerateSheet {
+                phaseSheetVisible.value = false
+            }
+        }
         Card(modifier = modifier) {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
@@ -177,7 +190,7 @@ class StatsActivity : ComponentActivity() {
                     .fillMaxWidth()
                     .padding(vertical = 10.dp)
                     .clickable {
-                        TODO("Open phase details popup")
+                        phaseSheetVisible.value = true
                     }
             ) {
                 Text(
@@ -234,14 +247,7 @@ class StatsActivity : ComponentActivity() {
             val casesWithoutSkip =
                 PredefinedPLLCase.values().copyOfRange(0, PredefinedPLLCase.values().size - 1)
             //Table label
-            Text(
-                text = context.getString(R.string.pll_cases_table_label),
-                fontSize = 25.sp,
-                textAlign = TextAlign.Center,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 10.dp)
-            )
+            TableLabel(labelText = context.getString(R.string.pll_cases_table_label))
             //Table header
             LLCaseRow(
                 case = context.getString(R.string.ll_cases_table_header_case),
@@ -270,12 +276,7 @@ class StatsActivity : ComponentActivity() {
             val casesWithoutSkip =
                 PredefinedOLLCase.values().copyOfRange(0, PredefinedOLLCase.values().size - 1)
             //Table label
-            Text(
-                text = context.getString(R.string.oll_cases_table_label),
-                fontSize = 25.sp,
-                textAlign = TextAlign.Center,
-                modifier = Modifier.fillMaxWidth()
-            )
+            TableLabel(labelText = context.getString(R.string.oll_cases_table_label))
             //Table header
             LLCaseRow(
                 case = context.getString(R.string.ll_cases_table_header_case),
