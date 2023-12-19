@@ -19,7 +19,7 @@ import com.example.smartcubeapp.millisToSeconds
 import com.example.smartcubeapp.roundDouble
 import com.example.smartcubeapp.stats.StatsDBConstants
 
-class AveragesTable(val values: List<Pair<Double, Double>>) {
+class AveragesTable(val values: List<Pair<String, String>>) {
 
     private lateinit var context: Context
 
@@ -55,7 +55,7 @@ class AveragesTable(val values: List<Pair<Double, Double>>) {
     }
 
     @Composable
-    fun TableRow(average: Double, bestAverage: Double, numberOfSolves: Int) {
+    fun TableRow(average: String, bestAverage: String, numberOfSolves: Int) {
         Row {
             TableCell(
                 text = String.format(
@@ -67,11 +67,11 @@ class AveragesTable(val values: List<Pair<Double, Double>>) {
             )
             TableCell(
                 text =
-                roundDouble(average, 100).toString(), weight = 1f
+                average, weight = 1f
             )
             TableCell(
                 text =
-                roundDouble(bestAverage, 100).toString(), weight = 1f
+                bestAverage, weight = 1f
             )
         }
     }
@@ -96,11 +96,13 @@ class AveragesTable(val values: List<Pair<Double, Double>>) {
 @Composable
 fun AveragesTableLayoutPreview() {
     val context = LocalContext.current
-    val averagesList = mutableListOf<Pair<Double, Double>>()
+    val averagesList = mutableListOf<Pair<String, String>>()
     for(value in StatsDBConstants.numberOfSolvesValues){
         val average = millisToSeconds((10000..20000).random().toDouble())
         val bestAverage = millisToSeconds((9000..average.toInt()).random().toDouble())
-        averagesList.add(Pair(average, bestAverage))
+        val averageRounded = roundDouble(average, 100).toString()
+        val bestAverageRounded = roundDouble(bestAverage, 100).toString()
+        averagesList.add(Pair(averageRounded, bestAverageRounded))
     }
     AveragesTable(averagesList).GenerateTableLayout(context = context)
 }

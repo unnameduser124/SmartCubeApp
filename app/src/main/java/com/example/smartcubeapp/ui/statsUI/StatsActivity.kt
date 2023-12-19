@@ -74,22 +74,38 @@ class StatsActivity : ComponentActivity() {
         }
     }
 
-    private fun getTimeAverages(): List<Pair<Double, Double>> {
-        val averagesList = mutableListOf<Pair<Double, Double>>()
+    private fun getTimeAverages(): List<Pair<String, String>> {
+        val averagesList = mutableListOf<Pair<String, String>>()
+        val totalSolves = statsService.totalNumberOfSolves()
         StatsDBConstants.numberOfSolvesValues.forEach {
-            val average = millisToSeconds(statsService.averageOf(it))
-            val bestAverage = millisToSeconds(statsService.bestAverageOf(it))
-            averagesList.add(Pair(average, bestAverage))
+            if(it > totalSolves) {
+                averagesList.add(Pair("-", "-"))
+            }
+            else{
+                val average = millisToSeconds(statsService.averageOf(it))
+                val bestAverage = millisToSeconds(statsService.bestAverageOf(it))
+                val averageRounded = roundDouble(average, 100).toString()
+                val bestAverageRounded = roundDouble(bestAverage, 100).toString()
+                averagesList.add(Pair(averageRounded, bestAverageRounded))
+            }
         }
         return averagesList
     }
 
-    private fun getMoveAverages(): List<Pair<Double, Double>> {
-        val averagesList = mutableListOf<Pair<Double, Double>>()
+    private fun getMoveAverages(): List<Pair<String, String>> {
+        val averagesList = mutableListOf<Pair<String, String>>()
+        val totalSolves = statsService.totalNumberOfSolves()
         StatsDBConstants.numberOfSolvesValues.forEach {
-            val average = statsService.averageNumberOfMovesPerSolveInLastXSolves(it)
-            val bestAverage = statsService.bestAverageNumberOfMovesPerSolveInXSolves(it)
-            averagesList.add(Pair(average, bestAverage))
+            if(it > totalSolves){
+                averagesList.add(Pair("-", "-"))
+            }
+            else{
+                val average = statsService.averageNumberOfMovesPerSolveInLastXSolves(it)
+                val bestAverage = statsService.bestAverageNumberOfMovesPerSolveInXSolves(it)
+                val averageRounded = roundDouble(average, 10).toString()
+                val bestAverageRounded = roundDouble(bestAverage, 10).toString()
+                averagesList.add(Pair(averageRounded, bestAverageRounded))
+            }
         }
         return averagesList
     }
@@ -98,7 +114,12 @@ class StatsActivity : ComponentActivity() {
     fun TotalStats() {
         val time = statsService.totalSolvingTime()
         val timeHours = roundDouble((time / 1000.0 / 60.0 / 60.0), 10)
-        val bestSolveTime = roundDouble(statsService.bestTime().solveDuration / 1000.0, 100)
+        val bestTime = statsService.bestTime()
+
+        val bestSolveTime = if (bestTime != null) roundDouble(
+            bestTime.solveDuration / 1000.0,
+            100
+        ).toString() else "-"
         StatLabelAndValue(
             label = context.getString(R.string.total_solves_stats_label),
             value = StatsService(context).totalNumberOfSolves().toString()
@@ -113,21 +134,22 @@ class StatsActivity : ComponentActivity() {
         )
         StatLabelAndValue(
             label = context.getString(R.string.best_solve_stats_label),
-            value = bestSolveTime.toString()
+            value = bestSolveTime
         )
     }
 
     @Composable
     fun GlobalAverageTimeAndMovesRow() {
-        val timeMinutes = StatsService(context).meanTime() / 1000.0
+        val timeSeconds = StatsService(context).meanTime() / 1000.0
+        val moves = roundDouble(StatsService(context).meanMoveCount(), 10)
         Row(modifier = Modifier.padding(10.dp), horizontalArrangement = Arrangement.SpaceAround) {
             StatLabelAndValue(
                 label = context.getString(R.string.solve_time_average_stats_label),
-                value = roundDouble(timeMinutes, 100).toString()
+                value = if(timeSeconds>0.0) roundDouble(timeSeconds, 100).toString() else "-"
             )
             StatLabelAndValue(
                 label = context.getString(R.string.solve_moves_average_stats_label),
-                value = roundDouble(StatsService(context).meanMoveCount(), 1).toString()
+                value = if(moves>0.0) moves.toString() else "-"
             )
         }
     }
@@ -178,7 +200,7 @@ class StatsActivity : ComponentActivity() {
     @Composable
     fun PhaseCard(phase: SolvePhase, modifier: Modifier) {
         val phaseSheetVisible = remember { mutableStateOf(false) }
-        if(phaseSheetVisible.value){
+        if (phaseSheetVisible.value) {
             PhaseStatsSheet(phase, context).GenerateSheet {
                 phaseSheetVisible.value = false
             }
@@ -259,8 +281,8 @@ class StatsActivity : ComponentActivity() {
                 val avgMoves = statsService.averageNumberOfMovesForPLLCaseInLastXSolves(100, case)
                 LLCaseRow(
                     case = case.name,
-                    avgTime = roundDouble(avgTime, 100).toString(),
-                    avgMoves = roundDouble(avgMoves, 10).toString()
+                    avgTime = if(avgTime>0.0) roundDouble(avgTime, 100).toString() else "-",
+                    avgMoves = if(avgMoves>0.0) roundDouble(avgMoves, 10).toString() else "-"
                 )
             }
         }
@@ -288,8 +310,8 @@ class StatsActivity : ComponentActivity() {
                 val avgMoves = statsService.averageNumberOfMovesForOLLCaseInLastXSolves(100, case)
                 LLCaseRow(
                     case = case.name,
-                    avgTime = roundDouble(avgTime, 100).toString(),
-                    avgMoves = roundDouble(avgMoves, 10).toString()
+                    avgTime = if(avgTime>0.0) roundDouble(avgTime, 100).toString() else "-",
+                    avgMoves = if(avgMoves>0.0) roundDouble(avgMoves, 10).toString() else "-"
                 )
             }
         }

@@ -22,6 +22,7 @@ import androidx.compose.ui.unit.sp
 import com.example.smartcubeapp.R
 import com.example.smartcubeapp.millisToSeconds
 import com.example.smartcubeapp.phasedetection.SolvePhase
+import com.example.smartcubeapp.roundDouble
 import com.example.smartcubeapp.stats.StatsDBConstants
 import com.example.smartcubeapp.stats.StatsService
 
@@ -75,22 +76,38 @@ class PhaseStatsSheet(val phase: SolvePhase, val context: Context) {
         }
     }
 
-    private fun getTimeAverages(): List<Pair<Double, Double>> {
-        val averagesList = mutableListOf<Pair<Double, Double>>()
+    private fun getTimeAverages(): List<Pair<String, String>> {
+        val averagesList = mutableListOf<Pair<String, String>>()
+        val totalSolves = statsService.totalNumberOfSolves()
         StatsDBConstants.numberOfSolvesValues.forEach {
-            val average = millisToSeconds(statsService.averageTimeForPhaseInLastXSolves(it, phase))
-            val bestAverage = millisToSeconds(statsService.bestAverageTimeForPhaseInXSolves(it, phase))
-            averagesList.add(Pair(average, bestAverage))
+            if(it > totalSolves) {
+                averagesList.add(Pair("-", "-"))
+            }
+            else{
+                val average = millisToSeconds(statsService.averageTimeForPhaseInLastXSolves(it, phase))
+                val bestAverage = millisToSeconds(statsService.bestAverageTimeForPhaseInXSolves(it, phase))
+                val averageRounded = roundDouble(average, 100).toString()
+                val bestAverageRounded = roundDouble(bestAverage, 100).toString()
+                averagesList.add(Pair(averageRounded, bestAverageRounded))
+            }
         }
         return averagesList
     }
 
-    private fun getMoveAverages(): List<Pair<Double, Double>> {
-        val averagesList = mutableListOf<Pair<Double, Double>>()
+    private fun getMoveAverages(): List<Pair<String, String>> {
+        val averagesList = mutableListOf<Pair<String, String>>()
+        val totalSolves = statsService.totalNumberOfSolves()
         StatsDBConstants.numberOfSolvesValues.forEach {
-            val average = statsService.averageNumberOfMovesForPhaseInLastXSolves(it, phase)
-            val bestAverage = statsService.bestAverageNumberOfMovesForPhaseInXSolves(it, phase)
-            averagesList.add(Pair(average, bestAverage))
+            if(it > totalSolves) {
+                averagesList.add(Pair("-", "-"))
+            }
+            else{
+                val average = statsService.averageNumberOfMovesForPhaseInLastXSolves(it, phase)
+                val bestAverage = statsService.bestAverageNumberOfMovesForPhaseInXSolves(it, phase)
+                val averageRounded = roundDouble(average, 10).toString()
+                val bestAverageRounded = roundDouble(bestAverage, 10).toString()
+                averagesList.add(Pair(averageRounded, bestAverageRounded))
+            }
         }
         return averagesList
     }
