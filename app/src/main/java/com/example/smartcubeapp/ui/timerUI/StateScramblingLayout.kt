@@ -43,6 +43,7 @@ import com.example.smartcubeapp.scramble.ScrambleGenerator
 import com.example.smartcubeapp.scramble.ScramblingMode
 import com.example.smartcubeapp.stats.StatsService
 import com.example.smartcubeapp.ui.historyUI.HistoryActivity
+import com.example.smartcubeapp.ui.statsUI.StatsActivity
 
 class StateScramblingLayout(
     val solve: Solve,
@@ -182,7 +183,10 @@ class StateScramblingLayout(
             horizontalArrangement = Arrangement.End,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            IconButton(onClick = { /*TODO("Open statistics activity")*/ }) {
+            IconButton(onClick = {
+                val intent = Intent(context, StatsActivity::class.java)
+                context.startActivity(intent)
+            }) {
                 Icon(
                     painter = painterResource(id = R.drawable.baseline_stats_24),
                     contentDescription = "Statistics button",

@@ -152,7 +152,7 @@ class OLLDBServiceTests {
         assert(!cursor.moveToFirst())
     }
 
-    @Test
+    //@Test - test no longer valid because we still want to add the data of the phase in the event of case detection error
     fun addOLLDataFailInvalidCase(){
         val ollData = OLLData(
             solveID = 1,

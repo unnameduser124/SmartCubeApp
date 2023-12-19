@@ -436,7 +436,7 @@ class StatsService(private val context: Context, dbName: String = SolvesDatabase
         }
     }
 
-    fun bestTime(): SolveData {
+    fun bestTime(): SolveData? {
         val db = this.readableDatabase
         print(databaseName)
 
@@ -456,18 +456,20 @@ class StatsService(private val context: Context, dbName: String = SolvesDatabase
         )
 
         with(cursor){
-            moveToFirst()
-            val bestSolve = SolveData(
-                id = getLong(getColumnIndexOrThrow(BaseColumns._ID)),
-                solveDuration = getLong(getColumnIndexOrThrow(SolvesDatabaseConstants.SolveTable.DURATION_COLUMN)),
-                timestamp = getLong(getColumnIndexOrThrow(SolvesDatabaseConstants.SolveTable.TIMESTAMP_COLUMN)),
-                scrambledStateID = getLong(getColumnIndexOrThrow(SolvesDatabaseConstants.SolveTable.SCRAMBLED_STATE_ID_COLUMN)),
-                scramble = getString(getColumnIndexOrThrow(SolvesDatabaseConstants.SolveTable.SCRAMBLE_SEQUENCE_COLUMN)),
-                moveCount = getInt(getColumnIndexOrThrow(SolvesDatabaseConstants.SolveTable.MOVE_COUNT))
-            )
-            close()
-            return bestSolve
+            if(moveToFirst()){
+                val bestSolve = SolveData(
+                    id = getLong(getColumnIndexOrThrow(BaseColumns._ID)),
+                    solveDuration = getLong(getColumnIndexOrThrow(SolvesDatabaseConstants.SolveTable.DURATION_COLUMN)),
+                    timestamp = getLong(getColumnIndexOrThrow(SolvesDatabaseConstants.SolveTable.TIMESTAMP_COLUMN)),
+                    scrambledStateID = getLong(getColumnIndexOrThrow(SolvesDatabaseConstants.SolveTable.SCRAMBLED_STATE_ID_COLUMN)),
+                    scramble = getString(getColumnIndexOrThrow(SolvesDatabaseConstants.SolveTable.SCRAMBLE_SEQUENCE_COLUMN)),
+                    moveCount = getInt(getColumnIndexOrThrow(SolvesDatabaseConstants.SolveTable.MOVE_COUNT))
+                )
+                close()
+                return bestSolve
+            }
         }
+        return null
     }
 
     fun worstTime(): SolveData{
@@ -625,6 +627,18 @@ class StatsService(private val context: Context, dbName: String = SolvesDatabase
     }
 
     fun meanTime(): Double {
-        return totalSolvingTime().toDouble() / totalNumberOfSolves()
+        val totalNumberOfSolves = totalNumberOfSolves()
+        if(totalNumberOfSolves == 0){
+            return 0.0
+        }
+        return totalSolvingTime().toDouble() / totalNumberOfSolves
+    }
+
+    fun meanMoveCount(): Double{
+        val totalNumberOfSolves = totalNumberOfSolves()
+        if(totalNumberOfSolves == 0){
+            return 0.0
+        }
+        return totalNumberOfMoves().toDouble() / totalNumberOfSolves
     }
 }

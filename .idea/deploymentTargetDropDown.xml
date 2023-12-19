@@ -2,13 +2,19 @@
 <project version="4">
   <component name="deploymentTargetDropDown">
     <value>
-      <entry key="PreviewHistoryActivityLayout">
+      <entry key="PhaseStatsSheetPreview">
         <State />
       </entry>
-      <entry key="SolveDetailsPopupPreview">
+      <entry key="StatsActivityLayoutPreview">
         <State />
       </entry>
-      <entry key="Tests in 'com.example.smartcubeapp.correctnesstests.detectiontests.casedetection'">
+      <entry key="Tests in 'com.example.smartcubeapp.correctnesstests.detectiontests'">
+        <State />
+      </entry>
+      <entry key="Tests in 'com.example.smartcubeapp.correctnesstests.statstests'">
+        <State />
+      </entry>
+      <entry key="Tests in 'com.example.smartcubeapp.correctnesstests.timertests'">
         <State />
       </entry>
       <entry key="app">
@@ -18,12 +24,6 @@
         <State />
       </entry>
       <entry key="dbtests">
-        <State />
-      </entry>
-      <entry key="detectOLLCaseTestWhite()">
-        <State />
-      </entry>
-      <entry key="getAllSolvesWithPagingTest()">
         <State />
       </entry>
       <entry key="performancetests">

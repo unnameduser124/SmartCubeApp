@@ -63,6 +63,10 @@ class StatsDBTests {
                 statsNames.add(cursor.getString(0))
             } while (cursor.moveToNext())
 
+            val statsNotInStatsNames = expectedStats.filter { !statsNames.contains(it) }
+            statsNotInStatsNames.forEach{
+                println(it)
+            }
             TestCase.assertEquals(expectedStats.size, statsNames.size)
             for (stat in expectedStats) {
                 TestCase.assertTrue(statsNames.contains(stat))
@@ -120,8 +124,9 @@ class StatsDBTests {
                     expectedStats.add(name.replace("X", numberOfSolves.toString()))
                 }
             } else if (name.contains('X') && name.contains('Y')) {
+                //sublist in for loops to avoid OLLSkip and PLLSkip enum values
                 if (name.contains("PLL")) {
-                    for (pll in PredefinedPLLCase.values()) {
+                    for (pll in PredefinedPLLCase.values().toMutableList().subList(0, 21)) {
                         for (numberOfSolves in numberOfSolvesValues) {
                             var modifiedName = name.replace("Y", numberOfSolves.toString())
                             modifiedName = modifiedName.replace("X", pll.name)
@@ -129,7 +134,7 @@ class StatsDBTests {
                         }
                     }
                 } else if (name.contains("OLL")) {
-                    for (oll in PredefinedOLLCase.values()) {
+                    for (oll in PredefinedOLLCase.values().toMutableList().subList(0, 57)) {
                         for (numberOfSolves in numberOfSolvesValues) {
                             var modifiedName = name.replace("Y", numberOfSolves.toString())
                             modifiedName = modifiedName.replace("OLLX", oll.name)

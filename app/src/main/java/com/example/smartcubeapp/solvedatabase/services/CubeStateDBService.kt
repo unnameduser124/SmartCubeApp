@@ -3,7 +3,6 @@ package com.example.smartcubeapp.solvedatabase.services
 import android.content.ContentValues
 import android.content.Context
 import android.provider.BaseColumns
-import com.example.smartcubeapp.cube.CubeState
 import com.example.smartcubeapp.dbAccesses
 import com.example.smartcubeapp.solvedatabase.SolveDB
 import com.example.smartcubeapp.solvedatabase.SolvesDatabaseConstants
@@ -316,9 +315,6 @@ class CubeStateDBService(context: Context, databaseName: String = SolvesDatabase
                 "B2"
             )
 
-        if (move !in validNotations) {
-            return false
-        }
-        return true
+        return move in validNotations
     }
 }

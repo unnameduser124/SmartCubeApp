@@ -1,3 +1,25 @@
 <resources>
     <string name="app_name">SmartCubeApp</string>
+    <string name="total_solves_stats_label">Total solves</string>
+    <string name="total_time_spent_solving_stats_label">Total time spent solving</string>
+    <string name="total_moves_stats_label">Total moves</string>
+    <string name="best_solve_stats_label">Best time</string>
+    <string name="solve_time_average_stats_label">Average time</string>
+    <string name="solve_moves_average_stats_label">Average moves</string>
+    <string name="aox_time_table_stats_label">Time averages</string>
+    <string name="aox_moves_table_stats_label">Moves averages</string>
+    <string name="aox_average_stats_label">ao%1$s</string>
+    <string name="best_aox_average_stats_label">Best ao%1$s</string>
+    <string name="average_of_stats_table_header_label">Average of</string>
+    <string name="current_stats_table_header">Current</string>
+    <string name="best_stats_table_header">Best</string>
+    <string name="time_averages_table_label">Time averages</string>
+    <string name="move_averages_table_label">Move averages</string>
+    <string name="phase_card_average_time">Average time:</string>
+    <string name="phase_card_average_moves">Average moves:</string>
+    <string name="ll_cases_table_header_case">Case</string>
+    <string name="ll_cases_table_header_average_time">avg time</string>
+    <string name="ll_cases_table_header_average_moves">avg moves</string>
+    <string name="oll_cases_table_label">OLL cases</string>
+    <string name="pll_cases_table_label">PLL cases</string>
 </resources>

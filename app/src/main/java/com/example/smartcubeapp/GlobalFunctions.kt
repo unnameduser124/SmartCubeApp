@@ -10,6 +10,16 @@ fun roundDouble(value: Double, multiplier: Int): Double {
 }
 fun simpleTestSolve(): Solve {
     return Solve(
+        scrambledState = CubeState(
+            mutableListOf(2, 1, 7, 4, 3, 5, 0, 6),
+            mutableListOf(1, 3, 3, 1, 3, 3, 1, 1),
+            mutableListOf(3, 1, 2, 0, 8, 5, 7, 11, 4, 9, 10, 6),
+            mutableListOf(
+                true, false, false, false, false, false, false, false, true, false, false, false
+            ),
+            Move(),
+            0
+        ),
         solveStateSequence = mutableListOf(
             //scrambled
             CubeState(
