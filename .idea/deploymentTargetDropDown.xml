@@ -2,10 +2,10 @@
 <project version="4">
   <component name="deploymentTargetDropDown">
     <value>
-      <entry key="PhaseStatsSheetPreview">
+      <entry key="DeviceDBServiceTests">
         <State />
       </entry>
-      <entry key="StatsActivityLayoutPreview">
+      <entry key="SolveDBTests">
         <State />
       </entry>
       <entry key="Tests in 'com.example.smartcubeapp.correctnesstests.detectiontests'">

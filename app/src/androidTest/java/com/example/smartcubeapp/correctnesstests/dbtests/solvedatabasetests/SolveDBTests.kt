@@ -2,8 +2,6 @@ package com.example.smartcubeapp.correctnesstests.dbtests.solvedatabasetests
 
 import android.content.Context
 import androidx.test.platform.app.InstrumentationRegistry
-import com.example.smartcubeapp.casedetection.olldetection.ollcase.PredefinedOLLCase
-import com.example.smartcubeapp.casedetection.plldetection.pllcase.PredefinedPLLCase
 import com.example.smartcubeapp.elementdatabase.ElementDatabaseConstants
 import com.example.smartcubeapp.solvedatabase.SolveDB
 import com.example.smartcubeapp.solvedatabase.SolvesDatabaseConstants
@@ -120,4 +118,20 @@ class SolveDBTests {
         }
     }
 
+    @Test
+    fun createDeviceTableTest(){
+        val cursor = dbService.readableDatabase.rawQuery(
+            "SELECT name " +
+                    "FROM sqlite_master WHERE type='table' " +
+                    "AND name='${SolvesDatabaseConstants.DeviceTable.TABLE_NAME}'",
+            null
+        )
+        cursor.use {
+            assertTrue(cursor.moveToFirst())
+            assertEquals(
+                SolvesDatabaseConstants.DeviceTable.TABLE_NAME,
+                cursor.getString(0)
+            )
+        }
+    }
 }

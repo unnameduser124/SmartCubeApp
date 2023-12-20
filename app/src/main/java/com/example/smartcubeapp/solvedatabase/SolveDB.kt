@@ -3,8 +3,6 @@ package com.example.smartcubeapp.solvedatabase
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
-import com.example.smartcubeapp.casedetection.olldetection.ollcase.PredefinedOLLCase
-import com.example.smartcubeapp.casedetection.plldetection.pllcase.PredefinedPLLCase
 import com.example.smartcubeapp.dbAccesses
 
 open class SolveDB(
@@ -20,6 +18,7 @@ open class SolveDB(
         createOLLTable(db)
         createPLLTable(db)
         createCrossTable(db)
+        createDeviceTable(db)
     }
 
     override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
@@ -48,6 +47,10 @@ open class SolveDB(
 
     private fun createCrossTable(db: SQLiteDatabase?) {
         db?.execSQL(SolvesDatabaseConstants.CREATE_CROSS_TABLE)
+    }
+
+    private fun createDeviceTable(db: SQLiteDatabase?){
+        db?.execSQL(SolvesDatabaseConstants.CREATE_DEVICE_TABLE)
     }
 
 

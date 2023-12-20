@@ -11,6 +11,7 @@ import com.example.smartcubeapp.bluetooth.BluetoothState
 import com.example.smartcubeapp.bluetooth.bluetoothState
 import com.example.smartcubeapp.bluetooth.timerState
 import com.example.smartcubeapp.cube.Solve
+import com.example.smartcubeapp.ui.connectUI.ConnectActivity
 
 class TimerActivity: ComponentActivity() {
 

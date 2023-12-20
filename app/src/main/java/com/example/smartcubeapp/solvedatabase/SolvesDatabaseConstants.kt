@@ -91,6 +91,11 @@ object SolvesDatabaseConstants {
             "FOREIGN KEY(${CrossTable.START_CUBE_STATE_ID_COLUMN}) REFERENCES ${CubeStateTable.TABLE_NAME}(${BaseColumns._ID}), " +
             "FOREIGN KEY(${CrossTable.END_CUBE_STATE_ID_COLUMN}) REFERENCES ${CubeStateTable.TABLE_NAME}(${BaseColumns._ID}))"
 
+    val CREATE_DEVICE_TABLE = "CREATE TABLE IF NOT EXISTS ${DeviceTable.TABLE_NAME} (" +
+            "${BaseColumns._ID} INTEGER PRIMARY KEY AUTOINCREMENT, " +
+            "${DeviceTable.DEVICE_ADDRESS_COLUMN} TEXT NOT NULL, " +
+            "${DeviceTable.DEVICE_NAME_COLUMN} TEXT NOT NULL)"
+
 
     object SolveTable {
         const val TABLE_NAME = "Solve"
@@ -150,5 +155,11 @@ object SolvesDatabaseConstants {
         override val START_CUBE_STATE_ID_COLUMN = "StartCubeStateId"
         override val END_CUBE_STATE_ID_COLUMN = "EndCubeStateId"
         override val MOVE_COUNT_COLUMN = "MoveCount"
+    }
+
+    object DeviceTable{
+        const val TABLE_NAME = "Devices"
+        const val DEVICE_ADDRESS_COLUMN = "DeviceAddress"
+        const val DEVICE_NAME_COLUMN = "DeviceName"
     }
 }

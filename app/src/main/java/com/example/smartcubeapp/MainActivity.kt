@@ -6,7 +6,10 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.annotation.RequiresApi
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import com.example.smartcubeapp.bluetooth.BluetoothService
 import com.example.smartcubeapp.bluetooth.BluetoothState
 import com.example.smartcubeapp.bluetooth.BluetoothUtilities
@@ -16,7 +19,7 @@ import com.example.smartcubeapp.bluetooth.lastMove
 import com.example.smartcubeapp.cube.CubeState
 import com.example.smartcubeapp.cube.Move
 import com.example.smartcubeapp.cube.Solve
-import com.example.smartcubeapp.ui.timerUI.ConnectActivity
+import com.example.smartcubeapp.ui.connectUI.ConnectActivity
 import com.example.smartcubeapp.ui.timerUI.TimerActivity
 
 class MainActivity : ComponentActivity() {

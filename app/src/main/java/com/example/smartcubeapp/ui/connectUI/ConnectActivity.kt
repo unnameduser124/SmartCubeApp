@@ -1,4 +1,4 @@
-package com.example.smartcubeapp.ui.timerUI
+package com.example.smartcubeapp.ui.connectUI
 
 import android.content.Intent
 import android.os.Build
@@ -25,6 +25,7 @@ import com.example.smartcubeapp.WindowCenterOffsetPositionProvider
 import com.example.smartcubeapp.bluetooth.BluetoothService
 import com.example.smartcubeapp.bluetooth.BluetoothState
 import com.example.smartcubeapp.bluetooth.bluetoothState
+import com.example.smartcubeapp.ui.timerUI.TimerActivity
 
 class ConnectActivity: ComponentActivity(
 ) {
