@@ -2,6 +2,7 @@ package com.example.smartcubeapp.solvedatabase
 
 import android.provider.BaseColumns
 
+@Suppress("PropertyName")
 interface PhaseTable{
     val TABLE_NAME: String
     val SOLVE_ID_COLUMN: String
@@ -42,6 +43,7 @@ object SolvesDatabaseConstants {
                 "${CubeStateTable.EDGE_ORIENTATIONS_COLUMN} TEXT NOT NULL, " +
                 "FOREIGN KEY(${CubeStateTable.SOLVE_ID_COLUMN}) REFERENCES ${SolveTable.TABLE_NAME}(${BaseColumns._ID}))"
 
+    @JvmField
     val CREATE_F2L_TABLE =
         "CREATE TABLE IF NOT EXISTS ${F2LTable.TABLE_NAME} (" +
                 "${BaseColumns._ID} INTEGER PRIMARY KEY AUTOINCREMENT, " +
@@ -54,6 +56,7 @@ object SolvesDatabaseConstants {
                 "FOREIGN KEY(${F2LTable.START_CUBE_STATE_ID_COLUMN}) REFERENCES ${CubeStateTable.TABLE_NAME}(${BaseColumns._ID}), " +
                 "FOREIGN KEY(${F2LTable.END_CUBE_STATE_ID_COLUMN}) REFERENCES ${CubeStateTable.TABLE_NAME}(${BaseColumns._ID}))"
 
+    @JvmField
     val CREATE_OLL_TABLE =
         "CREATE TABLE IF NOT EXISTS ${OLLTable.TABLE_NAME} (" +
                 "${BaseColumns._ID} INTEGER PRIMARY KEY AUTOINCREMENT, " +
@@ -67,6 +70,7 @@ object SolvesDatabaseConstants {
                 "FOREIGN KEY(${OLLTable.START_CUBE_STATE_ID_COLUMN}) REFERENCES ${CubeStateTable.TABLE_NAME}(${BaseColumns._ID}), " +
                 "FOREIGN KEY(${OLLTable.END_CUBE_STATE_ID_COLUMN}) REFERENCES ${CubeStateTable.TABLE_NAME}(${BaseColumns._ID}))"
 
+    @JvmField
     val CREATE_PLL_TABLE =
         "CREATE TABLE IF NOT EXISTS ${PLLTable.TABLE_NAME} (" +
                 "${BaseColumns._ID} INTEGER PRIMARY KEY AUTOINCREMENT, " +
@@ -80,6 +84,7 @@ object SolvesDatabaseConstants {
                 "FOREIGN KEY(${PLLTable.START_CUBE_STATE_ID_COLUMN}) REFERENCES ${CubeStateTable.TABLE_NAME}(${BaseColumns._ID}), " +
                 "FOREIGN KEY(${PLLTable.END_CUBE_STATE_ID_COLUMN}) REFERENCES ${CubeStateTable.TABLE_NAME}(${BaseColumns._ID}))"
 
+    @JvmField
     val CREATE_CROSS_TABLE = "CREATE TABLE IF NOT EXISTS ${CrossTable.TABLE_NAME} (" +
             "${BaseColumns._ID} INTEGER PRIMARY KEY AUTOINCREMENT, " +
             "${CrossTable.SOLVE_ID_COLUMN} INTEGER NOT NULL, " +
@@ -91,7 +96,7 @@ object SolvesDatabaseConstants {
             "FOREIGN KEY(${CrossTable.START_CUBE_STATE_ID_COLUMN}) REFERENCES ${CubeStateTable.TABLE_NAME}(${BaseColumns._ID}), " +
             "FOREIGN KEY(${CrossTable.END_CUBE_STATE_ID_COLUMN}) REFERENCES ${CubeStateTable.TABLE_NAME}(${BaseColumns._ID}))"
 
-    val CREATE_DEVICE_TABLE = "CREATE TABLE IF NOT EXISTS ${DeviceTable.TABLE_NAME} (" +
+    const val CREATE_DEVICE_TABLE = "CREATE TABLE IF NOT EXISTS ${DeviceTable.TABLE_NAME} (" +
             "${BaseColumns._ID} INTEGER PRIMARY KEY AUTOINCREMENT, " +
             "${DeviceTable.DEVICE_ADDRESS_COLUMN} TEXT NOT NULL, " +
             "${DeviceTable.DEVICE_NAME_COLUMN} TEXT NOT NULL)"

@@ -2,6 +2,9 @@
 <project version="4">
   <component name="deploymentTargetDropDown">
     <value>
+      <entry key="ConnectNewCubeLayoutPreview">
+        <State />
+      </entry>
       <entry key="DeviceDBServiceTests">
         <State />
       </entry>
@@ -12,9 +15,6 @@
         <State />
       </entry>
       <entry key="Tests in 'com.example.smartcubeapp.correctnesstests.statstests'">
-        <State />
-      </entry>
-      <entry key="Tests in 'com.example.smartcubeapp.correctnesstests.timertests'">
         <State />
       </entry>
       <entry key="app">
