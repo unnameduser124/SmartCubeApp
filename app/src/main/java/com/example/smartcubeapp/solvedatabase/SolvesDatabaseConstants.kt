@@ -99,7 +99,8 @@ object SolvesDatabaseConstants {
     const val CREATE_DEVICE_TABLE = "CREATE TABLE IF NOT EXISTS ${DeviceTable.TABLE_NAME} (" +
             "${BaseColumns._ID} INTEGER PRIMARY KEY AUTOINCREMENT, " +
             "${DeviceTable.DEVICE_ADDRESS_COLUMN} TEXT NOT NULL, " +
-            "${DeviceTable.DEVICE_NAME_COLUMN} TEXT NOT NULL)"
+            "${DeviceTable.DEVICE_NAME_COLUMN} TEXT NOT NULL, " +
+            "${DeviceTable.LAST_CONNECTION_TIME_COLUMN} INTEGER NOT NULL)"
 
 
     object SolveTable {
@@ -166,5 +167,6 @@ object SolvesDatabaseConstants {
         const val TABLE_NAME = "Devices"
         const val DEVICE_ADDRESS_COLUMN = "DeviceAddress"
         const val DEVICE_NAME_COLUMN = "DeviceName"
+        const val LAST_CONNECTION_TIME_COLUMN = "LastConnectionTime"
     }
 }
