@@ -42,7 +42,7 @@ class MainActivity : ComponentActivity() {
             if (!bluetoothUtilities.checkForBluetoothConnectPermission()
                 || !bluetoothUtilities.checkForBluetoothScanPermission()
                 || !bluetoothUtilities.checkFineLocationPermission()
-                || bluetoothUtilities.checkCoarseLocationPermission()
+                || !bluetoothUtilities.checkCoarseLocationPermission()
             ) {
                 bluetoothUtilities.requestAllPermissions()
             }

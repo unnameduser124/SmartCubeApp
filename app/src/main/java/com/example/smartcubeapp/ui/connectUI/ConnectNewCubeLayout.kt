@@ -1,5 +1,6 @@
 package com.example.smartcubeapp.ui.connectUI
 
+import android.content.Context
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -10,24 +11,29 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.smartcubeapp.bluetooth.BluetoothService
 import com.example.smartcubeapp.bluetooth.CubeDevice
+import com.example.smartcubeapp.solvedatabase.services.DeviceDBService
 
 class ConnectNewCubeLayout {
 
     private lateinit var devices: SnapshotStateList<CubeDevice>
+    private lateinit var context: Context
+    private lateinit var activity: ConnectActivity
+    private lateinit var bluetoothService: BluetoothService
 
     @Composable
-    fun GenerateLayout(deviceList: List<CubeDevice> = listOf()) { //TODO("Parameter only for testing")
-        devices =
-            remember { mutableStateListOf() } //TODO("Make sure none of the devices have null name or address")
-        devices.addAll(deviceList)
+    fun GenerateLayout(context: Context, bluetoothService: BluetoothService, devices: SnapshotStateList<CubeDevice>) {
+        this.bluetoothService = bluetoothService
+        this.context = context
+        activity = context as ConnectActivity
+        this.devices = devices
         Column(modifier = Modifier.fillMaxSize()) {
             DeviceListLazyColumn()
             RefreshButton()
@@ -56,17 +62,23 @@ class ConnectNewCubeLayout {
                 .fillMaxWidth()
         ) {
             Text(
-                text = device.name!!, fontSize = 20.sp, modifier = Modifier
+                text = device.name, fontSize = 20.sp, modifier = Modifier
                     .clickable {
-                        TODO("Connect to device on click")
-                    })
+                        bluetoothService.connectToDevice(device)
+                    }
+            )
         }
     }
 
     @Composable
     fun RefreshButton() {
         Button(
-            onClick = { TODO("Start scanning for new devices") },
+            onClick = {
+                devices.clear()
+                devices.addAll(DeviceDBService(context).getAllDevices())
+                bluetoothService.deviceList = devices
+                bluetoothService.scanForAvailableDevices()
+            },
             modifier = Modifier
                 .padding(bottom = 10.dp, start = 10.dp, end = 10.dp)
                 .fillMaxWidth()
@@ -83,5 +95,6 @@ fun ConnectNewCubeLayoutPreview() {
     for (i in 0..20) {
         deviceList.add(CubeDevice("test_name_$i", "test_address_$i"))
     }
-    ConnectNewCubeLayout().GenerateLayout(deviceList)
+    val context = LocalContext.current
+    //ConnectNewCubeLayout().GenerateLayout(context, BluetoothService(context, context as ComponentActivity))//doesn't work anymore
 }

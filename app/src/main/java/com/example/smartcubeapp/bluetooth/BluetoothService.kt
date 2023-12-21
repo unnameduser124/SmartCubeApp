@@ -18,6 +18,7 @@ import android.os.Parcelable
 import androidx.activity.ComponentActivity
 import androidx.annotation.RequiresApi
 import com.example.smartcubeapp.cube.MoveDataParser
+import com.example.smartcubeapp.solvedatabase.services.DeviceDBService
 import java.nio.ByteBuffer
 import java.util.Calendar
 import java.util.UUID
@@ -26,29 +27,27 @@ import java.util.UUID
 class BluetoothService(
     private val activityContext: Context,
     private val activity: ComponentActivity,
+    var deviceList: MutableList<CubeDevice> = mutableListOf()
 ) {
-
     private val bluetoothManager =
         activityContext.getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager
     private val bluetoothAdapter = bluetoothManager.adapter
     private val bluetoothUtilities = BluetoothUtilities(activity, activityContext)
+    private var device: CubeDevice? = null
+
 
     inline fun <reified T : Parcelable> Intent.parcelable(key: String): T? = when {
         SDK_INT >= 33 -> getParcelableExtra(key, T::class.java)
         else -> @Suppress("DEPRECATION") getParcelableExtra(key) as? T
     }
 
-
     private val receiver: BroadcastReceiver = object : BroadcastReceiver() {
-        @RequiresApi(Build.VERSION_CODES.S)
-
         override fun onReceive(context: Context?, intent: Intent) {
             val action = intent.action
             handleDiscoveryReceiverAction(action, intent)
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.S)
     fun scanForAvailableDevices() {
         if (!bluetoothUtilities.checkForBluetoothScanPermission()) {
             bluetoothUtilities.requestBluetoothScanPermission()
@@ -66,11 +65,17 @@ class BluetoothService(
 
         activity.registerReceiver(receiver, filter)
         bluetoothUtilities.checkForBluetoothScanPermission()
-        bluetoothAdapter.startDiscovery()
-        println(bluetoothAdapter.isDiscovering)
+        if(!bluetoothUtilities.checkFineLocationPermission()){
+            bluetoothUtilities.requestAllPermissions()
+        }
+        if(bluetoothAdapter.isDiscovering){
+            println("Already discovering")
+        }
+        else{
+            bluetoothAdapter.startDiscovery()
+        }
     }
 
-    @RequiresApi(Build.VERSION_CODES.S)
     fun isDiscovering(): Boolean {
         if (!bluetoothUtilities.checkForBluetoothScanPermission()) {
             bluetoothUtilities.requestBluetoothScanPermission()
@@ -80,7 +85,6 @@ class BluetoothService(
     }
 
 
-    @RequiresApi(Build.VERSION_CODES.S)
     fun getPairedDevices(): List<CubeDevice> {
 
         if (!bluetoothUtilities.checkIfBluetoothIsAvailable(bluetoothAdapter)) {
@@ -111,21 +115,16 @@ class BluetoothService(
         activity.unregisterReceiver(receiver)
     }
 
-    @RequiresApi(Build.VERSION_CODES.S)
     fun connectToDevice(
-        address: String = MY_CUBE_ADDRESS,
-        serviceUUID: String = SERVICE_UUID,
-        characteristicUUID: String = CHARACTERISTIC_UUID
+        device: CubeDevice
     ) {
 
-        val device = bluetoothAdapter.getRemoteDevice(address)
+        val bluetoothDevice = bluetoothAdapter.getRemoteDevice(device.address)
         val gattCallback = object : BluetoothGattCallback() {
-            @RequiresApi(Build.VERSION_CODES.S)
             override fun onConnectionStateChange(gatt: BluetoothGatt, status: Int, newState: Int) {
                 handleConnectionStateChanged(newState, gatt)
             }
 
-            @RequiresApi(Build.VERSION_CODES.S)
             override fun onServicesDiscovered(gatt: BluetoothGatt, status: Int) {
                 handleServiceDiscovery(gatt)
             }
@@ -144,7 +143,6 @@ class BluetoothService(
                 lastMove.value = state.lastMove
             }
 
-            @RequiresApi(Build.VERSION_CODES.TIRAMISU)
             override fun onCharacteristicChanged(
                 gatt: BluetoothGatt,
                 characteristic: BluetoothGattCharacteristic,
@@ -162,10 +160,13 @@ class BluetoothService(
             return
         }
         bluetoothState.value = BluetoothState.Connecting
-        device.connectGatt(activityContext, false, gattCallback)
+        if(this.device == null){
+            this.device = device
+            return
+        }
+        bluetoothDevice.connectGatt(activityContext, false, gattCallback)
     }
 
-    @RequiresApi(Build.VERSION_CODES.S)
     private fun handleConnectionStateChanged(newState: Int, gatt: BluetoothGatt) {
         if (newState == BluetoothProfile.STATE_CONNECTED) {
             if (!bluetoothUtilities.checkForBluetoothScanPermission()) {
@@ -177,6 +178,14 @@ class BluetoothService(
                 return
             }
             bluetoothState.value = BluetoothState.Connected
+            try{
+                if(device!!.id == -1L){
+                    DeviceDBService(activityContext).addDevice(device!!)
+                }
+            }
+            catch(exception: NullPointerException){
+                println("Device is null")
+            }
             gatt.discoverServices()
         } else if (newState == BluetoothProfile.STATE_DISCONNECTED) {
             bluetoothState.value = BluetoothState.Disconnected
@@ -185,7 +194,6 @@ class BluetoothService(
     }
 
 
-    @RequiresApi(Build.VERSION_CODES.S)
     fun handleServiceDiscovery(gatt: BluetoothGatt) {
 
         val service = gatt.getService(UUID.fromString(SERVICE_UUID))
@@ -233,8 +241,7 @@ class BluetoothService(
         )
     }
 
-    @RequiresApi(Build.VERSION_CODES.S)
-    fun enableCharacteristicsNotificationsAPI33Minus(
+    private fun enableCharacteristicsNotificationsAPI33Minus(
         bluetoothGatt: BluetoothGatt,
         characteristic: BluetoothGattCharacteristic
     ) {
@@ -251,7 +258,6 @@ class BluetoothService(
         bluetoothGatt.writeDescriptor(descriptor)
     }
 
-    @RequiresApi(Build.VERSION_CODES.S)
     private fun handleDiscoveryReceiverAction(action: String?, intent: Intent) {
 
         if (BluetoothDevice.ACTION_FOUND == action) {
@@ -262,10 +268,18 @@ class BluetoothService(
             } else {
                 println(action)
             }
+
+            if(device != null) {
+                val cubeDevice = CubeDevice(device.name, device.address)
+                deviceList.add(cubeDevice)
+                println(cubeDevice)
+            }
+        }
+        else{
+            println(action)
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.S)
     private fun getDeviceScanIntentFilter(): IntentFilter {
         val filter = IntentFilter(BluetoothDevice.ACTION_FOUND)
         filter.addAction(BluetoothAdapter.ACTION_STATE_CHANGED)

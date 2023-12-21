@@ -3,6 +3,7 @@ package com.example.smartcubeapp.ui.connectUI
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -25,7 +26,8 @@ class ConnectLastCubeLayout {
 
         Column(
             modifier = Modifier
-                .fillMaxSize(),
+                .fillMaxHeight(0.8f)
+                .fillMaxWidth(),
             verticalArrangement = Arrangement.Center
         ) {
             DeviceNameRow()

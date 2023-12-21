@@ -1,17 +1,17 @@
 package com.example.smartcubeapp.bluetooth
 
-import android.os.Build
-import androidx.annotation.RequiresApi
-import androidx.core.app.ActivityCompat
 import android.Manifest
 import android.app.AlertDialog
 import android.bluetooth.BluetoothAdapter
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.os.Build
+import androidx.activity.ComponentActivity
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.activity.ComponentActivity
+import androidx.annotation.RequiresApi
+import androidx.core.app.ActivityCompat
 import kotlin.system.exitProcess
 
 class BluetoothUtilities(private val activity: ComponentActivity, private val activityContext: Context) {
