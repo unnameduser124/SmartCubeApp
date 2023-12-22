@@ -18,16 +18,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.smartcubeapp.bluetooth.BluetoothService
 import com.example.smartcubeapp.bluetooth.CubeDevice
 import com.example.smartcubeapp.solvedatabase.services.DeviceDBService
 
-class ConnectLastCubeActivity: ComponentActivity() {
+class ConnectLastCubeActivity : ComponentActivity() {
 
     private lateinit var device: CubeDevice
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContent{
+        setContent {
             GenerateLayout()
         }
     }
@@ -35,10 +36,9 @@ class ConnectLastCubeActivity: ComponentActivity() {
     @Composable
     fun GenerateLayout() {
         val deviceFromDB = DeviceDBService(this).getLastDevice()
-        device = if(deviceFromDB != null){
+        device = if (deviceFromDB != null) {
             deviceFromDB
-        }
-        else{
+        } else {
             val intent = Intent(this, ConnectNewCubeActivity::class.java)
             startActivity(intent)
             return
@@ -64,16 +64,29 @@ class ConnectLastCubeActivity: ComponentActivity() {
 
     @Composable
     fun DeviceNameRow() {
-        Row(modifier = Modifier.fillMaxWidth().padding(bottom = 10.dp), horizontalArrangement = Arrangement.Center) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 10.dp),
+            horizontalArrangement = Arrangement.Center
+        ) {
             Text(text = device.name, fontSize = 25.sp)
         }
     }
 
     @Composable
     fun ConnectButtonRow() {
-        Row(modifier = Modifier.fillMaxWidth().padding(bottom = 100.dp), horizontalArrangement = Arrangement.Center) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 100.dp),
+            horizontalArrangement = Arrangement.Center
+        ) {
             Button(onClick = {
-                TODO("Try connecting to device")
+                BluetoothService(
+                    this@ConnectLastCubeActivity,
+                    this@ConnectLastCubeActivity
+                ).connectToDevice(device)
             }) {
                 Text(text = "Connect", fontSize = 20.sp)
             }
@@ -82,9 +95,15 @@ class ConnectLastCubeActivity: ComponentActivity() {
 
     @Composable
     fun AddNewDeviceButtonRow() {
-        Row(modifier = Modifier.fillMaxWidth().padding(bottom = 20.dp), horizontalArrangement = Arrangement.Center) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 20.dp),
+            horizontalArrangement = Arrangement.Center
+        ) {
             Button(onClick = {
-                TODO("Switch layout to ConnectNewCubeLayout")
+                val intent = Intent(this@ConnectLastCubeActivity, ConnectNewCubeActivity::class.java)
+                startActivity(intent)
             }) {
                 Text(text = "Add new cube", fontSize = 20.sp)
             }
