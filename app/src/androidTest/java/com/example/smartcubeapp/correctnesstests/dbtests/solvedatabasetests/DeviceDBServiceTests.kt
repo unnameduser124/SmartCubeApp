@@ -13,6 +13,7 @@ import junit.framework.TestCase.assertNull
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
+import java.util.Calendar
 
 class DeviceDBServiceTests {
 
@@ -20,19 +21,19 @@ class DeviceDBServiceTests {
     private lateinit var deviceDBService: DeviceDBService
 
     @Before
-    fun setUp(){
+    fun setUp() {
         context = InstrumentationRegistry.getInstrumentation().targetContext
         deviceDBService = DeviceDBService(context, SolvesDatabaseConstants.TEST_DATABASE_NAME)
     }
 
     @After
-    fun tearDown(){
+    fun tearDown() {
         deviceDBService.close()
         context.deleteDatabase(SolvesDatabaseConstants.TEST_DATABASE_NAME)
     }
 
     @Test
-    fun addDeviceTest(){
+    fun addDeviceTest() {
         val device = CubeDevice("test_name", "test_address")
 
         val id = deviceDBService.addDevice(device)
@@ -54,22 +55,23 @@ class DeviceDBServiceTests {
             null,
             null
         )
-        with(cursor){
-            if(moveToFirst()){
-                val name = getString(getColumnIndexOrThrow(SolvesDatabaseConstants.DeviceTable.DEVICE_NAME_COLUMN))
-                val address = getString(getColumnIndexOrThrow(SolvesDatabaseConstants.DeviceTable.DEVICE_ADDRESS_COLUMN))
+        with(cursor) {
+            if (moveToFirst()) {
+                val name =
+                    getString(getColumnIndexOrThrow(SolvesDatabaseConstants.DeviceTable.DEVICE_NAME_COLUMN))
+                val address =
+                    getString(getColumnIndexOrThrow(SolvesDatabaseConstants.DeviceTable.DEVICE_ADDRESS_COLUMN))
 
                 assert(name == device.name)
                 assert(address == device.address)
-            }
-            else{
+            } else {
                 TestCase.fail()
             }
         }
     }
 
     @Test
-    fun addDeviceTestFailEmptyName(){
+    fun addDeviceTestFailEmptyName() {
         val device = CubeDevice("", "test_address")
 
         val id = deviceDBService.addDevice(device)
@@ -78,7 +80,7 @@ class DeviceDBServiceTests {
     }
 
     @Test
-    fun addDeviceTestFailEmptyAddress(){
+    fun addDeviceTestFailEmptyAddress() {
         val device = CubeDevice("test_name", "")
 
         val id = deviceDBService.addDevice(device)
@@ -87,7 +89,7 @@ class DeviceDBServiceTests {
     }
 
     @Test
-    fun addDeviceTestFailInvalidTime(){
+    fun addDeviceTestFailInvalidTime() {
         val device = CubeDevice("test_name", "test_address")
         device.lastConnectionTime.set(0, 0, 0, 0, 0, 0)
 
@@ -97,7 +99,7 @@ class DeviceDBServiceTests {
     }
 
     @Test
-    fun getDeviceTest(){
+    fun getDeviceTest() {
         val device = CubeDevice("test_name", "test_address")
         val id = deviceDBService.addDevice(device)
 
@@ -110,7 +112,7 @@ class DeviceDBServiceTests {
     }
 
     @Test
-    fun getDeviceTestFailInvalidID(){
+    fun getDeviceTestFailInvalidID() {
         val device = CubeDevice("test_name", "test_address")
         val id = deviceDBService.addDevice(device)
 
@@ -120,7 +122,7 @@ class DeviceDBServiceTests {
     }
 
     @Test
-    fun removeDeviceTest(){
+    fun removeDeviceTest() {
         val device = CubeDevice("test_name", "test_address")
         val id = deviceDBService.addDevice(device)
 
@@ -131,7 +133,7 @@ class DeviceDBServiceTests {
     }
 
     @Test
-    fun removeDeviceTestFailInvalidID(){
+    fun removeDeviceTestFailInvalidID() {
         val device = CubeDevice("test_name", "test_address")
         val id = deviceDBService.addDevice(device)
 
@@ -145,7 +147,7 @@ class DeviceDBServiceTests {
     }
 
     @Test
-    fun updateDeviceTest(){
+    fun updateDeviceTest() {
         val device = CubeDevice("test_name", "test_address")
         val id = deviceDBService.addDevice(device)
 
@@ -160,7 +162,7 @@ class DeviceDBServiceTests {
     }
 
     @Test
-    fun updateDeviceTestFailEmptyName(){
+    fun updateDeviceTestFailEmptyName() {
         val device = CubeDevice("test_name", "test_address")
         val id = deviceDBService.addDevice(device)
 
@@ -175,7 +177,7 @@ class DeviceDBServiceTests {
     }
 
     @Test
-    fun updateDeviceTestFailEmptyAddress(){
+    fun updateDeviceTestFailEmptyAddress() {
         val device = CubeDevice("test_name", "test_address")
         val id = deviceDBService.addDevice(device)
 
@@ -190,7 +192,7 @@ class DeviceDBServiceTests {
     }
 
     @Test
-    fun updateDeviceTestFailInvalidID(){
+    fun updateDeviceTestFailInvalidID() {
         val device = CubeDevice("test_name", "test_address")
         val id = deviceDBService.addDevice(device)
 
@@ -205,7 +207,7 @@ class DeviceDBServiceTests {
     }
 
     @Test
-    fun updateDeviceFailInvalidTime(){
+    fun updateDeviceFailInvalidTime() {
         val device = CubeDevice("test_name", "test_address")
         val id = deviceDBService.addDevice(device)
 
@@ -221,7 +223,7 @@ class DeviceDBServiceTests {
     }
 
     @Test
-    fun getAllDevicesTest(){
+    fun getAllDevicesTest() {
         val device1 = CubeDevice("test_name1", "test_address1")
         val device2 = CubeDevice("test_name2", "test_address2")
         val device3 = CubeDevice("test_name3", "test_address3")
@@ -248,10 +250,39 @@ class DeviceDBServiceTests {
     }
 
     @Test
-    fun getAllDevicesEmptyDatabase(){
+    fun getAllDevicesEmptyDatabase() {
         val result = deviceDBService.getAllDevices()
 
         assertNotNull(result)
         assertEquals(0, result.size)
+    }
+
+    @Test
+    fun getLastDeviceTest() {
+        val device1 = CubeDevice("test_name1", "test_address1")
+        val device2 = CubeDevice("test_name2", "test_address2")
+        val device3 = CubeDevice(
+            "test_name3",
+            "test_address3",
+            Calendar.getInstance().apply { timeInMillis += 1000 }
+        )
+        deviceDBService.addDevice(device1)
+        deviceDBService.addDevice(device2)
+        val id3 = deviceDBService.addDevice(device3)
+
+        val result = deviceDBService.getLastDevice()
+
+        assertNotNull(result)
+        assertEquals(id3, result!!.id)
+        assertEquals(device3.name, result.name)
+        assertEquals(device3.address, result.address)
+        assertEquals(device3.lastConnectionTime, result.lastConnectionTime)
+    }
+
+    @Test
+    fun getLastDeviceEmptyDatabase() {
+        val result = deviceDBService.getLastDevice()
+
+        assertNull(result)
     }
 }

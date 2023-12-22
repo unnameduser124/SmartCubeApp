@@ -1,5 +1,6 @@
 package com.example.smartcubeapp.ui.connectUI
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -18,6 +19,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.smartcubeapp.bluetooth.CubeDevice
+import com.example.smartcubeapp.solvedatabase.services.DeviceDBService
 
 class ConnectLastCubeActivity: ComponentActivity() {
 
@@ -32,7 +34,15 @@ class ConnectLastCubeActivity: ComponentActivity() {
 
     @Composable
     fun GenerateLayout() {
-        device = CubeDevice("test_name", "test_address") //TODO("Get device from database")
+        val deviceFromDB = DeviceDBService(this).getLastDevice()
+        device = if(deviceFromDB != null){
+            deviceFromDB
+        }
+        else{
+            val intent = Intent(this, ConnectNewCubeActivity::class.java)
+            startActivity(intent)
+            return
+        }
 
         Column(
             modifier = Modifier

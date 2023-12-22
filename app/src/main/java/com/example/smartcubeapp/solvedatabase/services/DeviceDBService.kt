@@ -135,4 +135,38 @@ class DeviceDBService(
         }
         return devices
     }
+
+    fun getLastDevice(): CubeDevice?{
+        val projection = arrayOf(
+            BaseColumns._ID,
+            SolvesDatabaseConstants.DeviceTable.DEVICE_NAME_COLUMN,
+            SolvesDatabaseConstants.DeviceTable.DEVICE_ADDRESS_COLUMN,
+            SolvesDatabaseConstants.DeviceTable.LAST_CONNECTION_TIME_COLUMN
+        )
+        val orderBy = "${SolvesDatabaseConstants.DeviceTable.LAST_CONNECTION_TIME_COLUMN} DESC LIMIT 1"
+
+        val cursor = readableDatabase.query(
+            SolvesDatabaseConstants.DeviceTable.TABLE_NAME,
+            projection,
+            null,
+            null,
+            null,
+            null,
+            orderBy
+        )
+
+        with(cursor){
+            if(moveToFirst()){
+                val id = getLong(getColumnIndexOrThrow(BaseColumns._ID))
+                val name = getString(getColumnIndexOrThrow(SolvesDatabaseConstants.DeviceTable.DEVICE_NAME_COLUMN))
+                val address = getString(getColumnIndexOrThrow(SolvesDatabaseConstants.DeviceTable.DEVICE_ADDRESS_COLUMN))
+                val lastConnectionMillis = getLong(getColumnIndexOrThrow(SolvesDatabaseConstants.DeviceTable.LAST_CONNECTION_TIME_COLUMN))
+
+                val lastConnectionTime = Calendar.getInstance().apply { timeInMillis = lastConnectionMillis }
+
+                return CubeDevice(name, address, lastConnectionTime, id)
+            }
+        }
+        return null
+    }
 }
