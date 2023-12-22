@@ -3,7 +3,6 @@ package com.example.smartcubeapp.ui.connectUI
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
@@ -18,20 +17,18 @@ class ConnectActivity : ComponentActivity(
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContent {
-            if (bluetoothState.value != BluetoothState.Connected) {
-                if (DeviceDBService(this).getAllDevices().isEmpty()) {
-                    val intent = Intent(this, ConnectNewCubeActivity::class.java)
-                    startActivity(intent)
-                } else {
-                    val intent = Intent(this, ConnectLastCubeActivity::class.java)
-                    startActivity(intent)
-                }
-            }
-            if (bluetoothState.value == BluetoothState.Connected) {
-                val intent = Intent(this, TimerActivity::class.java)
+        if (bluetoothState.value != BluetoothState.Connected) {
+            if (DeviceDBService(this).getAllDevices().isEmpty()) {
+                val intent = Intent(this, ConnectNewCubeActivity::class.java)
+                startActivity(intent)
+            } else {
+                val intent = Intent(this, ConnectLastCubeActivity::class.java)
                 startActivity(intent)
             }
+        }
+        if (bluetoothState.value == BluetoothState.Connected) {
+            val intent = Intent(this, TimerActivity::class.java)
+            startActivity(intent)
         }
     }
 

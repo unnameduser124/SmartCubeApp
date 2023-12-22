@@ -19,6 +19,7 @@ import androidx.activity.ComponentActivity
 import androidx.annotation.RequiresApi
 import com.example.smartcubeapp.cube.MoveDataParser
 import com.example.smartcubeapp.solvedatabase.services.DeviceDBService
+import com.example.smartcubeapp.ui.timerUI.TimerActivity
 import java.nio.ByteBuffer
 import java.util.Calendar
 import java.util.UUID
@@ -188,6 +189,9 @@ class BluetoothService(
                 println("Device is null")
             }
             gatt.discoverServices()
+            val intent = Intent(activityContext, TimerActivity::class.java)
+            activity.startActivity(intent)
+            activity.finishAffinity()
         } else if (newState == BluetoothProfile.STATE_DISCONNECTED) {
             bluetoothState.value = BluetoothState.Disconnected
             println("Disconnected")

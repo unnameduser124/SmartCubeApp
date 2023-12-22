@@ -36,16 +36,16 @@ class ConnectNewCubeActivity: ComponentActivity() {
         super.onCreate(savedInstanceState)
         this.context = this
         setContent{
+            println("Recomposing in onCreate")
             GenerateLayout()
         }
     }
 
     @Composable
     fun GenerateLayout() {
-        devices = remember { mutableStateListOf() }
-        devices.addAll(DeviceDBService(context).getAllDevices())
         bluetoothService = BluetoothService(context, this)
         Column(modifier = Modifier.fillMaxSize()) {
+            println("Recomposing in GenerateLayout")
             DeviceListLazyColumn()
             RefreshButton()
         }
@@ -53,6 +53,9 @@ class ConnectNewCubeActivity: ComponentActivity() {
 
     @Composable
     fun DeviceListLazyColumn() {
+        println("Recomposing in DeviceListLazyColumn")
+        devices = remember { mutableStateListOf() }
+        devices.addAll(DeviceDBService(context).getAllDevices())
         LazyColumn(
             modifier = Modifier
                 .padding(10.dp)
