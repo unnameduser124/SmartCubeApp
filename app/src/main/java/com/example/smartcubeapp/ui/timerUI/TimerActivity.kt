@@ -9,8 +9,13 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import com.example.smartcubeapp.bluetooth.BluetoothState
 import com.example.smartcubeapp.bluetooth.bluetoothState
+import com.example.smartcubeapp.bluetooth.cubeState
+import com.example.smartcubeapp.bluetooth.lastMove
 import com.example.smartcubeapp.bluetooth.timerState
+import com.example.smartcubeapp.cube.CubeState
+import com.example.smartcubeapp.cube.Move
 import com.example.smartcubeapp.cube.Solve
+import com.example.smartcubeapp.ui.connectUI.ConnectActivity
 
 class TimerActivity: ComponentActivity() {
 
@@ -20,6 +25,9 @@ class TimerActivity: ComponentActivity() {
         super.onCreate(savedInstanceState)
         checkForConnection()
         setContent {
+            bluetoothState = remember { mutableStateOf(BluetoothState.Connected) }
+            cubeState = remember { mutableStateOf(CubeState.SOLVED_CUBE_STATE) }
+            lastMove = remember { mutableStateOf(Move("?", 0, "?")) }
             GenerateLayout()
         }
 

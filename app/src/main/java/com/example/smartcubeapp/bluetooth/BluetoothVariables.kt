@@ -1,6 +1,7 @@
 package com.example.smartcubeapp.bluetooth
 
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
 import com.example.smartcubeapp.cube.CubeState
 import com.example.smartcubeapp.cube.Move
 import com.example.smartcubeapp.ui.timerUI.TimerState
@@ -15,4 +16,4 @@ val MyCubeDevice = CubeDevice("MyCube", MY_CUBE_ADDRESS)
 lateinit var cubeState: MutableState<CubeState>
 lateinit var timerState: MutableState<TimerState>
 lateinit var lastMove: MutableState<Move>
-lateinit var bluetoothState: MutableState<BluetoothState>
+var bluetoothState: MutableState<BluetoothState> = mutableStateOf(BluetoothState.Disconnected)

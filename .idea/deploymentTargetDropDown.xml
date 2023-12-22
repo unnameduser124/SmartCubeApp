@@ -2,19 +2,19 @@
 <project version="4">
   <component name="deploymentTargetDropDown">
     <value>
-      <entry key="PhaseStatsSheetPreview">
+      <entry key="ConnectLastCubeLayoutPreview">
         <State />
       </entry>
-      <entry key="StatsActivityLayoutPreview">
+      <entry key="ConnectNewCubeLayoutPreview">
+        <State />
+      </entry>
+      <entry key="DeviceDBServiceTests">
         <State />
       </entry>
       <entry key="Tests in 'com.example.smartcubeapp.correctnesstests.detectiontests'">
         <State />
       </entry>
       <entry key="Tests in 'com.example.smartcubeapp.correctnesstests.statstests'">
-        <State />
-      </entry>
-      <entry key="Tests in 'com.example.smartcubeapp.correctnesstests.timertests'">
         <State />
       </entry>
       <entry key="app">
