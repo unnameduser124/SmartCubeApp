@@ -35,6 +35,10 @@
             android:parentActivityName=".MainActivity"/>
         <activity android:name=".ui.statsUI.StatsActivity"
             android:parentActivityName=".MainActivity"/>
+        <activity android:name=".ui.connectUI.ConnectLastCubeActivity"
+            android:parentActivityName=".MainActivity"/>
+        <activity android:name=".ui.connectUI.ConnectNewCubeActivity"
+            android:parentActivityName=".MainActivity"/>
     </application>
 
 </manifest>

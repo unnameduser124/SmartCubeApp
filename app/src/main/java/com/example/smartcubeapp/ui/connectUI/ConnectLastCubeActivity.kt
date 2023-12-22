@@ -1,5 +1,8 @@
 package com.example.smartcubeapp.ui.connectUI
 
+import android.os.Bundle
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -16,9 +19,16 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.smartcubeapp.bluetooth.CubeDevice
 
-class ConnectLastCubeLayout {
+class ConnectLastCubeActivity: ComponentActivity() {
 
     private lateinit var device: CubeDevice
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContent{
+            GenerateLayout()
+        }
+    }
 
     @Composable
     fun GenerateLayout() {
@@ -75,5 +85,5 @@ class ConnectLastCubeLayout {
 @Preview
 @Composable
 fun ConnectLastCubeLayoutPreview() {
-    ConnectLastCubeLayout().GenerateLayout()
+    ConnectLastCubeActivity().GenerateLayout()
 }

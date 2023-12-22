@@ -160,10 +160,7 @@ class BluetoothService(
             return
         }
         bluetoothState.value = BluetoothState.Connecting
-        if(this.device == null){
-            this.device = device
-            return
-        }
+        this.device = device
         bluetoothDevice.connectGatt(activityContext, false, gattCallback)
     }
 
@@ -181,6 +178,10 @@ class BluetoothService(
             try{
                 if(device!!.id == -1L){
                     DeviceDBService(activityContext).addDevice(device!!)
+                }
+                else{
+                    device!!.lastConnectionTime = Calendar.getInstance()
+                    DeviceDBService(activityContext).updateDevice(device!!, device!!.id)
                 }
             }
             catch(exception: NullPointerException){

@@ -1,6 +1,9 @@
 package com.example.smartcubeapp.ui.connectUI
 
 import android.content.Context
+import android.os.Bundle
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -11,6 +14,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -21,19 +26,25 @@ import com.example.smartcubeapp.bluetooth.BluetoothService
 import com.example.smartcubeapp.bluetooth.CubeDevice
 import com.example.smartcubeapp.solvedatabase.services.DeviceDBService
 
-class ConnectNewCubeLayout {
+class ConnectNewCubeActivity: ComponentActivity() {
 
-    private lateinit var devices: SnapshotStateList<CubeDevice>
     private lateinit var context: Context
-    private lateinit var activity: ConnectActivity
+    private lateinit var devices: SnapshotStateList<CubeDevice>
     private lateinit var bluetoothService: BluetoothService
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        this.context = this
+        setContent{
+            GenerateLayout()
+        }
+    }
+
     @Composable
-    fun GenerateLayout(context: Context, bluetoothService: BluetoothService, devices: SnapshotStateList<CubeDevice>) {
-        this.bluetoothService = bluetoothService
-        this.context = context
-        activity = context as ConnectActivity
-        this.devices = devices
+    fun GenerateLayout() {
+        devices = remember { mutableStateListOf() }
+        devices.addAll(DeviceDBService(context).getAllDevices())
+        bluetoothService = BluetoothService(context, this)
         Column(modifier = Modifier.fillMaxSize()) {
             DeviceListLazyColumn()
             RefreshButton()
@@ -96,5 +107,5 @@ fun ConnectNewCubeLayoutPreview() {
         deviceList.add(CubeDevice("test_name_$i", "test_address_$i"))
     }
     val context = LocalContext.current
-    //ConnectNewCubeLayout().GenerateLayout(context, BluetoothService(context, context as ComponentActivity))//doesn't work anymore
+    ConnectNewCubeActivity().GenerateLayout()//doesn't work anymore (I think)
 }
