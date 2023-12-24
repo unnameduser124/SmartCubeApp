@@ -1,4 +1,5 @@
 import org.gradle.api.artifacts.dsl.DependencyHandler
+import org.gradle.kotlin.dsl.project
 
 object Dependencies {
     const val tnoodle_lib = "com.github.thewca:tnoodle-lib:${Versions.tnoodle_lib}"
@@ -49,4 +50,28 @@ fun DependencyHandler.tnoodle(){
 fun DependencyHandler.core(){
     implementation(Dependencies.core_ktx)
     implementation(Dependencies.lifecycle_runtime_ktx)
+}
+
+fun DependencyHandler.bluetoothModule(){
+    implementation(project(":cube-bluetooth"))
+}
+
+fun DependencyHandler.detectionModule(){
+    implementation(project(":cube-detection"))
+}
+
+fun DependencyHandler.databaseModule(){
+    implementation(project(":cube-database"))
+}
+
+fun DependencyHandler.cubeModule(){
+    implementation(project(":cube-cube"))
+}
+
+fun DependencyHandler.uiModule(){
+    implementation(project(":cube-ui"))
+}
+
+fun DependencyHandler.testModule(){
+    implementation(project(":tests"))
 }

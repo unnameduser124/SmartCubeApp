@@ -16,3 +16,10 @@ dependencyResolutionManagement {
 
 rootProject.name = "SmartCubeApp"
 include ':app'
+include ':bluetooth'
+include ':cube-bluetooth'
+include ':cube-detection'
+include ':cube-database'
+include ':cube-cube'
+include ':cube-UI'
+include ':tests'
