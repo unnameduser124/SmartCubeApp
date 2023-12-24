@@ -50,9 +50,11 @@ android {
 }
 
 dependencies {
-    tnoodle()
     core()
     compose()
-    test()
-    androidTest()
+
+    bluetoothModule()
+    cubeModule()
+    globalModule()
+    databaseModule()
 }

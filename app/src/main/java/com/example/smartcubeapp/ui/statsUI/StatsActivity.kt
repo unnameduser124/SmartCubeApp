@@ -26,18 +26,16 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.cube_cube.cube.SolveStatus
+import com.example.cube_database.solvedatabase.services.SolveAnalysisDBService
+import com.example.cube_database.solvedatabase.stats.StatsDBConstants
+import com.example.cube_database.solvedatabase.stats.StatsService
+import com.example.cube_detection.casedetection.olldetection.ollcase.PredefinedOLLCase
+import com.example.cube_detection.casedetection.plldetection.pllcase.PredefinedPLLCase
+import com.example.cube_detection.phasedetection.SolvePhase
+import com.example.cube_global.millisToSeconds
+import com.example.cube_global.roundDouble
 import com.example.smartcubeapp.R
-import com.example.smartcubeapp.casedetection.olldetection.ollcase.PredefinedOLLCase
-import com.example.smartcubeapp.casedetection.plldetection.pllcase.PredefinedPLLCase
-import com.example.smartcubeapp.cube.SolveStatus
-import com.example.smartcubeapp.millisToSeconds
-import com.example.smartcubeapp.phasedetection.SolvePhase
-import com.example.smartcubeapp.roundDouble
-import com.example.smartcubeapp.simpleSolveStateSequence
-import com.example.smartcubeapp.simpleTestSolve
-import com.example.smartcubeapp.solvedatabase.services.SolveAnalysisDBService
-import com.example.smartcubeapp.stats.StatsDBConstants
-import com.example.smartcubeapp.stats.StatsService
 
 class StatsActivity : ComponentActivity() {
 
@@ -78,12 +76,12 @@ class StatsActivity : ComponentActivity() {
         val averagesList = mutableListOf<Pair<String, String>>()
         val totalSolves = statsService.totalNumberOfSolves()
         StatsDBConstants.numberOfSolvesValues.forEach {
-            if(it > totalSolves) {
+            if (it > totalSolves) {
                 averagesList.add(Pair("-", "-"))
-            }
-            else{
+            } else {
                 val average = millisToSeconds(statsService.averageOf(it))
-                val bestAverage = millisToSeconds(statsService.bestAverageOf(it))
+                val bestAverage =
+                    millisToSeconds(statsService.bestAverageOf(it))
                 val averageRounded = roundDouble(average, 100).toString()
                 val bestAverageRounded = roundDouble(bestAverage, 100).toString()
                 averagesList.add(Pair(averageRounded, bestAverageRounded))
@@ -96,10 +94,9 @@ class StatsActivity : ComponentActivity() {
         val averagesList = mutableListOf<Pair<String, String>>()
         val totalSolves = statsService.totalNumberOfSolves()
         StatsDBConstants.numberOfSolvesValues.forEach {
-            if(it > totalSolves){
+            if (it > totalSolves) {
                 averagesList.add(Pair("-", "-"))
-            }
-            else{
+            } else {
                 val average = statsService.averageNumberOfMovesPerSolveInLastXSolves(it)
                 val bestAverage = statsService.bestAverageNumberOfMovesPerSolveInXSolves(it)
                 val averageRounded = roundDouble(average, 10).toString()
@@ -145,11 +142,11 @@ class StatsActivity : ComponentActivity() {
         Row(modifier = Modifier.padding(10.dp), horizontalArrangement = Arrangement.SpaceAround) {
             StatLabelAndValue(
                 label = context.getString(R.string.solve_time_average_stats_label),
-                value = if(timeSeconds>0.0) roundDouble(timeSeconds, 100).toString() else "-"
+                value = if (timeSeconds > 0.0) roundDouble(timeSeconds, 100).toString() else "-"
             )
             StatLabelAndValue(
                 label = context.getString(R.string.solve_moves_average_stats_label),
-                value = if(moves>0.0) moves.toString() else "-"
+                value = if (moves > 0.0) moves.toString() else "-"
             )
         }
     }
@@ -220,7 +217,7 @@ class StatsActivity : ComponentActivity() {
                     textAlign = TextAlign.Center,
                     fontSize = 20.sp
                 )
-                val time = millisToSeconds(
+                val time = com.example.cube_global.millisToSeconds(
                     statsService.averageTimeForPhaseInLastXSolves(
                         phaseStatsSummaryNumberOfSolves,
                         phase
@@ -236,7 +233,7 @@ class StatsActivity : ComponentActivity() {
                 )
                 CardDataLabelAndValue(
                     label = context.getString(R.string.phase_card_average_moves),
-                    value = roundDouble(moves, 10).toString()
+                    value = com.example.cube_global.roundDouble(moves, 10).toString()
                 )
             }
         }
@@ -267,7 +264,11 @@ class StatsActivity : ComponentActivity() {
                 .fillMaxWidth()
         ) {
             val casesWithoutSkip =
-                PredefinedPLLCase.values().copyOfRange(0, PredefinedPLLCase.values().size - 1)
+                PredefinedPLLCase.values()
+                    .copyOfRange(
+                        0,
+                        PredefinedPLLCase.values().size - 1
+                    )
             //Table label
             TableLabel(labelText = context.getString(R.string.pll_cases_table_label))
             //Table header
@@ -281,8 +282,10 @@ class StatsActivity : ComponentActivity() {
                 val avgMoves = statsService.averageNumberOfMovesForPLLCaseInLastXSolves(100, case)
                 LLCaseRow(
                     case = case.name,
-                    avgTime = if(avgTime>0.0) roundDouble(avgTime, 100).toString() else "-",
-                    avgMoves = if(avgMoves>0.0) roundDouble(avgMoves, 10).toString() else "-"
+                    avgTime = if (avgTime > 0.0) roundDouble(avgTime, 100)
+                        .toString() else "-",
+                    avgMoves = if (avgMoves > 0.0) roundDouble(avgMoves, 10)
+                        .toString() else "-"
                 )
             }
         }
@@ -296,7 +299,11 @@ class StatsActivity : ComponentActivity() {
                 .fillMaxWidth()
         ) {
             val casesWithoutSkip =
-                PredefinedOLLCase.values().copyOfRange(0, PredefinedOLLCase.values().size - 1)
+                PredefinedOLLCase.values()
+                    .copyOfRange(
+                        0,
+                        PredefinedOLLCase.values().size - 1
+                    )
             //Table label
             TableLabel(labelText = context.getString(R.string.oll_cases_table_label))
             //Table header
@@ -310,8 +317,10 @@ class StatsActivity : ComponentActivity() {
                 val avgMoves = statsService.averageNumberOfMovesForOLLCaseInLastXSolves(100, case)
                 LLCaseRow(
                     case = case.name,
-                    avgTime = if(avgTime>0.0) roundDouble(avgTime, 100).toString() else "-",
-                    avgMoves = if(avgMoves>0.0) roundDouble(avgMoves, 10).toString() else "-"
+                    avgTime = if (avgTime > 0.0) com.example.cube_global.roundDouble(avgTime, 100)
+                        .toString() else "-",
+                    avgMoves = if (avgMoves > 0.0) com.example.cube_global.roundDouble(avgMoves, 10)
+                        .toString() else "-"
                 )
             }
         }
@@ -356,11 +365,11 @@ fun StatsActivityLayoutPreview() {
     val solveAnalysisDBService = SolveAnalysisDBService(context)
     if (StatsService(context).totalNumberOfSolves() < 100) {
         for (i in 0..100) {
-            val solve = simpleTestSolve()
+            val solve = com.example.cube_global.simpleTestSolve()
             solve.scrambleSequence = "R U R' U'"
             solve.solveStatus = SolveStatus.Solved
             solve.solveStartTime = 1
-            solve.solveStateSequence = simpleSolveStateSequence()
+            solve.solveStateSequence = com.example.cube_global.simpleSolveStateSequence()
             solveAnalysisDBService.saveSolveWithAnalysis(solve)
         }
     }

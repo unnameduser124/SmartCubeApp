@@ -2,19 +2,16 @@
 <project version="4">
   <component name="deploymentTargetDropDown">
     <value>
-      <entry key="ConnectLastCubeLayoutPreview">
+      <entry key="Tests in 'com.example.tests.correctnesstests.detectiontests'">
         <State />
       </entry>
-      <entry key="DeviceDBServiceTests">
+      <entry key="Tests in 'com.example.tests.correctnesstests.statstests'">
         <State />
       </entry>
-      <entry key="Tests in 'com.example.smartcubeapp.correctnesstests.detectiontests'">
+      <entry key="Tests in 'com.example.tests.correctnesstests.timertests'">
         <State />
       </entry>
-      <entry key="Tests in 'com.example.smartcubeapp.correctnesstests.statstests'">
-        <State />
-      </entry>
-      <entry key="Tests in 'com.example.smartcubeapp.correctnesstests.timertests'">
+      <entry key="Tests in 'com.example.tests.performancetests'">
         <State />
       </entry>
       <entry key="app">

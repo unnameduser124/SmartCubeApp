@@ -69,9 +69,17 @@ fun DependencyHandler.cubeModule(){
 }
 
 fun DependencyHandler.uiModule(){
-    implementation(project(":cube-ui"))
+    implementation(project(":cube-UI"))
 }
 
 fun DependencyHandler.testModule(){
     implementation(project(":tests"))
+}
+
+fun DependencyHandler.appModule(){
+    implementation(project(":app"))
+}
+
+fun DependencyHandler.globalModule(){
+    implementation(project(":cube-global"))
 }

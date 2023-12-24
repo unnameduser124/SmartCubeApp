@@ -31,17 +31,14 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.cube_cube.cube.CubeState
+import com.example.cube_cube.cube.Solve
+import com.example.cube_cube.scramble.Scramble
+import com.example.cube_cube.scramble.ScrambleGenerator
+import com.example.cube_cube.scramble.ScramblingMode
+import com.example.cube_database.solvedatabase.stats.StatsService
+import com.example.cube_global.TimerState
 import com.example.smartcubeapp.R
-import com.example.smartcubeapp.bluetooth.cubeState
-import com.example.smartcubeapp.bluetooth.lastMove
-import com.example.smartcubeapp.bluetooth.timerState
-import com.example.smartcubeapp.cube.CubeState
-import com.example.smartcubeapp.cube.Solve
-import com.example.smartcubeapp.millisToSeconds
-import com.example.smartcubeapp.scramble.Scramble
-import com.example.smartcubeapp.scramble.ScrambleGenerator
-import com.example.smartcubeapp.scramble.ScramblingMode
-import com.example.smartcubeapp.stats.StatsService
 import com.example.smartcubeapp.ui.historyUI.HistoryActivity
 import com.example.smartcubeapp.ui.statsUI.StatsActivity
 
@@ -80,26 +77,26 @@ class StateScramblingLayout(
     private fun handleScrambling() {
         if (scramble.scramblingMode == ScramblingMode.PreparingToScramble) {
             scrambleSequence.value = "Solve the cube before scrambling"
-            if (scramble.scramblingMode == ScramblingMode.PreparingToScramble && cubeState.value.isSolved()) {
+            if (scramble.scramblingMode == ScramblingMode.PreparingToScramble && com.example.cube_bluetooth.bluetooth.cubeState.value.isSolved()) {
                 scramble.scramblingMode = ScramblingMode.Scrambling
                 scramble.wrongMoves.clear()
                 scrambleSequence.value = scramble.getRemainingMoves()
-                lastState = cubeState.value
+                lastState = com.example.cube_bluetooth.bluetooth.cubeState.value
             }
-        } else if (cubeState.value != lastState) {
+        } else if (com.example.cube_bluetooth.bluetooth.cubeState.value != lastState) {
             if (lastState.cornerPositions.isNotEmpty()) {
-                lastState = cubeState.value
-                scramble.processMove(lastMove.value.notation)
+                lastState = com.example.cube_bluetooth.bluetooth.cubeState.value
+                scramble.processMove(com.example.cube_bluetooth.bluetooth.lastMove.value.notation)
                 scrambleSequence.value = scramble.getRemainingMoves()
             } else {
-                lastState = cubeState.value
+                lastState = com.example.cube_bluetooth.bluetooth.cubeState.value
             }
             if (scramble.scramblingMode == ScramblingMode.Scrambled) {
                 solve.prepareForNewSolve()
-                solve.scrambledState = cubeState.value
+                solve.scrambledState = com.example.cube_bluetooth.bluetooth.cubeState.value
                 solve.scrambleSequence = scramble.getScramble()
                 Toast.makeText(context, "Scrambled", Toast.LENGTH_SHORT).show()
-                timerState.value = TimerState.Solving
+                com.example.cube_bluetooth.bluetooth.timerState.value = TimerState.Solving
             }
         }
     }
@@ -108,7 +105,7 @@ class StateScramblingLayout(
     fun ScrambleSequenceRow() {
         scrambleSequence = remember { mutableStateOf(scramble.getRemainingMoves()) }
         if (
-            !cubeState.value.isSolved()
+            !com.example.cube_bluetooth.bluetooth.cubeState.value.isSolved()
             && scramble.getRemainingMoves() == scramble.getScramble()
             && !lastState.isSolved()
         ) {
@@ -122,7 +119,7 @@ class StateScramblingLayout(
                 .clickable(interactionSource = interactionSource, indication = null) {
                     try {
                         scramble.generateNewScramble()
-                        if (!cubeState.value.isSolved()) {
+                        if (!com.example.cube_bluetooth.bluetooth.cubeState.value.isSolved()) {
                             scramble.scramblingMode = ScramblingMode.PreparingToScramble
                             scrambleSequence.value = "Solve the cube before scrambling"
                         } else {
@@ -206,16 +203,16 @@ class StateScramblingLayout(
         var ao100 = "-"
 
         if (noSolves >= 5) {
-            ao5 = millisToSeconds(statsService.averageOf(5)).toString()
+            ao5 = com.example.cube_global.millisToSeconds(statsService.averageOf(5)).toString()
         }
         if (noSolves >= 12) {
-            ao12 = millisToSeconds(statsService.averageOf(12)).toString()
+            ao12 = com.example.cube_global.millisToSeconds(statsService.averageOf(12)).toString()
         }
         if (noSolves >= 50) {
-            ao50 = millisToSeconds(statsService.averageOf(50)).toString()
+            ao50 = com.example.cube_global.millisToSeconds(statsService.averageOf(50)).toString()
         }
         if (noSolves >= 100) {
-            ao100 = millisToSeconds(statsService.averageOf(100)).toString()
+            ao100 = com.example.cube_global.millisToSeconds(statsService.averageOf(100)).toString()
         }
         Column(
             modifier = Modifier.fillMaxSize(),

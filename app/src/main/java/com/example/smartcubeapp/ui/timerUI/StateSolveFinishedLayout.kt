@@ -33,24 +33,21 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.smartcubeapp.MILLIS_IN_SECOND
+import com.example.cube_bluetooth.bluetooth.cubeState
+import com.example.cube_bluetooth.bluetooth.lastMove
+import com.example.cube_bluetooth.bluetooth.timerState
+import com.example.cube_cube.cube.CubeState
+import com.example.cube_cube.cube.Solve
+import com.example.cube_cube.cube.SolvePenalty
+import com.example.cube_cube.scramble.Scramble
+import com.example.cube_cube.scramble.ScrambleGenerator
+import com.example.cube_cube.scramble.ScramblingMode
+import com.example.cube_database.solvedatabase.services.SolveAnalysisDBService
+import com.example.cube_database.solvedatabase.stats.StatsService
+import com.example.cube_detection.phasedetection.CubeStatePhaseDetection
+import com.example.cube_detection.phasedetection.SolutionPhaseDetection
+import com.example.cube_global.TimerState
 import com.example.smartcubeapp.R
-import com.example.smartcubeapp.bluetooth.cubeState
-import com.example.smartcubeapp.bluetooth.lastMove
-import com.example.smartcubeapp.bluetooth.timerState
-import com.example.smartcubeapp.cube.CubeState
-import com.example.smartcubeapp.cube.Solve
-import com.example.smartcubeapp.cube.SolvePenalty
-import com.example.smartcubeapp.millisToSeconds
-import com.example.smartcubeapp.phasedetection.CubeStatePhaseDetection
-import com.example.smartcubeapp.phasedetection.SolutionPhaseDetection
-import com.example.smartcubeapp.phasedetection.SolvePhase
-import com.example.smartcubeapp.roundDouble
-import com.example.smartcubeapp.scramble.Scramble
-import com.example.smartcubeapp.scramble.ScrambleGenerator
-import com.example.smartcubeapp.scramble.ScramblingMode
-import com.example.smartcubeapp.solvedatabase.services.SolveAnalysisDBService
-import com.example.smartcubeapp.stats.StatsService
 import com.example.smartcubeapp.ui.historyUI.HistoryActivity
 import com.example.smartcubeapp.ui.statsUI.StatsActivity
 import java.util.Calendar
@@ -136,7 +133,8 @@ class StateSolveFinishedLayout(
                         fontSize = 25.sp,
                         modifier = Modifier.padding(horizontal = 10.dp)
                     )
-                    val tpsRounded = roundDouble(solve.getTurnsPerSecond(), 100)
+                    val tpsRounded =
+                        com.example.cube_global.roundDouble(solve.getTurnsPerSecond(), 100)
                     Text(
                         text = "${tpsRounded}tps",
                         fontSize = 25.sp,
@@ -215,7 +213,7 @@ class StateSolveFinishedLayout(
 
     private fun handleCubeNotSolved() {
         if (
-            !cubeState.value.isSolved()
+            !com.example.cube_bluetooth.bluetooth.cubeState.value.isSolved()
             && scramble.getRemainingMoves() == scramble.getScramble()
             && !lastState.isSolved()
         ) {
@@ -235,7 +233,7 @@ class StateSolveFinishedLayout(
                 .clickable(interactionSource = interactionSource, indication = null) {
                     scramble.generateNewScramble()
                     scrambleSequence.value = scramble.getRemainingMoves()
-                    if (!cubeState.value.isSolved()) {
+                    if (!com.example.cube_bluetooth.bluetooth.cubeState.value.isSolved()) {
                         scramble.scramblingMode = ScramblingMode.PreparingToScramble
                         scrambleSequence.value = "Solve the cube before scrambling"
                     } else {
@@ -312,16 +310,16 @@ class StateSolveFinishedLayout(
         var ao100 = "-"
 
         if (noSolves >= 5) {
-            ao5 = millisToSeconds(statsService.averageOf(5)).toString()
+            ao5 = com.example.cube_global.millisToSeconds(statsService.averageOf(5)).toString()
         }
         if (noSolves >= 12) {
-            ao12 = millisToSeconds(statsService.averageOf(12)).toString()
+            ao12 = com.example.cube_global.millisToSeconds(statsService.averageOf(12)).toString()
         }
         if (noSolves >= 50) {
-            ao50 = millisToSeconds(statsService.averageOf(50)).toString()
+            ao50 = com.example.cube_global.millisToSeconds(statsService.averageOf(50)).toString()
         }
         if (noSolves >= 100) {
-            ao100 = millisToSeconds(statsService.averageOf(100)).toString()
+            ao100 = com.example.cube_global.millisToSeconds(statsService.averageOf(100)).toString()
         }
         Column(
             modifier = Modifier.fillMaxSize(),
@@ -437,27 +435,34 @@ class StateSolveFinishedLayout(
                     TableCell("TPS", columnWeight)
                 }
             }
-            val phases = SolvePhase.values().toMutableList()
-            phases.remove(SolvePhase.Scrambled)
+            val phases =
+                com.example.cube_detection.phasedetection.SolvePhase.values().toMutableList()
+            phases.remove(com.example.cube_detection.phasedetection.SolvePhase.Scrambled)
 
             items(phases.size) { index ->
 
-                val solutionPhaseDetection = SolutionPhaseDetection(
-                    solve,
-                    CubeStatePhaseDetection(CubeState.SOLVED_CUBE_STATE)
-                )
+                val solutionPhaseDetection =
+                    com.example.cube_detection.phasedetection.SolutionPhaseDetection(
+                        solve,
+                        com.example.cube_detection.phasedetection.CubeStatePhaseDetection(CubeState.SOLVED_CUBE_STATE)
+                    )
                 val phase = phases[index]
 
                 val phaseTime = remember { mutableStateOf(0.0) }
                 val phaseTps = remember { mutableStateOf(0.0) }
                 val phaseMoves = remember { mutableStateOf(0) }
 
-                phaseTime.value = roundDouble(
+                phaseTime.value = com.example.cube_global.roundDouble(
                     solutionPhaseDetection.getPhaseDurationInSeconds(phase, context),
                     100
                 )
                 phaseTps.value =
-                    roundDouble(solutionPhaseDetection.getPhaseTPS(phase, context), 10)
+                    com.example.cube_global.roundDouble(
+                        solutionPhaseDetection.getPhaseTPS(
+                            phase,
+                            context
+                        ), 10
+                    )
                 phaseMoves.value = solutionPhaseDetection.getPhaseMoveCount(phase, context)
 
                 Row(horizontalArrangement = Arrangement.Center) {
@@ -474,11 +479,11 @@ class StateSolveFinishedLayout(
         solve.calculateTimeFromStateSequence()
         val time =
             when (solve.solvePenalty) {
-                SolvePenalty.None -> solve.time / MILLIS_IN_SECOND.toDouble()
-                SolvePenalty.PlusTwo -> solve.time / MILLIS_IN_SECOND.toDouble() + 2.0
+                SolvePenalty.None -> solve.time / com.example.cube_global.MILLIS_IN_SECOND.toDouble()
+                SolvePenalty.PlusTwo -> solve.time / com.example.cube_global.MILLIS_IN_SECOND.toDouble() + 2.0
                 else -> 0.0
             }
-        val timeRounded = roundDouble(time, 100)
+        val timeRounded = com.example.cube_global.roundDouble(time, 100)
         return timeRounded.toString()
     }
 

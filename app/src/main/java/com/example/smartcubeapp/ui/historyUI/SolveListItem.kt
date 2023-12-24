@@ -19,9 +19,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.smartcubeapp.roundDouble
-import com.example.smartcubeapp.scramble.ScrambleGenerator
-import com.example.smartcubeapp.solvedatabase.dataclasses.SolveData
+import com.example.cube_cube.scramble.ScrambleGenerator
+import com.example.cube_cube.cubeDatabaseClasses.SolveData
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
@@ -57,7 +56,10 @@ class SolveListItem(
             val dateString = dateFormat.format(
                 Calendar.getInstance().apply { timeInMillis = solveData.timestamp }.time
             )
-            val durationString = roundDouble(solveData.solveDuration / 1000.0, 100).toString()
+            val durationString = com.example.cube_global.roundDouble(
+                solveData.solveDuration / 1000.0,
+                100
+            ).toString()
 
             Text(
                 text = durationString,
@@ -76,7 +78,7 @@ class SolveListItem(
                 textAlign = TextAlign.Center
             )
             Text(
-                text = roundDouble(solveTPS, 10).toString(),
+                text = com.example.cube_global.roundDouble(solveTPS, 10).toString(),
                 fontSize = 23.sp,
                 modifier = Modifier
                     .padding(vertical = 10.dp)

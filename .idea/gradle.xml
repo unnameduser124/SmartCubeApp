@@ -28,6 +28,8 @@
             <option value="$PROJECT_DIR$/cube-cube" />
             <option value="$PROJECT_DIR$/cube-database" />
             <option value="$PROJECT_DIR$/cube-detection" />
+            <option value="$PROJECT_DIR$/cube-global" />
+            <option value="$PROJECT_DIR$/cube-stats" />
             <option value="$PROJECT_DIR$/tests" />
           </set>
         </option>

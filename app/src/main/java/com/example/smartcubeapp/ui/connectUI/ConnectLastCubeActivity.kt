@@ -19,8 +19,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.smartcubeapp.bluetooth.BluetoothService
-import com.example.smartcubeapp.bluetooth.CubeDevice
-import com.example.smartcubeapp.solvedatabase.services.DeviceDBService
+import com.example.cube_cube.CubeDevice
+import com.example.cube_database.solvedatabase.services.DeviceDBService
 
 class ConnectLastCubeActivity : ComponentActivity() {
 
