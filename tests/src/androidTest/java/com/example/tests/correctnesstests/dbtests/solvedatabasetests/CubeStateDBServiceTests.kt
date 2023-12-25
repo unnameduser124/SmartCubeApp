@@ -5,9 +5,9 @@ import android.provider.BaseColumns
 import androidx.test.platform.app.InstrumentationRegistry
 import com.example.cube_cube.cube.CubeState
 import com.example.cube_cube.cube.Move
-import com.example.cube_cube.cubeDatabaseClasses.CubeStateData
-import com.example.cube_database.solvedatabase.SolvesDatabaseConstants
-import com.example.cube_database.solvedatabase.services.CubeStateDBService
+import com.example.cube_cube.solveDBDataClasses.CubeStateData
+import com.example.cube_database.solvedatabase.solvesDB.SolvesDatabaseConstants
+import com.example.cube_database.solvedatabase.solvesDB.services.CubeStateDBService
 import junit.framework.TestCase
 import org.junit.After
 import org.junit.Assert.assertEquals
@@ -76,42 +76,42 @@ class CubeStateDBServiceTests {
                 assert(
                     getString(
                         getColumnIndexOrThrow(
-                            SolvesDatabaseConstants.CubeStateTable.CORNER_POSITIONS_COLUMN
+                            com.example.cube_database.solvedatabase.solvesDB.SolvesDatabaseConstants.CubeStateTable.CORNER_POSITIONS_COLUMN
                         )
                     ) == cubeStateData.cornerPositions
                 )
                 assert(
                     getString(
                         getColumnIndexOrThrow(
-                            SolvesDatabaseConstants.CubeStateTable.CORNER_ORIENTATIONS_COLUMN
+                            com.example.cube_database.solvedatabase.solvesDB.SolvesDatabaseConstants.CubeStateTable.CORNER_ORIENTATIONS_COLUMN
                         )
                     ) == cubeStateData.cornerOrientations
                 )
                 assert(
                     getString(
                         getColumnIndexOrThrow(
-                            SolvesDatabaseConstants.CubeStateTable.EDGE_POSITIONS_COLUMN
+                            com.example.cube_database.solvedatabase.solvesDB.SolvesDatabaseConstants.CubeStateTable.EDGE_POSITIONS_COLUMN
                         )
                     ) == cubeStateData.edgePositions
                 )
                 assert(
                     getString(
                         getColumnIndexOrThrow(
-                            SolvesDatabaseConstants.CubeStateTable.EDGE_ORIENTATIONS_COLUMN
+                            com.example.cube_database.solvedatabase.solvesDB.SolvesDatabaseConstants.CubeStateTable.EDGE_ORIENTATIONS_COLUMN
                         )
                     ) == cubeStateData.edgeOrientations
                 )
 
                 assert(
-                    getString(getColumnIndexOrThrow(SolvesDatabaseConstants.CubeStateTable.LAST_MOVE_COLUMN)) == cubeStateData.lastMove
+                    getString(getColumnIndexOrThrow(com.example.cube_database.solvedatabase.solvesDB.SolvesDatabaseConstants.CubeStateTable.LAST_MOVE_COLUMN)) == cubeStateData.lastMove
                 )
 
                 assert(
-                    getLong(getColumnIndexOrThrow(SolvesDatabaseConstants.CubeStateTable.TIMESTAMP_COLUMN)) == cubeStateData.timestamp
+                    getLong(getColumnIndexOrThrow(com.example.cube_database.solvedatabase.solvesDB.SolvesDatabaseConstants.CubeStateTable.TIMESTAMP_COLUMN)) == cubeStateData.timestamp
                 )
 
                 assert(
-                    getLong(getColumnIndexOrThrow(SolvesDatabaseConstants.CubeStateTable.SOLVE_ID_COLUMN)) == cubeStateData.solveID
+                    getLong(getColumnIndexOrThrow(com.example.cube_database.solvedatabase.solvesDB.SolvesDatabaseConstants.CubeStateTable.SOLVE_ID_COLUMN)) == cubeStateData.solveID
                 )
                 assert(getLong(getColumnIndexOrThrow(BaseColumns._ID)) == id)
             } else {

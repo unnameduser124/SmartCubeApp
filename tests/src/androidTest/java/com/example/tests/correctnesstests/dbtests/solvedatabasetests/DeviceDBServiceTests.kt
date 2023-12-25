@@ -4,8 +4,8 @@ import android.content.Context
 import android.provider.BaseColumns
 import androidx.test.platform.app.InstrumentationRegistry
 import com.example.cube_cube.CubeDevice
-import com.example.cube_database.solvedatabase.SolvesDatabaseConstants
-import com.example.cube_database.solvedatabase.services.DeviceDBService
+import com.example.cube_database.solvedatabase.solvesDB.SolvesDatabaseConstants
+import com.example.cube_database.solvedatabase.solvesDB.services.DeviceDBService
 import junit.framework.TestCase
 import junit.framework.TestCase.assertEquals
 import junit.framework.TestCase.assertNotNull
@@ -58,9 +58,9 @@ class DeviceDBServiceTests {
         with(cursor) {
             if (moveToFirst()) {
                 val name =
-                    getString(getColumnIndexOrThrow(SolvesDatabaseConstants.DeviceTable.DEVICE_NAME_COLUMN))
+                    getString(getColumnIndexOrThrow(com.example.cube_database.solvedatabase.solvesDB.SolvesDatabaseConstants.DeviceTable.DEVICE_NAME_COLUMN))
                 val address =
-                    getString(getColumnIndexOrThrow(SolvesDatabaseConstants.DeviceTable.DEVICE_ADDRESS_COLUMN))
+                    getString(getColumnIndexOrThrow(com.example.cube_database.solvedatabase.solvesDB.SolvesDatabaseConstants.DeviceTable.DEVICE_ADDRESS_COLUMN))
 
                 assert(name == device.name)
                 assert(address == device.address)

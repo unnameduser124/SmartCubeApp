@@ -1,6 +1,7 @@
 package com.example.smartcubeapp.ui.connectUI
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -22,9 +23,10 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.smartcubeapp.bluetooth.BluetoothService
 import com.example.cube_cube.CubeDevice
-import com.example.cube_database.solvedatabase.services.DeviceDBService
+import com.example.cube_database.solvedatabase.solvesDB.services.DeviceDBService
+import com.example.cube_bluetooth.bluetooth.BluetoothService
+import com.example.smartcubeapp.ui.timerUI.TimerActivity
 
 class ConnectNewCubeActivity: ComponentActivity() {
 
@@ -43,7 +45,7 @@ class ConnectNewCubeActivity: ComponentActivity() {
 
     @Composable
     fun GenerateLayout() {
-        bluetoothService = BluetoothService(context, this)
+        bluetoothService = BluetoothService(context, this, Intent(this, TimerActivity::class.java), Intent(this, ConnectActivity::class.java))
         Column(modifier = Modifier.fillMaxSize()) {
             println("Recomposing in GenerateLayout")
             DeviceListLazyColumn()

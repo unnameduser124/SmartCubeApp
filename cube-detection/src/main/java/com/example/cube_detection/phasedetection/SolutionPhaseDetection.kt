@@ -10,10 +10,10 @@ import com.example.cube_cube.cube.Solve
 import com.example.cube_cube.cube.WhiteSide
 import com.example.cube_cube.cube.YellowSide
 import com.example.cube_cube.cube.cubeSides
-import com.example.cube_cube.cubeDatabaseClasses.CrossData
-import com.example.cube_cube.cubeDatabaseClasses.F2LData
-import com.example.cube_cube.cubeDatabaseClasses.OLLData
-import com.example.cube_cube.cubeDatabaseClasses.PLLData
+import com.example.cube_cube.solveDBDataClasses.CrossData
+import com.example.cube_cube.solveDBDataClasses.F2LData
+import com.example.cube_cube.solveDBDataClasses.OLLData
+import com.example.cube_cube.solveDBDataClasses.PLLData
 import com.example.cube_detection.casedetection.olldetection.OLLCaseDetection
 import com.example.cube_detection.casedetection.olldetection.ollcase.PredefinedOLLCase
 import com.example.cube_detection.casedetection.plldetection.PLLCaseDetection

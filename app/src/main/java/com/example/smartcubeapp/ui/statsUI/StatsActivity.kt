@@ -27,9 +27,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.cube_cube.cube.SolveStatus
-import com.example.cube_database.solvedatabase.services.SolveAnalysisDBService
-import com.example.cube_database.solvedatabase.stats.StatsDBConstants
-import com.example.cube_database.solvedatabase.stats.StatsService
+import com.example.cube_database.solvedatabase.solvesDB.services.SolveAnalysisDBService
+import com.example.cube_database.solvedatabase.statsDB.StatsDBConstants
+import com.example.cube_database.solvedatabase.statsDB.StatsService
 import com.example.cube_detection.casedetection.olldetection.ollcase.PredefinedOLLCase
 import com.example.cube_detection.casedetection.plldetection.pllcase.PredefinedPLLCase
 import com.example.cube_detection.phasedetection.SolvePhase

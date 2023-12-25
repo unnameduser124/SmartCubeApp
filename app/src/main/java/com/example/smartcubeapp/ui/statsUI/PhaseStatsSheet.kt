@@ -19,8 +19,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.cube_database.solvedatabase.stats.StatsDBConstants
-import com.example.cube_database.solvedatabase.stats.StatsService
+import com.example.cube_database.solvedatabase.statsDB.StatsDBConstants
+import com.example.cube_database.solvedatabase.statsDB.StatsService
 import com.example.smartcubeapp.R
 
 class PhaseStatsSheet(val phase: com.example.cube_detection.phasedetection.SolvePhase, val context: Context) {

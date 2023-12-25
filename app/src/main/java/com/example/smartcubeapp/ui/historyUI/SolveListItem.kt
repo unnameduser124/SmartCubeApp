@@ -20,7 +20,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.cube_cube.scramble.ScrambleGenerator
-import com.example.cube_cube.cubeDatabaseClasses.SolveData
+import com.example.cube_cube.solveDBDataClasses.SolveData
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale

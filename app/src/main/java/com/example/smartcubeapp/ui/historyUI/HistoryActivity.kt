@@ -29,9 +29,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Popup
 import androidx.compose.ui.window.PopupProperties
-import com.example.cube_database.solvedatabase.SolvesDatabaseConstants
-import com.example.cube_cube.cubeDatabaseClasses.SolveData
-import com.example.cube_database.solvedatabase.services.SolveDBService
+import com.example.cube_database.solvedatabase.solvesDB.SolvesDatabaseConstants
+import com.example.cube_cube.solveDBDataClasses.SolveData
+import com.example.cube_database.solvedatabase.solvesDB.services.SolveDBService
 
 class HistoryActivity : ComponentActivity() {
 

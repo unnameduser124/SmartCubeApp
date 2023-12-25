@@ -1,6 +1,6 @@
 package com.example.cube_cube.cube
 
-import com.example.cube_cube.cubeDatabaseClasses.CubeStateData
+import com.example.cube_cube.solveDBDataClasses.CubeStateData
 import java.util.Calendar
 
 data class CubeState(

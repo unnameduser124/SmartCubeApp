@@ -3,9 +3,9 @@ package com.example.tests.correctnesstests.dbtests.solvedatabasetests
 import android.content.Context
 import android.provider.BaseColumns
 import androidx.test.platform.app.InstrumentationRegistry
-import com.example.cube_cube.cubeDatabaseClasses.OLLData
-import com.example.cube_database.solvedatabase.SolvesDatabaseConstants
-import com.example.cube_database.solvedatabase.services.OLLDBService
+import com.example.cube_cube.solveDBDataClasses.OLLData
+import com.example.cube_database.solvedatabase.solvesDB.SolvesDatabaseConstants
+import com.example.cube_database.solvedatabase.solvesDB.services.OLLDBService
 import junit.framework.TestCase
 import org.junit.After
 import org.junit.Assert
@@ -65,12 +65,12 @@ class OLLDBServiceTests {
 
         with(cursor) {
             if (moveToFirst()) {
-                assert(getLong(getColumnIndex(SolvesDatabaseConstants.OLLTable.SOLVE_ID_COLUMN)) == ollData.solveID)
-                assert(getLong(getColumnIndex(SolvesDatabaseConstants.OLLTable.DURATION_COLUMN)) == ollData.duration)
-                assert(getInt(getColumnIndex(SolvesDatabaseConstants.OLLTable.MOVE_COUNT_COLUMN)) == ollData.moveCount)
-                assert(getLong(getColumnIndex(SolvesDatabaseConstants.OLLTable.END_CUBE_STATE_ID_COLUMN)) == ollData.endStateID)
-                assert(getLong(getColumnIndex(SolvesDatabaseConstants.OLLTable.START_CUBE_STATE_ID_COLUMN)) == ollData.startStateID)
-                assert(getInt(getColumnIndex(SolvesDatabaseConstants.OLLTable.CASE_COLUMN)) == ollData.case)
+                assert(getLong(getColumnIndex(com.example.cube_database.solvedatabase.solvesDB.SolvesDatabaseConstants.OLLTable.SOLVE_ID_COLUMN)) == ollData.solveID)
+                assert(getLong(getColumnIndex(com.example.cube_database.solvedatabase.solvesDB.SolvesDatabaseConstants.OLLTable.DURATION_COLUMN)) == ollData.duration)
+                assert(getInt(getColumnIndex(com.example.cube_database.solvedatabase.solvesDB.SolvesDatabaseConstants.OLLTable.MOVE_COUNT_COLUMN)) == ollData.moveCount)
+                assert(getLong(getColumnIndex(com.example.cube_database.solvedatabase.solvesDB.SolvesDatabaseConstants.OLLTable.END_CUBE_STATE_ID_COLUMN)) == ollData.endStateID)
+                assert(getLong(getColumnIndex(com.example.cube_database.solvedatabase.solvesDB.SolvesDatabaseConstants.OLLTable.START_CUBE_STATE_ID_COLUMN)) == ollData.startStateID)
+                assert(getInt(getColumnIndex(com.example.cube_database.solvedatabase.solvesDB.SolvesDatabaseConstants.OLLTable.CASE_COLUMN)) == ollData.case)
                 assert(getLong(getColumnIndex(BaseColumns._ID)) == id)
             } else {
                 TestCase.fail()

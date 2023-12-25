@@ -2,10 +2,10 @@ package com.example.tests.correctnesstests.dbtests
 
 import android.content.Context
 import androidx.test.platform.app.InstrumentationRegistry
-import com.example.cube_database.solvedatabase.stats.StatsDB
-import com.example.cube_database.solvedatabase.stats.StatsDBConstants
-import com.example.cube_database.solvedatabase.stats.StatsDBConstants.numberOfSolvesValues
-import com.example.cube_database.solvedatabase.stats.StatsDBConstants.statsNamesList
+import com.example.cube_database.solvedatabase.statsDB.StatsDB
+import com.example.cube_database.solvedatabase.statsDB.StatsDBConstants
+import com.example.cube_database.solvedatabase.statsDB.StatsDBConstants.numberOfSolvesValues
+import com.example.cube_database.solvedatabase.statsDB.StatsDBConstants.statsNamesList
 import junit.framework.TestCase
 import org.junit.After
 import org.junit.Before

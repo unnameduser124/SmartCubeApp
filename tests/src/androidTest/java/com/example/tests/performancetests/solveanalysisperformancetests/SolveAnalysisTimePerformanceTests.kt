@@ -4,8 +4,8 @@ import android.content.Context
 import androidx.test.platform.app.InstrumentationRegistry
 import com.example.cube_cube.cube.Solve
 import com.example.cube_cube.cube.SolveStatus
-import com.example.cube_database.solvedatabase.SolvesDatabaseConstants
-import com.example.cube_database.solvedatabase.services.SolveAnalysisDBService
+import com.example.cube_database.solvedatabase.solvesDB.SolvesDatabaseConstants
+import com.example.cube_database.solvedatabase.solvesDB.services.SolveAnalysisDBService
 import org.junit.After
 import org.junit.Before
 import org.junit.Test

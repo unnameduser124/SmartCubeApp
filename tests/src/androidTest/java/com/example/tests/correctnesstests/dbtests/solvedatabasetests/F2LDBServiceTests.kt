@@ -3,9 +3,9 @@ package com.example.tests.correctnesstests.dbtests.solvedatabasetests
 import android.content.Context
 import android.provider.BaseColumns
 import androidx.test.platform.app.InstrumentationRegistry
-import com.example.cube_cube.cubeDatabaseClasses.F2LData
-import com.example.cube_database.solvedatabase.SolvesDatabaseConstants
-import com.example.cube_database.solvedatabase.services.F2LDBService
+import com.example.cube_cube.solveDBDataClasses.F2LData
+import com.example.cube_database.solvedatabase.solvesDB.SolvesDatabaseConstants
+import com.example.cube_database.solvedatabase.solvesDB.services.F2LDBService
 import junit.framework.TestCase
 import org.junit.After
 import org.junit.Assert.assertNull
@@ -63,11 +63,11 @@ class F2LDBServiceTests {
 
         with(cursor) {
             if (moveToFirst()) {
-                assert(getLong(getColumnIndex(SolvesDatabaseConstants.F2LTable.SOLVE_ID_COLUMN)) == f2lData.solveID)
-                assert(getLong(getColumnIndex(SolvesDatabaseConstants.F2LTable.DURATION_COLUMN)) == f2lData.duration)
-                assert(getInt(getColumnIndex(SolvesDatabaseConstants.F2LTable.MOVE_COUNT_COLUMN)) == f2lData.moveCount)
-                assert(getLong(getColumnIndex(SolvesDatabaseConstants.F2LTable.END_CUBE_STATE_ID_COLUMN)) == f2lData.endStateID)
-                assert(getLong(getColumnIndex(SolvesDatabaseConstants.F2LTable.START_CUBE_STATE_ID_COLUMN)) == f2lData.startStateID)
+                assert(getLong(getColumnIndex(com.example.cube_database.solvedatabase.solvesDB.SolvesDatabaseConstants.F2LTable.SOLVE_ID_COLUMN)) == f2lData.solveID)
+                assert(getLong(getColumnIndex(com.example.cube_database.solvedatabase.solvesDB.SolvesDatabaseConstants.F2LTable.DURATION_COLUMN)) == f2lData.duration)
+                assert(getInt(getColumnIndex(com.example.cube_database.solvedatabase.solvesDB.SolvesDatabaseConstants.F2LTable.MOVE_COUNT_COLUMN)) == f2lData.moveCount)
+                assert(getLong(getColumnIndex(com.example.cube_database.solvedatabase.solvesDB.SolvesDatabaseConstants.F2LTable.END_CUBE_STATE_ID_COLUMN)) == f2lData.endStateID)
+                assert(getLong(getColumnIndex(com.example.cube_database.solvedatabase.solvesDB.SolvesDatabaseConstants.F2LTable.START_CUBE_STATE_ID_COLUMN)) == f2lData.startStateID)
                 assert(getLong(getColumnIndex(BaseColumns._ID)) == id)
             } else {
                 TestCase.fail()

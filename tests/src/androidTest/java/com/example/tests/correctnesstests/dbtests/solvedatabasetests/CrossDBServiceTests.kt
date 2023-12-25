@@ -3,9 +3,9 @@ package com.example.tests.correctnesstests.dbtests.solvedatabasetests
 import android.content.Context
 import android.provider.BaseColumns
 import androidx.test.platform.app.InstrumentationRegistry
-import com.example.cube_cube.cubeDatabaseClasses.CrossData
-import com.example.cube_database.solvedatabase.SolvesDatabaseConstants
-import com.example.cube_database.solvedatabase.services.CrossDBService
+import com.example.cube_cube.solveDBDataClasses.CrossData
+import com.example.cube_database.solvedatabase.solvesDB.SolvesDatabaseConstants
+import com.example.cube_database.solvedatabase.solvesDB.services.CrossDBService
 import junit.framework.TestCase
 import org.junit.After
 import org.junit.Assert
@@ -63,11 +63,11 @@ class CrossDBServiceTests {
 
         with(cursor) {
             if (moveToFirst()) {
-                assert(getLong(getColumnIndex(SolvesDatabaseConstants.CrossTable.SOLVE_ID_COLUMN)) == crossData.solveID)
-                assert(getLong(getColumnIndex(SolvesDatabaseConstants.CrossTable.DURATION_COLUMN)) == crossData.duration)
-                assert(getInt(getColumnIndex(SolvesDatabaseConstants.CrossTable.MOVE_COUNT_COLUMN)) == crossData.moveCount)
-                assert(getLong(getColumnIndex(SolvesDatabaseConstants.CrossTable.END_CUBE_STATE_ID_COLUMN)) == crossData.endStateID)
-                assert(getLong(getColumnIndex(SolvesDatabaseConstants.CrossTable.START_CUBE_STATE_ID_COLUMN)) == crossData.startStateID)
+                assert(getLong(getColumnIndex(com.example.cube_database.solvedatabase.solvesDB.SolvesDatabaseConstants.CrossTable.SOLVE_ID_COLUMN)) == crossData.solveID)
+                assert(getLong(getColumnIndex(com.example.cube_database.solvedatabase.solvesDB.SolvesDatabaseConstants.CrossTable.DURATION_COLUMN)) == crossData.duration)
+                assert(getInt(getColumnIndex(com.example.cube_database.solvedatabase.solvesDB.SolvesDatabaseConstants.CrossTable.MOVE_COUNT_COLUMN)) == crossData.moveCount)
+                assert(getLong(getColumnIndex(com.example.cube_database.solvedatabase.solvesDB.SolvesDatabaseConstants.CrossTable.END_CUBE_STATE_ID_COLUMN)) == crossData.endStateID)
+                assert(getLong(getColumnIndex(com.example.cube_database.solvedatabase.solvesDB.SolvesDatabaseConstants.CrossTable.START_CUBE_STATE_ID_COLUMN)) == crossData.startStateID)
                 assert(getLong(getColumnIndex(BaseColumns._ID)) == id)
             } else {
                 TestCase.fail()

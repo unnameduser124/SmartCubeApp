@@ -14,7 +14,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.cube_database.solvedatabase.stats.StatsDBConstants
+import com.example.cube_database.solvedatabase.statsDB.StatsDBConstants
 import com.example.smartcubeapp.R
 
 class AveragesTable(val values: List<Pair<String, String>>) {

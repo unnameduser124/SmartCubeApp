@@ -6,9 +6,9 @@ import androidx.test.platform.app.InstrumentationRegistry
 import com.example.cube_cube.cube.CubeState
 import com.example.cube_cube.cube.Solve
 import com.example.cube_cube.cube.SolvePenalty
-import com.example.cube_cube.cubeDatabaseClasses.SolveData
-import com.example.cube_database.solvedatabase.SolvesDatabaseConstants
-import com.example.cube_database.solvedatabase.services.SolveDBService
+import com.example.cube_cube.solveDBDataClasses.SolveData
+import com.example.cube_database.solvedatabase.solvesDB.SolvesDatabaseConstants
+import com.example.cube_database.solvedatabase.solvesDB.services.SolveDBService
 import junit.framework.TestCase
 import org.junit.After
 import org.junit.Assert.assertEquals
@@ -67,13 +67,13 @@ class SolveDBServiceTests {
 
         with(cursor) {
             if(moveToFirst()){
-                assert(getLong(getColumnIndexOrThrow(SolvesDatabaseConstants.SolveTable.DURATION_COLUMN)) == 1000L)
-                assert(getLong(getColumnIndexOrThrow(SolvesDatabaseConstants.SolveTable.TIMESTAMP_COLUMN)) == solve.date.timeInMillis)
-                assert(getLong(getColumnIndexOrThrow(SolvesDatabaseConstants.SolveTable.SCRAMBLED_STATE_ID_COLUMN)) == -1L)
-                assert(getString(getColumnIndexOrThrow(SolvesDatabaseConstants.SolveTable.SCRAMBLE_SEQUENCE_COLUMN)) == "R U R' U'")
-                assert(getInt(getColumnIndexOrThrow(SolvesDatabaseConstants.SolveTable.PENALTY_COLUMN)) == 0)
+                assert(getLong(getColumnIndexOrThrow(com.example.cube_database.solvedatabase.solvesDB.SolvesDatabaseConstants.SolveTable.DURATION_COLUMN)) == 1000L)
+                assert(getLong(getColumnIndexOrThrow(com.example.cube_database.solvedatabase.solvesDB.SolvesDatabaseConstants.SolveTable.TIMESTAMP_COLUMN)) == solve.date.timeInMillis)
+                assert(getLong(getColumnIndexOrThrow(com.example.cube_database.solvedatabase.solvesDB.SolvesDatabaseConstants.SolveTable.SCRAMBLED_STATE_ID_COLUMN)) == -1L)
+                assert(getString(getColumnIndexOrThrow(com.example.cube_database.solvedatabase.solvesDB.SolvesDatabaseConstants.SolveTable.SCRAMBLE_SEQUENCE_COLUMN)) == "R U R' U'")
+                assert(getInt(getColumnIndexOrThrow(com.example.cube_database.solvedatabase.solvesDB.SolvesDatabaseConstants.SolveTable.PENALTY_COLUMN)) == 0)
                 assert(getLong(getColumnIndexOrThrow(BaseColumns._ID)) == id)
-                assertEquals(-1, getInt(getColumnIndexOrThrow(SolvesDatabaseConstants.SolveTable.MOVE_COUNT)))
+                assertEquals(-1, getInt(getColumnIndexOrThrow(com.example.cube_database.solvedatabase.solvesDB.SolvesDatabaseConstants.SolveTable.MOVE_COUNT)))
             }
             else{
                 TestCase.fail()

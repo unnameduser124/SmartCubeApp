@@ -42,8 +42,8 @@ import com.example.cube_cube.cube.SolvePenalty
 import com.example.cube_cube.scramble.Scramble
 import com.example.cube_cube.scramble.ScrambleGenerator
 import com.example.cube_cube.scramble.ScramblingMode
-import com.example.cube_database.solvedatabase.services.SolveAnalysisDBService
-import com.example.cube_database.solvedatabase.stats.StatsService
+import com.example.cube_database.solvedatabase.solvesDB.services.SolveAnalysisDBService
+import com.example.cube_database.solvedatabase.statsDB.StatsService
 import com.example.cube_detection.phasedetection.CubeStatePhaseDetection
 import com.example.cube_detection.phasedetection.SolutionPhaseDetection
 import com.example.cube_global.TimerState

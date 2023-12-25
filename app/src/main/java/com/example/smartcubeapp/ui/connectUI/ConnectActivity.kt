@@ -9,7 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.example.cube_bluetooth.bluetooth.BluetoothState
 import com.example.cube_bluetooth.bluetooth.bluetoothState
-import com.example.cube_database.solvedatabase.services.DeviceDBService
+import com.example.cube_database.solvedatabase.solvesDB.services.DeviceDBService
 import com.example.smartcubeapp.ui.timerUI.TimerActivity
 
 class ConnectActivity : ComponentActivity(

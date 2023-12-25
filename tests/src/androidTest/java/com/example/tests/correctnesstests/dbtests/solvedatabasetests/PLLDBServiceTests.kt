@@ -3,9 +3,9 @@ package com.example.tests.correctnesstests.dbtests.solvedatabasetests
 import android.content.Context
 import android.provider.BaseColumns
 import androidx.test.platform.app.InstrumentationRegistry
-import com.example.cube_cube.cubeDatabaseClasses.PLLData
-import com.example.cube_database.solvedatabase.SolvesDatabaseConstants
-import com.example.cube_database.solvedatabase.services.PLLDBService
+import com.example.cube_cube.solveDBDataClasses.PLLData
+import com.example.cube_database.solvedatabase.solvesDB.SolvesDatabaseConstants
+import com.example.cube_database.solvedatabase.solvesDB.services.PLLDBService
 import junit.framework.TestCase
 import org.junit.After
 import org.junit.Assert
@@ -65,12 +65,12 @@ class PLLDBServiceTests {
 
         with(cursor) {
             if (moveToFirst()) {
-                assert(getLong(getColumnIndex(SolvesDatabaseConstants.PLLTable.SOLVE_ID_COLUMN)) == pllData.solveID)
-                assert(getLong(getColumnIndex(SolvesDatabaseConstants.PLLTable.DURATION_COLUMN)) == pllData.duration)
-                assert(getInt(getColumnIndex(SolvesDatabaseConstants.PLLTable.MOVE_COUNT_COLUMN)) == pllData.moveCount)
-                assert(getLong(getColumnIndex(SolvesDatabaseConstants.PLLTable.END_CUBE_STATE_ID_COLUMN)) == pllData.endStateID)
-                assert(getLong(getColumnIndex(SolvesDatabaseConstants.PLLTable.START_CUBE_STATE_ID_COLUMN)) == pllData.startStateID)
-                assert(getInt(getColumnIndex(SolvesDatabaseConstants.PLLTable.CASE_COLUMN)) == pllData.case)
+                assert(getLong(getColumnIndex(com.example.cube_database.solvedatabase.solvesDB.SolvesDatabaseConstants.PLLTable.SOLVE_ID_COLUMN)) == pllData.solveID)
+                assert(getLong(getColumnIndex(com.example.cube_database.solvedatabase.solvesDB.SolvesDatabaseConstants.PLLTable.DURATION_COLUMN)) == pllData.duration)
+                assert(getInt(getColumnIndex(com.example.cube_database.solvedatabase.solvesDB.SolvesDatabaseConstants.PLLTable.MOVE_COUNT_COLUMN)) == pllData.moveCount)
+                assert(getLong(getColumnIndex(com.example.cube_database.solvedatabase.solvesDB.SolvesDatabaseConstants.PLLTable.END_CUBE_STATE_ID_COLUMN)) == pllData.endStateID)
+                assert(getLong(getColumnIndex(com.example.cube_database.solvedatabase.solvesDB.SolvesDatabaseConstants.PLLTable.START_CUBE_STATE_ID_COLUMN)) == pllData.startStateID)
+                assert(getInt(getColumnIndex(com.example.cube_database.solvedatabase.solvesDB.SolvesDatabaseConstants.PLLTable.CASE_COLUMN)) == pllData.case)
                 assert(getLong(getColumnIndex(BaseColumns._ID)) == id)
             } else {
                 TestCase.fail()

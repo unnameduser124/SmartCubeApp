@@ -37,6 +37,6 @@ dependencies {
     compose()
 
     cubeModule()
-    databaseModule()
     globalModule()
+    databaseModule()
 }

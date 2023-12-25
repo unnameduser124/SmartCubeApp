@@ -2,10 +2,10 @@ package com.example.tests.correctnesstests.statstests.standardstats
 
 import android.content.Context
 import androidx.test.platform.app.InstrumentationRegistry
-import com.example.cube_cube.cubeDatabaseClasses.SolveData
-import com.example.cube_database.solvedatabase.SolvesDatabaseConstants
-import com.example.cube_database.solvedatabase.stats.StatsDBConstants
-import com.example.cube_database.solvedatabase.stats.StatsService
+import com.example.cube_cube.solveDBDataClasses.SolveData
+import com.example.cube_database.solvedatabase.solvesDB.SolvesDatabaseConstants
+import com.example.cube_database.solvedatabase.statsDB.StatsDBConstants
+import com.example.cube_database.solvedatabase.statsDB.StatsService
 import org.junit.AfterClass
 import org.junit.Assert.assertEquals
 import org.junit.BeforeClass

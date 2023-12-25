@@ -2,8 +2,8 @@ package com.example.tests.correctnesstests.dbtests.solvedatabasetests
 
 import android.content.Context
 import androidx.test.platform.app.InstrumentationRegistry
-import com.example.cube_database.solvedatabase.SolveDB
-import com.example.cube_database.solvedatabase.SolvesDatabaseConstants
+import com.example.cube_database.solvedatabase.solvesDB.SolveDB
+import com.example.cube_database.solvedatabase.solvesDB.SolvesDatabaseConstants
 import com.example.cube_detection.ElementDatabaseConstants
 import junit.framework.TestCase
 import junit.framework.TestCase.assertEquals

@@ -36,7 +36,7 @@ import com.example.cube_cube.cube.Solve
 import com.example.cube_cube.scramble.Scramble
 import com.example.cube_cube.scramble.ScrambleGenerator
 import com.example.cube_cube.scramble.ScramblingMode
-import com.example.cube_database.solvedatabase.stats.StatsService
+import com.example.cube_database.solvedatabase.statsDB.StatsService
 import com.example.cube_global.TimerState
 import com.example.smartcubeapp.R
 import com.example.smartcubeapp.ui.historyUI.HistoryActivity

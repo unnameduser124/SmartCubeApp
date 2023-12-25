@@ -57,4 +57,5 @@ dependencies {
     cubeModule()
     globalModule()
     databaseModule()
+    detectionModule()
 }
