@@ -13,12 +13,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
-import com.example.smartcubeapp.bluetooth.cubeState
-import com.example.smartcubeapp.bluetooth.timerState
-import com.example.smartcubeapp.cube.Solve
-import com.example.smartcubeapp.cube.SolvePenalty
-import com.example.smartcubeapp.cube.SolveStatus
-import com.example.smartcubeapp.roundDouble
+import com.example.cube_cube.cube.Solve
+import com.example.cube_cube.cube.SolvePenalty
+import com.example.cube_cube.cube.SolveStatus
+import com.example.cube_global.TimerState
 import kotlinx.coroutines.delay
 import java.util.Calendar
 
@@ -65,17 +63,21 @@ class StateSolvingLayout(
 
         InitializeInspectionTimer(inspectionTime)
 
-        if (cubeState.value != solve.scrambledState) {
+        if (com.example.cube_bluetooth.bluetooth.cubeState.value != solve.scrambledState) {
             solvingLayoutState.value = SolvingLayoutState.Solving
         }
 
-        val inspectionTimeString = "${roundDouble(inspectionTime.value / 1000.0, 1).toInt()}"
+        val inspectionTimeString = "${
+            com.example.cube_global.roundDouble(
+                inspectionTime.value / 1000.0,
+                1
+            ).toInt()}"
         if(inspectionTime.value <= 0 && inspectionTime.value > -2000){
             solve.solvePenalty = SolvePenalty.PlusTwo
         }
         else if(inspectionTime.value < -2000){
             solve.solvePenalty = SolvePenalty.DNF
-            timerState.value = TimerState.SolveFinished
+            com.example.cube_bluetooth.bluetooth.timerState.value = TimerState.SolveFinished
             return
         }
 
@@ -113,7 +115,7 @@ class StateSolvingLayout(
         UpdateTimer()
 
         Text(
-            text = "${roundDouble(solveTime.value / 1000.0, 100)}s",
+            text = "${com.example.cube_global.roundDouble(solveTime.value / 1000.0, 100)}s",
             fontSize = 50.sp
         )
     }
@@ -131,14 +133,14 @@ class StateSolvingLayout(
 
     @Composable
     fun UpdateTimer() {
-        if (cubeState.value != solve.scrambledState
-            && cubeState.value != solve.solveStateSequence.lastOrNull()
+        if (com.example.cube_bluetooth.bluetooth.cubeState.value != solve.scrambledState
+            && com.example.cube_bluetooth.bluetooth.cubeState.value != solve.solveStateSequence.lastOrNull()
             && solve.solveStatus == SolveStatus.Solving
         ) {
-            solve.solveStateSequence.add(cubeState.value)
+            solve.solveStateSequence.add(com.example.cube_bluetooth.bluetooth.cubeState.value)
         }
-        if (cubeState.value.isSolved()) {
-            timerState.value = TimerState.SolveFinished
+        if (com.example.cube_bluetooth.bluetooth.cubeState.value.isSolved()) {
+            com.example.cube_bluetooth.bluetooth.timerState.value = TimerState.SolveFinished
             solve.calculateTimeFromStateSequence()
             solve.solveStatus = SolveStatus.Solved
         }

@@ -19,14 +19,11 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.cube_database.solvedatabase.statsDB.StatsDBConstants
+import com.example.cube_database.solvedatabase.statsDB.StatsService
 import com.example.smartcubeapp.R
-import com.example.smartcubeapp.millisToSeconds
-import com.example.smartcubeapp.phasedetection.SolvePhase
-import com.example.smartcubeapp.roundDouble
-import com.example.smartcubeapp.stats.StatsDBConstants
-import com.example.smartcubeapp.stats.StatsService
 
-class PhaseStatsSheet(val phase: SolvePhase, val context: Context) {
+class PhaseStatsSheet(val phase: com.example.cube_detection.phasedetection.SolvePhase, val context: Context) {
 
     private val statsService = StatsService(context)
     @OptIn(ExperimentalMaterial3Api::class)
@@ -84,10 +81,20 @@ class PhaseStatsSheet(val phase: SolvePhase, val context: Context) {
                 averagesList.add(Pair("-", "-"))
             }
             else{
-                val average = millisToSeconds(statsService.averageTimeForPhaseInLastXSolves(it, phase))
-                val bestAverage = millisToSeconds(statsService.bestAverageTimeForPhaseInXSolves(it, phase))
-                val averageRounded = roundDouble(average, 100).toString()
-                val bestAverageRounded = roundDouble(bestAverage, 100).toString()
+                val average = com.example.cube_global.millisToSeconds(
+                    statsService.averageTimeForPhaseInLastXSolves(
+                        it,
+                        phase
+                    )
+                )
+                val bestAverage = com.example.cube_global.millisToSeconds(
+                    statsService.bestAverageTimeForPhaseInXSolves(
+                        it,
+                        phase
+                    )
+                )
+                val averageRounded = com.example.cube_global.roundDouble(average, 100).toString()
+                val bestAverageRounded = com.example.cube_global.roundDouble(bestAverage, 100).toString()
                 averagesList.add(Pair(averageRounded, bestAverageRounded))
             }
         }
@@ -104,8 +111,8 @@ class PhaseStatsSheet(val phase: SolvePhase, val context: Context) {
             else{
                 val average = statsService.averageNumberOfMovesForPhaseInLastXSolves(it, phase)
                 val bestAverage = statsService.bestAverageNumberOfMovesForPhaseInXSolves(it, phase)
-                val averageRounded = roundDouble(average, 10).toString()
-                val bestAverageRounded = roundDouble(bestAverage, 10).toString()
+                val averageRounded = com.example.cube_global.roundDouble(average, 10).toString()
+                val bestAverageRounded = com.example.cube_global.roundDouble(bestAverage, 10).toString()
                 averagesList.add(Pair(averageRounded, bestAverageRounded))
             }
         }
@@ -129,5 +136,5 @@ class PhaseStatsSheet(val phase: SolvePhase, val context: Context) {
 fun PhaseStatsSheetPreview() {
     val sheetOpen = remember { mutableStateOf(true) }
     val context = LocalContext.current
-    PhaseStatsSheet(SolvePhase.Cross, context).GenerateSheet { sheetOpen.value = false }
+    PhaseStatsSheet(com.example.cube_detection.phasedetection.SolvePhase.Cross, context).GenerateSheet { sheetOpen.value = false }
 }

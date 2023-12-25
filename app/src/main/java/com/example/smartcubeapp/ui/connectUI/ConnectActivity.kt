@@ -7,9 +7,9 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.example.smartcubeapp.bluetooth.BluetoothState
-import com.example.smartcubeapp.bluetooth.bluetoothState
-import com.example.smartcubeapp.solvedatabase.services.DeviceDBService
+import com.example.cube_bluetooth.bluetooth.BluetoothState
+import com.example.cube_bluetooth.bluetooth.bluetoothState
+import com.example.cube_database.solvedatabase.solvesDB.services.DeviceDBService
 import com.example.smartcubeapp.ui.timerUI.TimerActivity
 
 class ConnectActivity : ComponentActivity(

@@ -14,10 +14,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.cube_database.solvedatabase.statsDB.StatsDBConstants
 import com.example.smartcubeapp.R
-import com.example.smartcubeapp.millisToSeconds
-import com.example.smartcubeapp.roundDouble
-import com.example.smartcubeapp.stats.StatsDBConstants
 
 class AveragesTable(val values: List<Pair<String, String>>) {
 
@@ -98,10 +96,11 @@ fun AveragesTableLayoutPreview() {
     val context = LocalContext.current
     val averagesList = mutableListOf<Pair<String, String>>()
     for(value in StatsDBConstants.numberOfSolvesValues){
-        val average = millisToSeconds((10000..20000).random().toDouble())
-        val bestAverage = millisToSeconds((9000..average.toInt()).random().toDouble())
-        val averageRounded = roundDouble(average, 100).toString()
-        val bestAverageRounded = roundDouble(bestAverage, 100).toString()
+        val average = com.example.cube_global.millisToSeconds((10000..20000).random().toDouble())
+        val bestAverage =
+            com.example.cube_global.millisToSeconds((9000..average.toInt()).random().toDouble())
+        val averageRounded = com.example.cube_global.roundDouble(average, 100).toString()
+        val bestAverageRounded = com.example.cube_global.roundDouble(bestAverage, 100).toString()
         averagesList.add(Pair(averageRounded, bestAverageRounded))
     }
     AveragesTable(averagesList).GenerateTableLayout(context = context)

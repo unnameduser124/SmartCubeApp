@@ -3,18 +3,15 @@ package com.example.smartcubeapp
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
-import com.example.smartcubeapp.bluetooth.BluetoothState
-import com.example.smartcubeapp.bluetooth.BluetoothUtilities
-import com.example.smartcubeapp.bluetooth.bluetoothState
 import com.example.smartcubeapp.ui.connectUI.ConnectActivity
 import com.example.smartcubeapp.ui.timerUI.TimerActivity
 
 class MainActivity : ComponentActivity() {
-    private lateinit var bluetoothUtilities: BluetoothUtilities
+    private lateinit var bluetoothUtilities: com.example.cube_bluetooth.bluetooth.BluetoothUtilities
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        bluetoothUtilities = BluetoothUtilities(this, this)
+        bluetoothUtilities = com.example.cube_bluetooth.bluetooth.BluetoothUtilities(this, this)
         if (!bluetoothUtilities.checkForBluetoothConnectPermission()
             || !bluetoothUtilities.checkForBluetoothScanPermission()
             || !bluetoothUtilities.checkFineLocationPermission()
@@ -26,8 +23,8 @@ class MainActivity : ComponentActivity() {
     }
 
     private fun launchActivity() {
-        when (bluetoothState.value) {
-            BluetoothState.Connected -> {
+        when (com.example.cube_bluetooth.bluetooth.bluetoothState.value) {
+            com.example.cube_bluetooth.bluetooth.BluetoothState.Connected -> {
                 val intent = Intent(this, TimerActivity::class.java)
                 startActivity(intent)
                 finish()

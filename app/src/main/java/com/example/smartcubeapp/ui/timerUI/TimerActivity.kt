@@ -7,14 +7,15 @@ import androidx.activity.compose.setContent
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import com.example.smartcubeapp.bluetooth.BluetoothState
-import com.example.smartcubeapp.bluetooth.bluetoothState
-import com.example.smartcubeapp.bluetooth.cubeState
-import com.example.smartcubeapp.bluetooth.lastMove
-import com.example.smartcubeapp.bluetooth.timerState
-import com.example.smartcubeapp.cube.CubeState
-import com.example.smartcubeapp.cube.Move
-import com.example.smartcubeapp.cube.Solve
+import com.example.cube_bluetooth.bluetooth.BluetoothState
+import com.example.cube_bluetooth.bluetooth.bluetoothState
+import com.example.cube_bluetooth.bluetooth.cubeState
+import com.example.cube_bluetooth.bluetooth.lastMove
+import com.example.cube_bluetooth.bluetooth.timerState
+import com.example.cube_cube.cube.CubeState
+import com.example.cube_cube.cube.Move
+import com.example.cube_cube.cube.Solve
+import com.example.cube_global.TimerState
 import com.example.smartcubeapp.ui.connectUI.ConnectActivity
 
 class TimerActivity: ComponentActivity() {

@@ -18,9 +18,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.smartcubeapp.bluetooth.BluetoothService
-import com.example.smartcubeapp.bluetooth.CubeDevice
-import com.example.smartcubeapp.solvedatabase.services.DeviceDBService
+import com.example.cube_bluetooth.bluetooth.BluetoothService
+import com.example.cube_cube.CubeDevice
+import com.example.cube_database.solvedatabase.solvesDB.services.DeviceDBService
+import com.example.smartcubeapp.ui.timerUI.TimerActivity
 
 class ConnectLastCubeActivity : ComponentActivity() {
 
@@ -85,7 +86,9 @@ class ConnectLastCubeActivity : ComponentActivity() {
             Button(onClick = {
                 BluetoothService(
                     this@ConnectLastCubeActivity,
-                    this@ConnectLastCubeActivity
+                    this@ConnectLastCubeActivity,
+                    Intent(this@ConnectLastCubeActivity, TimerActivity::class.java),
+                    Intent(this@ConnectLastCubeActivity, ConnectActivity::class.java)
                 ).connectToDevice(device)
             }) {
                 Text(text = "Connect", fontSize = 20.sp)
