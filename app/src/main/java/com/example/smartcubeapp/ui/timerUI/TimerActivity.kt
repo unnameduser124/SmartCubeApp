@@ -39,16 +39,11 @@ class TimerActivity: ComponentActivity() {
         timerState = remember { mutableStateOf(TimerState.Scrambling) }
 
         when (timerState.value) {
-            TimerState.Scrambling -> {
-                StateScramblingLayout(solve).GenerateLayout(this)
-            }
-
             TimerState.Solving -> {
                 StateSolvingLayout(solve).GenerateLayout()
             }
-
-            TimerState.SolveFinished -> {
-                StateSolveFinishedLayout(solve).GenerateLayout(this)
+            else -> {
+                StateSolvePreparationLayout(solve).GenerateLayout(this)
             }
         }
     }

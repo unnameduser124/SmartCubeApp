@@ -39,6 +39,7 @@ import com.example.cube_bluetooth.bluetooth.timerState
 import com.example.cube_cube.cube.CubeState
 import com.example.cube_cube.cube.Solve
 import com.example.cube_cube.cube.SolvePenalty
+import com.example.cube_cube.cube.SolveStatus
 import com.example.cube_cube.scramble.Scramble
 import com.example.cube_cube.scramble.ScrambleGenerator
 import com.example.cube_cube.scramble.ScramblingMode
@@ -52,7 +53,7 @@ import com.example.smartcubeapp.ui.historyUI.HistoryActivity
 import com.example.smartcubeapp.ui.statsUI.StatsActivity
 import java.util.Calendar
 
-class StateSolveFinishedLayout(
+class StateSolvePreparationLayout(
     private val solve: Solve
 ) {
 
@@ -70,7 +71,7 @@ class StateSolveFinishedLayout(
     @Composable
     fun GenerateLayout(context: Context) {
         this.context = context
-        if (solve.id == -1L && solve.solvePenalty != SolvePenalty.DNF) {
+        if (solve.id == -1L && solve.solvePenalty != SolvePenalty.DNF && solve.solveStatus == SolveStatus.Solved) {
             solve.date = Calendar.getInstance()
             val id = SolveAnalysisDBService(context).saveSolveWithAnalysis(solve).solveID
             solve.id = id
@@ -125,7 +126,7 @@ class StateSolveFinishedLayout(
             verticalArrangement = Arrangement.Center
         ) {
             SolveTimeRow()
-            if (solve.solvePenalty != SolvePenalty.DNF) {
+            if (solve.solvePenalty != SolvePenalty.DNF && solve.solveStatus == SolveStatus.Solved) {
                 Row(horizontalArrangement = Arrangement.Center) {
                     val moveCount = solve.solveStateSequence.size - 1
                     Text(
@@ -476,7 +477,13 @@ class StateSolveFinishedLayout(
     }
 
     private fun calculateTime(): String {
-        solve.calculateTimeFromStateSequence()
+        try{
+            solve.calculateTimeFromStateSequence()
+        }
+        catch(exception: IllegalArgumentException){
+            print(exception.message)
+            return "0.0"
+        }
         val time =
             when (solve.solvePenalty) {
                 SolvePenalty.None -> solve.time / com.example.cube_global.MILLIS_IN_SECOND.toDouble()
@@ -509,5 +516,5 @@ class StateSolveFinishedLayout(
 fun PreviewStateSolveFinishedLayout() {
     val solve = Solve()
     val context = androidx.compose.ui.platform.LocalContext.current
-    StateSolveFinishedLayout(solve).GenerateLayout(context)
+    StateSolvePreparationLayout(solve).GenerateLayout(context)
 }
