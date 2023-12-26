@@ -273,10 +273,12 @@ class BluetoothService(
                 println(action)
             }
 
-            if (device != null) {
-                val cubeDevice = CubeDevice(device.name, device.address)
-                deviceList.add(cubeDevice)
-                println(cubeDevice)
+            if (device != null && device.name != null && device.address != null) {
+                if(deviceList.none{ it.address == device.address}){
+                    val cubeDevice = CubeDevice(device.name, device.address)
+                    deviceList.add(cubeDevice)
+                    println(cubeDevice)
+                }
             }
         } else {
             println(action)
