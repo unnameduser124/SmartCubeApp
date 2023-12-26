@@ -15,6 +15,6 @@ const val GIIKER_DESCRIPTOR_UUID = "00002902-0000-1000-8000-00805f9b34fb"
 val MyCubeDevice = CubeDevice("MyCube", MY_CUBE_ADDRESS)
 
 lateinit var cubeState: MutableState<CubeState>
-lateinit var timerState: MutableState<TimerState>
+var timerState: TimerState = TimerState.Preparing
 lateinit var lastMove: MutableState<Move>
 var bluetoothState: MutableState<BluetoothState> = mutableStateOf(BluetoothState.Disconnected)

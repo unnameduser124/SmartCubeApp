@@ -1,7 +1,6 @@
 package com.example.cube_global
 
 enum class TimerState {
-    Scrambling,
+    Preparing,
     Solving,
-    SolveFinished
 }

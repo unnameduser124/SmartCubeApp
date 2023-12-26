@@ -14,13 +14,10 @@ import com.example.cube_bluetooth.bluetooth.lastMove
 import com.example.cube_bluetooth.bluetooth.timerState
 import com.example.cube_cube.cube.CubeState
 import com.example.cube_cube.cube.Move
-import com.example.cube_cube.cube.Solve
 import com.example.cube_global.TimerState
 import com.example.smartcubeapp.ui.connectUI.ConnectActivity
 
 class TimerActivity: ComponentActivity() {
-
-    private var solve: Solve = Solve()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,14 +33,14 @@ class TimerActivity: ComponentActivity() {
 
     @Composable
     fun GenerateLayout(){
-        timerState = remember { mutableStateOf(TimerState.Scrambling) }
-
-        when (timerState.value) {
+        when (timerState) {
             TimerState.Solving -> {
-                StateSolvingLayout(solve).GenerateLayout()
+                val intent = Intent(this, SolvingActivity::class.java)
+                startActivity(intent)
             }
             else -> {
-                StateSolvePreparationLayout(solve).GenerateLayout(this)
+                val intent = Intent(this, SolvePreparationActivity::class.java)
+                startActivity(intent)
             }
         }
     }

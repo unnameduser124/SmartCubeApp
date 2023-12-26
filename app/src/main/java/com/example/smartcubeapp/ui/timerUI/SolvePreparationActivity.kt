@@ -2,7 +2,10 @@ package com.example.smartcubeapp.ui.timerUI
 
 import android.content.Context
 import android.content.Intent
+import android.os.Bundle
 import android.widget.Toast
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -37,7 +40,6 @@ import com.example.cube_bluetooth.bluetooth.cubeState
 import com.example.cube_bluetooth.bluetooth.lastMove
 import com.example.cube_bluetooth.bluetooth.timerState
 import com.example.cube_cube.cube.CubeState
-import com.example.cube_cube.cube.Solve
 import com.example.cube_cube.cube.SolvePenalty
 import com.example.cube_cube.cube.SolveStatus
 import com.example.cube_cube.scramble.Scramble
@@ -47,15 +49,17 @@ import com.example.cube_database.solvedatabase.solvesDB.services.SolveAnalysisDB
 import com.example.cube_database.solvedatabase.statsDB.StatsService
 import com.example.cube_detection.phasedetection.CubeStatePhaseDetection
 import com.example.cube_detection.phasedetection.SolutionPhaseDetection
+import com.example.cube_global.MILLIS_IN_SECOND
 import com.example.cube_global.TimerState
+import com.example.cube_global.millisToSeconds
+import com.example.cube_global.roundDouble
+import com.example.cube_global.solve
 import com.example.smartcubeapp.R
 import com.example.smartcubeapp.ui.historyUI.HistoryActivity
 import com.example.smartcubeapp.ui.statsUI.StatsActivity
 import java.util.Calendar
 
-class StateSolvePreparationLayout(
-    private val solve: Solve
-) {
+class SolvePreparationActivity: ComponentActivity() {
 
     private lateinit var scrambleSequence: MutableState<String>
     private val generatedScramble = ScrambleGenerator.generateScramble()
@@ -68,9 +72,17 @@ class StateSolvePreparationLayout(
         mutableListOf(),
     )
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        setContent{
+            GenerateLayout()
+        }
+    }
+
     @Composable
-    fun GenerateLayout(context: Context) {
-        this.context = context
+    fun GenerateLayout() {
+        this.context = this
         if (solve.id == -1L && solve.solvePenalty != SolvePenalty.DNF && solve.solveStatus == SolveStatus.Solved) {
             solve.date = Calendar.getInstance()
             val id = SolveAnalysisDBService(context).saveSolveWithAnalysis(solve).solveID
@@ -112,7 +124,10 @@ class StateSolvePreparationLayout(
                 solve.scrambledState = cubeState.value
                 solve.scrambleSequence = scramble.getScramble()
                 Toast.makeText(context, "Scrambled", Toast.LENGTH_SHORT).show()
-                timerState.value = TimerState.Solving
+                timerState = TimerState.Solving
+                val intent = Intent(this, SolvingActivity::class.java)
+                startActivity(intent)
+                finish()
             }
         }
     }
@@ -135,7 +150,7 @@ class StateSolvePreparationLayout(
                         modifier = Modifier.padding(horizontal = 10.dp)
                     )
                     val tpsRounded =
-                        com.example.cube_global.roundDouble(solve.getTurnsPerSecond(), 100)
+                        roundDouble(solve.getTurnsPerSecond(), 100)
                     Text(
                         text = "${tpsRounded}tps",
                         fontSize = 25.sp,
@@ -214,7 +229,7 @@ class StateSolvePreparationLayout(
 
     private fun handleCubeNotSolved() {
         if (
-            !com.example.cube_bluetooth.bluetooth.cubeState.value.isSolved()
+            !cubeState.value.isSolved()
             && scramble.getRemainingMoves() == scramble.getScramble()
             && !lastState.isSolved()
         ) {
@@ -234,7 +249,7 @@ class StateSolvePreparationLayout(
                 .clickable(interactionSource = interactionSource, indication = null) {
                     scramble.generateNewScramble()
                     scrambleSequence.value = scramble.getRemainingMoves()
-                    if (!com.example.cube_bluetooth.bluetooth.cubeState.value.isSolved()) {
+                    if (!cubeState.value.isSolved()) {
                         scramble.scramblingMode = ScramblingMode.PreparingToScramble
                         scrambleSequence.value = "Solve the cube before scrambling"
                     } else {
@@ -311,16 +326,16 @@ class StateSolvePreparationLayout(
         var ao100 = "-"
 
         if (noSolves >= 5) {
-            ao5 = com.example.cube_global.millisToSeconds(statsService.averageOf(5)).toString()
+            ao5 = millisToSeconds(statsService.averageOf(5)).toString()
         }
         if (noSolves >= 12) {
-            ao12 = com.example.cube_global.millisToSeconds(statsService.averageOf(12)).toString()
+            ao12 = millisToSeconds(statsService.averageOf(12)).toString()
         }
         if (noSolves >= 50) {
-            ao50 = com.example.cube_global.millisToSeconds(statsService.averageOf(50)).toString()
+            ao50 = millisToSeconds(statsService.averageOf(50)).toString()
         }
         if (noSolves >= 100) {
-            ao100 = com.example.cube_global.millisToSeconds(statsService.averageOf(100)).toString()
+            ao100 = millisToSeconds(statsService.averageOf(100)).toString()
         }
         Column(
             modifier = Modifier.fillMaxSize(),
@@ -443,9 +458,9 @@ class StateSolvePreparationLayout(
             items(phases.size) { index ->
 
                 val solutionPhaseDetection =
-                    com.example.cube_detection.phasedetection.SolutionPhaseDetection(
+                    SolutionPhaseDetection(
                         solve,
-                        com.example.cube_detection.phasedetection.CubeStatePhaseDetection(CubeState.SOLVED_CUBE_STATE)
+                        CubeStatePhaseDetection(CubeState.SOLVED_CUBE_STATE)
                     )
                 val phase = phases[index]
 
@@ -453,12 +468,12 @@ class StateSolvePreparationLayout(
                 val phaseTps = remember { mutableStateOf(0.0) }
                 val phaseMoves = remember { mutableStateOf(0) }
 
-                phaseTime.value = com.example.cube_global.roundDouble(
+                phaseTime.value = roundDouble(
                     solutionPhaseDetection.getPhaseDurationInSeconds(phase, context),
                     100
                 )
                 phaseTps.value =
-                    com.example.cube_global.roundDouble(
+                    roundDouble(
                         solutionPhaseDetection.getPhaseTPS(
                             phase,
                             context
@@ -486,11 +501,11 @@ class StateSolvePreparationLayout(
         }
         val time =
             when (solve.solvePenalty) {
-                SolvePenalty.None -> solve.time / com.example.cube_global.MILLIS_IN_SECOND.toDouble()
-                SolvePenalty.PlusTwo -> solve.time / com.example.cube_global.MILLIS_IN_SECOND.toDouble() + 2.0
+                SolvePenalty.None -> solve.time / MILLIS_IN_SECOND.toDouble()
+                SolvePenalty.PlusTwo -> solve.time / MILLIS_IN_SECOND.toDouble() + 2.0
                 else -> 0.0
             }
-        val timeRounded = com.example.cube_global.roundDouble(time, 100)
+        val timeRounded = roundDouble(time, 100)
         return timeRounded.toString()
     }
 
@@ -514,7 +529,5 @@ class StateSolvePreparationLayout(
 @Preview
 @Composable
 fun PreviewStateSolveFinishedLayout() {
-    val solve = Solve()
-    val context = androidx.compose.ui.platform.LocalContext.current
-    StateSolvePreparationLayout(solve).GenerateLayout(context)
+    SolvePreparationActivity().GenerateLayout()
 }
