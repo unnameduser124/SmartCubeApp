@@ -4,6 +4,8 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -19,6 +21,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.cube_bluetooth.bluetooth.BluetoothService
+import com.example.cube_bluetooth.bluetooth.BluetoothUtilities
 import com.example.cube_cube.CubeDevice
 import com.example.cube_database.solvedatabase.solvesDB.services.DeviceDBService
 import com.example.smartcubeapp.ui.timerUI.TimerActivity
@@ -26,9 +29,18 @@ import com.example.smartcubeapp.ui.timerUI.TimerActivity
 class ConnectLastCubeActivity : ComponentActivity() {
 
     private lateinit var device: CubeDevice
+    private lateinit var bluetoothUtilities: BluetoothUtilities
+    private lateinit var permissionLauncher: ActivityResultLauncher<Array<String>>
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        bluetoothUtilities = BluetoothUtilities(this, this)
+        permissionLauncher =
+            registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { }
+        if (!bluetoothUtilities.checkAllPermissions()) {
+            bluetoothUtilities.requestAllPermissions(permissionLauncher)
+        }
         setContent {
             GenerateLayout()
         }
@@ -84,12 +96,17 @@ class ConnectLastCubeActivity : ComponentActivity() {
             horizontalArrangement = Arrangement.Center
         ) {
             Button(onClick = {
-                BluetoothService(
-                    this@ConnectLastCubeActivity,
-                    this@ConnectLastCubeActivity,
-                    Intent(this@ConnectLastCubeActivity, TimerActivity::class.java),
-                    Intent(this@ConnectLastCubeActivity, ConnectActivity::class.java)
-                ).connectToDevice(device)
+                if (!bluetoothUtilities.checkAllPermissions()) {
+                    bluetoothUtilities.requestAllPermissions(permissionLauncher)
+                }
+                else{
+                    BluetoothService(
+                        this@ConnectLastCubeActivity,
+                        this@ConnectLastCubeActivity,
+                        Intent(this@ConnectLastCubeActivity, TimerActivity::class.java),
+                        Intent(this@ConnectLastCubeActivity, ConnectActivity::class.java)
+                    ).connectToDevice(device)
+                }
             }) {
                 Text(text = "Connect", fontSize = 20.sp)
             }

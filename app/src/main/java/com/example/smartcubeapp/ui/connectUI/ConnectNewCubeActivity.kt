@@ -5,6 +5,8 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -23,21 +25,30 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.cube_bluetooth.bluetooth.BluetoothService
+import com.example.cube_bluetooth.bluetooth.BluetoothUtilities
 import com.example.cube_cube.CubeDevice
 import com.example.cube_database.solvedatabase.solvesDB.services.DeviceDBService
-import com.example.cube_bluetooth.bluetooth.BluetoothService
 import com.example.smartcubeapp.ui.timerUI.TimerActivity
 
-class ConnectNewCubeActivity: ComponentActivity() {
+class ConnectNewCubeActivity : ComponentActivity() {
 
     private lateinit var context: Context
     private lateinit var devices: SnapshotStateList<CubeDevice>
     private lateinit var bluetoothService: BluetoothService
+    private lateinit var bluetoothUtilities: BluetoothUtilities
+    private lateinit var permissionLauncher: ActivityResultLauncher<Array<String>>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         this.context = this
-        setContent{
+        permissionLauncher =
+            registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { }
+        bluetoothUtilities = BluetoothUtilities(this, this)
+        if (!bluetoothUtilities.checkAllPermissions()) {
+            bluetoothUtilities.requestAllPermissions(permissionLauncher)
+        }
+        setContent {
             println("Recomposing in onCreate")
             GenerateLayout()
         }
@@ -45,7 +56,12 @@ class ConnectNewCubeActivity: ComponentActivity() {
 
     @Composable
     fun GenerateLayout() {
-        bluetoothService = BluetoothService(context, this, Intent(this, TimerActivity::class.java), Intent(this, ConnectActivity::class.java))
+        bluetoothService = BluetoothService(
+            context,
+            this,
+            Intent(this, TimerActivity::class.java),
+            Intent(this, ConnectActivity::class.java)
+        )
         Column(modifier = Modifier.fillMaxSize()) {
             println("Recomposing in GenerateLayout")
             DeviceListLazyColumn()
@@ -79,7 +95,11 @@ class ConnectNewCubeActivity: ComponentActivity() {
             Text(
                 text = device.name, fontSize = 20.sp, modifier = Modifier
                     .clickable {
-                        bluetoothService.connectToDevice(device)
+                        if (!bluetoothUtilities.checkAllPermissions()) {
+                            bluetoothUtilities.requestAllPermissions(permissionLauncher)
+                        } else {
+                            bluetoothService.connectToDevice(device)
+                        }
                     }
             )
         }
@@ -89,10 +109,14 @@ class ConnectNewCubeActivity: ComponentActivity() {
     fun RefreshButton() {
         Button(
             onClick = {
-                devices.clear()
-                devices.addAll(DeviceDBService(context).getAllDevices())
-                bluetoothService.deviceList = devices
-                bluetoothService.scanForAvailableDevices()
+                if (!bluetoothUtilities.checkAllPermissions()) {
+                    bluetoothUtilities.requestAllPermissions(permissionLauncher)
+                } else {
+                    devices.clear()
+                    devices.addAll(DeviceDBService(context).getAllDevices())
+                    bluetoothService.deviceList = devices
+                    bluetoothService.scanForAvailableDevices()
+                }
             },
             modifier = Modifier
                 .padding(bottom = 10.dp, start = 10.dp, end = 10.dp)

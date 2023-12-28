@@ -17,18 +17,23 @@ class ConnectActivity : ComponentActivity(
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+
         if (bluetoothState.value != BluetoothState.Connected) {
             if (DeviceDBService(this).getAllDevices().isEmpty()) {
                 val intent = Intent(this, ConnectNewCubeActivity::class.java)
                 startActivity(intent)
+                finish()
             } else {
                 val intent = Intent(this, ConnectLastCubeActivity::class.java)
                 startActivity(intent)
+                finish()
             }
         }
         if (bluetoothState.value == BluetoothState.Connected) {
             val intent = Intent(this, TimerActivity::class.java)
             startActivity(intent)
+            finish()
         }
     }
 

@@ -65,12 +65,10 @@ class BluetoothService(
         bluetoothUtilities.checkIfBluetoothIsOn(bluetoothAdapter)
 
         val filter = getDeviceScanIntentFilter()
-
         activity.registerReceiver(receiver, filter)
+
         bluetoothUtilities.checkForBluetoothScanPermission()
-        if (!bluetoothUtilities.checkFineLocationPermission()) {
-            bluetoothUtilities.requestAllPermissions()
-        }
+
         if (bluetoothAdapter.isDiscovering) {
             println("Already discovering")
         } else {

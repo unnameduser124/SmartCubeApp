@@ -52,18 +52,18 @@ class PositionRepresentationTransformer(var cubeState: CubeState, var cubeSide: 
         val positionsClass = T::class.java
         return arrayOf(
             arrayOf(
-                positionsClass.newInstance(),
-                positionsClass.newInstance(),
-                positionsClass.newInstance()
+                positionsClass.getDeclaredConstructor().newInstance(),
+                positionsClass.getDeclaredConstructor().newInstance(),
+                positionsClass.getDeclaredConstructor().newInstance()
             ),
             arrayOf(
-                positionsClass.newInstance(),
-                positionsClass.newInstance()
+                positionsClass.getDeclaredConstructor().newInstance(),
+                positionsClass.getDeclaredConstructor().newInstance()
             ),
             arrayOf(
-                positionsClass.newInstance(),
-                positionsClass.newInstance(),
-                positionsClass.newInstance()
+                positionsClass.getDeclaredConstructor().newInstance(),
+                positionsClass.getDeclaredConstructor().newInstance(),
+                positionsClass.getDeclaredConstructor().newInstance()
             )
         )
     }
@@ -139,7 +139,7 @@ class PositionRepresentationTransformer(var cubeState: CubeState, var cubeSide: 
                 }
             }
         }
-        val case = CaseType::class.java.newInstance()
+        val case = CaseType::class.java.getDeclaredConstructor().newInstance()
         when (case) {
             is CustomOLLCase -> {
                 case.incorrectlyOrientedPieces =
@@ -201,7 +201,7 @@ class PositionRepresentationTransformer(var cubeState: CubeState, var cubeSide: 
     ): T {
         val elementClass = T::class.java
         if (elementClass == PLLElementPosition::class.java) {
-            val element = elementClass.newInstance() as PLLElementPosition
+            val element = elementClass.getDeclaredConstructor().newInstance() as PLLElementPosition
             element.pieceType = pieceType
             element.pieceNumber =
                 if (pieceType == PieceType.CORNER) cubeState.cornerPositions[piecePosition]
@@ -209,7 +209,7 @@ class PositionRepresentationTransformer(var cubeState: CubeState, var cubeSide: 
             element.sideRelativePosition = sideRelativePosition
             return element as T
         } else {
-            val element = elementClass.newInstance() as OLLElementOrientation
+            val element = elementClass.getDeclaredConstructor().newInstance() as OLLElementOrientation
             element.pieceType = pieceType
             element.sideRelativePosition =
                 sideRelativePosition
