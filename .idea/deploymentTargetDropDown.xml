@@ -5,13 +5,13 @@
       <entry key="StateScramblingLayoutPreview">
         <State />
       </entry>
+      <entry key="Tests in 'com.example.tests.correctnesstests.dbtests'">
+        <State />
+      </entry>
+      <entry key="Tests in 'com.example.tests.correctnesstests.detectiontests'">
+        <State />
+      </entry>
       <entry key="Tests in 'com.example.tests.correctnesstests.statstests'">
-        <State />
-      </entry>
-      <entry key="Tests in 'com.example.tests.correctnesstests.timertests'">
-        <State />
-      </entry>
-      <entry key="Tests in 'com.example.tests.performancetests'">
         <State />
       </entry>
       <entry key="app">

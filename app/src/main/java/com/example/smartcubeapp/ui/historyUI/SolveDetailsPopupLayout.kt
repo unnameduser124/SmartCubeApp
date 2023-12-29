@@ -46,13 +46,15 @@ import com.example.cube_database.solvedatabase.solvesDB.services.SolveAnalysisDB
 import com.example.cube_database.solvedatabase.solvesDB.services.SolveDBService
 import com.example.cube_detection.casedetection.olldetection.ollcase.PredefinedOLLCase
 import com.example.cube_detection.casedetection.plldetection.pllcase.PredefinedPLLCase
+import com.example.cube_detection.phasedetection.SolvePhase
+import com.example.cube_global.roundDouble
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
 
 class SolveDetailsPopupLayout(
-    val popupVisible: MutableState<Boolean>,
-    val solvesList: SnapshotStateList<SolveData>
+    private val popupVisible: MutableState<Boolean>,
+    private val solvesList: SnapshotStateList<SolveData>
 ) {
 
 
@@ -84,9 +86,9 @@ class SolveDetailsPopupLayout(
             MovesTPSRow(moves = data.solveStateSequence.size, tps = tps)
             PhaseStatsDataTable(data = data)
             val ollCase =
-                if (data.ollData.case > 0) PredefinedOLLCase.values()[data.ollData.case] else null
+                if (data.ollData.case >= 0) PredefinedOLLCase.values()[data.ollData.case] else null
             val pllCase =
-                if (data.pllData.case > 0) com.example.cube_detection.casedetection.plldetection.pllcase.PredefinedPLLCase.values()[data.pllData.case] else null
+                if (data.pllData.case >= 0) PredefinedPLLCase.values()[data.pllData.case] else null
             LLCasesRow(ollCase = ollCase, pllCase = pllCase)
             val sequenceWithoutScrambledState =
                 data.solveStateSequence.subList(1, data.solveStateSequence.size)
@@ -114,13 +116,13 @@ class SolveDetailsPopupLayout(
 
     @Composable
     fun DurationRow(duration: Long) {
-        val durationString = com.example.cube_global.roundDouble(duration / 1000.0, 100)
+        val durationString = roundDouble(duration / 1000.0, 100)
         Text(text = durationString.toString(), fontSize = 25.sp)
     }
 
     @Composable
     fun MovesTPSRow(moves: Int, tps: Double) {
-        val tpsString = com.example.cube_global.roundDouble(tps, 100)
+        val tpsString = roundDouble(tps, 100)
         Row(horizontalArrangement = Arrangement.SpaceEvenly, modifier = Modifier.padding(10.dp)) {
             Text(text = "$moves moves", fontSize = 20.sp, modifier = Modifier.padding(end = 10.dp))
             Text(
@@ -151,53 +153,53 @@ class SolveDetailsPopupLayout(
                     TableCell("TPS", columnWeight)
                 }
             }
-            val phases = com.example.cube_detection.phasedetection.SolvePhase.values().toMutableList()
-            phases.remove(com.example.cube_detection.phasedetection.SolvePhase.Scrambled)
+            val phases = SolvePhase.values().toMutableList()
+            phases.remove(SolvePhase.Scrambled)
 
             items(phases.size) { index ->
 
                 val phase = phases[index]
 
                 val phaseTime = when (phase) {
-                    com.example.cube_detection.phasedetection.SolvePhase.Cross -> com.example.cube_global.roundDouble(
+                    SolvePhase.Cross -> roundDouble(
                         data.crossData.duration / 1000.0,
                         100
                     )
-                    com.example.cube_detection.phasedetection.SolvePhase.F2L -> com.example.cube_global.roundDouble(
+                    SolvePhase.F2L -> roundDouble(
                         data.f2lData.duration / 1000.0,
                         100
                     )
-                    com.example.cube_detection.phasedetection.SolvePhase.OLL -> com.example.cube_global.roundDouble(
+                    SolvePhase.OLL -> roundDouble(
                         data.ollData.duration / 1000.0,
                         100
                     )
-                    else -> com.example.cube_global.roundDouble(data.pllData.duration / 1000.0, 100)
+                    else -> roundDouble(data.pllData.duration / 1000.0, 100)
                 }
 
                 val phaseMoves = when (phase) {
-                    com.example.cube_detection.phasedetection.SolvePhase.Cross -> data.crossData.moveCount
-                    com.example.cube_detection.phasedetection.SolvePhase.F2L -> data.f2lData.moveCount
-                    com.example.cube_detection.phasedetection.SolvePhase.OLL -> data.ollData.moveCount
+                    SolvePhase.Cross -> data.crossData.moveCount
+                    SolvePhase.F2L -> data.f2lData.moveCount
+                    SolvePhase.OLL -> data.ollData.moveCount
                     else -> data.pllData.moveCount
                 }
 
                 val phaseTps = when (phase) {
-                    com.example.cube_detection.phasedetection.SolvePhase.Cross -> com.example.cube_global.roundDouble(
+                    SolvePhase.Cross -> roundDouble(
                         data.crossData.moveCount.toDouble() / (data.crossData.duration / 1000.0),
                         10
                     )
 
-                    com.example.cube_detection.phasedetection.SolvePhase.F2L -> com.example.cube_global.roundDouble(
+                    SolvePhase.F2L -> roundDouble(
                         data.f2lData.moveCount.toDouble() / (data.f2lData.duration / 1000.0),
                         10
                     )
 
-                    com.example.cube_detection.phasedetection.SolvePhase.OLL -> com.example.cube_global.roundDouble(
+                    SolvePhase.OLL -> roundDouble(
                         data.ollData.moveCount.toDouble() / (data.ollData.duration / 1000.0),
                         10
                     )
 
-                    else -> com.example.cube_global.roundDouble(
+                    else -> roundDouble(
                         data.pllData.moveCount.toDouble() / (data.pllData.duration / 1000.0),
                         10
                     )

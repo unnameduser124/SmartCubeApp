@@ -1,6 +1,7 @@
 package com.example.cube_bluetooth.bluetooth
 
 import android.Manifest
+import android.app.Activity
 import android.app.AlertDialog
 import android.bluetooth.BluetoothAdapter
 import android.content.Context
@@ -8,7 +9,6 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import androidx.activity.ComponentActivity
 import androidx.activity.result.ActivityResultLauncher
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.app.ActivityCompat.requestPermissions
 import kotlin.system.exitProcess
@@ -64,31 +64,13 @@ class BluetoothUtilities(
         return true
     }
 
-    fun checkIfBluetoothIsOn(bluetoothAdapter: BluetoothAdapter): Boolean {
-
-        // Bluetooth is not enabled so let the user turn it on.
-        if (!bluetoothAdapter.isEnabled) {
-            val chooserIntent = Intent(Intent.ACTION_CHOOSER)
-            chooserIntent.putExtra(
-                Intent.EXTRA_INTENT,
-                Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE)
-            )
-            if (checkForBluetoothConnectPermission()) {
-                requestBluetoothConnectPermission()
-                return false
-            }
-            val startActivityIntent: ActivityResultLauncher<Intent> =
-                activity.registerForActivityResult(
-                    ActivityResultContracts.StartActivityForResult()
-                ) { result ->
-                    if (result.resultCode == 0) {
-                        println("Bluetooth is on")
-                    }
-                }
-            startActivityIntent.launch(chooserIntent)
-            return false
+    fun checkIfBluetoothIsOn(bluetoothAdapter: BluetoothAdapter, activity: Activity): Boolean {
+        if(!bluetoothAdapter.isEnabled){
+            checkForBluetoothConnectPermission()
+            val intent = Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE)
+            activity.startActivity(intent)
         }
-        return true
+        return bluetoothAdapter.isEnabled
     }
 
     fun checkForBluetoothConnectPermission(): Boolean {
@@ -106,6 +88,8 @@ class BluetoothUtilities(
     }
 
     fun requestAllPermissions(permissionLauncher: ActivityResultLauncher<Array<String>>) {
+        requestBluetoothScanPermission()
+        requestBluetoothConnectPermission()
         val permissions = arrayOf(
             Manifest.permission.ACCESS_FINE_LOCATION,
             Manifest.permission.ACCESS_COARSE_LOCATION,

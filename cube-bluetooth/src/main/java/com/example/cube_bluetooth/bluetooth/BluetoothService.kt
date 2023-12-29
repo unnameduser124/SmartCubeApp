@@ -62,7 +62,8 @@ class BluetoothService(
             return
         }
 
-        bluetoothUtilities.checkIfBluetoothIsOn(bluetoothAdapter)
+        bluetoothUtilities.checkIfBluetoothIsOn(bluetoothAdapter, activity)
+
 
         val filter = getDeviceScanIntentFilter()
         activity.registerReceiver(receiver, filter)
@@ -91,7 +92,7 @@ class BluetoothService(
             return emptyList()
         }
 
-        if (!bluetoothUtilities.checkIfBluetoothIsOn(bluetoothAdapter)) {
+        if (!bluetoothUtilities.checkIfBluetoothIsOn(bluetoothAdapter, activity)) {
             return emptyList()
         }
 
@@ -118,7 +119,6 @@ class BluetoothService(
     fun connectToDevice(
         device: CubeDevice
     ) {
-
         val bluetoothDevice = bluetoothAdapter.getRemoteDevice(device.address)
         val gattCallback = object : BluetoothGattCallback() {
             override fun onConnectionStateChange(gatt: BluetoothGatt, status: Int, newState: Int) {
@@ -157,8 +157,12 @@ class BluetoothService(
 
         if (!bluetoothUtilities.checkForBluetoothConnectPermission()) {
             bluetoothUtilities.requestBluetoothConnectPermission()
-            return
         }
+        if(!bluetoothUtilities.checkForBluetoothScanPermission()){
+            bluetoothUtilities.requestBluetoothScanPermission()
+        }
+        bluetoothUtilities.checkIfBluetoothIsOn(bluetoothAdapter, activity)
+
         bluetoothState.value = BluetoothState.Connecting
         this.device = device
         bluetoothDevice.connectGatt(activityContext, false, gattCallback)
@@ -192,6 +196,9 @@ class BluetoothService(
             bluetoothState.value = BluetoothState.Disconnected
             println("Disconnected")
             activity.startActivity(onDisconnectActivityIntent)
+        }
+        else if(newState == BluetoothProfile.STATE_CONNECTING){
+            println("Connecting to device: ${device!!.name} ${device!!.address}")
         }
     }
 
@@ -261,7 +268,6 @@ class BluetoothService(
     }
 
     private fun handleDiscoveryReceiverAction(action: String?, intent: Intent) {
-
         if (BluetoothDevice.ACTION_FOUND == action) {
             val device = intent.parcelable<BluetoothDevice>(BluetoothDevice.EXTRA_DEVICE)
             if (!bluetoothUtilities.checkForBluetoothConnectPermission()) {

@@ -21,7 +21,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.cube_bluetooth.bluetooth.BluetoothService
+import com.example.cube_bluetooth.bluetooth.BluetoothState
 import com.example.cube_bluetooth.bluetooth.BluetoothUtilities
+import com.example.cube_bluetooth.bluetooth.bluetoothState
 import com.example.cube_cube.CubeDevice
 import com.example.cube_database.solvedatabase.solvesDB.services.DeviceDBService
 import com.example.smartcubeapp.ui.timerUI.TimerActivity
@@ -98,8 +100,7 @@ class ConnectLastCubeActivity : ComponentActivity() {
             Button(onClick = {
                 if (!bluetoothUtilities.checkAllPermissions()) {
                     bluetoothUtilities.requestAllPermissions(permissionLauncher)
-                }
-                else{
+                } else {
                     BluetoothService(
                         this@ConnectLastCubeActivity,
                         this@ConnectLastCubeActivity,
@@ -108,7 +109,13 @@ class ConnectLastCubeActivity : ComponentActivity() {
                     ).connectToDevice(device)
                 }
             }) {
-                Text(text = "Connect", fontSize = 20.sp)
+                val text =
+                    when (bluetoothState.value) {
+                        BluetoothState.Connecting -> "Connecting"
+                        BluetoothState.Connected -> "Connected"
+                        else -> "Connect"
+                    }
+                Text(text = text, fontSize = 20.sp)
             }
         }
     }
@@ -122,7 +129,8 @@ class ConnectLastCubeActivity : ComponentActivity() {
             horizontalArrangement = Arrangement.Center
         ) {
             Button(onClick = {
-                val intent = Intent(this@ConnectLastCubeActivity, ConnectNewCubeActivity::class.java)
+                val intent =
+                    Intent(this@ConnectLastCubeActivity, ConnectNewCubeActivity::class.java)
                 startActivity(intent)
             }) {
                 Text(text = "Add new cube", fontSize = 20.sp)
