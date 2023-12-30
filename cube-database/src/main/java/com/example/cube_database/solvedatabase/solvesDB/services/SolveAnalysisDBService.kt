@@ -4,8 +4,6 @@ import android.content.Context
 import com.example.cube_cube.cube.CubeState
 import com.example.cube_cube.cube.Solve
 import com.example.cube_cube.cube.SolveStatus
-import com.example.cube_database.solvedatabase.solvesDB.SolveDB
-import com.example.cube_database.solvedatabase.solvesDB.SolvesDatabaseConstants
 import com.example.cube_cube.solveDBDataClasses.CrossData
 import com.example.cube_cube.solveDBDataClasses.CubeStateData
 import com.example.cube_cube.solveDBDataClasses.F2LData
@@ -13,6 +11,8 @@ import com.example.cube_cube.solveDBDataClasses.OLLData
 import com.example.cube_cube.solveDBDataClasses.PLLData
 import com.example.cube_cube.solveDBDataClasses.SolveAnalysisData
 import com.example.cube_cube.solveDBDataClasses.SolveData
+import com.example.cube_database.solvedatabase.solvesDB.SolveDB
+import com.example.cube_database.solvedatabase.solvesDB.SolvesDatabaseConstants
 import com.example.cube_detection.phasedetection.CubeStatePhaseDetection
 import com.example.cube_detection.phasedetection.SolutionPhaseDetection
 
@@ -27,11 +27,14 @@ class SolveAnalysisDBService(
 
         solve.calculateTimeFromStateSequence()
 
-        val solveData = SolveData(solve)
+        var solveData = SolveData(solve)
         solveData.id = SolveDBService(context, dbName).addSolve(solveData)
         solve.id = solveData.id
 
         saveSolveSequence(solve)
+        solve.scrambledState.id = solve.solveStateSequence.first().id
+        solveData = SolveData(solve)
+        SolveDBService(context, dbName).updateSolve(solveData, solve.id)
 
         val pllData = getPLLData(solve)
         val ollData = getOLLData(solve)

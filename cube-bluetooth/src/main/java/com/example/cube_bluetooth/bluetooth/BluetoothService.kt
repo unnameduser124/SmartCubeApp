@@ -105,7 +105,6 @@ class BluetoothService(
 
         val devices = mutableListOf<CubeDevice>()
         pairedDevices.forEach { device ->
-            //do something
             devices.add(CubeDevice(device.name, device.address))
         }
         return devices

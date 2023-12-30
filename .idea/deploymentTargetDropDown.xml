@@ -2,9 +2,6 @@
 <project version="4">
   <component name="deploymentTargetDropDown">
     <value>
-      <entry key="StateScramblingLayoutPreview">
-        <State />
-      </entry>
       <entry key="Tests in 'com.example.tests.correctnesstests.dbtests'">
         <State />
       </entry>
@@ -12,6 +9,9 @@
         <State />
       </entry>
       <entry key="Tests in 'com.example.tests.correctnesstests.statstests'">
+        <State />
+      </entry>
+      <entry key="Tests in 'com.example.tests.correctnesstests.timertests'">
         <State />
       </entry>
       <entry key="app">
@@ -24,6 +24,9 @@
         <State />
       </entry>
       <entry key="performancetests">
+        <State />
+      </entry>
+      <entry key="saveSolveWithAnalysisTest()">
         <State />
       </entry>
     </value>

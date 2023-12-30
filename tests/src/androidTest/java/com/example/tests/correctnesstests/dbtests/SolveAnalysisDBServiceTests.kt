@@ -59,6 +59,7 @@ class SolveAnalysisDBServiceTests {
         val solveFromDatabase =
             SolveDBService(context, SolvesDatabaseConstants.TEST_DATABASE_NAME).getSolve(solveID)
         assertNotNull(solveFromDatabase)
+        assert(solveFromDatabase?.scrambledStateID == 1L)
 
         val cubeStatesFromDatabase =
             CubeStateDBService(context, SolvesDatabaseConstants.TEST_DATABASE_NAME)
