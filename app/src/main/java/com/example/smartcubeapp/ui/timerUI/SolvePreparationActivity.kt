@@ -3,7 +3,6 @@ package com.example.smartcubeapp.ui.timerUI
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
@@ -34,8 +33,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.cube_bluetooth.bluetooth.cubeState
-import com.example.cube_bluetooth.bluetooth.lastMove
-import com.example.cube_bluetooth.bluetooth.timerState
 import com.example.cube_cube.cube.CubeState
 import com.example.cube_cube.cube.SolvePenalty
 import com.example.cube_cube.cube.SolveStatus
@@ -44,7 +41,6 @@ import com.example.cube_cube.scramble.ScrambleGenerator
 import com.example.cube_cube.scramble.ScramblingMode
 import com.example.cube_database.solvedatabase.solvesDB.services.SolveAnalysisDBService
 import com.example.cube_database.solvedatabase.statsDB.StatsService
-import com.example.cube_global.TimerState
 import com.example.cube_global.millisToSeconds
 import com.example.cube_global.solve
 import com.example.smartcubeapp.R
@@ -87,6 +83,7 @@ class SolvePreparationActivity : ComponentActivity() {
 
         SolveResultsUI(context).SolveResults()
         CurrentStatsColumn()
+
         Column(
             modifier = Modifier.fillMaxSize(),
             verticalArrangement = Arrangement.Top,
@@ -98,51 +95,11 @@ class SolvePreparationActivity : ComponentActivity() {
         }
     }
 
-    private fun handleCubeNotSolved() {
-        if (
-            !cubeState.value.isSolved()
-            && scramble.getRemainingMoves() == scramble.getScramble()
-            && !lastState.isSolved()
-        ) {
-            scramble.scramblingMode = ScramblingMode.PreparingToScramble
-        }
-    }
-
-    private fun handleScrambling() {
-        if (scramble.scramblingMode == ScramblingMode.PreparingToScramble) {
-            scrambleSequence.value = "Solve the cube before scrambling"
-            if (scramble.scramblingMode == ScramblingMode.PreparingToScramble && cubeState.value.isSolved()) {
-                scramble.scramblingMode = ScramblingMode.Scrambling
-                scramble.wrongMoves.clear()
-                scrambleSequence.value = scramble.getRemainingMoves()
-                lastState = cubeState.value
-            }
-        } else if (cubeState.value != lastState) {
-            if (lastState.cornerPositions.isNotEmpty()) {
-                lastState = cubeState.value
-                scramble.processMove(lastMove.value.notation)
-                scrambleSequence.value = scramble.getRemainingMoves()
-            } else {
-                lastState = cubeState.value
-            }
-            if (scramble.scramblingMode == ScramblingMode.Scrambled) {
-                solve.prepareForNewSolve()
-                solve.scrambledState = cubeState.value
-                solve.scrambleSequence = scramble.getScramble()
-                Toast.makeText(context, "Scrambled", Toast.LENGTH_SHORT).show()
-                timerState = TimerState.Solving
-                val intent = Intent(this, SolvingActivity::class.java)
-                startActivity(intent)
-                finish()
-            }
-        }
-    }
 
     @Composable
     fun ScrambleSequenceRow() {
         scrambleSequence = remember { mutableStateOf(scramble.getRemainingMoves()) }
-        handleCubeNotSolved()
-        handleScrambling()
+        ScrambleHandler(context, this).handle(scramble, scrambleSequence, lastState)
         val interactionSource = remember { MutableInteractionSource() }
         Row(
             modifier = Modifier
