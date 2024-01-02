@@ -58,6 +58,7 @@ import com.example.smartcubeapp.R
 import com.example.smartcubeapp.ui.historyUI.HistoryActivity
 import com.example.smartcubeapp.ui.statsUI.StatsActivity
 import java.util.Calendar
+import kotlin.concurrent.thread
 
 class SolvePreparationActivity: ComponentActivity() {
 
@@ -84,9 +85,11 @@ class SolvePreparationActivity: ComponentActivity() {
     fun GenerateLayout() {
         this.context = this
         if (solve.id == -1L && solve.solvePenalty != SolvePenalty.DNF && solve.solveStatus == SolveStatus.Solved) {
-            solve.date = Calendar.getInstance()
-            val id = SolveAnalysisDBService(context).saveSolveWithAnalysis(solve).solveID
-            solve.id = id
+            thread{
+                solve.date = Calendar.getInstance()
+                val id = SolveAnalysisDBService(context).saveSolveWithAnalysis(solve).solveID
+                solve.id = id
+            }
         }
 
         SolveResults()

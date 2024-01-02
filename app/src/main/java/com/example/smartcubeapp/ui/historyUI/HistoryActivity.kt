@@ -29,8 +29,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Popup
 import androidx.compose.ui.window.PopupProperties
-import com.example.cube_database.solvedatabase.solvesDB.SolvesDatabaseConstants
 import com.example.cube_cube.solveDBDataClasses.SolveData
+import com.example.cube_database.solvedatabase.solvesDB.SolvesDatabaseConstants
 import com.example.cube_database.solvedatabase.solvesDB.services.SolveDBService
 
 class HistoryActivity : ComponentActivity() {
@@ -106,8 +106,8 @@ class HistoryActivity : ComponentActivity() {
 
     @Composable
     fun SolvesListLazyColumn(context: Context) {
-        solvesList = remember { mutableStateListOf<SolveData>() }
-        val page = remember { mutableStateOf(2) }
+        solvesList = remember { mutableStateListOf() }
+        val page = remember { mutableStateOf(1) }
         if(solvesList.isEmpty()){
             solvesList.addAll(SolveDBService(context).getAllSolves().toMutableList())
         }

@@ -86,6 +86,7 @@ class MoveDataParser(private val data: ByteBuffer) {
             }
             Move(face, amount!!, notation)
         } catch (e: Exception) {
+            println("Error parsing move: $e")
             null
         }
     }
