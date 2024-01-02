@@ -32,13 +32,11 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.cube_bluetooth.bluetooth.cubeState
 import com.example.cube_cube.cube.CubeState
 import com.example.cube_cube.cube.SolvePenalty
 import com.example.cube_cube.cube.SolveStatus
 import com.example.cube_cube.scramble.Scramble
 import com.example.cube_cube.scramble.ScrambleGenerator
-import com.example.cube_cube.scramble.ScramblingMode
 import com.example.cube_database.solvedatabase.solvesDB.services.SolveAnalysisDBService
 import com.example.cube_database.solvedatabase.statsDB.StatsService
 import com.example.cube_global.millisToSeconds
@@ -99,20 +97,15 @@ class SolvePreparationActivity : ComponentActivity() {
     @Composable
     fun ScrambleSequenceRow() {
         scrambleSequence = remember { mutableStateOf(scramble.getRemainingMoves()) }
-        ScrambleHandler(context, this).handle(scramble, scrambleSequence, lastState)
+        val scrambleHandler = ScrambleHandler(context, this, scramble, scrambleSequence)
+        scrambleHandler.handle(lastState)
+
         val interactionSource = remember { MutableInteractionSource() }
         Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .clickable(interactionSource = interactionSource, indication = null) {
-                    scramble.generateNewScramble()
-                    scrambleSequence.value = scramble.getRemainingMoves()
-                    if (!cubeState.value.isSolved()) {
-                        scramble.scramblingMode = ScramblingMode.PreparingToScramble
-                        scrambleSequence.value = "Solve the cube before scrambling"
-                    } else {
-                        scrambleSequence.value = scramble.getRemainingMoves()
-                    }
+                    scrambleHandler.handleScrambleGeneration()
                 }
                 .padding(16.dp)
                 .background(color = Color.LightGray, shape = RoundedCornerShape(20.dp))

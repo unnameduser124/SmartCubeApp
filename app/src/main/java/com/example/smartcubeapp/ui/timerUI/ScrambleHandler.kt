@@ -16,16 +16,27 @@ import com.example.cube_global.solve
 
 class ScrambleHandler(
     val context: Context,
-    private val activityContext: Activity
+    private val activityContext: Activity,
+    private val scramble: Scramble,
+    private val scrambleSequence: MutableState<String>,
 ) {
 
     fun handle(
-        scramble: Scramble,
-        scrambleSequence: MutableState<String>,
         lastState: CubeState,
     ) {
         handleCubeNotSolved(scramble, lastState)
         handleScrambling(scramble, scrambleSequence, lastState)
+    }
+
+    fun handleScrambleGeneration(){
+        scramble.generateNewScramble()
+        scrambleSequence.value = scramble.getRemainingMoves()
+        if (!cubeState.value.isSolved()) {
+            scramble.scramblingMode = ScramblingMode.PreparingToScramble
+            scrambleSequence.value = "Solve the cube before scrambling"
+        } else {
+            scrambleSequence.value = scramble.getRemainingMoves()
+        }
     }
 
     private fun handleCubeNotSolved(scramble: Scramble, lastState: CubeState) {
