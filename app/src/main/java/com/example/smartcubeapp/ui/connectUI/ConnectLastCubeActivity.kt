@@ -26,6 +26,7 @@ import com.example.cube_bluetooth.bluetooth.BluetoothUtilities
 import com.example.cube_bluetooth.bluetooth.bluetoothState
 import com.example.cube_cube.CubeDevice
 import com.example.cube_database.solvedatabase.solvesDB.services.DeviceDBService
+import com.example.smartcubeapp.MainActivity
 import com.example.smartcubeapp.ui.timerUI.TimerActivity
 
 class ConnectLastCubeActivity : ComponentActivity() {
@@ -105,7 +106,7 @@ class ConnectLastCubeActivity : ComponentActivity() {
                         this@ConnectLastCubeActivity,
                         this@ConnectLastCubeActivity,
                         Intent(this@ConnectLastCubeActivity, TimerActivity::class.java),
-                        Intent(this@ConnectLastCubeActivity, ConnectActivity::class.java)
+                        Intent(this@ConnectLastCubeActivity, MainActivity::class.java)
                     ).connectToDevice(device)
                 }
             }) {

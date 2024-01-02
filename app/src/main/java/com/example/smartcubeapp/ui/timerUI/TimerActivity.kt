@@ -15,7 +15,7 @@ import com.example.cube_bluetooth.bluetooth.timerState
 import com.example.cube_cube.cube.CubeState
 import com.example.cube_cube.cube.Move
 import com.example.cube_global.TimerState
-import com.example.smartcubeapp.ui.connectUI.ConnectActivity
+import com.example.smartcubeapp.MainActivity
 
 class TimerActivity: ComponentActivity() {
 
@@ -47,7 +47,7 @@ class TimerActivity: ComponentActivity() {
 
     private fun checkForConnection(){
         if(bluetoothState.value != BluetoothState.Connected){
-            val intent = Intent(this, ConnectActivity::class.java)
+            val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
         }
     }

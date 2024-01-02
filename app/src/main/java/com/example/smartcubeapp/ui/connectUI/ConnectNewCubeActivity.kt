@@ -21,7 +21,6 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -29,6 +28,7 @@ import com.example.cube_bluetooth.bluetooth.BluetoothService
 import com.example.cube_bluetooth.bluetooth.BluetoothUtilities
 import com.example.cube_cube.CubeDevice
 import com.example.cube_database.solvedatabase.solvesDB.services.DeviceDBService
+import com.example.smartcubeapp.MainActivity
 import com.example.smartcubeapp.ui.timerUI.TimerActivity
 
 class ConnectNewCubeActivity : ComponentActivity() {
@@ -60,7 +60,7 @@ class ConnectNewCubeActivity : ComponentActivity() {
             context,
             this,
             Intent(this, TimerActivity::class.java),
-            Intent(this, ConnectActivity::class.java)
+            Intent(this, MainActivity::class.java)
         )
         Column(modifier = Modifier.fillMaxSize()) {
             println("Recomposing in GenerateLayout")
@@ -139,6 +139,5 @@ fun ConnectNewCubeLayoutPreview() {
             )
         )
     }
-    val context = LocalContext.current
     ConnectNewCubeActivity().GenerateLayout()//doesn't work anymore (I think)
 }
