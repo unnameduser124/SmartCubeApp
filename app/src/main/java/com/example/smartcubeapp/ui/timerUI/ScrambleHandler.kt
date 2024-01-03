@@ -55,13 +55,7 @@ class ScrambleHandler(
         lastState: CubeState
     ) {
         if (scramble.scramblingMode == ScramblingMode.PreparingToScramble) {
-            scrambleSequence.value = "Solve the cube before scrambling"
-            if (scramble.scramblingMode == ScramblingMode.PreparingToScramble && cubeState.value.isSolved()) {
-                scramble.scramblingMode = ScramblingMode.Scrambling
-                scramble.wrongMoves.clear()
-                scrambleSequence.value = scramble.getRemainingMoves()
-                changeLastState(cubeState.value, lastState)
-            }
+            processMovePreparingToScramble(lastState)
         } else if (cubeState.value != lastState) {
             if (lastState.cornerPositions.isNotEmpty()) {
                 changeLastState(cubeState.value, lastState)
@@ -71,14 +65,7 @@ class ScrambleHandler(
                 changeLastState(cubeState.value, lastState)
             }
             if (scramble.scramblingMode == ScramblingMode.Scrambled) {
-                solve.prepareForNewSolve()
-                solve.scrambledState = cubeState.value
-                solve.scrambleSequence = scramble.getScramble()
-                Toast.makeText(context, "Scrambled", Toast.LENGTH_SHORT).show()
-                timerState = TimerState.Solving
-                val intent = Intent(context, SolvingActivity::class.java)
-                context.startActivity(intent)
-                activityContext.finish()
+                scramblingFinished()
             }
         }
     }
@@ -92,5 +79,26 @@ class ScrambleHandler(
         lastState.edgePositions.addAll(newState.edgePositions)
         lastState.edgeOrientations.clear()
         lastState.edgeOrientations.addAll(newState.edgeOrientations)
+    }
+
+    private fun processMovePreparingToScramble(lastState: CubeState){
+        scrambleSequence.value = "Solve the cube before scrambling"
+        if (scramble.scramblingMode == ScramblingMode.PreparingToScramble && cubeState.value.isSolved()) {
+            scramble.scramblingMode = ScramblingMode.Scrambling
+            scramble.wrongMoves.clear()
+            scrambleSequence.value = scramble.getRemainingMoves()
+            changeLastState(cubeState.value, lastState)
+        }
+    }
+
+    private fun scramblingFinished(){
+        solve.prepareForNewSolve()
+        solve.scrambledState = cubeState.value
+        solve.scrambleSequence = scramble.getScramble()
+        Toast.makeText(context, "Scrambled", Toast.LENGTH_SHORT).show()
+        timerState = TimerState.Solving
+        val intent = Intent(context, SolvingActivity::class.java)
+        context.startActivity(intent)
+        activityContext.finish()
     }
 }
