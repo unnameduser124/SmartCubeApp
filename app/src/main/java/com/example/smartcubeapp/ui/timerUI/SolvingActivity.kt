@@ -21,6 +21,7 @@ import com.example.cube_bluetooth.bluetooth.cubeState
 import com.example.cube_bluetooth.bluetooth.timerState
 import com.example.cube_cube.cube.SolvePenalty
 import com.example.cube_cube.cube.SolveStatus
+import com.example.cube_global.AppSettings
 import com.example.cube_global.TimerState
 import com.example.cube_global.roundDouble
 import com.example.cube_global.solve
@@ -32,7 +33,7 @@ enum class SolvingLayoutState {
     Solving
 }
 
-class SolvingActivity: ComponentActivity(
+class SolvingActivity : ComponentActivity(
 ) {
 
     private lateinit var solvingLayoutState: MutableState<SolvingLayoutState>
@@ -41,7 +42,7 @@ class SolvingActivity: ComponentActivity(
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        setContent{
+        setContent {
             GenerateLayout()
         }
     }
@@ -85,11 +86,11 @@ class SolvingActivity: ComponentActivity(
             roundDouble(
                 inspectionTime.value / 1000.0,
                 1
-            ).toInt()}"
-        if(inspectionTime.value <= 0 && inspectionTime.value > -2000){
+            ).toInt()
+        }"
+        if (inspectionTime.value <= 0 && inspectionTime.value > -2000) {
             solve.solvePenalty = SolvePenalty.PlusTwo
-        }
-        else if(inspectionTime.value < -2000){
+        } else if (inspectionTime.value < -2000) {
             solve.solvePenalty = SolvePenalty.DNF
             timerState = TimerState.Preparing
             val intent = Intent(this, SolvePreparationActivity::class.java)
@@ -127,11 +128,19 @@ class SolvingActivity: ComponentActivity(
     fun SolvingPhaseLayout() {
         val solveTime = remember { mutableStateOf(0L) }
 
-        InitializeTimer(solveTime)
-        UpdateTimer()
+        if (AppSettings.isSolvingTimeVisible) {
+            InitializeTimer(solveTime)
+        }
+        CheckCubeState()
 
+        val solveTimeString = if (AppSettings.isSolvingTimeVisible) "${
+            roundDouble(
+                solveTime.value / 1000.0,
+                100
+            )
+        }s" else "..."
         Text(
-            text = "${roundDouble(solveTime.value / 1000.0, 100)}s",
+            text = solveTimeString,
             fontSize = 50.sp
         )
     }
@@ -148,7 +157,7 @@ class SolvingActivity: ComponentActivity(
     }
 
     @Composable
-    fun UpdateTimer() {
+    fun CheckCubeState() {
         if (cubeState.value != solve.scrambledState
             && cubeState.value != solve.solveStateSequence.lastOrNull()
             && solve.solveStatus == SolveStatus.Solving
