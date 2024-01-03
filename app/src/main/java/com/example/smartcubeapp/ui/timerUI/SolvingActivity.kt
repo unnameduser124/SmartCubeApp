@@ -7,6 +7,7 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -16,9 +17,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.cube_bluetooth.bluetooth.cubeState
 import com.example.cube_bluetooth.bluetooth.timerState
+import com.example.cube_cube.cube.CubeState
 import com.example.cube_cube.cube.SolvePenalty
 import com.example.cube_cube.cube.SolveStatus
 import com.example.cube_global.AppSettings
@@ -76,34 +79,46 @@ class SolvingActivity : ComponentActivity(
     fun InspectionPhaseLayout() {
         val inspectionTime = remember { mutableStateOf(1L) }
 
-        InitializeInspectionTimer(inspectionTime)
+        if(AppSettings.isInspectionEnabled){
+            InitializeInspectionTimer(inspectionTime)
+            if (inspectionTime.value <= 0 && inspectionTime.value > -2000) {
+                solve.solvePenalty = SolvePenalty.PlusTwo
+            } else if (inspectionTime.value < -2000) {
+                solve.solvePenalty = SolvePenalty.DNF
+                timerState = TimerState.Preparing
+                val intent = Intent(this, SolvePreparationActivity::class.java)
+                startActivity(intent)
+                finish()
+            }
+        }
 
         if (cubeState.value != solve.scrambledState) {
             solvingLayoutState.value = SolvingLayoutState.Solving
         }
 
-        val inspectionTimeString = "${
-            roundDouble(
-                inspectionTime.value / 1000.0,
-                1
-            ).toInt()
-        }"
-        if (inspectionTime.value <= 0 && inspectionTime.value > -2000) {
-            solve.solvePenalty = SolvePenalty.PlusTwo
-        } else if (inspectionTime.value < -2000) {
-            solve.solvePenalty = SolvePenalty.DNF
-            timerState = TimerState.Preparing
-            val intent = Intent(this, SolvePreparationActivity::class.java)
-            startActivity(intent)
-            finish()
-        }
+        val inspectionTimeFontSize = if(AppSettings.isInspectionEnabled) 50.sp else 25.sp
 
         Text(
-            text = if (inspectionTimeString.toInt() > 0) inspectionTimeString
-            else if (inspectionTimeString.toInt() <= 0 && inspectionTimeString.toInt() > -2) "+2"
-            else "DNF",
-            fontSize = 50.sp
+            text = inspectionTimeString(inspectionTime.value),
+            fontSize = inspectionTimeFontSize,
+            maxLines = 2,
+            modifier = Modifier.padding(10.dp)
         )
+    }
+
+    private fun inspectionTimeString(inspectionTimeValue: Long): String{
+        if(AppSettings.isInspectionEnabled){
+            val valueSeconds = "${
+                roundDouble(
+                    inspectionTimeValue / 1000.0,
+                    1
+                ).toInt()
+            }"
+            return if (valueSeconds.toInt() > 0) valueSeconds
+            else if (valueSeconds.toInt() <= 0 && valueSeconds.toInt() > -2) "+2"
+            else "DNF"
+        }
+        return "Make a move to start the solve"
     }
 
     @Composable
@@ -158,10 +173,7 @@ class SolvingActivity : ComponentActivity(
 
     @Composable
     fun CheckCubeState() {
-        if (cubeState.value != solve.scrambledState
-            && cubeState.value != solve.solveStateSequence.lastOrNull()
-            && solve.solveStatus == SolveStatus.Solving
-        ) {
+        if (newCubeState(cubeState.value)) {
             solve.solveStateSequence.add(cubeState.value)
         }
         if (cubeState.value.isSolved()) {
@@ -173,6 +185,12 @@ class SolvingActivity : ComponentActivity(
             finish()
         }
     }
+}
+
+private fun newCubeState(cubeState: CubeState): Boolean {
+    return cubeState != solve.scrambledState
+            && cubeState != solve.solveStateSequence.lastOrNull()
+            && solve.solveStatus == SolveStatus.Solving
 }
 
 @Preview
