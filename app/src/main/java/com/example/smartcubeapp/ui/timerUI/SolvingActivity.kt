@@ -20,12 +20,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.cube_bluetooth.bluetooth.cubeState
-import com.example.cube_bluetooth.bluetooth.timerState
 import com.example.cube_cube.cube.CubeState
 import com.example.cube_cube.cube.SolvePenalty
 import com.example.cube_cube.cube.SolveStatus
 import com.example.cube_global.AppSettings
-import com.example.cube_global.TimerState
 import com.example.cube_global.roundDouble
 import com.example.cube_global.solve
 import kotlinx.coroutines.delay
@@ -85,7 +83,6 @@ class SolvingActivity : ComponentActivity(
                 solve.solvePenalty = SolvePenalty.PlusTwo
             } else if (inspectionTime.value < -2000) {
                 solve.solvePenalty = SolvePenalty.DNF
-                timerState = TimerState.Preparing
                 val intent = Intent(this, SolvePreparationActivity::class.java)
                 startActivity(intent)
                 finish()
@@ -178,7 +175,6 @@ class SolvingActivity : ComponentActivity(
         }
         if (cubeState.value.isSolved()) {
             solve.solveStatus = SolveStatus.Solved
-            timerState = TimerState.Preparing
             solve.calculateTimeFromStateSequence()
             val intent = Intent(this, SolvePreparationActivity::class.java)
             startActivity(intent)

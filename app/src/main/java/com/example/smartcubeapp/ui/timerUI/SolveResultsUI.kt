@@ -114,7 +114,7 @@ class SolveResultsUI(val context: Context) {
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.Bottom,
             modifier = Modifier.clickable {
-                if(!AppSettings.isScrambleGenerationEnabled){
+                if(!AppSettings.isScrambleGenerationEnabled && !cubeState.value.isSolved()){
                     solve.prepareForNewSolve()
                     solve.scrambledState = cubeState.value
                     solve.scrambleSequence = "Scramble generation disabled"

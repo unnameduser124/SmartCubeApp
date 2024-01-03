@@ -11,10 +11,8 @@ import com.example.cube_bluetooth.bluetooth.BluetoothState
 import com.example.cube_bluetooth.bluetooth.bluetoothState
 import com.example.cube_bluetooth.bluetooth.cubeState
 import com.example.cube_bluetooth.bluetooth.lastMove
-import com.example.cube_bluetooth.bluetooth.timerState
 import com.example.cube_cube.cube.CubeState
 import com.example.cube_cube.cube.Move
-import com.example.cube_global.TimerState
 import com.example.smartcubeapp.MainActivity
 
 class TimerActivity: ComponentActivity() {
@@ -26,23 +24,15 @@ class TimerActivity: ComponentActivity() {
             bluetoothState = remember { mutableStateOf(BluetoothState.Connected) }
             cubeState = remember { mutableStateOf(CubeState.SOLVED_CUBE_STATE) }
             lastMove = remember { mutableStateOf(Move("?", 0, "?")) }
-            GenerateLayout()
+            LaunchActivity()
         }
 
     }
 
     @Composable
-    fun GenerateLayout(){
-        when (timerState) {
-            TimerState.Solving -> {
-                val intent = Intent(this, SolvingActivity::class.java)
-                startActivity(intent)
-            }
-            else -> {
-                val intent = Intent(this, SolvePreparationActivity::class.java)
-                startActivity(intent)
-            }
-        }
+    fun LaunchActivity(){
+        val intent = Intent(this, SolvePreparationActivity::class.java)
+        startActivity(intent)
     }
 
     private fun checkForConnection(){

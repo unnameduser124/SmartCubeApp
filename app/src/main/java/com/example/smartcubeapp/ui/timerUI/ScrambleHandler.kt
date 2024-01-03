@@ -7,11 +7,9 @@ import android.widget.Toast
 import androidx.compose.runtime.MutableState
 import com.example.cube_bluetooth.bluetooth.cubeState
 import com.example.cube_bluetooth.bluetooth.lastMove
-import com.example.cube_bluetooth.bluetooth.timerState
 import com.example.cube_cube.cube.CubeState
 import com.example.cube_cube.scramble.Scramble
 import com.example.cube_cube.scramble.ScramblingMode
-import com.example.cube_global.TimerState
 import com.example.cube_global.solve
 
 class ScrambleHandler(
@@ -96,7 +94,6 @@ class ScrambleHandler(
         solve.scrambledState = cubeState.value
         solve.scrambleSequence = scramble.getScramble()
         Toast.makeText(context, "Scrambled", Toast.LENGTH_SHORT).show()
-        timerState = TimerState.Solving
         val intent = Intent(context, SolvingActivity::class.java)
         context.startActivity(intent)
         activityContext.finish()

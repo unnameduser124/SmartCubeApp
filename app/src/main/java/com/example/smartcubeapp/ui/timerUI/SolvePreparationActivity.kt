@@ -137,8 +137,7 @@ class SolvePreparationActivity : ComponentActivity() {
                         .fillMaxWidth()
                         .padding(top = 10.dp, bottom = 10.dp, start = 15.dp, end = 5.dp),
                     fontSize = 25.sp,
-                    overflow = TextOverflow.Ellipsis,
-                    maxLines = 1,
+                    maxLines = 2,
                     textAlign = TextAlign.Center
                 )
             }
