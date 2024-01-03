@@ -1,6 +1,8 @@
 package com.example.smartcubeapp.ui.timerUI
 
 import android.content.Context
+import android.content.Intent
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -18,12 +20,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.cube_bluetooth.bluetooth.cubeState
 import com.example.cube_cube.cube.CubeState
 import com.example.cube_cube.cube.SolvePenalty
 import com.example.cube_cube.cube.SolveStatus
 import com.example.cube_detection.phasedetection.CubeStatePhaseDetection
 import com.example.cube_detection.phasedetection.SolutionPhaseDetection
 import com.example.cube_detection.phasedetection.SolvePhase
+import com.example.cube_global.AppSettings
 import com.example.cube_global.MILLIS_IN_SECOND
 import com.example.cube_global.roundDouble
 import com.example.cube_global.solve
@@ -108,39 +112,52 @@ class SolveResultsUI(val context: Context) {
     fun SolveTimeRow() {
         Row(
             horizontalArrangement = Arrangement.Center,
-            verticalAlignment = Alignment.Bottom
+            verticalAlignment = Alignment.Bottom,
+            modifier = Modifier.clickable {
+                if(!AppSettings.isScrambleGenerationEnabled){
+                    solve.prepareForNewSolve()
+                    solve.scrambledState = cubeState.value
+                    solve.scrambleSequence = "Scramble generation disabled"
+                    val intent = Intent(context, SolvingActivity::class.java)
+                    context.startActivity(intent)
+                }
+            }
         ) {
-            if (solve.solvePenalty == SolvePenalty.DNF) {
-                Text(
-                    text = "DNF",
-                    fontSize = 70.sp,
-                )
-            } else if (solve.solvePenalty == SolvePenalty.PlusTwo) {
-                val solveTime = calculateTime()
-                val solveSeconds = solveTime.split(".")[0]
-                val solveMilliseconds = solveTime.split(".")[1]
-                Text(
-                    text = "$solveSeconds.",
-                    fontSize = 70.sp,
-                )
-                Text(
-                    text = solveMilliseconds,
-                    fontSize = 50.sp,
-                    modifier = Modifier.padding(bottom = 6.dp)
-                )
-            } else {
-                val solveTime = calculateTime()
-                val solveSeconds = solveTime.split(".")[0]
-                val solveMilliseconds = solveTime.split(".")[1]
-                Text(
-                    text = "$solveSeconds.",
-                    fontSize = 70.sp,
-                )
-                Text(
-                    text = solveMilliseconds,
-                    fontSize = 50.sp,
-                    modifier = Modifier.padding(bottom = 6.dp)
-                )
+            when (solve.solvePenalty) {
+                SolvePenalty.DNF -> {
+                    Text(
+                        text = "DNF",
+                        fontSize = 70.sp,
+                    )
+                }
+                SolvePenalty.PlusTwo -> {
+                    val solveTime = calculateTime()
+                    val solveSeconds = solveTime.split(".")[0]
+                    val solveMilliseconds = solveTime.split(".")[1]
+                    Text(
+                        text = "$solveSeconds.",
+                        fontSize = 70.sp,
+                    )
+                    Text(
+                        text = solveMilliseconds,
+                        fontSize = 50.sp,
+                        modifier = Modifier.padding(bottom = 6.dp)
+                    )
+                }
+                else -> {
+                    val solveTime = calculateTime()
+                    val solveSeconds = solveTime.split(".")[0]
+                    val solveMilliseconds = solveTime.split(".")[1]
+                    Text(
+                        text = "$solveSeconds.",
+                        fontSize = 70.sp,
+                    )
+                    Text(
+                        text = solveMilliseconds,
+                        fontSize = 50.sp,
+                        modifier = Modifier.padding(bottom = 6.dp)
+                    )
+                }
             }
         }
     }

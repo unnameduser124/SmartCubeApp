@@ -2,7 +2,7 @@ package com.example.cube_global
 
 object AppSettings {
 
-    var isInspectionEnabled = false
-    var isScrambleGenerationEnabled = true
+    var isInspectionEnabled = true
+    var isScrambleGenerationEnabled = false
     var isSolvingTimeVisible = false
 }
