@@ -1,6 +1,5 @@
 package com.example.smartcubeapp.ui.connectUI
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -25,7 +24,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.cube_bluetooth.bluetooth.BluetoothService
+import com.example.cube_bluetooth.bluetooth.BluetoothState
 import com.example.cube_bluetooth.bluetooth.BluetoothUtilities
+import com.example.cube_bluetooth.bluetooth.bluetoothState
 import com.example.cube_cube.CubeDevice
 import com.example.cube_database.solvedatabase.solvesDB.services.DeviceDBService
 import com.example.smartcubeapp.MainActivity
@@ -33,7 +34,6 @@ import com.example.smartcubeapp.ui.timerUI.TimerActivity
 
 class ConnectNewCubeActivity : ComponentActivity() {
 
-    private lateinit var context: Context
     private lateinit var devices: SnapshotStateList<CubeDevice>
     private lateinit var bluetoothService: BluetoothService
     private lateinit var bluetoothUtilities: BluetoothUtilities
@@ -41,15 +41,15 @@ class ConnectNewCubeActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        this.context = this
+        bluetoothUtilities = BluetoothUtilities(this, this)
+
         permissionLauncher =
             registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { }
-        bluetoothUtilities = BluetoothUtilities(this, this)
         if (!bluetoothUtilities.checkAllPermissions()) {
             bluetoothUtilities.requestAllPermissions(permissionLauncher)
         }
+
         setContent {
-            println("Recomposing in onCreate")
             GenerateLayout()
         }
     }
@@ -57,13 +57,12 @@ class ConnectNewCubeActivity : ComponentActivity() {
     @Composable
     fun GenerateLayout() {
         bluetoothService = BluetoothService(
-            context,
+            this,
             this,
             Intent(this, TimerActivity::class.java),
             Intent(this, MainActivity::class.java)
         )
         Column(modifier = Modifier.fillMaxSize()) {
-            println("Recomposing in GenerateLayout")
             DeviceListLazyColumn()
             RefreshButton()
         }
@@ -72,7 +71,7 @@ class ConnectNewCubeActivity : ComponentActivity() {
     @Composable
     fun DeviceListLazyColumn() {
         devices = remember { mutableStateListOf() }
-        devices.addAll(DeviceDBService(context).getAllDevices())
+        devices.addAll(DeviceDBService(this).getAllDevices())
         LazyColumn(
             modifier = Modifier
                 .padding(10.dp)
@@ -95,11 +94,7 @@ class ConnectNewCubeActivity : ComponentActivity() {
             Text(
                 text = device.name, fontSize = 20.sp, modifier = Modifier
                     .clickable {
-                        if (!bluetoothUtilities.checkAllPermissions()) {
-                            bluetoothUtilities.requestAllPermissions(permissionLauncher)
-                        } else {
-                            bluetoothService.connectToDevice(device)
-                        }
+                        connectToDevice(device)
                     }
             )
         }
@@ -109,20 +104,43 @@ class ConnectNewCubeActivity : ComponentActivity() {
     fun RefreshButton() {
         Button(
             onClick = {
-                if (!bluetoothUtilities.checkAllPermissions()) {
-                    bluetoothUtilities.requestAllPermissions(permissionLauncher)
-                } else {
-                    devices.clear()
-                    devices.addAll(DeviceDBService(context).getAllDevices())
-                    bluetoothService.deviceList = devices
-                    bluetoothService.scanForAvailableDevices()
-                }
+                refreshDeviceList()
             },
             modifier = Modifier
                 .padding(bottom = 10.dp, start = 10.dp, end = 10.dp)
                 .fillMaxWidth()
         ) {
-            Text(text = "Refresh", fontSize = 20.sp)
+            val refreshButtonTest =
+                when (bluetoothState.value) {
+                    BluetoothState.Disconnected -> "Refresh"
+                    BluetoothState.Connecting -> "Connecting"
+                    BluetoothState.Connected -> "Connected"
+                    BluetoothState.Scanning -> "Scanning"
+                }
+            Text(text = refreshButtonTest, fontSize = 20.sp)
+        }
+    }
+
+    private fun connectToDevice(device: CubeDevice) {
+        ifPermissionsGranted {
+            bluetoothService.connectToDevice(device)
+        }
+    }
+
+    private fun refreshDeviceList() {
+        ifPermissionsGranted {
+            devices.clear()
+            devices.addAll(DeviceDBService(this).getAllDevices())
+            bluetoothService.deviceList = devices
+            bluetoothService.scanForAvailableDevices()
+        }
+    }
+
+    private fun ifPermissionsGranted(unit: () -> Unit) {
+        if (!bluetoothUtilities.checkAllPermissions()) {
+            bluetoothUtilities.requestAllPermissions(permissionLauncher)
+        } else {
+            unit()
         }
     }
 }

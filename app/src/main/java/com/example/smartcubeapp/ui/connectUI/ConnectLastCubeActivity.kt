@@ -39,11 +39,13 @@ class ConnectLastCubeActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         bluetoothUtilities = BluetoothUtilities(this, this)
+
         permissionLauncher =
             registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { }
         if (!bluetoothUtilities.checkAllPermissions()) {
             bluetoothUtilities.requestAllPermissions(permissionLauncher)
         }
+
         setContent {
             GenerateLayout()
         }
@@ -51,14 +53,7 @@ class ConnectLastCubeActivity : ComponentActivity() {
 
     @Composable
     fun GenerateLayout() {
-        val deviceFromDB = DeviceDBService(this).getLastDevice()
-        device = if (deviceFromDB != null) {
-            deviceFromDB
-        } else {
-            val intent = Intent(this, ConnectNewCubeActivity::class.java)
-            startActivity(intent)
-            return
-        }
+        loadDevice()
 
         Column(
             modifier = Modifier
@@ -77,6 +72,7 @@ class ConnectLastCubeActivity : ComponentActivity() {
             AddNewDeviceButtonRow()
         }
     }
+
 
     @Composable
     fun DeviceNameRow() {
@@ -99,27 +95,19 @@ class ConnectLastCubeActivity : ComponentActivity() {
             horizontalArrangement = Arrangement.Center
         ) {
             Button(onClick = {
-                if (!bluetoothUtilities.checkAllPermissions()) {
-                    bluetoothUtilities.requestAllPermissions(permissionLauncher)
-                } else {
-                    BluetoothService(
-                        this@ConnectLastCubeActivity,
-                        this@ConnectLastCubeActivity,
-                        Intent(this@ConnectLastCubeActivity, TimerActivity::class.java),
-                        Intent(this@ConnectLastCubeActivity, MainActivity::class.java)
-                    ).connectToDevice(device)
-                }
+                connectToDevice()
             }) {
-                val text =
+                val connectButtonText =
                     when (bluetoothState.value) {
                         BluetoothState.Connecting -> "Connecting"
                         BluetoothState.Connected -> "Connected"
                         else -> "Connect"
                     }
-                Text(text = text, fontSize = 20.sp)
+                Text(text = connectButtonText, fontSize = 20.sp)
             }
         }
     }
+
 
     @Composable
     fun AddNewDeviceButtonRow() {
@@ -136,6 +124,37 @@ class ConnectLastCubeActivity : ComponentActivity() {
             }) {
                 Text(text = "Add new cube", fontSize = 20.sp)
             }
+        }
+    }
+
+    private fun loadDevice() {
+        val deviceFromDB = DeviceDBService(this).getLastDevice()
+        device = if (deviceFromDB != null) {
+            deviceFromDB
+        } else {
+            val intent = Intent(this, ConnectNewCubeActivity::class.java)
+            startActivity(intent)
+            finish()
+            return
+        }
+    }
+
+    private fun connectToDevice() {
+        ifPermissionsGranted {
+            BluetoothService(
+                this@ConnectLastCubeActivity,
+                this@ConnectLastCubeActivity,
+                Intent(this@ConnectLastCubeActivity, TimerActivity::class.java),
+                Intent(this@ConnectLastCubeActivity, MainActivity::class.java)
+            ).connectToDevice(device)
+        }
+    }
+
+    private fun ifPermissionsGranted(unit: () -> Unit) {
+        if (!bluetoothUtilities.checkAllPermissions()) {
+            bluetoothUtilities.requestAllPermissions(permissionLauncher)
+        } else {
+            unit()
         }
     }
 }
