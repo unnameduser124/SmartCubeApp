@@ -1,7 +1,7 @@
 package com.example.smartcubeapp.ui.historyUI
 
-import android.content.Context
 import android.os.Bundle
+import android.os.Looper
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -29,14 +29,15 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Popup
 import androidx.compose.ui.window.PopupProperties
+import androidx.lifecycle.lifecycleScope
 import com.example.cube_cube.solveDBDataClasses.SolveData
 import com.example.cube_database.solvedatabase.solvesDB.SolvesDatabaseConstants
 import com.example.cube_database.solvedatabase.solvesDB.services.SolveDBService
+import kotlinx.coroutines.launch
+import kotlin.concurrent.thread
 
 class HistoryActivity : ComponentActivity() {
 
-    private lateinit var popupVisible: MutableState<Boolean>
-    private lateinit var popupSolveID: MutableState<Long>
     private lateinit var solvesList: SnapshotStateList<SolveData>
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -48,13 +49,19 @@ class HistoryActivity : ComponentActivity() {
     }
 
     @Composable
-    fun GenerateLayout(context: Context = this@HistoryActivity) {
-        popupVisible = remember { mutableStateOf(false) }
-        popupSolveID = remember { mutableStateOf(-1) }
+    fun GenerateLayout() {
+        val popupVisible = remember { mutableStateOf(false) }
+        val popupSolveID = remember { mutableStateOf(-1L) }
         Column(modifier = Modifier.fillMaxSize()) {
             ListHeader()
-            SolvesListLazyColumn(context)
+            SolvesListLazyColumn(popupVisible, popupSolveID)
         }
+
+        ShowPopup(popupVisible, popupSolveID)
+    }
+
+    @Composable
+    fun ShowPopup(popupVisible: MutableState<Boolean>, popupSolveID: MutableState<Long>) {
         if (popupVisible.value) {
             Popup(
                 alignment = Alignment.Center,
@@ -63,7 +70,11 @@ class HistoryActivity : ComponentActivity() {
                 },
                 properties = PopupProperties(focusable = true)
             ) {
-                SolveDetailsPopupLayout(popupVisible, solvesList).GenerateLayout(context = context, solveID = popupSolveID.value)
+                SolveDetailsPopupLayout(popupVisible, solvesList).GenerateLayout(
+                    context = this,
+                    solveID = popupSolveID.value,
+                    lifecycleScope = lifecycleScope
+                )
             }
         }
     }
@@ -105,11 +116,17 @@ class HistoryActivity : ComponentActivity() {
     }
 
     @Composable
-    fun SolvesListLazyColumn(context: Context) {
+    fun SolvesListLazyColumn(
+        popupVisible: MutableState<Boolean>,
+        popupSolveID: MutableState<Long>
+    ) {
         solvesList = remember { mutableStateListOf() }
         val page = remember { mutableStateOf(1) }
-        if(solvesList.isEmpty()){
-            solvesList.addAll(SolveDBService(context).getAllSolves().toMutableList())
+
+        lifecycleScope.launch {
+            if (solvesList.isEmpty()) {
+                solvesList.addAll(SolveDBService(this@HistoryActivity).getAllSolves())
+            }
         }
 
         Column(modifier = Modifier.fillMaxSize()) {
@@ -122,24 +139,38 @@ class HistoryActivity : ComponentActivity() {
                     SolveListItem(solvesList[index], popupVisible, popupSolveID).GenerateLayout()
                 }
                 item {
-                    Row(modifier = Modifier.padding(horizontal = 10.dp)) {
-                        Button(onClick = {
-                            val newSolves = SolveDBService(context).getAllSolves(page = page.value)
-                            if (newSolves.isEmpty()) {
-                                Toast.makeText(context, "All solves loaded", Toast.LENGTH_SHORT)
-                                    .show()
-                            } else {
-                                solvesList.addAll(SolveDBService(context).getAllSolves(page = page.value))
-                                page.value++
-                            }
-                        }, modifier = Modifier.fillMaxWidth()) {
-                            Text(text = "Load more")
-                        }
-                    }
+                    LoadMoreButtonRow(page)
                 }
             }
         }
     }
+
+    @Composable
+    fun LoadMoreButtonRow(page: MutableState<Int>) {
+        Row(modifier = Modifier.padding(horizontal = 10.dp)) {
+            Button(onClick = {
+                loadMoreSolves(page)
+            }, modifier = Modifier.fillMaxWidth()) {
+                Text(text = "Load more")
+            }
+        }
+    }
+
+    private fun loadMoreSolves(page: MutableState<Int>) {
+        thread {
+            val newSolves = SolveDBService(this@HistoryActivity).getAllSolves(page = page.value)
+            if (newSolves.isEmpty()) {
+                Looper.prepare()
+                Toast.makeText(this@HistoryActivity, "All solves loaded", Toast.LENGTH_SHORT)
+                    .show()
+            } else {
+                solvesList.addAll(SolveDBService(this@HistoryActivity).getAllSolves(page = page.value))
+                page.value++
+            }
+        }
+    }
+
+
 }
 
 @Preview
@@ -160,5 +191,5 @@ fun PreviewHistoryActivityLayout() {
             )
         )
     }
-    HistoryActivity().GenerateLayout(context)
+    HistoryActivity().GenerateLayout()
 }
