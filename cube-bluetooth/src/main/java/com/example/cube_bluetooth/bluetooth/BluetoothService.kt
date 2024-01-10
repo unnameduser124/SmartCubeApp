@@ -74,6 +74,7 @@ class BluetoothService(
             println("Already discovering")
         } else {
             bluetoothAdapter.startDiscovery()
+            bluetoothState.value = BluetoothState.Scanning
         }
     }
 
@@ -283,7 +284,13 @@ class BluetoothService(
                     println(cubeDevice)
                 }
             }
-        } else {
+        }
+        else if (action == BluetoothAdapter.ACTION_DISCOVERY_FINISHED){
+            if(bluetoothState.value == BluetoothState.Scanning){
+                bluetoothState.value = BluetoothState.Disconnected
+            }
+        }
+        else {
             println(action)
         }
     }

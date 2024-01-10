@@ -21,14 +21,15 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.cube_cube.scramble.ScrambleGenerator
 import com.example.cube_cube.solveDBDataClasses.SolveData
+import com.example.cube_global.roundDouble
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
 
 class SolveListItem(
     private val solveData: SolveData,
-    val popupVisible: MutableState<Boolean>,
-    val solveID: MutableState<Long>
+    private val popupVisible: MutableState<Boolean>,
+    private val solveID: MutableState<Long>
 ) {
 
     @Composable
@@ -43,7 +44,7 @@ class SolveListItem(
                 .fillMaxWidth()
                 .padding(10.dp)
                 .background(color = Color.LightGray, shape = RoundedCornerShape(16.dp))
-                .clickable{
+                .clickable {
                     solveID.value = solveData.id
                     popupVisible.value = true
                 },
@@ -56,7 +57,7 @@ class SolveListItem(
             val dateString = dateFormat.format(
                 Calendar.getInstance().apply { timeInMillis = solveData.timestamp }.time
             )
-            val durationString = com.example.cube_global.roundDouble(
+            val durationString = roundDouble(
                 solveData.solveDuration / 1000.0,
                 100
             ).toString()
@@ -78,7 +79,7 @@ class SolveListItem(
                 textAlign = TextAlign.Center
             )
             Text(
-                text = com.example.cube_global.roundDouble(solveTPS, 10).toString(),
+                text = roundDouble(solveTPS, 10).toString(),
                 fontSize = 23.sp,
                 modifier = Modifier
                     .padding(vertical = 10.dp)

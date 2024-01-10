@@ -5,7 +5,9 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import com.example.cube_bluetooth.bluetooth.BluetoothState
 import com.example.cube_bluetooth.bluetooth.bluetoothState
-import com.example.smartcubeapp.ui.connectUI.ConnectActivity
+import com.example.cube_database.solvedatabase.solvesDB.services.DeviceDBService
+import com.example.smartcubeapp.ui.connectUI.ConnectLastCubeActivity
+import com.example.smartcubeapp.ui.connectUI.ConnectNewCubeActivity
 import com.example.smartcubeapp.ui.timerUI.TimerActivity
 
 class MainActivity : ComponentActivity() {
@@ -21,14 +23,21 @@ class MainActivity : ComponentActivity() {
                 startActivity(intent)
                 finish()
             }
-
             else -> {
-                print("Recomposing in launchActivity")
-                val intent = Intent(this, ConnectActivity::class.java)
-                startActivity(intent)
-                finish()
+                launchConnectActivity()
             }
         }
     }
-}
 
+    private fun launchConnectActivity(){
+        if (DeviceDBService(this).getAllDevices().isEmpty()) {
+            val intent = Intent(this, ConnectNewCubeActivity::class.java)
+            startActivity(intent)
+            finish()
+        } else {
+            val intent = Intent(this, ConnectLastCubeActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
+    }
+}

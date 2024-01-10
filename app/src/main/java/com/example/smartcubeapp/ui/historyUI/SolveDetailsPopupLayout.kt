@@ -29,6 +29,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.LifecycleCoroutineScope
 import com.example.cube_cube.solveDBDataClasses.CrossData
 import com.example.cube_cube.solveDBDataClasses.CubeStateData
 import com.example.cube_cube.solveDBDataClasses.F2LData
@@ -48,25 +49,79 @@ import com.example.cube_detection.casedetection.olldetection.ollcase.PredefinedO
 import com.example.cube_detection.casedetection.plldetection.pllcase.PredefinedPLLCase
 import com.example.cube_detection.phasedetection.SolvePhase
 import com.example.cube_global.roundDouble
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
+import kotlin.concurrent.thread
 
 class SolveDetailsPopupLayout(
     private val popupVisible: MutableState<Boolean>,
     private val solvesList: SnapshotStateList<SolveData>
 ) {
 
+    @Composable
+    fun LoadData(context: Context, solveID: Long, lifecycleScope: LifecycleCoroutineScope): SolveAnalysisData? {
+        val data: MutableState<SolveAnalysisData?> = remember {
+            mutableStateOf(null)
+        }
+        lifecycleScope.launch {
+            data.value = SolveAnalysisDBService(context).getSolveAnalysisForSolve(solveID)
+            if (data.value == null) {
+                popupVisible.value = false
+            }
+        }
+        return data.value
+    }
+
 
     @Composable
-    fun GenerateLayout(context: Context, solveID: Long) {
-        val solveDB = SolveAnalysisDBService(context)
-        val data = solveDB.getSolveAnalysisForSolve(solveID)
-        if (data == null) {
-            popupVisible.value = false
-            return
-        }
+    fun GenerateLayout(context: Context, solveID: Long, lifecycleScope: LifecycleCoroutineScope) {
+        val data = LoadData(context, solveID, lifecycleScope)
 
+        if(data == null){
+            SolveDataLoadingLayout()
+        }
+        else{
+            Column(
+                modifier = Modifier
+                    .padding(10.dp)
+                    .shadow(elevation = 10.dp, shape = RoundedCornerShape(20.dp))
+                    .background(color = Color.White)
+                    .widthIn(max = 300.dp),
+                verticalArrangement = Arrangement.Top,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                DateRow(solveDate = data.timestamp)
+                ScrambleRow(scrambleSequence = data.scrambleSequence)
+                DurationRow(duration = data.solveDuration)
+
+                val tps = roundDouble(
+                    data.solveStateSequence.size.toDouble() / (data.solveDuration / 1000.0),
+                    10
+                )
+                MovesTPSRow(moves = data.solveStateSequence.size, tps = tps)
+
+                PhaseStatsDataTable(data = data)
+                val ollCase =
+                    if (data.ollData.case >= 0) PredefinedOLLCase.values()[data.ollData.case] else null
+                val pllCase =
+                    if (data.pllData.case >= 0) PredefinedPLLCase.values()[data.pllData.case] else null
+
+                LLCasesRow(ollCase = ollCase, pllCase = pllCase)
+                val sequenceWithoutScrambledState =
+                    data.solveStateSequence.subList(
+                        1,
+                        data.solveStateSequence.size
+                    )
+                SolveMoveSequenceRow(sequence = sequenceWithoutScrambledState)
+                DeleteButtonRow(id = data.solveID, context = context)
+            }
+        }
+    }
+
+    @Composable
+    fun SolveDataLoadingLayout(){
         Column(
             modifier = Modifier
                 .padding(10.dp)
@@ -76,24 +131,7 @@ class SolveDetailsPopupLayout(
             verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            DateRow(solveDate = data.timestamp)
-            ScrambleRow(scrambleSequence = data.scrambleSequence)
-            DurationRow(duration = data.solveDuration)
-            val tps = com.example.cube_global.roundDouble(
-                data.solveStateSequence.size.toDouble() / (data.solveDuration / 1000.0),
-                10
-            )
-            MovesTPSRow(moves = data.solveStateSequence.size, tps = tps)
-            PhaseStatsDataTable(data = data)
-            val ollCase =
-                if (data.ollData.case >= 0) PredefinedOLLCase.values()[data.ollData.case] else null
-            val pllCase =
-                if (data.pllData.case >= 0) PredefinedPLLCase.values()[data.pllData.case] else null
-            LLCasesRow(ollCase = ollCase, pllCase = pllCase)
-            val sequenceWithoutScrambledState =
-                data.solveStateSequence.subList(1, data.solveStateSequence.size)
-            SolveMoveSequenceRow(sequence = sequenceWithoutScrambledState)
-            DeleteButtonRow(id = data.solveID, context = context)
+            Text(text = "Loading...", modifier = Modifier.padding(20.dp))
         }
     }
 
@@ -160,60 +198,76 @@ class SolveDetailsPopupLayout(
 
                 val phase = phases[index]
 
-                val phaseTime = when (phase) {
-                    SolvePhase.Cross -> roundDouble(
-                        data.crossData.duration / 1000.0,
-                        100
-                    )
-                    SolvePhase.F2L -> roundDouble(
-                        data.f2lData.duration / 1000.0,
-                        100
-                    )
-                    SolvePhase.OLL -> roundDouble(
-                        data.ollData.duration / 1000.0,
-                        100
-                    )
-                    else -> roundDouble(data.pllData.duration / 1000.0, 100)
-                }
+                val phaseTime = phaseTimeText(phase, data)
 
-                val phaseMoves = when (phase) {
-                    SolvePhase.Cross -> data.crossData.moveCount
-                    SolvePhase.F2L -> data.f2lData.moveCount
-                    SolvePhase.OLL -> data.ollData.moveCount
-                    else -> data.pllData.moveCount
-                }
+                val phaseMoves = phaseMovesText(phase, data)
 
-                val phaseTps = when (phase) {
-                    SolvePhase.Cross -> roundDouble(
-                        data.crossData.moveCount.toDouble() / (data.crossData.duration / 1000.0),
-                        10
-                    )
-
-                    SolvePhase.F2L -> roundDouble(
-                        data.f2lData.moveCount.toDouble() / (data.f2lData.duration / 1000.0),
-                        10
-                    )
-
-                    SolvePhase.OLL -> roundDouble(
-                        data.ollData.moveCount.toDouble() / (data.ollData.duration / 1000.0),
-                        10
-                    )
-
-                    else -> roundDouble(
-                        data.pllData.moveCount.toDouble() / (data.pllData.duration / 1000.0),
-                        10
-                    )
-                }
+                val phaseTps = phaseTPSText(phase, data)
 
                 Row(horizontalArrangement = Arrangement.Center) {
                     TableCell(phase.toString(), columnWeight)
-                    TableCell(phaseTime.toString(), columnWeight)
-                    TableCell(phaseMoves.toString(), columnWeight)
-                    TableCell(phaseTps.toString(), columnWeight)
+                    TableCell(phaseTime, columnWeight)
+                    TableCell(phaseMoves, columnWeight)
+                    TableCell(phaseTps, columnWeight)
                 }
             }
         }
     }
+
+    private fun phaseTimeText(phase: SolvePhase, data: SolveAnalysisData): String {
+        return when (phase) {
+            SolvePhase.Cross -> roundDouble(
+                data.crossData.duration / 1000.0,
+                100
+            )
+
+            SolvePhase.F2L -> roundDouble(
+                data.f2lData.duration / 1000.0,
+                100
+            )
+
+            SolvePhase.OLL -> roundDouble(
+                data.ollData.duration / 1000.0,
+                100
+            )
+
+            else -> roundDouble(data.pllData.duration / 1000.0, 100)
+        }.toString()
+    }
+
+    private fun phaseMovesText(phase: SolvePhase, data: SolveAnalysisData): String {
+        return when (phase) {
+            SolvePhase.Cross -> data.crossData.moveCount
+            SolvePhase.F2L -> data.f2lData.moveCount
+            SolvePhase.OLL -> data.ollData.moveCount
+            else -> data.pllData.moveCount
+        }.toString()
+    }
+
+    private fun phaseTPSText(phase: SolvePhase, data: SolveAnalysisData): String {
+        return when (phase) {
+            SolvePhase.Cross -> roundDouble(
+                data.crossData.moveCount.toDouble() / (data.crossData.duration / 1000.0),
+                10
+            )
+
+            SolvePhase.F2L -> roundDouble(
+                data.f2lData.moveCount.toDouble() / (data.f2lData.duration / 1000.0),
+                10
+            )
+
+            SolvePhase.OLL -> roundDouble(
+                data.ollData.moveCount.toDouble() / (data.ollData.duration / 1000.0),
+                10
+            )
+
+            else -> roundDouble(
+                data.pllData.moveCount.toDouble() / (data.pllData.duration / 1000.0),
+                10
+            )
+        }.toString()
+    }
+
 
     @Composable
     fun LLCasesRow(ollCase: PredefinedOLLCase?, pllCase: PredefinedPLLCase?) {
@@ -268,9 +322,11 @@ class SolveDetailsPopupLayout(
         ) {
             Button(
                 onClick = {
-                    SolveAnalysisDBService(context).deleteSolveWithAnalysisData(id)
-                    solvesList.removeIf { it.id == id }
-                    popupVisible.value = false
+                    thread {
+                        SolveAnalysisDBService(context).deleteSolveWithAnalysisData(id)
+                        solvesList.removeIf { it.id == id }
+                        popupVisible.value = false
+                    }
                 },
                 modifier = Modifier
                     .fillMaxWidth(0.9f),
@@ -355,5 +411,5 @@ fun SolveDetailsPopupPreview() {
     )
     CrossDBService(context).addCrossData(crossData)
     val solvesList = remember { mutableStateListOf<SolveData>() }
-    SolveDetailsPopupLayout(popupVisible, solvesList).GenerateLayout(context = context, solveID = 1)
+    //SolveDetailsPopupLayout(popupVisible, solvesList).GenerateLayout(context = context, solveID = 1, lifecycleScope)
 }

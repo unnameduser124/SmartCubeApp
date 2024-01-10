@@ -634,3 +634,8 @@ fun millisToSeconds(millis: Double): Double {
     val time = millis / MILLIS_IN_SECOND.toDouble()
     return roundDouble(time, 100)
 }
+
+fun millisToHours(millis: Long): Double {
+    val time = millis / MILLIS_IN_HOUR.toDouble()
+    return roundDouble(time, 10)
+}
