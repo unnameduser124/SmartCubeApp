@@ -13,7 +13,7 @@ import com.example.cube_cube.scramble.ScramblingMode
 import com.example.cube_global.solve
 
 class ScrambleHandler(
-    val context: Context,
+    private val context: Context,
     private val activityContext: Activity,
     private val scramble: Scramble,
     private val scrambleSequence: MutableState<String>,

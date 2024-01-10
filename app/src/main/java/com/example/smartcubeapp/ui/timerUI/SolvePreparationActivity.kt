@@ -98,31 +98,7 @@ class SolvePreparationActivity : ComponentActivity() {
     @Composable
     fun ScrambleSequenceRow() {
         if(AppSettings.isScrambleGenerationEnabled){
-            scrambleSequence = remember { mutableStateOf(scramble.getRemainingMoves()) }
-            val scrambleHandler = ScrambleHandler(context, this, scramble, scrambleSequence)
-            scrambleHandler.handle(lastState)
-
-            val interactionSource = remember { MutableInteractionSource() }
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .clickable(interactionSource = interactionSource, indication = null) {
-                        scrambleHandler.handleScrambleGeneration()
-                    }
-                    .padding(16.dp)
-                    .background(color = Color.LightGray, shape = RoundedCornerShape(20.dp))
-            ) {
-                Text(
-                    scrambleSequence.value,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 10.dp, bottom = 10.dp, start = 15.dp, end = 5.dp),
-                    fontSize = 25.sp,
-                    overflow = TextOverflow.Ellipsis,
-                    maxLines = 1,
-                    textAlign = TextAlign.Center
-                )
-            }
+            HandleScrambleDisplay()
         }
         else{
             Row(
@@ -141,6 +117,35 @@ class SolvePreparationActivity : ComponentActivity() {
                     textAlign = TextAlign.Center
                 )
             }
+        }
+    }
+
+    @Composable
+    fun HandleScrambleDisplay(){
+        scrambleSequence = remember { mutableStateOf(scramble.getRemainingMoves()) }
+        val scrambleHandler = ScrambleHandler(context, this, scramble, scrambleSequence)
+        scrambleHandler.handle(lastState)
+
+        val interactionSource = remember { MutableInteractionSource() }
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .clickable(interactionSource = interactionSource, indication = null) {
+                    scrambleHandler.handleScrambleGeneration()
+                }
+                .padding(16.dp)
+                .background(color = Color.LightGray, shape = RoundedCornerShape(20.dp))
+        ) {
+            Text(
+                scrambleSequence.value,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 10.dp, bottom = 10.dp, start = 15.dp, end = 5.dp),
+                fontSize = 25.sp,
+                overflow = TextOverflow.Ellipsis,
+                maxLines = 1,
+                textAlign = TextAlign.Center
+            )
         }
     }
 

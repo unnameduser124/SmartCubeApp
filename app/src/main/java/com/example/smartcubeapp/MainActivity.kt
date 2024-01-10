@@ -24,17 +24,20 @@ class MainActivity : ComponentActivity() {
                 finish()
             }
             else -> {
-                if (DeviceDBService(this).getAllDevices().isEmpty()) {
-                    val intent = Intent(this, ConnectNewCubeActivity::class.java)
-                    startActivity(intent)
-                    finish()
-                } else {
-                    val intent = Intent(this, ConnectLastCubeActivity::class.java)
-                    startActivity(intent)
-                    finish()
-                }
+                launchConnectActivity()
             }
         }
     }
-}
 
+    private fun launchConnectActivity(){
+        if (DeviceDBService(this).getAllDevices().isEmpty()) {
+            val intent = Intent(this, ConnectNewCubeActivity::class.java)
+            startActivity(intent)
+            finish()
+        } else {
+            val intent = Intent(this, ConnectLastCubeActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
+    }
+}

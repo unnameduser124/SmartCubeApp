@@ -123,41 +123,46 @@ class SolveResultsUI(val context: Context) {
                 }
             }
         ) {
-            when (solve.solvePenalty) {
-                SolvePenalty.DNF -> {
-                    Text(
-                        text = "DNF",
-                        fontSize = 70.sp,
-                    )
-                }
-                SolvePenalty.PlusTwo -> {
-                    val solveTime = calculateTime()
-                    val solveSeconds = solveTime.split(".")[0]
-                    val solveMilliseconds = solveTime.split(".")[1]
-                    Text(
-                        text = "$solveSeconds.",
-                        fontSize = 70.sp,
-                    )
-                    Text(
-                        text = solveMilliseconds,
-                        fontSize = 50.sp,
-                        modifier = Modifier.padding(bottom = 6.dp)
-                    )
-                }
-                else -> {
-                    val solveTime = calculateTime()
-                    val solveSeconds = solveTime.split(".")[0]
-                    val solveMilliseconds = solveTime.split(".")[1]
-                    Text(
-                        text = "$solveSeconds.",
-                        fontSize = 70.sp,
-                    )
-                    Text(
-                        text = solveMilliseconds,
-                        fontSize = 50.sp,
-                        modifier = Modifier.padding(bottom = 6.dp)
-                    )
-                }
+            SolveTimeText(solvePenalty = solve.solvePenalty)
+        }
+    }
+
+    private fun solveTimeString(solvePenalty: SolvePenalty): Pair<String, String>{
+        return when (solvePenalty){
+            SolvePenalty.DNF -> {
+                Pair("DNF", "DNF")
+            }
+            else -> {
+                val solveTime = calculateTime()
+                val solveSeconds = solveTime.split(".")[0]
+                val solveMilliseconds = solveTime.split(".")[1]
+                Pair(solveSeconds, solveMilliseconds)
+            }
+        }
+    }
+
+    @Composable
+    fun SolveTimeText(solvePenalty: SolvePenalty){
+        when (solvePenalty){
+            SolvePenalty.DNF -> {
+                Text(
+                    text = "DNF",
+                    fontSize = 70.sp,
+                )
+            }
+            else -> {
+                val solveTimePair = solveTimeString(solvePenalty)
+                val solveSeconds = solveTimePair.first
+                val solveMilliseconds = solveTimePair.second
+                Text(
+                    text = "$solveSeconds.",
+                    fontSize = 70.sp,
+                )
+                Text(
+                    text = solveMilliseconds,
+                    fontSize = 50.sp,
+                    modifier = Modifier.padding(bottom = 6.dp)
+                )
             }
         }
     }
