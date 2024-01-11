@@ -102,6 +102,10 @@ object SolvesDatabaseConstants {
             "${DeviceTable.DEVICE_NAME_COLUMN} TEXT NOT NULL, " +
             "${DeviceTable.LAST_CONNECTION_TIME_COLUMN} INTEGER NOT NULL)"
 
+    const val CREATE_SETTINGS_TABLE = "CREATE TABLE IF NOT EXISTS ${SettingsTable.TABLE_NAME} (" +
+            "${SettingsTable.SETTING_NAME} TEXT NOT NULL, " +
+            "${SettingsTable.SETTING_VALUE} TEXT NOT NULL)"
+
 
     object SolveTable {
         const val TABLE_NAME = "Solve"
@@ -168,5 +172,11 @@ object SolvesDatabaseConstants {
         const val DEVICE_ADDRESS_COLUMN = "DeviceAddress"
         const val DEVICE_NAME_COLUMN = "DeviceName"
         const val LAST_CONNECTION_TIME_COLUMN = "LastConnectionTime"
+    }
+
+    object SettingsTable{
+        const val TABLE_NAME = "Settings"
+        const val SETTING_NAME = "SettingName"
+        const val SETTING_VALUE = "SettingValue"
     }
 }

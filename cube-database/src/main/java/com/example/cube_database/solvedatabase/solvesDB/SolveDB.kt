@@ -3,6 +3,7 @@ package com.example.cube_database.solvedatabase.solvesDB
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
+import com.example.cube_global.dbAccesses
 
 open class SolveDB(
     private val context: Context,
@@ -10,7 +11,7 @@ open class SolveDB(
 ) :
     SQLiteOpenHelper(context, dbName, null, SolvesDatabaseConstants.DATABASE_VERSION) {
     override fun onCreate(db: SQLiteDatabase?) {
-        com.example.cube_global.dbAccesses++
+        dbAccesses++
         createSolveTable(db)
         createCubeStateTable(db)
         createF2LTable(db)
@@ -18,6 +19,7 @@ open class SolveDB(
         createPLLTable(db)
         createCrossTable(db)
         createDeviceTable(db)
+        createSettingsTable(db)
     }
 
     override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
@@ -50,6 +52,10 @@ open class SolveDB(
 
     private fun createDeviceTable(db: SQLiteDatabase?){
         db?.execSQL(SolvesDatabaseConstants.CREATE_DEVICE_TABLE)
+    }
+
+    private fun createSettingsTable(db: SQLiteDatabase?){
+        db?.execSQL(SolvesDatabaseConstants.CREATE_SETTINGS_TABLE)
     }
 
 

@@ -4,7 +4,6 @@ import android.content.Context
 import androidx.test.platform.app.InstrumentationRegistry
 import com.example.cube_database.solvedatabase.solvesDB.SolveDB
 import com.example.cube_database.solvedatabase.solvesDB.SolvesDatabaseConstants
-import com.example.cube_detection.ElementDatabaseConstants
 import junit.framework.TestCase
 import junit.framework.TestCase.assertEquals
 import junit.framework.TestCase.assertTrue
@@ -25,7 +24,7 @@ class SolveDBTests {
     @After
     fun tearDown() {
         dbService.close()
-        appContext.deleteDatabase(ElementDatabaseConstants.TEST_DATABASE_NAME)
+        appContext.deleteDatabase(SolvesDatabaseConstants.TEST_DATABASE_NAME)
     }
 
     @Test
@@ -130,6 +129,23 @@ class SolveDBTests {
             assertTrue(cursor.moveToFirst())
             assertEquals(
                 SolvesDatabaseConstants.DeviceTable.TABLE_NAME,
+                cursor.getString(0)
+            )
+        }
+    }
+
+    @Test
+    fun createSettingsTableTest(){
+        val cursor = dbService.readableDatabase.rawQuery(
+            "SELECT name " +
+                    "FROM sqlite_master WHERE type='table' " +
+                    "AND name='${SolvesDatabaseConstants.SettingsTable.TABLE_NAME}'",
+            null
+        )
+        cursor.use {
+            assertTrue(cursor.moveToFirst())
+            assertEquals(
+                SolvesDatabaseConstants.SettingsTable.TABLE_NAME,
                 cursor.getString(0)
             )
         }
