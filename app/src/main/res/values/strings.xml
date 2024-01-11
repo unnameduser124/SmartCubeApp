@@ -22,4 +22,8 @@
     <string name="ll_cases_table_header_average_moves">avg moves</string>
     <string name="oll_cases_table_label">OLL cases</string>
     <string name="pll_cases_table_label">PLL cases</string>
+    <string name="inspection_timer_switch_label">Inspection timer</string>
+    <string name="clear_all_data_button_label">CLEAR ALL DATA</string>
+    <string name="scramble_generation_switch_label">Scramble generation</string>
+    <string name="solve_time_visibility_during_solve_switch_label">Time visible while solving</string>
 </resources>

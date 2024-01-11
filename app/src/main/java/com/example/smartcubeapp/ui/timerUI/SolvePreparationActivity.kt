@@ -44,6 +44,7 @@ import com.example.cube_global.millisToSeconds
 import com.example.cube_global.solve
 import com.example.smartcubeapp.R
 import com.example.smartcubeapp.ui.historyUI.HistoryActivity
+import com.example.smartcubeapp.ui.settingsUI.SettingsActivity
 import com.example.smartcubeapp.ui.statsUI.StatsActivity
 import java.util.Calendar
 import kotlin.concurrent.thread
@@ -202,7 +203,10 @@ class SolvePreparationActivity : ComponentActivity() {
             horizontalArrangement = Arrangement.End,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            IconButton(onClick = { /*TODO("Open settings activity")*/ }) {
+            IconButton(onClick = {
+                val intent = Intent(context, SettingsActivity::class.java)
+                context.startActivity(intent)
+            }) {
                 Icon(
                     painter = painterResource(id = R.drawable.baseline_settings_24),
                     contentDescription = "Settings button",

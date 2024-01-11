@@ -37,9 +37,7 @@ class BluetoothService(
     private val bluetoothAdapter = bluetoothManager.adapter
     private val bluetoothUtilities = BluetoothUtilities(activity, activityContext)
     private var device: CubeDevice? = null
-
-
-    inline fun <reified T : Parcelable> Intent.parcelable(key: String): T? = when {
+    private inline fun <reified T : Parcelable> Intent.parcelable(key: String): T? = when {
         SDK_INT >= 33 -> getParcelableExtra(key, T::class.java)
         else -> @Suppress("DEPRECATION") getParcelableExtra(key) as? T
     }
@@ -50,6 +48,14 @@ class BluetoothService(
             handleDiscoveryReceiverAction(action, intent)
         }
     }
+
+    init{
+        val filter = getDeviceScanIntentFilter()
+        activity.registerReceiver(receiver, filter)
+    }
+
+
+
 
     fun scanForAvailableDevices() {
         if (!bluetoothUtilities.checkForBluetoothScanPermission()) {
@@ -65,8 +71,6 @@ class BluetoothService(
         bluetoothUtilities.checkIfBluetoothIsOn(bluetoothAdapter, activity)
 
 
-        val filter = getDeviceScanIntentFilter()
-        activity.registerReceiver(receiver, filter)
 
         bluetoothUtilities.checkForBluetoothScanPermission()
 
@@ -268,6 +272,7 @@ class BluetoothService(
     }
 
     private fun handleDiscoveryReceiverAction(action: String?, intent: Intent) {
+        val state: Int = intent.getIntExtra(BluetoothAdapter.EXTRA_STATE, -1)
         if (BluetoothDevice.ACTION_FOUND == action) {
             val device = intent.parcelable<BluetoothDevice>(BluetoothDevice.EXTRA_DEVICE)
             if (!bluetoothUtilities.checkForBluetoothConnectPermission()) {
@@ -290,8 +295,11 @@ class BluetoothService(
                 bluetoothState.value = BluetoothState.Disconnected
             }
         }
+        else if(state == BluetoothAdapter.STATE_ON){
+            bluetoothState.value = BluetoothState.Disconnected
+        }
         else {
-            println(action)
+            println(action?.javaClass)
         }
     }
 
