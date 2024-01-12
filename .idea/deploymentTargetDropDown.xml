@@ -2,7 +2,7 @@
 <project version="4">
   <component name="deploymentTargetDropDown">
     <value>
-      <entry key="PreviewGenerateLayout">
+      <entry key="SettingsDBServiceTests">
         <State />
       </entry>
       <entry key="SolveDBTests">
@@ -11,7 +11,10 @@
       <entry key="Tests in 'com.example.tests.correctnesstests.dbtests'">
         <State />
       </entry>
-      <entry key="Tests in 'com.example.tests.correctnesstests.timertests'">
+      <entry key="Tests in 'com.example.tests.correctnesstests.detectiontests'">
+        <State />
+      </entry>
+      <entry key="Tests in 'com.example.tests.correctnesstests.statstests'">
         <State />
       </entry>
       <entry key="app">
@@ -24,9 +27,6 @@
         <State />
       </entry>
       <entry key="performancetests">
-        <State />
-      </entry>
-      <entry key="saveSolveWithAnalysisTest()">
         <State />
       </entry>
     </value>

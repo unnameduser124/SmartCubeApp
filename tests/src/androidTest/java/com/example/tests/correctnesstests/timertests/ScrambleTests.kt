@@ -1,20 +1,16 @@
 package com.example.tests.correctnesstests.timertests
 
-import androidx.compose.ui.test.junit4.createComposeRule
 import com.example.cube_cube.scramble.Scramble
 import com.example.cube_cube.scramble.ScramblingMode
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotEquals
 import org.junit.Before
-import org.junit.Rule
 import org.junit.Test
 
 class ScrambleTests {
 
     private lateinit var scramble: Scramble
 
-    @get:Rule
-    val composeTestRule = createComposeRule()
 
     @Before
     fun setUp() {
@@ -123,9 +119,7 @@ class ScrambleTests {
     fun getRemainingMovesTest() {
         val movesList = scramble.getRemainingMoves().split(" ")
 
-        movesList.forEachIndexed { index, move ->
-            val remainingMoves = scramble.getRemainingMoves()
-            val expectedRemainingMoves = movesList.subList(index, movesList.size).joinToString(" ")
+        movesList.forEach{ move ->
             val nextMove = scramble.nextMove(move)
             assert(nextMove)
         }

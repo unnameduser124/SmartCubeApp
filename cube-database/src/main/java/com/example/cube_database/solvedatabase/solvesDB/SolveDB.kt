@@ -20,6 +20,7 @@ open class SolveDB(
         createCrossTable(db)
         createDeviceTable(db)
         createSettingsTable(db)
+        initializeSettings(db)
     }
 
     override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
@@ -56,6 +57,10 @@ open class SolveDB(
 
     private fun createSettingsTable(db: SQLiteDatabase?){
         db?.execSQL(SolvesDatabaseConstants.CREATE_SETTINGS_TABLE)
+    }
+
+    private fun initializeSettings(db: SQLiteDatabase?){
+        db?.execSQL(SolvesDatabaseConstants.INITIALIZE_SETTINGS_QUERY)
     }
 
 

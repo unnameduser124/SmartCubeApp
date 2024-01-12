@@ -103,8 +103,13 @@ object SolvesDatabaseConstants {
             "${DeviceTable.LAST_CONNECTION_TIME_COLUMN} INTEGER NOT NULL)"
 
     const val CREATE_SETTINGS_TABLE = "CREATE TABLE IF NOT EXISTS ${SettingsTable.TABLE_NAME} (" +
-            "${SettingsTable.SETTING_NAME} TEXT NOT NULL, " +
+            "${SettingsTable.SETTING_NAME} TEXT PRIMARY KEY, " +
             "${SettingsTable.SETTING_VALUE} TEXT NOT NULL)"
+
+    const val INITIALIZE_SETTINGS_QUERY = "INSERT INTO ${SettingsTable.TABLE_NAME} VALUES " +
+            "('${SettingsTable.INSPECTION_ENABLED}', '1'), " +
+            "('${SettingsTable.SOLVING_TIME_VISIBLE}', '1'), " +
+            "('${SettingsTable.SCRAMBLE_GENERATION_ENABLED}', '1')"
 
 
     object SolveTable {
@@ -178,5 +183,9 @@ object SolvesDatabaseConstants {
         const val TABLE_NAME = "Settings"
         const val SETTING_NAME = "SettingName"
         const val SETTING_VALUE = "SettingValue"
+
+        const val INSPECTION_ENABLED = "InspectionEnabled"
+        const val SOLVING_TIME_VISIBLE = "SolvingTimeVisible"
+        const val SCRAMBLE_GENERATION_ENABLED = "ScrambleGenerationEnabled"
     }
 }
