@@ -1,7 +1,9 @@
 package com.example.smartcubeapp.ui.settingsUI
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -21,7 +23,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.cube_database.solvedatabase.solvesDB.SolvesDatabaseConstants
+import com.example.cube_database.solvedatabase.solvesDB.services.SettingsDBService
+import com.example.cube_global.AppSettings
 import com.example.smartcubeapp.R
+import com.example.smartcubeapp.ui.timerUI.SolvePreparationActivity
+import kotlin.concurrent.thread
 
 class SettingsActivity : ComponentActivity() {
 
@@ -31,6 +38,15 @@ class SettingsActivity : ComponentActivity() {
         setContent {
             GenerateLayout()
         }
+
+        val callback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                val intent = Intent(this@SettingsActivity, SolvePreparationActivity::class.java)
+                startActivity(intent)
+                finish()
+            }
+        }
+        onBackPressedDispatcher.addCallback(callback)
     }
 
     @Composable
@@ -40,14 +56,44 @@ class SettingsActivity : ComponentActivity() {
                 .fillMaxSize()
                 .padding(10.dp)
         ) {
-            SwitchButtonRow(this@SettingsActivity.getString(R.string.inspection_timer_switch_label)) {
-                //TODO("Switch AppSettings variable, save change to database")
+            SwitchButtonRow(
+                this@SettingsActivity.getString(R.string.inspection_timer_switch_label),
+                AppSettings.isInspectionEnabled
+            ) {
+                AppSettings.isInspectionEnabled = !AppSettings.isInspectionEnabled
+                thread {
+                    val service = SettingsDBService(this@SettingsActivity)
+                    service.updateSetting(
+                        SolvesDatabaseConstants.SettingsTable.INSPECTION_ENABLED,
+                        if (AppSettings.isInspectionEnabled) "1" else "0"
+                    )
+                }
             }
-            SwitchButtonRow(this@SettingsActivity.getString(R.string.solve_time_visibility_during_solve_switch_label)) {
-                //TODO("Switch AppSettings variable, save change to database")
+            SwitchButtonRow(
+                this@SettingsActivity.getString(R.string.solve_time_visibility_during_solve_switch_label),
+                AppSettings.isSolvingTimeVisible
+            ) {
+                AppSettings.isSolvingTimeVisible = !AppSettings.isSolvingTimeVisible
+                thread {
+                    val service = SettingsDBService(this@SettingsActivity)
+                    service.updateSetting(
+                        SolvesDatabaseConstants.SettingsTable.SOLVING_TIME_VISIBLE,
+                        if (AppSettings.isSolvingTimeVisible) "1" else "0"
+                    )
+                }
             }
-            SwitchButtonRow(this@SettingsActivity.getString(R.string.scramble_generation_switch_label)) {
-                //TODO("Switch AppSettings variable, save change to database")
+            SwitchButtonRow(
+                this@SettingsActivity.getString(R.string.scramble_generation_switch_label),
+                AppSettings.isScrambleGenerationEnabled
+            ) {
+                AppSettings.isScrambleGenerationEnabled = !AppSettings.isScrambleGenerationEnabled
+                thread {
+                    val service = SettingsDBService(this@SettingsActivity)
+                    service.updateSetting(
+                        SolvesDatabaseConstants.SettingsTable.SCRAMBLE_GENERATION_ENABLED,
+                        if (AppSettings.isScrambleGenerationEnabled) "1" else "0"
+                    )
+                }
             }
             ClearAllDataButtonRow()
         }
@@ -73,18 +119,24 @@ class SettingsActivity : ComponentActivity() {
     }
 
     @Composable
-    fun SwitchButtonRow(text: String, onCheckedChanged: () -> Unit) {
-        val checked = remember { mutableStateOf(false) }
+    fun SwitchButtonRow(
+        text: String,
+        checkedInitValue: Boolean = false,
+        onCheckedChanged: () -> Unit
+    ) {
+        val checked = remember { mutableStateOf(checkedInitValue) }
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(text = "Switch Button", fontSize = 20.sp)
+            Text(text = text, fontSize = 20.sp)
             Switch(checked = checked.value, onCheckedChange = {
                 checked.value = it
                 onCheckedChanged()
             })
         }
     }
+
+
 }

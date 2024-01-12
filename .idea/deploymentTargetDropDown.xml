@@ -2,19 +2,16 @@
 <project version="4">
   <component name="deploymentTargetDropDown">
     <value>
-      <entry key="SettingsDBServiceTests">
-        <State />
-      </entry>
-      <entry key="SolveDBTests">
-        <State />
-      </entry>
-      <entry key="Tests in 'com.example.tests.correctnesstests.dbtests'">
+      <entry key="Tests in 'com.example.tests'">
         <State />
       </entry>
       <entry key="Tests in 'com.example.tests.correctnesstests.detectiontests'">
         <State />
       </entry>
       <entry key="Tests in 'com.example.tests.correctnesstests.statstests'">
+        <State />
+      </entry>
+      <entry key="Tests in 'com.example.tests.correctnesstests.timertests'">
         <State />
       </entry>
       <entry key="app">

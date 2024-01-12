@@ -12,15 +12,6 @@ class SettingsDBService(
     dbName: String = SOLVE_DATABASE_NAME
 ) : SolveDB(context, dbName) {
 
-    private fun addSetting(settingName: String, settingValue: String) {
-        val db = writableDatabase
-        val values = ContentValues().apply {
-            put(SettingsTable.SETTING_NAME, settingName)
-            put(SettingsTable.SETTING_VALUE, settingValue)
-        }
-        db.insert(SettingsTable.TABLE_NAME, null, values)
-    }
-
     fun updateSetting(settingName: String, settingValue: String){
         val db = writableDatabase
         val values = ContentValues().apply{
@@ -29,6 +20,7 @@ class SettingsDBService(
         }
         val selection = "${SettingsTable.SETTING_NAME} = ?"
         val selectionArgs = arrayOf(settingName)
+        println("Query = UPDATE ${SettingsTable.TABLE_NAME} SET ${SettingsTable.SETTING_VALUE} = $settingValue WHERE $selection = $settingName")
         db.update(SettingsTable.TABLE_NAME, values, selection, selectionArgs)
     }
 

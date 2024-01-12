@@ -206,6 +206,7 @@ class SolvePreparationActivity : ComponentActivity() {
             IconButton(onClick = {
                 val intent = Intent(context, SettingsActivity::class.java)
                 context.startActivity(intent)
+                finish()
             }) {
                 Icon(
                     painter = painterResource(id = R.drawable.baseline_settings_24),

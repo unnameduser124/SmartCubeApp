@@ -6,13 +6,19 @@ import androidx.activity.ComponentActivity
 import com.example.cube_bluetooth.bluetooth.BluetoothState
 import com.example.cube_bluetooth.bluetooth.bluetoothState
 import com.example.cube_database.solvedatabase.solvesDB.services.DeviceDBService
+import com.example.cube_database.solvedatabase.solvesDB.services.SettingsDBService
 import com.example.smartcubeapp.ui.connectUI.ConnectLastCubeActivity
 import com.example.smartcubeapp.ui.connectUI.ConnectNewCubeActivity
 import com.example.smartcubeapp.ui.timerUI.TimerActivity
+import kotlin.concurrent.thread
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        thread{
+            val settingsService = SettingsDBService(this)
+            settingsService.loadSettings()
+        }
         launchActivity()
     }
 

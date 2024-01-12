@@ -299,7 +299,7 @@ class BluetoothService(
             bluetoothState.value = BluetoothState.Disconnected
         }
         else {
-            println(action?.javaClass)
+            println(action)
         }
     }
 
