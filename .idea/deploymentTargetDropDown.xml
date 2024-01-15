@@ -5,16 +5,16 @@
       <entry key="Tests in 'com.example.tests'">
         <State />
       </entry>
-      <entry key="Tests in 'com.example.tests.correctnesstests.detectiontests'">
-        <State />
-      </entry>
-      <entry key="Tests in 'com.example.tests.correctnesstests.statstests'">
-        <State />
-      </entry>
       <entry key="Tests in 'com.example.tests.correctnesstests.timertests'">
         <State />
       </entry>
       <entry key="app">
+        <State />
+      </entry>
+      <entry key="clearDataTest()">
+        <State />
+      </entry>
+      <entry key="clearDataTest() (1)">
         <State />
       </entry>
       <entry key="correctnesstests">

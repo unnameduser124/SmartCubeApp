@@ -12,15 +12,7 @@ open class SolveDB(
     SQLiteOpenHelper(context, dbName, null, SolvesDatabaseConstants.DATABASE_VERSION) {
     override fun onCreate(db: SQLiteDatabase?) {
         dbAccesses++
-        createSolveTable(db)
-        createCubeStateTable(db)
-        createF2LTable(db)
-        createOLLTable(db)
-        createPLLTable(db)
-        createCrossTable(db)
-        createDeviceTable(db)
-        createSettingsTable(db)
-        initializeSettings(db)
+        createTables(db)
     }
 
     override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
@@ -63,6 +55,36 @@ open class SolveDB(
         db?.execSQL(SolvesDatabaseConstants.INITIALIZE_SETTINGS_QUERY)
     }
 
+    fun clearAllData(){
+        val db = this.writableDatabase
+        val dropQueries = SolvesDatabaseConstants.CLEAR_ALL_DATA_QUERY.split(';')
+        for (query in dropQueries){
+            if(query.isEmpty()) continue
+            db.execSQL(query)
+        }
+        createTablesAfterDataClearing(db)
+    }
+
+    private fun createTables(db: SQLiteDatabase?){
+        createSolveTable(db)
+        createCubeStateTable(db)
+        createF2LTable(db)
+        createOLLTable(db)
+        createPLLTable(db)
+        createCrossTable(db)
+        createDeviceTable(db)
+        createSettingsTable(db)
+        initializeSettings(db)
+    }
+
+    private fun createTablesAfterDataClearing(db: SQLiteDatabase?){
+        createSolveTable(db)
+        createCubeStateTable(db)
+        createF2LTable(db)
+        createOLLTable(db)
+        createPLLTable(db)
+        createCrossTable(db)
+    }
 
     fun getDatabaseSizeInMegabytes(): Double {
         val dbFile = context.getDatabasePath(dbName)
