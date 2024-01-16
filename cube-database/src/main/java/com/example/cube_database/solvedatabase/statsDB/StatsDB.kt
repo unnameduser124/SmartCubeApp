@@ -81,4 +81,9 @@ class StatsDB(val context: Context, private val dbName: String = StatsDBConstant
         }
     }
 
+    fun clearAllData() {
+        val db = this.writableDatabase
+        db.execSQL(StatsDBConstants.CLEAR_ALL_DATA_QUERY)
+    }
+
 }

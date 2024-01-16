@@ -114,6 +114,27 @@ class StatsDBTests {
         }
     }
 
+    @Test
+    fun clearDataTest(){
+        dbService.writableDatabase.execSQL(updateStatsTableRecordValuesQuery(5.5))
+        dbService.clearAllData()
+        val cursor = dbService.readableDatabase.rawQuery(
+            "SELECT * FROM ${StatsDBConstants.StatsTable.TABLE_NAME}",
+            null
+        )
+        with(cursor){
+            while(moveToNext()){
+                val value = getDouble(getColumnIndexOrThrow(StatsDBConstants.StatsTable.STATISTIC_VALUE_COLUMN))
+                TestCase.assertEquals(0.0, value)
+            }
+        }
+    }
+
+    private fun updateStatsTableRecordValuesQuery(value: Double): String{
+        return "UPDATE ${StatsDBConstants.StatsTable.TABLE_NAME} " +
+                "SET ${StatsDBConstants.StatsTable.STATISTIC_VALUE_COLUMN} = $value "
+    }
+
     private fun getExpectedStats(): List<String> {
         val expectedStats = mutableListOf<String>()
         for (name in statsNamesList) {

@@ -19,6 +19,15 @@ object SolvesDatabaseConstants {
     const val STATS_TESTS_DATABASE_NAME = "SolveDBForStatsTests.db"
     const val DATABASE_VERSION = 1
 
+
+    @JvmField
+    val CLEAR_ALL_DATA_QUERY = "DROP TABLE ${CrossTable.TABLE_NAME};" +
+            "DROP TABLE ${F2LTable.TABLE_NAME};" +
+            "DROP TABLE ${OLLTable.TABLE_NAME};" +
+            "DROP TABLE ${PLLTable.TABLE_NAME};" +
+            "DROP TABLE ${SolveTable.TABLE_NAME};" +
+            "DROP TABLE ${CubeStateTable.TABLE_NAME};"
+
     const val CREATE_SOLVE_TABLE =
         "CREATE TABLE IF NOT EXISTS ${SolveTable.TABLE_NAME} (" +
                 "${BaseColumns._ID} INTEGER PRIMARY KEY AUTOINCREMENT, " +
@@ -27,8 +36,7 @@ object SolvesDatabaseConstants {
                 "${SolveTable.SCRAMBLED_STATE_ID_COLUMN} INTEGER NOT NULL, " +
                 "${SolveTable.SCRAMBLE_SEQUENCE_COLUMN} TEXT NOT NULL, " +
                 "${SolveTable.MOVE_COUNT} INTEGER NOT NULL, " +
-                "${SolveTable.PENALTY_COLUMN} INTEGER NOT NULL, " +
-                "FOREIGN KEY(${SolveTable.SCRAMBLED_STATE_ID_COLUMN}) REFERENCES ${CubeStateTable.TABLE_NAME}(${BaseColumns._ID}))"
+                "${SolveTable.PENALTY_COLUMN} INTEGER NOT NULL) "
 
     const val CREATE_CUBE_STATE_TABLE =
         "CREATE TABLE IF NOT EXISTS ${CubeStateTable.TABLE_NAME} (" +
@@ -102,6 +110,15 @@ object SolvesDatabaseConstants {
             "${DeviceTable.DEVICE_NAME_COLUMN} TEXT NOT NULL, " +
             "${DeviceTable.LAST_CONNECTION_TIME_COLUMN} INTEGER NOT NULL)"
 
+    const val CREATE_SETTINGS_TABLE = "CREATE TABLE IF NOT EXISTS ${SettingsTable.TABLE_NAME} (" +
+            "${SettingsTable.SETTING_NAME} TEXT PRIMARY KEY, " +
+            "${SettingsTable.SETTING_VALUE} TEXT NOT NULL)"
+
+    const val INITIALIZE_SETTINGS_QUERY = "INSERT INTO ${SettingsTable.TABLE_NAME} VALUES " +
+            "('${SettingsTable.INSPECTION_ENABLED}', '1'), " +
+            "('${SettingsTable.SOLVING_TIME_VISIBLE}', '1'), " +
+            "('${SettingsTable.SCRAMBLE_GENERATION_ENABLED}', '1')"
+
 
     object SolveTable {
         const val TABLE_NAME = "Solve"
@@ -168,5 +185,15 @@ object SolvesDatabaseConstants {
         const val DEVICE_ADDRESS_COLUMN = "DeviceAddress"
         const val DEVICE_NAME_COLUMN = "DeviceName"
         const val LAST_CONNECTION_TIME_COLUMN = "LastConnectionTime"
+    }
+
+    object SettingsTable{
+        const val TABLE_NAME = "Settings"
+        const val SETTING_NAME = "SettingName"
+        const val SETTING_VALUE = "SettingValue"
+
+        const val INSPECTION_ENABLED = "InspectionEnabled"
+        const val SOLVING_TIME_VISIBLE = "SolvingTimeVisible"
+        const val SCRAMBLE_GENERATION_ENABLED = "ScrambleGenerationEnabled"
     }
 }

@@ -22,13 +22,11 @@
             android:theme="@style/Theme.SmartCubeApp">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
+                <action android:name="android.bluetooth.adapter.action.STATE_CHANGED"/>
             </intent-filter>
         </activity>
 
-        <activity android:name=".ui.connectUI.ConnectActivity"
-            android:parentActivityName=".MainActivity"/>
         <activity android:name=".ui.timerUI.TimerActivity"
             android:parentActivityName=".MainActivity"/>
         <activity android:name=".ui.historyUI.HistoryActivity"
@@ -43,6 +41,8 @@
             android:parentActivityName=".MainActivity"/>
         <activity android:name=".ui.timerUI.SolvingActivity"
             android:parentActivityName=".MainActivity"/>
+        <activity android:name=".ui.settingsUI.SettingsActivity"
+            android:parentActivityName=".ui.timerUI.SolvePreparationActivity"/>
     </application>
 
 </manifest>

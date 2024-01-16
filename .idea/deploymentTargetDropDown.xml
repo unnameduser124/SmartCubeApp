@@ -2,19 +2,22 @@
 <project version="4">
   <component name="deploymentTargetDropDown">
     <value>
+      <entry key="ConfirmationPopupPreview">
+        <State />
+      </entry>
+      <entry key="StatsDBTests">
+        <State />
+      </entry>
       <entry key="Tests in 'com.example.tests.correctnesstests.dbtests'">
         <State />
       </entry>
-      <entry key="Tests in 'com.example.tests.correctnesstests.detectiontests'">
-        <State />
-      </entry>
-      <entry key="Tests in 'com.example.tests.correctnesstests.statstests'">
-        <State />
-      </entry>
-      <entry key="Tests in 'com.example.tests.correctnesstests.timertests'">
-        <State />
-      </entry>
       <entry key="app">
+        <State />
+      </entry>
+      <entry key="clearDataTest()">
+        <State />
+      </entry>
+      <entry key="clearDataTest() (1)">
         <State />
       </entry>
       <entry key="correctnesstests">
@@ -24,9 +27,6 @@
         <State />
       </entry>
       <entry key="performancetests">
-        <State />
-      </entry>
-      <entry key="saveSolveWithAnalysisTest()">
         <State />
       </entry>
     </value>

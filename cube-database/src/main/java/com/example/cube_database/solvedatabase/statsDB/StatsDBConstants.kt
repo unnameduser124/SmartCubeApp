@@ -45,6 +45,9 @@ object StatsDBConstants {
             "${StatsTable.STATISTIC_NAME_COLUMN} TEXT NOT NULL, " +
             "${StatsTable.STATISTIC_VALUE_COLUMN} TEXT NOT NULL)"
 
+    const val CLEAR_ALL_DATA_QUERY = "UPDATE ${StatsTable.TABLE_NAME} " +
+            "SET ${StatsTable.STATISTIC_VALUE_COLUMN} = 0.0;"
+
     object StatsTable{
         const val TABLE_NAME = "Stats"
         const val STATISTIC_NAME_COLUMN = "StatisticName"
