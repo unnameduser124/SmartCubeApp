@@ -23,10 +23,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.cube_database.solvedatabase.solvesDB.SolveDB
 import com.example.cube_database.solvedatabase.solvesDB.SolvesDatabaseConstants
 import com.example.cube_database.solvedatabase.solvesDB.services.SettingsDBService
 import com.example.cube_global.AppSettings
 import com.example.smartcubeapp.R
+import com.example.smartcubeapp.ui.popups.ConfirmationPopup
 import com.example.smartcubeapp.ui.timerUI.SolvePreparationActivity
 import kotlin.concurrent.thread
 
@@ -101,13 +103,16 @@ class SettingsActivity : ComponentActivity() {
 
     @Composable
     fun ClearAllDataButtonRow() {
+        val confirmationPopupVisible = remember { mutableStateOf(false) }
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
             Button(
-                onClick = { /*TODO("Call database method")*/ },
+                onClick = {
+                    confirmationPopupVisible.value = true
+                },
                 modifier = Modifier
                     .padding(10.dp)
                     .fillMaxWidth(),
@@ -115,6 +120,15 @@ class SettingsActivity : ComponentActivity() {
             ) {
                 Text(text = "Clear All Data", fontSize = 20.sp, color = Color.White)
             }
+        }
+        if (confirmationPopupVisible.value) {
+            ConfirmationPopup(this@SettingsActivity, confirmationPopupVisible)
+                .GeneratePopup {
+                    thread {
+                        val solveDB = SolveDB(this@SettingsActivity).clearAllData()
+                        val settingsDB = SettingsDBService(this@SettingsActivity).clearAllData()
+                    }
+                }
         }
     }
 
