@@ -49,6 +49,7 @@ import com.example.cube_detection.casedetection.olldetection.ollcase.PredefinedO
 import com.example.cube_detection.casedetection.plldetection.pllcase.PredefinedPLLCase
 import com.example.cube_detection.phasedetection.SolvePhase
 import com.example.cube_global.roundDouble
+import com.example.smartcubeapp.ui.popups.ConfirmationPopup
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -314,6 +315,7 @@ class SolveDetailsPopupLayout(
 
     @Composable
     fun DeleteButtonRow(id: Long, context: Context) {
+        val confirmationPopupVisible = remember { mutableStateOf(false) }
         Row(
             horizontalArrangement = Arrangement.Center,
             modifier = Modifier
@@ -322,11 +324,7 @@ class SolveDetailsPopupLayout(
         ) {
             Button(
                 onClick = {
-                    thread {
-                        SolveAnalysisDBService(context).deleteSolveWithAnalysisData(id)
-                        solvesList.removeIf { it.id == id }
-                        popupVisible.value = false
-                    }
+                    confirmationPopupVisible.value = true
                 },
                 modifier = Modifier
                     .fillMaxWidth(0.9f),
@@ -335,6 +333,15 @@ class SolveDetailsPopupLayout(
                 )
             ) {
                 Text(text = "Delete")
+            }
+        }
+        if(confirmationPopupVisible.value){
+            ConfirmationPopup(context, confirmationPopupVisible).GeneratePopup {
+                thread {
+                    SolveAnalysisDBService(context).deleteSolveWithAnalysisData(id)
+                    solvesList.removeIf { it.id == id }
+                    popupVisible.value = false
+                }
             }
         }
     }

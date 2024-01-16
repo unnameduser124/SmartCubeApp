@@ -38,11 +38,11 @@ class ConfirmationPopup(val context: Context, private val popupVisible: MutableS
     fun GeneratePopup(onYesClick: () -> Unit) {
         this.onYesClick = onYesClick
         Popup(
-            alignment = Alignment.Center,
             onDismissRequest = {
                 popupVisible.value = false
             },
-            properties = PopupProperties(focusable = true)
+            properties = PopupProperties(focusable = true),
+            popupPositionProvider = PopupCenterPositionProvider()
         ) {
             Column(
                 modifier = Modifier
