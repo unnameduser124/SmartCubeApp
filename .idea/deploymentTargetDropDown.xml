@@ -5,6 +5,12 @@
       <entry key="ConfirmationPopupPreview">
         <State />
       </entry>
+      <entry key="PreviewStateSolveFinishedLayout">
+        <State />
+      </entry>
+      <entry key="SolveResultsPreview">
+        <State />
+      </entry>
       <entry key="StatsDBTests">
         <State />
       </entry>
@@ -12,12 +18,6 @@
         <State />
       </entry>
       <entry key="app">
-        <State />
-      </entry>
-      <entry key="clearDataTest()">
-        <State />
-      </entry>
-      <entry key="clearDataTest() (1)">
         <State />
       </entry>
       <entry key="correctnesstests">

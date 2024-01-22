@@ -25,7 +25,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -37,6 +36,7 @@ import com.example.cube_cube.cube.SolvePenalty
 import com.example.cube_cube.cube.SolveStatus
 import com.example.cube_cube.scramble.Scramble
 import com.example.cube_cube.scramble.ScrambleGenerator
+import com.example.cube_cube.scramble.ScramblingMode
 import com.example.cube_database.solvedatabase.solvesDB.services.SolveAnalysisDBService
 import com.example.cube_database.solvedatabase.statsDB.StatsService
 import com.example.cube_global.AppSettings
@@ -46,6 +46,12 @@ import com.example.smartcubeapp.R
 import com.example.smartcubeapp.ui.historyUI.HistoryActivity
 import com.example.smartcubeapp.ui.settingsUI.SettingsActivity
 import com.example.smartcubeapp.ui.statsUI.StatsActivity
+import com.example.smartcubeapp.ui.theme.backgroundDark
+import com.example.smartcubeapp.ui.theme.errorDark
+import com.example.smartcubeapp.ui.theme.onBackgroundDark
+import com.example.smartcubeapp.ui.theme.onErrorDark
+import com.example.smartcubeapp.ui.theme.onPrimaryDark
+import com.example.smartcubeapp.ui.theme.primaryDark
 import java.util.Calendar
 import kotlin.concurrent.thread
 
@@ -81,11 +87,11 @@ class SolvePreparationActivity : ComponentActivity() {
             }
         }
 
-        SolveResultsUI(context).SolveResults()
-        CurrentStatsColumn()
 
         Column(
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier
+                .fillMaxSize()
+                .background(backgroundDark),
             verticalArrangement = Arrangement.Top,
         ) {
             ScrambleSequenceRow()
@@ -93,20 +99,21 @@ class SolvePreparationActivity : ComponentActivity() {
             StatisticsButtonRow()
             SettingsButtonRow()
         }
+        SolveResultsUI(context).SolveResults()
+        CurrentStatsColumn()
     }
 
 
     @Composable
     fun ScrambleSequenceRow() {
-        if(AppSettings.isScrambleGenerationEnabled){
+        if (AppSettings.isScrambleGenerationEnabled) {
             HandleScrambleDisplay()
-        }
-        else{
+        } else {
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(16.dp)
-                    .background(color = Color.LightGray, shape = RoundedCornerShape(20.dp))
+                    .background(color = primaryDark, shape = RoundedCornerShape(20.dp))
             ) {
                 Text(
                     "Click solve time to go into inspection",
@@ -115,19 +122,30 @@ class SolvePreparationActivity : ComponentActivity() {
                         .padding(top = 10.dp, bottom = 10.dp, start = 15.dp, end = 5.dp),
                     fontSize = 25.sp,
                     maxLines = 2,
-                    textAlign = TextAlign.Center
+                    textAlign = TextAlign.Center,
+                    color = onPrimaryDark
                 )
             }
         }
     }
 
     @Composable
-    fun HandleScrambleDisplay(){
+    fun HandleScrambleDisplay() {
         scrambleSequence = remember { mutableStateOf(scramble.getRemainingMoves()) }
         val scrambleHandler = ScrambleHandler(context, this, scramble, scrambleSequence)
         scrambleHandler.handle(lastState)
 
         val interactionSource = remember { MutableInteractionSource() }
+        val rowColor = if(scramble.scramblingMode == ScramblingMode.Fixing) {
+            errorDark
+        } else {
+            primaryDark
+        }
+        val textColor = if(scramble.scramblingMode == ScramblingMode.Fixing) {
+            onErrorDark
+        } else {
+            onPrimaryDark
+        }
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -135,7 +153,7 @@ class SolvePreparationActivity : ComponentActivity() {
                     scrambleHandler.handleScrambleGeneration()
                 }
                 .padding(16.dp)
-                .background(color = Color.LightGray, shape = RoundedCornerShape(20.dp))
+                .background(color = rowColor, shape = RoundedCornerShape(20.dp))
         ) {
             Text(
                 scrambleSequence.value,
@@ -145,7 +163,8 @@ class SolvePreparationActivity : ComponentActivity() {
                 fontSize = 25.sp,
                 overflow = TextOverflow.Ellipsis,
                 maxLines = 1,
-                textAlign = TextAlign.Center
+                textAlign = TextAlign.Center,
+                color = textColor
             )
         }
     }
@@ -155,18 +174,21 @@ class SolvePreparationActivity : ComponentActivity() {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(end = 16.dp, top = 5.dp),
+                .padding(end = 8.dp, top = 5.dp),
             horizontalArrangement = Arrangement.End,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            IconButton(onClick = {
-                val intent = Intent(context, HistoryActivity::class.java)
-                context.startActivity(intent)
-            }) {
+            IconButton(
+                onClick = {
+                    val intent = Intent(context, HistoryActivity::class.java)
+                    context.startActivity(intent)
+                }
+            ) {
                 Icon(
                     painter = painterResource(id = R.drawable.baseline_history_24),
                     contentDescription = "Solve history button",
-                    modifier = Modifier.size(30.dp)
+                    modifier = Modifier.size(40.dp),
+                    tint = primaryDark
                 )
             }
         }
@@ -177,7 +199,7 @@ class SolvePreparationActivity : ComponentActivity() {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(end = 16.dp, top = 5.dp),
+                .padding(end = 8.dp, top = 5.dp),
             horizontalArrangement = Arrangement.End,
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -188,7 +210,8 @@ class SolvePreparationActivity : ComponentActivity() {
                 Icon(
                     painter = painterResource(id = R.drawable.baseline_stats_24),
                     contentDescription = "Statistics button",
-                    modifier = Modifier.size(30.dp)
+                    modifier = Modifier.size(40.dp),
+                    tint = primaryDark
                 )
             }
         }
@@ -199,7 +222,7 @@ class SolvePreparationActivity : ComponentActivity() {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(end = 16.dp, top = 5.dp),
+                .padding(end = 8.dp, top = 5.dp),
             horizontalArrangement = Arrangement.End,
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -211,7 +234,8 @@ class SolvePreparationActivity : ComponentActivity() {
                 Icon(
                     painter = painterResource(id = R.drawable.baseline_settings_24),
                     contentDescription = "Settings button",
-                    modifier = Modifier.size(30.dp)
+                    modifier = Modifier.size(40.dp),
+                    tint = primaryDark
                 )
             }
         }
@@ -250,8 +274,8 @@ class SolvePreparationActivity : ComponentActivity() {
                     .padding(bottom = 10.dp)
                     .fillMaxWidth()
             ) {
-                Text(text = "ao5: $ao5", fontSize = 20.sp)
-                Text(text = "ao12: $ao12", fontSize = 20.sp)
+                Text(text = "ao5: $ao5", fontSize = 20.sp, color = onBackgroundDark)
+                Text(text = "ao12: $ao12", fontSize = 20.sp, color = onBackgroundDark)
             }
             Row(
                 horizontalArrangement = Arrangement.SpaceEvenly,
@@ -260,8 +284,8 @@ class SolvePreparationActivity : ComponentActivity() {
                     .padding(bottom = 10.dp)
                     .fillMaxWidth()
             ) {
-                Text(text = "ao50: $ao50", fontSize = 20.sp)
-                Text(text = "ao100: $ao100", fontSize = 20.sp)
+                Text(text = "ao50: $ao50", fontSize = 20.sp, color = onBackgroundDark)
+                Text(text = "ao100: $ao100", fontSize = 20.sp, color = onBackgroundDark)
             }
 
             Row(
@@ -271,7 +295,7 @@ class SolvePreparationActivity : ComponentActivity() {
                     .padding(bottom = 30.dp)
                     .fillMaxWidth()
             ) {
-                Text(text = "Solves: $noSolves", fontSize = 20.sp)
+                Text(text = "Solves: $noSolves", fontSize = 20.sp, color = onBackgroundDark)
             }
         }
     }

@@ -20,7 +20,6 @@ class SettingsDBService(
         }
         val selection = "${SettingsTable.SETTING_NAME} = ?"
         val selectionArgs = arrayOf(settingName)
-        println("Query = UPDATE ${SettingsTable.TABLE_NAME} SET ${SettingsTable.SETTING_VALUE} = $settingValue WHERE $selection = $settingName")
         db.update(SettingsTable.TABLE_NAME, values, selection, selectionArgs)
     }
 
