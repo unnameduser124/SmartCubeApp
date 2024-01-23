@@ -172,7 +172,6 @@ class SolvingActivity : ComponentActivity(
                 delay(100)
                 solveTime.value =
                     Calendar.getInstance().timeInMillis - solve.solveStartTime
-                checkCubeSolved()
             }
         }
     }
@@ -180,11 +179,12 @@ class SolvingActivity : ComponentActivity(
     @Composable
     fun AddNewCubeState(){
         if (newCubeState(cubeState.value)) {
+            checkCubeState()
             solve.solveStateSequence.add(cubeState.value)
         }
     }
 
-    private fun checkCubeSolved() {
+    private fun checkCubeState() {
         if (cubeState.value.isSolved()) {
             solve.solveStatus = SolveStatus.Solved
             solve.calculateTimeFromStateSequence()
