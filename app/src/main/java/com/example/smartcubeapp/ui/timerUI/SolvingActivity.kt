@@ -150,7 +150,7 @@ class SolvingActivity : ComponentActivity(
         if (AppSettings.isSolvingTimeVisible) {
             InitializeTimer(solveTime)
         }
-        CheckCubeState()
+        AddNewCubeState()
 
         val solveTimeString = if (AppSettings.isSolvingTimeVisible) "${
             roundDouble(
@@ -172,15 +172,19 @@ class SolvingActivity : ComponentActivity(
                 delay(100)
                 solveTime.value =
                     Calendar.getInstance().timeInMillis - solve.solveStartTime
+                checkCubeSolved()
             }
         }
     }
 
     @Composable
-    fun CheckCubeState() {
+    fun AddNewCubeState(){
         if (newCubeState(cubeState.value)) {
             solve.solveStateSequence.add(cubeState.value)
         }
+    }
+
+    private fun checkCubeSolved() {
         if (cubeState.value.isSolved()) {
             solve.solveStatus = SolveStatus.Solved
             solve.calculateTimeFromStateSequence()

@@ -6,6 +6,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -14,6 +15,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -27,6 +29,10 @@ import com.example.cube_bluetooth.bluetooth.bluetoothState
 import com.example.cube_cube.CubeDevice
 import com.example.cube_database.solvedatabase.solvesDB.services.DeviceDBService
 import com.example.smartcubeapp.MainActivity
+import com.example.smartcubeapp.ui.theme.backgroundDark
+import com.example.smartcubeapp.ui.theme.onBackgroundDark
+import com.example.smartcubeapp.ui.theme.onPrimaryDark
+import com.example.smartcubeapp.ui.theme.primaryDark
 import com.example.smartcubeapp.ui.timerUI.TimerActivity
 
 class ConnectLastCubeActivity : ComponentActivity() {
@@ -57,19 +63,20 @@ class ConnectLastCubeActivity : ComponentActivity() {
 
         Column(
             modifier = Modifier
+                .fillMaxSize()
+                .background(color = backgroundDark),
+            verticalArrangement = Arrangement.Bottom
+        ) {
+            AddNewDeviceButtonRow()
+        }
+        Column(
+            modifier = Modifier
                 .fillMaxHeight(0.8f)
                 .fillMaxWidth(),
             verticalArrangement = Arrangement.Center
         ) {
             DeviceNameRow()
             ConnectButtonRow()
-        }
-        Column(
-            modifier = Modifier
-                .fillMaxSize(),
-            verticalArrangement = Arrangement.Bottom
-        ) {
-            AddNewDeviceButtonRow()
         }
     }
 
@@ -82,7 +89,7 @@ class ConnectLastCubeActivity : ComponentActivity() {
                 .padding(bottom = 10.dp),
             horizontalArrangement = Arrangement.Center
         ) {
-            Text(text = device.name, fontSize = 25.sp)
+            Text(text = device.name, fontSize = 25.sp, color = onBackgroundDark)
         }
     }
 
@@ -94,16 +101,19 @@ class ConnectLastCubeActivity : ComponentActivity() {
                 .padding(bottom = 100.dp),
             horizontalArrangement = Arrangement.Center
         ) {
-            Button(onClick = {
-                connectToDevice()
-            }) {
+            Button(
+                onClick = {
+                    connectToDevice()
+                },
+                colors = ButtonDefaults.buttonColors(containerColor = primaryDark)
+            ) {
                 val connectButtonText =
                     when (bluetoothState.value) {
                         BluetoothState.Connecting -> "Connecting"
                         BluetoothState.Connected -> "Connected"
                         else -> "Connect"
                     }
-                Text(text = connectButtonText, fontSize = 20.sp)
+                Text(text = connectButtonText, fontSize = 20.sp, color = onPrimaryDark)
             }
         }
     }
@@ -117,12 +127,15 @@ class ConnectLastCubeActivity : ComponentActivity() {
                 .padding(bottom = 20.dp),
             horizontalArrangement = Arrangement.Center
         ) {
-            Button(onClick = {
-                val intent =
-                    Intent(this@ConnectLastCubeActivity, ConnectNewCubeActivity::class.java)
-                startActivity(intent)
-            }) {
-                Text(text = "Add new cube", fontSize = 20.sp)
+            Button(
+                onClick = {
+                    val intent =
+                        Intent(this@ConnectLastCubeActivity, ConnectNewCubeActivity::class.java)
+                    startActivity(intent)
+                },
+                colors = ButtonDefaults.buttonColors(containerColor = primaryDark)
+            ) {
+                Text(text = "Add new cube", fontSize = 20.sp, color = onPrimaryDark)
             }
         }
     }
