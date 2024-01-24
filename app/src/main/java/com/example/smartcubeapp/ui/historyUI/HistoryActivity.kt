@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -42,7 +43,9 @@ import com.example.cube_database.solvedatabase.solvesDB.services.SolveDBService
 import com.example.smartcubeapp.R
 import com.example.smartcubeapp.ui.theme.backgroundDark
 import com.example.smartcubeapp.ui.theme.onPrimaryDark
+import com.example.smartcubeapp.ui.theme.onSecondaryDark
 import com.example.smartcubeapp.ui.theme.primaryDark
+import com.example.smartcubeapp.ui.theme.secondaryDark
 import kotlinx.coroutines.launch
 import kotlin.concurrent.thread
 
@@ -168,11 +171,15 @@ class HistoryActivity : ComponentActivity() {
 
     @Composable
     fun LoadMoreButtonRow(page: MutableState<Int>) {
-        Row(modifier = Modifier.padding(horizontal = 10.dp)) {
-            Button(onClick = {
-                loadMoreSolves(page)
-            }, modifier = Modifier.fillMaxWidth()) {
-                Text(text = "Load more")
+        Row() {
+            Button(
+                onClick = {
+                    loadMoreSolves(page)
+                }, modifier = Modifier.fillMaxWidth(),
+                colors = ButtonDefaults.buttonColors(containerColor = secondaryDark),
+                shape = RoundedCornerShape(16.dp)
+            ) {
+                Text(text = "Load more", color = onSecondaryDark)
             }
         }
     }
