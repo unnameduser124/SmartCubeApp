@@ -6,14 +6,18 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateListOf
@@ -30,6 +34,11 @@ import com.example.cube_bluetooth.bluetooth.bluetoothState
 import com.example.cube_cube.CubeDevice
 import com.example.cube_database.solvedatabase.solvesDB.services.DeviceDBService
 import com.example.smartcubeapp.MainActivity
+import com.example.smartcubeapp.ui.theme.backgroundDark
+import com.example.smartcubeapp.ui.theme.onPrimaryDark
+import com.example.smartcubeapp.ui.theme.onSurfaceVariantDark
+import com.example.smartcubeapp.ui.theme.primaryDark
+import com.example.smartcubeapp.ui.theme.surfaceContainerHighestDark
 import com.example.smartcubeapp.ui.timerUI.TimerActivity
 
 class ConnectNewCubeActivity : ComponentActivity() {
@@ -62,7 +71,9 @@ class ConnectNewCubeActivity : ComponentActivity() {
             Intent(this, TimerActivity::class.java),
             Intent(this, MainActivity::class.java)
         )
-        Column(modifier = Modifier.fillMaxSize()) {
+        Column(modifier = Modifier
+            .fillMaxSize()
+            .background(backgroundDark)) {
             DeviceListLazyColumn()
             RefreshButton()
         }
@@ -86,16 +97,19 @@ class ConnectNewCubeActivity : ComponentActivity() {
 
     @Composable
     fun DeviceItem(device: CubeDevice) {
-        Column(
+        Row(
             modifier = Modifier
-                .padding(10.dp)
                 .fillMaxWidth()
+                .padding(vertical = 5.dp)
+                .background(color = surfaceContainerHighestDark, shape = RoundedCornerShape(10.dp))
+                .clickable {
+                    connectToDevice(device)
+                }
         ) {
             Text(
                 text = device.name, fontSize = 20.sp, modifier = Modifier
-                    .clickable {
-                        connectToDevice(device)
-                    }
+                    .padding(10.dp),
+                color = onSurfaceVariantDark
             )
         }
     }
@@ -108,7 +122,8 @@ class ConnectNewCubeActivity : ComponentActivity() {
             },
             modifier = Modifier
                 .padding(bottom = 10.dp, start = 10.dp, end = 10.dp)
-                .fillMaxWidth()
+                .fillMaxWidth(),
+            colors = ButtonDefaults.buttonColors(containerColor = primaryDark)
         ) {
             val refreshButtonTest =
                 when (bluetoothState.value) {
@@ -117,7 +132,7 @@ class ConnectNewCubeActivity : ComponentActivity() {
                     BluetoothState.Connected -> "Connected"
                     BluetoothState.Scanning -> "Scanning"
                 }
-            Text(text = refreshButtonTest, fontSize = 20.sp)
+            Text(text = refreshButtonTest, fontSize = 20.sp, color = onPrimaryDark)
         }
     }
 

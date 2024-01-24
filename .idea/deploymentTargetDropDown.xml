@@ -11,9 +11,6 @@
       <entry key="SolveResultsPreview">
         <State />
       </entry>
-      <entry key="StatsDBTests">
-        <State />
-      </entry>
       <entry key="Tests in 'com.example.tests.correctnesstests.dbtests'">
         <State />
       </entry>
@@ -27,6 +24,9 @@
         <State />
       </entry>
       <entry key="performancetests">
+        <State />
+      </entry>
+      <entry key="stateF2LNotSolvedWhiteSideTest()">
         <State />
       </entry>
     </value>
