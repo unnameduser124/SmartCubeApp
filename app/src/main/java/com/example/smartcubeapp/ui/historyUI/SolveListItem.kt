@@ -14,7 +14,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -22,6 +21,8 @@ import androidx.compose.ui.unit.sp
 import com.example.cube_cube.scramble.ScrambleGenerator
 import com.example.cube_cube.solveDBDataClasses.SolveData
 import com.example.cube_global.roundDouble
+import com.example.smartcubeapp.ui.theme.onSurfaceVariantDark
+import com.example.smartcubeapp.ui.theme.surfaceContainerHighestDark
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
@@ -42,18 +43,19 @@ class SolveListItem(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(10.dp)
-                .background(color = Color.LightGray, shape = RoundedCornerShape(16.dp))
+                .padding(vertical = 5.dp)
+                .background(color = surfaceContainerHighestDark, shape = RoundedCornerShape(16.dp))
+                .padding(start = 10.dp, end = 10.dp)
                 .clickable {
                     solveID.value = solveData.id
                     popupVisible.value = true
                 },
-            horizontalArrangement = Arrangement.SpaceEvenly,
+            horizontalArrangement = Arrangement.SpaceAround,
             verticalAlignment = Alignment.CenterVertically
         ) {
 
             val solveTPS = solveData.moveCount / (solveData.solveDuration / 1000.0)
-            val dateFormat = SimpleDateFormat("dd.MM.yyyy HH:mm", Locale.ROOT)
+            val dateFormat = SimpleDateFormat("dd.MM HH:mm", Locale.ROOT)
             val dateString = dateFormat.format(
                 Calendar.getInstance().apply { timeInMillis = solveData.timestamp }.time
             )
@@ -63,36 +65,38 @@ class SolveListItem(
             ).toString()
 
             Text(
-                text = durationString,
-                fontSize = 23.sp,
+                text = "${durationString}s",
+                fontSize = 20.sp,
                 modifier = Modifier
-                    .padding(start = 10.dp)
                     .weight(1f),
-                textAlign = TextAlign.Start
+                textAlign = TextAlign.Center,
+                color = onSurfaceVariantDark
             )
             Text(
                 text = solveData.moveCount.toString(),
-                fontSize = 23.sp,
+                fontSize = 20.sp,
                 modifier = Modifier
                     .padding(vertical = 10.dp)
-                    .weight(0.7f),
-                textAlign = TextAlign.Center
+                    .weight(1f),
+                textAlign = TextAlign.Center,
+                color = onSurfaceVariantDark
             )
             Text(
                 text = roundDouble(solveTPS, 10).toString(),
-                fontSize = 23.sp,
+                fontSize = 20.sp,
                 modifier = Modifier
                     .padding(vertical = 10.dp)
-                    .weight(0.5f),
-                textAlign = TextAlign.Center
+                    .weight(1f),
+                textAlign = TextAlign.Center,
+                color = onSurfaceVariantDark
             )
             Text(
                 text = dateString,
-                fontSize = 23.sp,
+                fontSize = 20.sp,
                 modifier = Modifier
-                    .padding(end = 10.dp)
-                    .weight(2f),
-                textAlign = TextAlign.End
+                    .weight(1.5f),
+                textAlign = TextAlign.Center,
+                color = onSurfaceVariantDark
             )
         }
     }
