@@ -14,13 +14,17 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -37,6 +41,8 @@ import com.example.cube_global.millisToHours
 import com.example.cube_global.millisToSeconds
 import com.example.cube_global.roundDouble
 import com.example.smartcubeapp.R
+import com.example.smartcubeapp.ui.theme.SmartCubeAppTheme
+import com.example.smartcubeapp.ui.theme.backgroundDark
 import kotlinx.coroutines.launch
 
 class StatsActivity : ComponentActivity() {
@@ -47,7 +53,11 @@ class StatsActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            Layout()
+            SmartCubeAppTheme {
+                Surface(color = backgroundDark){
+                    Layout()
+                }
+            }
         }
     }
 
@@ -355,14 +365,16 @@ class StatsActivity : ComponentActivity() {
                 avgMoves = this@StatsActivity.getString(R.string.ll_cases_table_header_average_moves)
             )
             val casesData = remember { mutableStateListOf<Pair<Double, Double>>() }
-            lifecycleScope.launch {
-                lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                    casesWithoutSkip.forEach { case ->
-                        val avgTime =
-                            statsService.averageTimeForOLLCaseInLastXSolves(100, case) / 1000.0
-                        val avgMoves =
-                            statsService.averageNumberOfMovesForOLLCaseInLastXSolves(100, case)
-                        casesData.add(Pair(avgTime, avgMoves))
+            LaunchedEffect(casesData){
+                lifecycleScope.launch {
+                    lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                        casesWithoutSkip.forEach { case ->
+                            val avgTime =
+                                statsService.averageTimeForOLLCaseInLastXSolves(100, case) / 1000.0
+                            val avgMoves =
+                                statsService.averageNumberOfMovesForOLLCaseInLastXSolves(100, case)
+                            casesData.add(Pair(avgTime, avgMoves))
+                        }
                     }
                 }
             }

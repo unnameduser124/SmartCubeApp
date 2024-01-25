@@ -29,6 +29,7 @@ import com.example.cube_cube.cube.SolveStatus
 import com.example.cube_global.AppSettings
 import com.example.cube_global.roundDouble
 import com.example.cube_global.solve
+import com.example.smartcubeapp.ui.theme.SmartCubeAppTheme
 import com.example.smartcubeapp.ui.theme.backgroundDark
 import com.example.smartcubeapp.ui.theme.errorDark
 import com.example.smartcubeapp.ui.theme.onBackgroundDark
@@ -50,7 +51,9 @@ class SolvingActivity : ComponentActivity(
         super.onCreate(savedInstanceState)
 
         setContent {
-            GenerateLayout()
+            SmartCubeAppTheme {
+                GenerateLayout()
+            }
         }
     }
 

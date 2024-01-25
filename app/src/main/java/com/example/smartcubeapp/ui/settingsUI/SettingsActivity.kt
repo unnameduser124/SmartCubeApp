@@ -31,6 +31,7 @@ import com.example.cube_database.solvedatabase.solvesDB.services.SettingsDBServi
 import com.example.cube_global.AppSettings
 import com.example.smartcubeapp.R
 import com.example.smartcubeapp.ui.popups.ConfirmationPopup
+import com.example.smartcubeapp.ui.theme.SmartCubeAppTheme
 import com.example.smartcubeapp.ui.theme.backgroundDark
 import com.example.smartcubeapp.ui.theme.errorDark
 import com.example.smartcubeapp.ui.theme.onBackgroundDark
@@ -49,7 +50,9 @@ class SettingsActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         setContent {
-            GenerateLayout()
+            SmartCubeAppTheme {
+                GenerateLayout()
+            }
         }
 
         val callback = object : OnBackPressedCallback(true) {

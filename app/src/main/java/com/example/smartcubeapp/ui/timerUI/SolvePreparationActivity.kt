@@ -46,6 +46,7 @@ import com.example.smartcubeapp.R
 import com.example.smartcubeapp.ui.historyUI.HistoryActivity
 import com.example.smartcubeapp.ui.settingsUI.SettingsActivity
 import com.example.smartcubeapp.ui.statsUI.StatsActivity
+import com.example.smartcubeapp.ui.theme.SmartCubeAppTheme
 import com.example.smartcubeapp.ui.theme.backgroundDark
 import com.example.smartcubeapp.ui.theme.errorDark
 import com.example.smartcubeapp.ui.theme.onBackgroundDark
@@ -72,7 +73,9 @@ class SolvePreparationActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         setContent {
-            GenerateLayout()
+            SmartCubeAppTheme {
+                GenerateLayout()
+            }
         }
     }
 

@@ -41,6 +41,7 @@ import com.example.cube_cube.solveDBDataClasses.SolveData
 import com.example.cube_database.solvedatabase.solvesDB.SolvesDatabaseConstants
 import com.example.cube_database.solvedatabase.solvesDB.services.SolveDBService
 import com.example.smartcubeapp.R
+import com.example.smartcubeapp.ui.theme.SmartCubeAppTheme
 import com.example.smartcubeapp.ui.theme.backgroundDark
 import com.example.smartcubeapp.ui.theme.onPrimaryDark
 import com.example.smartcubeapp.ui.theme.onSecondaryDark
@@ -57,7 +58,9 @@ class HistoryActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         setContent {
-            GenerateLayout()
+            SmartCubeAppTheme {
+                GenerateLayout()
+            }
         }
     }
 

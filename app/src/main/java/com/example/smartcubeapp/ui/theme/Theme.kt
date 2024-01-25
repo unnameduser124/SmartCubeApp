@@ -13,14 +13,21 @@ import androidx.core.view.WindowCompat
 private val DarkColorScheme = darkColorScheme(
     primary = primaryDark,
     secondary = secondaryDark,
-    tertiary = tertiaryDark
+    tertiary = tertiaryDark,
+    background = backgroundDark,
+    surface = surfaceDark,
+    error = errorDark,
+    onPrimary = onPrimaryDark,
+    onSecondary = onSecondaryDark,
+    onTertiary = onTertiaryDark,
+    onBackground = onBackgroundDark,
+    onSurface = onSurfaceDark,
+    onError = onErrorDark
 )
 
 @Composable
 fun SmartCubeAppTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
-    // Dynamic color is available on Android 12+
-    dynamicColor: Boolean = true,
     content: @Composable () -> Unit
 ) {
     val colorScheme = DarkColorScheme
@@ -28,11 +35,10 @@ fun SmartCubeAppTheme(
     if (!view.isInEditMode) {
         SideEffect {
             val window = (view.context as Activity).window
-            window.statusBarColor = colorScheme.primary.toArgb()
-            WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = darkTheme
+            window.statusBarColor = DarkColorScheme.background.toArgb()
+            WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = !darkTheme
         }
     }
-
     MaterialTheme(
         colorScheme = colorScheme,
         typography = Typography,
