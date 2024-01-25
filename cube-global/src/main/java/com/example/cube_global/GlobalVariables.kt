@@ -7,4 +7,4 @@ const val MILLIS_IN_SECOND = 1000
 const val MILLIS_IN_HOUR = 3600000
 var dbAccesses = 0
 var solve = Solve().apply{ solveStatus = SolveStatus.Scramble }
-const val devModeConnectionBypass = true
+const val devModeConnectionBypass = false

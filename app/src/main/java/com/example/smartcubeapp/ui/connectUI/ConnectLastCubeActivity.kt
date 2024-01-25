@@ -29,6 +29,7 @@ import com.example.cube_bluetooth.bluetooth.bluetoothState
 import com.example.cube_cube.CubeDevice
 import com.example.cube_database.solvedatabase.solvesDB.services.DeviceDBService
 import com.example.smartcubeapp.MainActivity
+import com.example.smartcubeapp.ui.theme.SmartCubeAppTheme
 import com.example.smartcubeapp.ui.theme.backgroundDark
 import com.example.smartcubeapp.ui.theme.onBackgroundDark
 import com.example.smartcubeapp.ui.theme.onPrimaryDark
@@ -53,7 +54,9 @@ class ConnectLastCubeActivity : ComponentActivity() {
         }
 
         setContent {
-            GenerateLayout()
+            SmartCubeAppTheme {
+                GenerateLayout()
+            }
         }
     }
 

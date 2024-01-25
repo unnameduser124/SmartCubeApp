@@ -34,6 +34,7 @@ import com.example.cube_bluetooth.bluetooth.bluetoothState
 import com.example.cube_cube.CubeDevice
 import com.example.cube_database.solvedatabase.solvesDB.services.DeviceDBService
 import com.example.smartcubeapp.MainActivity
+import com.example.smartcubeapp.ui.theme.SmartCubeAppTheme
 import com.example.smartcubeapp.ui.theme.backgroundDark
 import com.example.smartcubeapp.ui.theme.onPrimaryDark
 import com.example.smartcubeapp.ui.theme.onSurfaceVariantDark
@@ -59,7 +60,9 @@ class ConnectNewCubeActivity : ComponentActivity() {
         }
 
         setContent {
-            GenerateLayout()
+            SmartCubeAppTheme {
+                GenerateLayout()
+            }
         }
     }
 
