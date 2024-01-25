@@ -3,6 +3,7 @@ package com.example.smartcubeapp.ui.statsUI
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -12,8 +13,10 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -23,8 +26,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -43,6 +44,10 @@ import com.example.cube_global.roundDouble
 import com.example.smartcubeapp.R
 import com.example.smartcubeapp.ui.theme.SmartCubeAppTheme
 import com.example.smartcubeapp.ui.theme.backgroundDark
+import com.example.smartcubeapp.ui.theme.onPrimaryDark
+import com.example.smartcubeapp.ui.theme.primaryDark
+import com.example.smartcubeapp.ui.theme.surfaceContainerHighestDark
+import com.example.smartcubeapp.ui.theme.surfaceContainerLowDark
 import kotlinx.coroutines.launch
 
 class StatsActivity : ComponentActivity() {
@@ -54,7 +59,7 @@ class StatsActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             SmartCubeAppTheme {
-                Surface(color = backgroundDark){
+                Surface(color = backgroundDark) {
                     Layout()
                 }
             }
@@ -236,7 +241,13 @@ class StatsActivity : ComponentActivity() {
                 phaseSheetVisible.value = false
             }
         }
-        Card(modifier = modifier) {
+        Card(
+            modifier = modifier,
+            colors = CardDefaults.cardColors(
+                containerColor = primaryDark,
+                contentColor = onPrimaryDark
+            )
+        ) {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier
@@ -296,10 +307,13 @@ class StatsActivity : ComponentActivity() {
 
     @Composable
     fun PLLCases() {
+        //Table label
+        Row(modifier = Modifier.padding(5.dp)){ TableLabel(labelText = this@StatsActivity.getString(R.string.pll_cases_table_label)) }
         Column(
             modifier = Modifier
                 .padding(10.dp)
                 .fillMaxWidth()
+                .background(color = surfaceContainerHighestDark, shape = RoundedCornerShape(10.dp))
         ) {
             val casesWithoutSkip =
                 PredefinedPLLCase.values()
@@ -307,13 +321,14 @@ class StatsActivity : ComponentActivity() {
                         0,
                         PredefinedPLLCase.values().size - 1
                     )
-            //Table label
-            TableLabel(labelText = this@StatsActivity.getString(R.string.pll_cases_table_label))
+            val lastIndex = casesWithoutSkip.size - 1
             //Table header
             LLCaseRow(
                 case = this@StatsActivity.getString(R.string.ll_cases_table_header_case),
                 avgTime = this@StatsActivity.getString(R.string.ll_cases_table_header_average_time),
-                avgMoves = this@StatsActivity.getString(R.string.ll_cases_table_header_average_moves)
+                avgMoves = this@StatsActivity.getString(R.string.ll_cases_table_header_average_moves),
+                index = -1,
+                lastIndex = lastIndex
             )
             val casesData = remember { mutableStateListOf<Pair<Double, Double>>() }
             launchOnStarted {
@@ -337,7 +352,9 @@ class StatsActivity : ComponentActivity() {
                     avgTime = if (avgTime > 0.0) roundDouble(avgTime, 100)
                         .toString() else "-",
                     avgMoves = if (avgMoves > 0.0) roundDouble(avgMoves, 10)
-                        .toString() else "-"
+                        .toString() else "-",
+                    index = index,
+                    lastIndex = lastIndex
                 )
             }
         }
@@ -345,10 +362,13 @@ class StatsActivity : ComponentActivity() {
 
     @Composable
     fun OLLCases() {
+        //Table label
+        Row(modifier = Modifier.padding(5.dp)) { TableLabel(labelText = this@StatsActivity.getString(R.string.oll_cases_table_label)) }
         Column(
             modifier = Modifier
                 .padding(10.dp)
                 .fillMaxWidth()
+                .background(color = surfaceContainerHighestDark, shape = RoundedCornerShape(10.dp))
         ) {
             val casesWithoutSkip =
                 PredefinedOLLCase.values()
@@ -356,16 +376,17 @@ class StatsActivity : ComponentActivity() {
                         0,
                         PredefinedOLLCase.values().size - 1
                     )
-            //Table label
-            TableLabel(labelText = this@StatsActivity.getString(R.string.oll_cases_table_label))
+            val lastIndex = casesWithoutSkip.size - 1
             //Table header
             LLCaseRow(
                 case = this@StatsActivity.getString(R.string.ll_cases_table_header_case),
                 avgTime = this@StatsActivity.getString(R.string.ll_cases_table_header_average_time),
-                avgMoves = this@StatsActivity.getString(R.string.ll_cases_table_header_average_moves)
+                avgMoves = this@StatsActivity.getString(R.string.ll_cases_table_header_average_moves),
+                index = -1,
+                lastIndex = lastIndex
             )
             val casesData = remember { mutableStateListOf<Pair<Double, Double>>() }
-            LaunchedEffect(casesData){
+            LaunchedEffect(casesData) {
                 lifecycleScope.launch {
                     lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
                         casesWithoutSkip.forEach { case ->
@@ -390,18 +411,49 @@ class StatsActivity : ComponentActivity() {
                     avgTime = if (avgTime > 0.0) roundDouble(avgTime, 100)
                         .toString() else "-",
                     avgMoves = if (avgMoves > 0.0) roundDouble(avgMoves, 10)
-                        .toString() else "-"
+                        .toString() else "-",
+                    index = index,
+                    lastIndex = lastIndex
                 )
             }
         }
     }
 
     @Composable
-    fun LLCaseRow(case: String, avgTime: String, avgMoves: String) {
+    fun LLCaseRow(case: String, avgTime: String, avgMoves: String, index: Int, lastIndex: Int) {
+
+        val modifier = when (index) {
+            -1 -> {
+                Modifier
+                    .padding(1.dp)
+                    .background(
+                        color = surfaceContainerLowDark,
+                        shape = RoundedCornerShape(topStart = 10.dp, topEnd = 10.dp)
+                    )
+                    .padding(2.dp)
+            }
+
+            lastIndex -> {
+                Modifier
+                    .padding(start = 1.dp, end = 1.dp, bottom = 1.dp)
+                    .background(
+                        color = surfaceContainerLowDark,
+                        shape = RoundedCornerShape(bottomStart = 10.dp, bottomEnd = 10.dp)
+                    )
+                    .padding(2.dp)
+            }
+
+            else -> {
+                Modifier
+                    .padding(start = 1.dp, end = 1.dp, bottom = 1.dp)
+                    .background(
+                        color = surfaceContainerLowDark,
+                    )
+                    .padding(2.dp)
+            }
+        }
         Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 5.dp),
+            modifier = modifier,
             horizontalArrangement = Arrangement.SpaceEvenly
         ) {
             TableCell(text = case, weight = 1f)

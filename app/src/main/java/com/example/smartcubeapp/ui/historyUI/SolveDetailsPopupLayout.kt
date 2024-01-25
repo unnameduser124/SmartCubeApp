@@ -231,7 +231,7 @@ class SolveDetailsPopupLayout(
                 Row(
                     horizontalArrangement = Arrangement.Center,
                     modifier = Modifier
-                        .padding(start = 1.dp, end = 1.dp, bottom = 1.dp, top = 1.dp)
+                        .padding(1.dp)
                         .background(
                             color = surfaceContainerLowDark,
                             shape = RoundedCornerShape(topStart = 10.dp, topEnd = 10.dp)

@@ -22,7 +22,7 @@ private val DarkColorScheme = darkColorScheme(
     onTertiary = onTertiaryDark,
     onBackground = onBackgroundDark,
     onSurface = onSurfaceDark,
-    onError = onErrorDark
+    onError = onErrorDark,
 )
 
 @Composable
