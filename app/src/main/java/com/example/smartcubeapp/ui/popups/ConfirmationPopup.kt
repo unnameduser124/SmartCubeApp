@@ -36,7 +36,7 @@ import com.example.smartcubeapp.ui.theme.onSurfaceDark
 import com.example.smartcubeapp.ui.theme.secondaryDark
 import com.example.smartcubeapp.ui.theme.surfaceContainerLowDark
 
-class ConfirmationPopup(val context: Context, private val popupVisible: MutableState<Boolean>) {
+class ConfirmationPopup(val context: Context, private val popupVisible: MutableState<Boolean>, text: String = "Are you sure?") {
 
     private lateinit var onYesClick: () -> Unit
 

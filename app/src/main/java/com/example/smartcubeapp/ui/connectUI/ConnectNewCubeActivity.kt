@@ -8,8 +8,9 @@ import androidx.activity.OnBackPressedCallback
 import androidx.activity.compose.setContent
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -23,6 +24,7 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Modifier
@@ -37,6 +39,7 @@ import com.example.cube_bluetooth.bluetooth.bluetoothState
 import com.example.cube_cube.CubeDevice
 import com.example.cube_database.solvedatabase.solvesDB.services.DeviceDBService
 import com.example.smartcubeapp.MainActivity
+import com.example.smartcubeapp.ui.popups.ConfirmationPopup
 import com.example.smartcubeapp.ui.theme.SmartCubeAppTheme
 import com.example.smartcubeapp.ui.theme.backgroundDark
 import com.example.smartcubeapp.ui.theme.onPrimaryDark
@@ -79,7 +82,11 @@ class ConnectNewCubeActivity : ComponentActivity() {
                 }
 
                 doubleBackToExitPressedOnce = true
-                Toast.makeText(this@ConnectNewCubeActivity, "Press BACK again to exit", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    this@ConnectNewCubeActivity,
+                    "Press BACK again to exit",
+                    Toast.LENGTH_SHORT
+                ).show()
 
                 lifecycleScope.launch {
                     delay(2000)
@@ -98,9 +105,11 @@ class ConnectNewCubeActivity : ComponentActivity() {
             Intent(this, TimerActivity::class.java),
             Intent(this, MainActivity::class.java)
         )
-        Column(modifier = Modifier
-            .fillMaxSize()
-            .background(backgroundDark)) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(backgroundDark)
+        ) {
             DeviceListLazyColumn()
             RefreshButton()
         }
@@ -122,22 +131,40 @@ class ConnectNewCubeActivity : ComponentActivity() {
         }
     }
 
+    @OptIn(ExperimentalFoundationApi::class)
     @Composable
     fun DeviceItem(device: CubeDevice) {
+        val deleteConfirmationPopupVisible = remember { mutableStateOf(false) }
         Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(vertical = 5.dp)
                 .background(color = surfaceContainerHighestDark, shape = RoundedCornerShape(10.dp))
-                .clickable {
-                    connectToDevice(device)
-                }
+                .combinedClickable(
+                    onClick = {
+                        connectToDevice(device)
+                    },
+                    onLongClick = {
+                        deleteConfirmationPopupVisible.value = true
+                    }
+                )
         ) {
             Text(
                 text = device.name, fontSize = 20.sp, modifier = Modifier
                     .padding(10.dp),
                 color = onSurfaceVariantDark
             )
+        }
+
+        if (deleteConfirmationPopupVisible.value) {
+            ConfirmationPopup(
+                this@ConnectNewCubeActivity,
+                deleteConfirmationPopupVisible,
+                "Remove device?"
+            ).GeneratePopup {
+                DeviceDBService(this@ConnectNewCubeActivity).removeDevice(device.id)
+                devices.remove(device)
+            }
         }
     }
 
