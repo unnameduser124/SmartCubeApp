@@ -3,7 +3,9 @@ package com.example.smartcubeapp.ui.timerUI
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -31,6 +33,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.lifecycleScope
 import com.example.cube_cube.cube.CubeState
 import com.example.cube_cube.cube.SolvePenalty
 import com.example.cube_cube.cube.SolveStatus
@@ -53,8 +56,11 @@ import com.example.smartcubeapp.ui.theme.onBackgroundDark
 import com.example.smartcubeapp.ui.theme.onErrorDark
 import com.example.smartcubeapp.ui.theme.onPrimaryDark
 import com.example.smartcubeapp.ui.theme.primaryDark
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import java.util.Calendar
 import kotlin.concurrent.thread
+
 
 class SolvePreparationActivity : ComponentActivity() {
 
@@ -62,6 +68,7 @@ class SolvePreparationActivity : ComponentActivity() {
     private val generatedScramble = ScrambleGenerator.generateScramble()
     private val scramble: Scramble = Scramble(generatedScramble)
     private lateinit var context: Context
+    private var doubleBackToExitPressedOnce = false
     private var lastState = CubeState(
         mutableListOf(),
         mutableListOf(),
@@ -77,6 +84,23 @@ class SolvePreparationActivity : ComponentActivity() {
                 GenerateLayout()
             }
         }
+        val callback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                if (doubleBackToExitPressedOnce) {
+                    finishAffinity()
+                    return
+                }
+
+                doubleBackToExitPressedOnce = true
+                Toast.makeText(this@SolvePreparationActivity, "Press BACK again to exit", Toast.LENGTH_SHORT).show()
+
+                lifecycleScope.launch {
+                    delay(2000)
+                    doubleBackToExitPressedOnce = false
+                }
+            }
+        }
+        onBackPressedDispatcher.addCallback(callback)
     }
 
     @Composable
@@ -139,12 +163,12 @@ class SolvePreparationActivity : ComponentActivity() {
         scrambleHandler.handle(lastState)
 
         val interactionSource = remember { MutableInteractionSource() }
-        val rowColor = if(scramble.scramblingMode == ScramblingMode.Fixing) {
+        val rowColor = if (scramble.scramblingMode == ScramblingMode.Fixing) {
             errorDark
         } else {
             primaryDark
         }
-        val textColor = if(scramble.scramblingMode == ScramblingMode.Fixing) {
+        val textColor = if (scramble.scramblingMode == ScramblingMode.Fixing) {
             onErrorDark
         } else {
             onPrimaryDark

@@ -2,7 +2,9 @@ package com.example.smartcubeapp.ui.connectUI
 
 import android.content.Intent
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.compose.setContent
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
@@ -22,6 +24,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.lifecycleScope
 import com.example.cube_bluetooth.bluetooth.BluetoothService
 import com.example.cube_bluetooth.bluetooth.BluetoothState
 import com.example.cube_bluetooth.bluetooth.BluetoothUtilities
@@ -35,12 +38,15 @@ import com.example.smartcubeapp.ui.theme.onBackgroundDark
 import com.example.smartcubeapp.ui.theme.onPrimaryDark
 import com.example.smartcubeapp.ui.theme.primaryDark
 import com.example.smartcubeapp.ui.timerUI.TimerActivity
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class ConnectLastCubeActivity : ComponentActivity() {
 
     private lateinit var device: CubeDevice
     private lateinit var bluetoothUtilities: BluetoothUtilities
     private lateinit var permissionLauncher: ActivityResultLauncher<Array<String>>
+    private var doubleBackToExitPressedOnce = false
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -58,6 +64,23 @@ class ConnectLastCubeActivity : ComponentActivity() {
                 GenerateLayout()
             }
         }
+        val callback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                if (doubleBackToExitPressedOnce) {
+                    finishAffinity()
+                    return
+                }
+
+                doubleBackToExitPressedOnce = true
+                Toast.makeText(this@ConnectLastCubeActivity, "Press BACK again to exit", Toast.LENGTH_SHORT).show()
+
+                lifecycleScope.launch {
+                    delay(2000)
+                    doubleBackToExitPressedOnce = false
+                }
+            }
+        }
+        onBackPressedDispatcher.addCallback(callback)
     }
 
     @Composable

@@ -3,6 +3,7 @@ package com.example.smartcubeapp.ui.timerUI
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -24,6 +25,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.cube_bluetooth.bluetooth.cubeState
 import com.example.cube_cube.cube.CubeState
+import com.example.cube_cube.cube.Solve
 import com.example.cube_cube.cube.SolvePenalty
 import com.example.cube_cube.cube.SolveStatus
 import com.example.cube_global.AppSettings
@@ -55,6 +57,16 @@ class SolvingActivity : ComponentActivity(
                 GenerateLayout()
             }
         }
+
+        val callback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                solve = Solve().apply{ solveStatus = SolveStatus.Scramble }
+                val intent = Intent(this@SolvingActivity, SolvePreparationActivity::class.java)
+                startActivity(intent)
+                finish()
+            }
+        }
+        onBackPressedDispatcher.addCallback(callback)
     }
 
     @Composable
