@@ -3,6 +3,7 @@ package com.example.smartcubeapp.ui.statsUI
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -12,10 +13,15 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -37,6 +43,13 @@ import com.example.cube_global.millisToHours
 import com.example.cube_global.millisToSeconds
 import com.example.cube_global.roundDouble
 import com.example.smartcubeapp.R
+import com.example.smartcubeapp.R.string
+import com.example.smartcubeapp.ui.theme.SmartCubeAppTheme
+import com.example.smartcubeapp.ui.theme.backgroundDark
+import com.example.smartcubeapp.ui.theme.onPrimaryDark
+import com.example.smartcubeapp.ui.theme.primaryDark
+import com.example.smartcubeapp.ui.theme.surfaceContainerHighestDark
+import com.example.smartcubeapp.ui.theme.surfaceContainerLowDark
 import kotlinx.coroutines.launch
 
 class StatsActivity : ComponentActivity() {
@@ -47,7 +60,11 @@ class StatsActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            Layout()
+            SmartCubeAppTheme {
+                Surface(color = backgroundDark) {
+                    Layout()
+                }
+            }
         }
     }
 
@@ -68,9 +85,9 @@ class StatsActivity : ComponentActivity() {
             }
             TotalStats()
             GlobalAverageTimeAndMovesRow()
-            TableLabel(labelText = this@StatsActivity.getString(R.string.time_averages_table_label))
+            TableLabel(labelText = this@StatsActivity.getString(string.time_averages_table_label))
             AveragesTable(timeAverages).GenerateTableLayout(context = this@StatsActivity)
-            TableLabel(labelText = this@StatsActivity.getString(R.string.move_averages_table_label))
+            TableLabel(labelText = this@StatsActivity.getString(string.move_averages_table_label))
             AveragesTable(moveAverages).GenerateTableLayout(context = this@StatsActivity)
             PhaseStatsSummary()
             PLLCases()
@@ -133,19 +150,19 @@ class StatsActivity : ComponentActivity() {
         }
 
         StatLabelAndValue(
-            label = this.getString(R.string.total_solves_stats_label),
+            label = this.getString(string.total_solves_stats_label),
             value = totalSolves.value.toString()
         )
         StatLabelAndValue(
-            label = this.getString(R.string.total_time_spent_solving_stats_label),
+            label = this.getString(string.total_time_spent_solving_stats_label),
             value = "${timeHours.value}h"
         )
         StatLabelAndValue(
-            label = this.getString(R.string.total_moves_stats_label),
+            label = this.getString(string.total_moves_stats_label),
             value = totalMoves.value.toString()
         )
         StatLabelAndValue(
-            label = this.getString(R.string.best_solve_stats_label),
+            label = this.getString(string.best_solve_stats_label),
             value = bestSolveTime.value
         )
     }
@@ -162,14 +179,14 @@ class StatsActivity : ComponentActivity() {
 
         Row(modifier = Modifier.padding(10.dp), horizontalArrangement = Arrangement.SpaceAround) {
             StatLabelAndValue(
-                label = this@StatsActivity.getString(R.string.solve_time_average_stats_label),
+                label = this@StatsActivity.getString(string.solve_time_average_stats_label),
                 value = if (timeSeconds.value > 0.0) roundDouble(
                     timeSeconds.value,
                     100
                 ).toString() else "-"
             )
             StatLabelAndValue(
-                label = this@StatsActivity.getString(R.string.solve_moves_average_stats_label),
+                label = this@StatsActivity.getString(string.solve_moves_average_stats_label),
                 value = if (moves.value > 0.0) moves.value.toString() else "-"
             )
         }
@@ -226,7 +243,13 @@ class StatsActivity : ComponentActivity() {
                 phaseSheetVisible.value = false
             }
         }
-        Card(modifier = modifier) {
+        Card(
+            modifier = modifier,
+            colors = CardDefaults.cardColors(
+                containerColor = primaryDark,
+                contentColor = onPrimaryDark
+            )
+        ) {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier
@@ -256,11 +279,11 @@ class StatsActivity : ComponentActivity() {
                     )
                 }
                 CardDataLabelAndValue(
-                    label = this@StatsActivity.getString(R.string.phase_card_average_time),
+                    label = this@StatsActivity.getString(string.phase_card_average_time),
                     value = roundDouble(time.value, 100).toString()
                 )
                 CardDataLabelAndValue(
-                    label = this@StatsActivity.getString(R.string.phase_card_average_moves),
+                    label = this@StatsActivity.getString(string.phase_card_average_moves),
                     value = roundDouble(moves.value, 10).toString()
                 )
             }
@@ -286,10 +309,19 @@ class StatsActivity : ComponentActivity() {
 
     @Composable
     fun PLLCases() {
+        //Table label
+        Row(modifier = Modifier.padding(5.dp)) {
+            TableLabel(
+                labelText = this@StatsActivity.getString(
+                    string.pll_cases_table_label
+                )
+            )
+        }
         Column(
             modifier = Modifier
                 .padding(10.dp)
                 .fillMaxWidth()
+                .background(color = surfaceContainerHighestDark, shape = RoundedCornerShape(10.dp))
         ) {
             val casesWithoutSkip =
                 PredefinedPLLCase.values()
@@ -297,13 +329,14 @@ class StatsActivity : ComponentActivity() {
                         0,
                         PredefinedPLLCase.values().size - 1
                     )
-            //Table label
-            TableLabel(labelText = this@StatsActivity.getString(R.string.pll_cases_table_label))
+            val lastIndex = casesWithoutSkip.size - 1
             //Table header
             LLCaseRow(
-                case = this@StatsActivity.getString(R.string.ll_cases_table_header_case),
-                avgTime = this@StatsActivity.getString(R.string.ll_cases_table_header_average_time),
-                avgMoves = this@StatsActivity.getString(R.string.ll_cases_table_header_average_moves)
+                case = this@StatsActivity.getString(string.ll_cases_table_header_case),
+                avgTime = this@StatsActivity.getString(string.ll_cases_table_header_average_time),
+                avgMoves = this@StatsActivity.getString(string.ll_cases_table_header_average_moves),
+                index = -1,
+                lastIndex = lastIndex
             )
             val casesData = remember { mutableStateListOf<Pair<Double, Double>>() }
             launchOnStarted {
@@ -327,7 +360,9 @@ class StatsActivity : ComponentActivity() {
                     avgTime = if (avgTime > 0.0) roundDouble(avgTime, 100)
                         .toString() else "-",
                     avgMoves = if (avgMoves > 0.0) roundDouble(avgMoves, 10)
-                        .toString() else "-"
+                        .toString() else "-",
+                    index = index,
+                    lastIndex = lastIndex
                 )
             }
         }
@@ -335,10 +370,21 @@ class StatsActivity : ComponentActivity() {
 
     @Composable
     fun OLLCases() {
+        //Table label
+        val casePopupVisible = remember { mutableStateOf(false) }
+        val popupCase = remember { mutableStateOf(PredefinedOLLCase.OLL_01) }
+        Row(modifier = Modifier.padding(5.dp)) {
+            TableLabel(
+                labelText = this@StatsActivity.getString(
+                    string.oll_cases_table_label
+                )
+            )
+        }
         Column(
             modifier = Modifier
                 .padding(10.dp)
                 .fillMaxWidth()
+                .background(color = surfaceContainerHighestDark, shape = RoundedCornerShape(10.dp))
         ) {
             val casesWithoutSkip =
                 PredefinedOLLCase.values()
@@ -346,23 +392,26 @@ class StatsActivity : ComponentActivity() {
                         0,
                         PredefinedOLLCase.values().size - 1
                     )
-            //Table label
-            TableLabel(labelText = this@StatsActivity.getString(R.string.oll_cases_table_label))
+            val lastIndex = casesWithoutSkip.size - 1
             //Table header
             LLCaseRow(
-                case = this@StatsActivity.getString(R.string.ll_cases_table_header_case),
-                avgTime = this@StatsActivity.getString(R.string.ll_cases_table_header_average_time),
-                avgMoves = this@StatsActivity.getString(R.string.ll_cases_table_header_average_moves)
+                case = this@StatsActivity.getString(string.ll_cases_table_header_case),
+                avgTime = this@StatsActivity.getString(string.ll_cases_table_header_average_time),
+                avgMoves = this@StatsActivity.getString(string.ll_cases_table_header_average_moves),
+                index = -1,
+                lastIndex = lastIndex,
             )
             val casesData = remember { mutableStateListOf<Pair<Double, Double>>() }
-            lifecycleScope.launch {
-                lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                    casesWithoutSkip.forEach { case ->
-                        val avgTime =
-                            statsService.averageTimeForOLLCaseInLastXSolves(100, case) / 1000.0
-                        val avgMoves =
-                            statsService.averageNumberOfMovesForOLLCaseInLastXSolves(100, case)
-                        casesData.add(Pair(avgTime, avgMoves))
+            LaunchedEffect(casesData) {
+                lifecycleScope.launch {
+                    lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                        casesWithoutSkip.forEach { case ->
+                            val avgTime =
+                                statsService.averageTimeForOLLCaseInLastXSolves(100, case) / 1000.0
+                            val avgMoves =
+                                statsService.averageNumberOfMovesForOLLCaseInLastXSolves(100, case)
+                            casesData.add(Pair(avgTime, avgMoves))
+                        }
                     }
                 }
             }
@@ -373,23 +422,116 @@ class StatsActivity : ComponentActivity() {
                     avgTime = casesData[index].first
                     avgMoves = casesData[index].second
                 }
-                LLCaseRow(
-                    case = case.name,
+                OLLCaseRow(
+                    case = case,
                     avgTime = if (avgTime > 0.0) roundDouble(avgTime, 100)
                         .toString() else "-",
                     avgMoves = if (avgMoves > 0.0) roundDouble(avgMoves, 10)
-                        .toString() else "-"
+                        .toString() else "-",
+                    index = index,
+                    lastIndex = lastIndex,
+                    casePopupVisible = casePopupVisible,
+                    popupCase = popupCase
                 )
             }
+        }
+        if (casePopupVisible.value) {
+            OLLCaseImagePopup(
+                this,
+                getOLLDrawableID(popupCase.value),
+                casePopupVisible
+            ).GeneratePopup()
         }
     }
 
     @Composable
-    fun LLCaseRow(case: String, avgTime: String, avgMoves: String) {
+    fun OLLCaseRow(
+        case: PredefinedOLLCase,
+        avgTime: String,
+        avgMoves: String,
+        index: Int,
+        lastIndex: Int,
+        popupCase: MutableState<PredefinedOLLCase>,
+        casePopupVisible: MutableState<Boolean>
+    ) {
+        val modifier = when (index) {
+            lastIndex -> {
+                Modifier
+                    .padding(start = 1.dp, end = 1.dp, bottom = 1.dp)
+                    .background(
+                        color = surfaceContainerLowDark,
+                        shape = RoundedCornerShape(bottomStart = 10.dp, bottomEnd = 10.dp)
+                    )
+                    .padding(2.dp)
+                    .clickable {
+                        casePopupVisible.value = true
+                        popupCase.value = case
+                    }
+            }
+
+            else -> {
+                Modifier
+                    .padding(start = 1.dp, end = 1.dp, bottom = 1.dp)
+                    .background(
+                        color = surfaceContainerLowDark,
+                    )
+                    .padding(2.dp)
+                    .clickable {
+                        casePopupVisible.value = true
+                        popupCase.value = case
+                    }
+            }
+        }
         Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 5.dp),
+            modifier = modifier,
+            horizontalArrangement = Arrangement.SpaceEvenly
+        ) {
+            TableCell(text = case.name, weight = 1f)
+            TableCell(text = avgTime, weight = 1f)
+            TableCell(text = avgMoves, weight = 1f)
+        }
+    }
+
+    @Composable
+    fun LLCaseRow(
+        case: String,
+        avgTime: String,
+        avgMoves: String,
+        index: Int,
+        lastIndex: Int,
+    ) {
+        val modifier = when (index) {
+            -1 -> {
+                Modifier
+                    .padding(1.dp)
+                    .background(
+                        color = surfaceContainerLowDark,
+                        shape = RoundedCornerShape(topStart = 10.dp, topEnd = 10.dp)
+                    )
+                    .padding(2.dp)
+            }
+
+            lastIndex -> {
+                Modifier
+                    .padding(start = 1.dp, end = 1.dp, bottom = 1.dp)
+                    .background(
+                        color = surfaceContainerLowDark,
+                        shape = RoundedCornerShape(bottomStart = 10.dp, bottomEnd = 10.dp)
+                    )
+                    .padding(2.dp)
+            }
+
+            else -> {
+                Modifier
+                    .padding(start = 1.dp, end = 1.dp, bottom = 1.dp)
+                    .background(
+                        color = surfaceContainerLowDark,
+                    )
+                    .padding(2.dp)
+            }
+        }
+        Row(
+            modifier = modifier,
             horizontalArrangement = Arrangement.SpaceEvenly
         ) {
             TableCell(text = case, weight = 1f)
@@ -418,6 +560,69 @@ class StatsActivity : ComponentActivity() {
             lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 block()
             }
+        }
+    }
+
+    private fun getOLLDrawableID(ollCase: PredefinedOLLCase): Int {
+        return when (ollCase) {
+            PredefinedOLLCase.OLL_01 -> R.drawable.oll_01
+            PredefinedOLLCase.OLL_02 -> R.drawable.oll_02
+            PredefinedOLLCase.OLL_03 -> R.drawable.oll_03
+            PredefinedOLLCase.OLL_04 -> R.drawable.oll_04
+            PredefinedOLLCase.OLL_05 -> R.drawable.oll_05
+            PredefinedOLLCase.OLL_06 -> R.drawable.oll_06
+            PredefinedOLLCase.OLL_07 -> R.drawable.oll_07
+            PredefinedOLLCase.OLL_08 -> R.drawable.oll_08
+            PredefinedOLLCase.OLL_09 -> R.drawable.oll_09
+            PredefinedOLLCase.OLL_10 -> R.drawable.oll_10
+            PredefinedOLLCase.OLL_11 -> R.drawable.oll_11
+            PredefinedOLLCase.OLL_12 -> R.drawable.oll_12
+            PredefinedOLLCase.OLL_13 -> R.drawable.oll_13
+            PredefinedOLLCase.OLL_14 -> R.drawable.oll_14
+            PredefinedOLLCase.OLL_15 -> R.drawable.oll_15
+            PredefinedOLLCase.OLL_16 -> R.drawable.oll_16
+            PredefinedOLLCase.OLL_17 -> R.drawable.oll_17
+            PredefinedOLLCase.OLL_18 -> R.drawable.oll_18
+            PredefinedOLLCase.OLL_19 -> R.drawable.oll_19
+            PredefinedOLLCase.OLL_20 -> R.drawable.oll_20
+            PredefinedOLLCase.OLL_21 -> R.drawable.oll_21
+            PredefinedOLLCase.OLL_22 -> R.drawable.oll_22
+            PredefinedOLLCase.OLL_23 -> R.drawable.oll_23
+            PredefinedOLLCase.OLL_24 -> R.drawable.oll_24
+            PredefinedOLLCase.OLL_25 -> R.drawable.oll_25
+            PredefinedOLLCase.OLL_26 -> R.drawable.oll_26
+            PredefinedOLLCase.OLL_27 -> R.drawable.oll_27
+            PredefinedOLLCase.OLL_28 -> R.drawable.oll_28
+            PredefinedOLLCase.OLL_29 -> R.drawable.oll_29
+            PredefinedOLLCase.OLL_30 -> R.drawable.oll_30
+            PredefinedOLLCase.OLL_31 -> R.drawable.oll_31
+            PredefinedOLLCase.OLL_32 -> R.drawable.oll_32
+            PredefinedOLLCase.OLL_33 -> R.drawable.oll_33
+            PredefinedOLLCase.OLL_34 -> R.drawable.oll_34
+            PredefinedOLLCase.OLL_35 -> R.drawable.oll_35
+            PredefinedOLLCase.OLL_36 -> R.drawable.oll_36
+            PredefinedOLLCase.OLL_37 -> R.drawable.oll_37
+            PredefinedOLLCase.OLL_38 -> R.drawable.oll_38
+            PredefinedOLLCase.OLL_39 -> R.drawable.oll_39
+            PredefinedOLLCase.OLL_40 -> R.drawable.oll_40
+            PredefinedOLLCase.OLL_41 -> R.drawable.oll_41
+            PredefinedOLLCase.OLL_42 -> R.drawable.oll_42
+            PredefinedOLLCase.OLL_43 -> R.drawable.oll_43
+            PredefinedOLLCase.OLL_44 -> R.drawable.oll_44
+            PredefinedOLLCase.OLL_45 -> R.drawable.oll_45
+            PredefinedOLLCase.OLL_46 -> R.drawable.oll_46
+            PredefinedOLLCase.OLL_47 -> R.drawable.oll_47
+            PredefinedOLLCase.OLL_48 -> R.drawable.oll_48
+            PredefinedOLLCase.OLL_49 -> R.drawable.oll_49
+            PredefinedOLLCase.OLL_50 -> R.drawable.oll_50
+            PredefinedOLLCase.OLL_51 -> R.drawable.oll_51
+            PredefinedOLLCase.OLL_52 -> R.drawable.oll_52
+            PredefinedOLLCase.OLL_53 -> R.drawable.oll_53
+            PredefinedOLLCase.OLL_54 -> R.drawable.oll_54
+            PredefinedOLLCase.OLL_55 -> R.drawable.oll_55
+            PredefinedOLLCase.OLL_56 -> R.drawable.oll_56
+            PredefinedOLLCase.OLL_57 -> R.drawable.oll_57
+            else -> R.drawable.ollskip
         }
     }
 }

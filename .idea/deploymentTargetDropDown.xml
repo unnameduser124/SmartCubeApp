@@ -5,19 +5,16 @@
       <entry key="ConfirmationPopupPreview">
         <State />
       </entry>
-      <entry key="StatsDBTests">
+      <entry key="PreviewStateSolveFinishedLayout">
+        <State />
+      </entry>
+      <entry key="SolveResultsPreview">
         <State />
       </entry>
       <entry key="Tests in 'com.example.tests.correctnesstests.dbtests'">
         <State />
       </entry>
       <entry key="app">
-        <State />
-      </entry>
-      <entry key="clearDataTest()">
-        <State />
-      </entry>
-      <entry key="clearDataTest() (1)">
         <State />
       </entry>
       <entry key="correctnesstests">
@@ -27,6 +24,9 @@
         <State />
       </entry>
       <entry key="performancetests">
+        <State />
+      </entry>
+      <entry key="stateF2LNotSolvedWhiteSideTest()">
         <State />
       </entry>
     </value>

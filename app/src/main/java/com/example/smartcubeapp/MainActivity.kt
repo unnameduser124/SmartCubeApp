@@ -7,6 +7,7 @@ import com.example.cube_bluetooth.bluetooth.BluetoothState
 import com.example.cube_bluetooth.bluetooth.bluetoothState
 import com.example.cube_database.solvedatabase.solvesDB.services.DeviceDBService
 import com.example.cube_database.solvedatabase.solvesDB.services.SettingsDBService
+import com.example.cube_global.devModeConnectionBypass
 import com.example.smartcubeapp.ui.connectUI.ConnectLastCubeActivity
 import com.example.smartcubeapp.ui.connectUI.ConnectNewCubeActivity
 import com.example.smartcubeapp.ui.timerUI.TimerActivity
@@ -23,6 +24,9 @@ class MainActivity : ComponentActivity() {
     }
 
     private fun launchActivity() {
+        if(devModeConnectionBypass){
+            bluetoothState.value = BluetoothState.Connected
+        }
         when (bluetoothState.value) {
             BluetoothState.Connected -> {
                 val intent = Intent(this, TimerActivity::class.java)

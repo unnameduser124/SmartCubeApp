@@ -29,8 +29,14 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Popup
 import androidx.compose.ui.window.PopupProperties
 import com.example.smartcubeapp.R
+import com.example.smartcubeapp.ui.theme.errorDark
+import com.example.smartcubeapp.ui.theme.onErrorDark
+import com.example.smartcubeapp.ui.theme.onSecondaryDark
+import com.example.smartcubeapp.ui.theme.onSurfaceDark
+import com.example.smartcubeapp.ui.theme.secondaryDark
+import com.example.smartcubeapp.ui.theme.surfaceContainerLowDark
 
-class ConfirmationPopup(val context: Context, private val popupVisible: MutableState<Boolean>) {
+class ConfirmationPopup(val context: Context, private val popupVisible: MutableState<Boolean>, text: String = "Are you sure?") {
 
     private lateinit var onYesClick: () -> Unit
 
@@ -48,8 +54,8 @@ class ConfirmationPopup(val context: Context, private val popupVisible: MutableS
                 modifier = Modifier
                     .padding(10.dp)
                     .shadow(elevation = 10.dp, shape = RoundedCornerShape(20.dp))
-                    .background(color = Color.White)
-                    .widthIn(max = 300.dp),
+                    .background(color = surfaceContainerLowDark, shape = RoundedCornerShape(20.dp))
+                    .widthIn(max = 350.dp),
                 verticalArrangement = Arrangement.Top,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
@@ -69,10 +75,11 @@ class ConfirmationPopup(val context: Context, private val popupVisible: MutableS
         ) {
             Text(
                 text = context.getString(R.string.confirmation_popup_question),
-                fontSize = 20.sp,
+                fontSize = 30.sp,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier.padding(top = 10.dp),
-                textAlign = TextAlign.Center
+                textAlign = TextAlign.Center,
+                color = onSurfaceDark
             )
         }
     }
@@ -85,10 +92,10 @@ class ConfirmationPopup(val context: Context, private val popupVisible: MutableS
                 .padding(horizontal = 20.dp, vertical = 50.dp),
             horizontalArrangement = Arrangement.SpaceEvenly
         ) {
-            ChoiceButton(text = "Yes", buttonColor = Color.Red, textColor = Color.White){
+            ChoiceButton(text = "Yes", buttonColor = errorDark, textColor = onErrorDark) {
                 onYesClick()
             }
-            ChoiceButton(text = "No", buttonColor = Color.LightGray, textColor = Color.Black)
+            ChoiceButton(text = "No", buttonColor = secondaryDark, textColor = onSecondaryDark)
         }
     }
 
@@ -108,5 +115,5 @@ class ConfirmationPopup(val context: Context, private val popupVisible: MutableS
 fun ConfirmationPopupPreview() {
     val context = LocalContext.current
     val popupVisible = remember { mutableStateOf(true) }
-    ConfirmationPopup(context, popupVisible).GeneratePopup{}
+    ConfirmationPopup(context, popupVisible).GeneratePopup {}
 }

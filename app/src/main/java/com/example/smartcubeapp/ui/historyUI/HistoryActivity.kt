@@ -5,16 +5,22 @@ import android.os.Looper
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -23,6 +29,7 @@ import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -33,6 +40,13 @@ import androidx.lifecycle.lifecycleScope
 import com.example.cube_cube.solveDBDataClasses.SolveData
 import com.example.cube_database.solvedatabase.solvesDB.SolvesDatabaseConstants
 import com.example.cube_database.solvedatabase.solvesDB.services.SolveDBService
+import com.example.smartcubeapp.R
+import com.example.smartcubeapp.ui.theme.SmartCubeAppTheme
+import com.example.smartcubeapp.ui.theme.backgroundDark
+import com.example.smartcubeapp.ui.theme.onPrimaryDark
+import com.example.smartcubeapp.ui.theme.onSecondaryDark
+import com.example.smartcubeapp.ui.theme.primaryDark
+import com.example.smartcubeapp.ui.theme.secondaryDark
 import kotlinx.coroutines.launch
 import kotlin.concurrent.thread
 
@@ -44,7 +58,9 @@ class HistoryActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         setContent {
-            GenerateLayout()
+            SmartCubeAppTheme {
+                GenerateLayout()
+            }
         }
     }
 
@@ -52,7 +68,11 @@ class HistoryActivity : ComponentActivity() {
     fun GenerateLayout() {
         val popupVisible = remember { mutableStateOf(false) }
         val popupSolveID = remember { mutableStateOf(-1L) }
-        Column(modifier = Modifier.fillMaxSize()) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(backgroundDark)
+        ) {
             ListHeader()
             SolvesListLazyColumn(popupVisible, popupSolveID)
         }
@@ -84,33 +104,38 @@ class HistoryActivity : ComponentActivity() {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 10.dp, start = 20.dp, end = 20.dp),
+                .padding(top = 10.dp, start = 10.dp, end = 10.dp)
+                .background(color = primaryDark, shape = RoundedCornerShape(16.dp))
+                .padding(start = 10.dp, end = 10.dp),
             horizontalArrangement = Arrangement.SpaceAround,
-            verticalAlignment = Alignment.Bottom
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(
-                text = "Duration",
-                fontSize = 17.sp,
+            Icon(
+                painter = painterResource(id = R.drawable.solve_time_24),
+                contentDescription = "Solve time",
                 modifier = Modifier.weight(1f),
-                textAlign = TextAlign.Center
+                tint = onPrimaryDark
             )
-            Text(
-                text = "Moves",
-                fontSize = 17.sp,
-                modifier = Modifier.weight(0.7f),
-                textAlign = TextAlign.Center
+            Icon(
+                painter = painterResource(id = R.drawable.outline_123_24),
+                contentDescription = "Move count",
+                modifier = Modifier
+                    .size(40.dp)
+                    .weight(1f),
+                tint = onPrimaryDark
             )
             Text(
                 text = "TPS",
                 fontSize = 17.sp,
-                modifier = Modifier.weight(0.5f),
-                textAlign = TextAlign.Center
+                modifier = Modifier.weight(1f),
+                textAlign = TextAlign.Center,
+                color = onPrimaryDark
             )
-            Text(
-                text = "Date",
-                fontSize = 17.sp,
-                modifier = Modifier.weight(2f),
-                textAlign = TextAlign.Center
+            Icon(
+                painter = painterResource(id = R.drawable.baseline_calendar_month_24),
+                contentDescription = "Date",
+                modifier = Modifier.weight(1.5f),
+                tint = onPrimaryDark,
             )
         }
     }
@@ -123,9 +148,11 @@ class HistoryActivity : ComponentActivity() {
         solvesList = remember { mutableStateListOf() }
         val page = remember { mutableStateOf(1) }
 
-        lifecycleScope.launch {
-            if (solvesList.isEmpty()) {
-                solvesList.addAll(SolveDBService(this@HistoryActivity).getAllSolves())
+        LaunchedEffect(lifecycleScope) {
+            lifecycleScope.launch {
+                if (solvesList.isEmpty()) {
+                    solvesList.addAll(SolveDBService(this@HistoryActivity).getAllSolves())
+                }
             }
         }
 
@@ -147,11 +174,15 @@ class HistoryActivity : ComponentActivity() {
 
     @Composable
     fun LoadMoreButtonRow(page: MutableState<Int>) {
-        Row(modifier = Modifier.padding(horizontal = 10.dp)) {
-            Button(onClick = {
-                loadMoreSolves(page)
-            }, modifier = Modifier.fillMaxWidth()) {
-                Text(text = "Load more")
+        Row() {
+            Button(
+                onClick = {
+                    loadMoreSolves(page)
+                }, modifier = Modifier.fillMaxWidth(),
+                colors = ButtonDefaults.buttonColors(containerColor = secondaryDark),
+                shape = RoundedCornerShape(16.dp)
+            ) {
+                Text(text = "Load more", color = onSecondaryDark)
             }
         }
     }
